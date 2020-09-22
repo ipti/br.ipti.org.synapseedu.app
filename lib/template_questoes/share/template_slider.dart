@@ -1,55 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:vertical_tabs/vertical_tabs.dart';
 
-class Template_Slider extends StatelessWidget {
+class TemplateSlider extends StatelessWidget {
   final Widget titulo;
-  final Widget telaDeAtividade;
+  final Widget activityScreen;
   final Widget imagem;
 
-  const Template_Slider({Key key, this.titulo, this.telaDeAtividade, this.imagem}) : super(key: key);
+  const TemplateSlider({Key key, this.titulo, this.activityScreen, this.imagem})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double largura_tela = MediaQuery.of(context).size.width;
-    double altura_tela = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
 
-    return VerticalTabs(
-      tabsWidth: 0.0,
-      contentScrollAxis: Axis.vertical,
+    return PageView(
+      scrollDirection: Axis.vertical,
       // <====Essas TABS nao aparecem, são apenas requisitos do VerticalTabs====>
-      tabs: <Tab>[
-        Tab(child: Text('')),
-        Tab(child: Text('')),
-      ],
-      // <====Telas====>
-      contents: [
-        Primeira_Tela(largura_tela, altura_tela),
-        Segunda_Tela(largura_tela, altura_tela),
+      children: [
+        topScreen(screenWidth, screenHeight),
+        bottomScreen(screenWidth, screenHeight),
       ],
     );
   }
 
-  Widget Primeira_Tela(double largura_tela, double altura_tela) {
+  Widget topScreen(double screenWidth, double screenHeight) {
     return Container(
-      decoration: BoxDecoration(color: Colors.white),
-      width: largura_tela,
-      height: altura_tela,
+      decoration: BoxDecoration(color: Colors.grey[200]),
+      width: screenWidth,
+      height: screenHeight,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(child: titulo != null ? titulo : Container()),
-          imagem != null ? imagem: Container(),
+          imagem != null ? imagem : Container(),
         ],
       ),
     );
   }
 
-  Widget Segunda_Tela(double largura_tela, double altura_tela) {
+  Widget bottomScreen(double screenWidth, double screenHeight) {
     return Container(
-      decoration: BoxDecoration(color: Colors.red),
-      width: largura_tela,
-      height: altura_tela,
-      child: telaDeAtividade,
+      decoration: BoxDecoration(color: Colors.blue[200]),
+      width: screenWidth,
+      height: screenHeight,
+      child: activityScreen,
     );
   }
 }
