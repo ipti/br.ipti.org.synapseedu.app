@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Caixa_Login extends StatelessWidget {
+class Caixa_Login extends StatefulWidget {
   final double larguraTelaDisponivel;
 
   Caixa_Login(this.larguraTelaDisponivel);
 
-  double error_message_opacity = 1.0;
+  @override
+  _Caixa_LoginState createState() => _Caixa_LoginState();
+}
 
+// final exibirErro = StateProvider((ref) => false);
+
+class _Caixa_LoginState extends State<Caixa_Login> {
   final usuario = TextEditingController();
   final senha = TextEditingController();
+
+  bool exibirErro = false;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       //<---------LARGURA E ALTURA IGUAIS PRA FORMAR UM QUADRADO--------->
-      height: larguraTelaDisponivel / 1.3,
-      width: larguraTelaDisponivel / 1.3,
+      height: widget.larguraTelaDisponivel / 1.1,
+      width: widget.larguraTelaDisponivel / 1.1,
       decoration: BoxDecoration(
           color: Colors.lightGreenAccent[700],
           borderRadius: BorderRadius.circular(20)),
@@ -27,19 +35,19 @@ class Caixa_Login extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.white,
-              fontSize: larguraTelaDisponivel * 0.09,
+              fontSize: widget.larguraTelaDisponivel * 0.09,
             ),
           ),
-          Entrada('Usuário', larguraTelaDisponivel),
-          Entrada('Senha', larguraTelaDisponivel),
+          Entrada('Usuário', widget.larguraTelaDisponivel),
+          Entrada('Senha', widget.larguraTelaDisponivel),
           Entrar(),
           Text(
-            'Verifique seus dados de acesso',
+            exibirErro ? 'Verifique seus dados de acesso' : "",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: larguraTelaDisponivel * 0.04,
-              color: Colors.red.withOpacity(error_message_opacity),
+              fontSize: widget.larguraTelaDisponivel * 0.04,
+              color: Colors.red,
             ),
           ),
         ],
@@ -50,9 +58,12 @@ class Caixa_Login extends StatelessWidget {
   Widget Entrada(String Variavel, double LarguraDisponivel) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(10)),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
       margin: EdgeInsets.only(top: 10, bottom: 10, left: 30, right: 30),
       child: TextFormField(
+        style: TextStyle(fontSize: LarguraDisponivel * 0.07),
         textAlign: TextAlign.center,
         decoration: InputDecoration(
           border: InputBorder.none,
@@ -66,23 +77,37 @@ class Caixa_Login extends StatelessWidget {
   }
 
   Widget Entrar() {
+    Color cor_letra = Colors.orange;
+    Color cor_botao = Colors.white;
+
     return GestureDetector(
-      onTap: () {}, // adicionar função ao tocar no botão
+      onTap: () {
+        ValidarUsuario()
+            ? null
+            : setState(() {
+                exibirErro = true;
+              });
+      }, // adicionar função ao tocar no botão
       child: Container(
         padding: EdgeInsets.only(left: 20, right: 20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: cor_botao,
           border: Border.all(width: 5, color: Colors.orange),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Text(
           'entrar',
           style: TextStyle(
-            color: Colors.orange,
-            fontSize: larguraTelaDisponivel * 0.09,
+            color: cor_letra,
+            fontSize: widget.larguraTelaDisponivel * 0.09,
           ),
         ),
       ),
     );
+  }
+
+  bool ValidarUsuario() {
+    // enquanto não estamos comunicando com o servidor
+    return usuario == 'admin' && senha == '123456' ? true : false;
   }
 }
