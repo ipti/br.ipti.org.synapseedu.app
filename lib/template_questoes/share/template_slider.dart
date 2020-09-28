@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vertical_tabs/vertical_tabs.dart';
 
-class TemplateSlider extends StatelessWidget {
+class TemplateSlider extends StatefulWidget {
   final Widget titulo;
   final Widget activityScreen;
   final Widget imagem;
@@ -10,13 +10,19 @@ class TemplateSlider extends StatelessWidget {
       : super(key: key);
 
   @override
+  _TemplateSliderState createState() => _TemplateSliderState();
+}
+
+class _TemplateSliderState extends State<TemplateSlider> {
+  bool showSecondTab = false;
+
+  @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
     return PageView(
       scrollDirection: Axis.vertical,
-      // <====Essas TABS nao aparecem, são apenas requisitos do VerticalTabs====>
       children: [
         topScreen(screenWidth, screenHeight),
         bottomScreen(screenWidth, screenHeight),
@@ -32,8 +38,8 @@ class TemplateSlider extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(child: titulo != null ? titulo : Container()),
-          imagem != null ? imagem : Container(),
+          Expanded(child: widget.titulo != null ? widget.titulo : Container()),
+          widget.imagem != null ? widget.imagem : Container(),
         ],
       ),
     );
@@ -44,7 +50,7 @@ class TemplateSlider extends StatelessWidget {
       decoration: BoxDecoration(color: Colors.blue[200]),
       width: screenWidth,
       height: screenHeight,
-      child: activityScreen,
+      child: widget.activityScreen,
     );
   }
 }
