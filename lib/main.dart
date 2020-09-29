@@ -5,15 +5,21 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import 'login/login_view.dart';
-import 'template_questoes/drag_and_drop.dart';
-import 'template_questoes/question_and_answer.dart';
 import 'template_questoes/share/template_slider.dart';
 import 'webview/base.dart';
 import 'webview/models/webview_modelo.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'template_questoes/text_question.dart';
+import 'template_questoes/multiple_choice.dart';
 
 void main() async {
   //usando pra iniciar em outra tela
-  runApp(Home());
+  //Força o modo retrato na inicialização do aplicativo
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
+      .then((_) => runApp(ProviderScope(child: new Home())));
 
   //WidgetsFlutterBinding.ensureInitialized();
   // Pedindo permissões para o usuário
@@ -52,10 +58,25 @@ class Home extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Elesson',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        // brightness: Brightness.light,
+        primarySwatch: Colors.lightGreen,
+        accentColor: Colors.amber[900],
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        buttonTheme: ButtonThemeData(
+          splashColor: Colors.orange,
+          minWidth: 120,
+          hoverColor: Colors.red,
+        ),
+        fontFamily: 'OpenSans',
+        textTheme: ThemeData.light().textTheme.copyWith(
+              headline2: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 36,
+              ),
+            ),
       ),
-      home: DragAndDrop(),
+      // home: MultipleChoiceQuestion(),
+      home: TextQuestion(),
       // initialRoute: '/',
       // routes: {
       //   '/': (context) => Base(),

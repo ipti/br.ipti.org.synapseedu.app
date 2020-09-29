@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:vertical_tabs/vertical_tabs.dart';
 
-class TemplateSlider extends StatefulWidget {
-  final Widget titulo;
+class TemplateSlider extends StatelessWidget {
+  final Widget title;
   final Widget activityScreen;
-  final Widget imagem;
+  final Widget image;
 
-  const TemplateSlider({Key key, this.titulo, this.activityScreen, this.imagem})
+  const TemplateSlider({Key key, this.title, this.activityScreen, this.image})
       : super(key: key);
-
-  @override
-  _TemplateSliderState createState() => _TemplateSliderState();
-}
-
-class _TemplateSliderState extends State<TemplateSlider> {
-  bool showSecondTab = false;
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +31,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(child: widget.titulo != null ? widget.titulo : Container()),
-          widget.imagem != null ? widget.imagem : Container(),
+          Expanded(child: title != null ? title : Container()),
+          image != null ? image : Container(),
         ],
       ),
     );
@@ -47,10 +40,10 @@ class _TemplateSliderState extends State<TemplateSlider> {
 
   Widget bottomScreen(double screenWidth, double screenHeight) {
     return Container(
-      decoration: BoxDecoration(color: Colors.blue[200]),
+      decoration: BoxDecoration(color: Colors.grey[300]),
       width: screenWidth,
       height: screenHeight,
-      child: widget.activityScreen,
+      child: activityScreen,
     );
   }
 }
