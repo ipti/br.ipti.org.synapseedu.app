@@ -77,7 +77,7 @@ class Home extends StatelessWidget {
             ),
       ),
       // home: MultipleChoiceQuestion(),
-      home: RegisterView(),
+      home: LoginView(),
       // initialRoute: '/',
       // routes: {
       //   '/': (context) => Base(),

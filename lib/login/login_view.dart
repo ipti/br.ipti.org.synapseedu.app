@@ -123,7 +123,7 @@ class _LoginViewState extends State<LoginView> {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/img/logo.png'),
+          image: NetworkImage('https://avatars2.githubusercontent.com/u/64334312?s=200&v=4'),
           scale: 0.7,
         ),
       ),
