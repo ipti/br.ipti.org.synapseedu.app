@@ -25,18 +25,6 @@ class TextQuestion extends ConsumerWidget {
     final buttonState = watch(buttonStateProvider).state;
     bool image = true;
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(
-      //     'Elesson',
-      //     style: TextStyle(color: Colors.white),
-      //   ),
-      //   actions: <Widget>[
-      //     IconButton(
-      //       icon: Icon(Icons.exit_to_app),
-      //       onPressed: () => {},
-      //     )
-      //   ],
-      // ),
       body: TemplateSlider(
         title: Text(
           "Texto da questão",
@@ -55,7 +43,7 @@ class TextQuestion extends ConsumerWidget {
               children: [
                 // if (image == true) Image.asset('assets/img/logo.png'),
                 Text(
-                  'Como visto acima, faça pipipipopopó',
+                  'Qual o nome do objeto da imagem?',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,

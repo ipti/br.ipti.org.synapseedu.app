@@ -20,24 +20,26 @@ class _RegisterViewState extends State<RegisterView> {
     double alturaTela = MediaQuery.of(context).size.height;
     double larguraTela = MediaQuery.of(context).size.width;
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Logo(),
-          Entrada(_templateController, 'Nome Do Responsavel'),
-          Entrada(_2templateController, 'Nome do Aluno'),
-          EscolaESerie(larguraTela),
-          Entrada(_3templateController, 'Email'),
-          Entrada(_4templateController, 'Senha'),
-          BtnCadastrar(larguraTela, alturaTela),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            Logo(),
+            Entrada(_templateController, 'Nome Do Responsavel'),
+            Entrada(_2templateController, 'Nome do Aluno'),
+            EscolaESerie(larguraTela),
+            Entrada(_3templateController, 'Email'),
+            Entrada(_4templateController, 'Senha'),
+            BtnCadastrar(larguraTela, alturaTela),
+          ],
+        ),
       ),
     );
   }
 
   Widget Logo() {
-    return Expanded(
+    return Container(
+      margin: EdgeInsets.all(20),
       child: Image(
         image: NetworkImage('https://avatars2.githubusercontent.com/u/64334312?s=200&v=4', scale: 0.7),
       ),
