@@ -5,7 +5,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import 'login/login_view.dart';
+import 'recover_password/recover_password_view.dart';
 import 'register/register_view.dart';
+import 'template_questoes/drag_and_drop.dart';
 import 'template_questoes/share/template_slider.dart';
 import 'webview/base.dart';
 import 'webview/models/webview_modelo.dart';

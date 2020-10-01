@@ -1,3 +1,4 @@
+import 'package:elesson/recover_password/recover_password_view.dart';
 import 'package:flutter/material.dart';
 import 'package:elesson/login/widgets/caixa_login.dart';
 
@@ -7,6 +8,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+
   int mostarSobre = 0;
   double bottom_sobre_box = 0.0;
   double top_sobre_box = 0.0;
@@ -19,17 +21,23 @@ class _LoginViewState extends State<LoginView> {
     double larguraTela = MediaQuery.of(context).size.width;
     double alturaTela = MediaQuery.of(context).size.height;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
-          BotaoSobre(larguraTela, alturaTela),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Logo(larguraTela),
-              Caixa_Login(larguraTela),
-            ],
+          SingleChildScrollView(
+            child: Container(
+              width: larguraTela,
+              height: alturaTela,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Logo(larguraTela),
+                  Caixa_Login(larguraTela),
+                  RecuperarSenha(alturaTela),
+                ],
+              ),
+            ),
           ),
+          BotaoSobre(larguraTela, alturaTela),
           Sobre(larguraTela, alturaTela),
         ],
       ),
@@ -48,9 +56,7 @@ class _LoginViewState extends State<LoginView> {
         width: larguraTela * 0.2,
         decoration: BoxDecoration(
           color: Colors.lightGreenAccent[700],
-          borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20)),
+          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
         ),
         margin: EdgeInsets.only(
           left: larguraTela * 0.06,
@@ -59,10 +65,7 @@ class _LoginViewState extends State<LoginView> {
         child: Center(
           child: Text(
             'Sobre',
-            style: TextStyle(
-                fontSize: larguraTela * 0.04,
-                fontWeight: FontWeight.bold,
-                color: Colors.white),
+            style: TextStyle(fontSize: larguraTela * 0.04, fontWeight: FontWeight.bold, color: Colors.white),
           ),
         ),
       ),
@@ -82,17 +85,11 @@ class _LoginViewState extends State<LoginView> {
     }
 
     return AnimatedContainer(
-      margin: EdgeInsets.only(
-          left: larguraTela * 0.05,
-          right: larguraTela * 0.05,
-          bottom: bottom_sobre_box,
-          top: top_sobre_box),
+      margin: EdgeInsets.only(left: larguraTela * 0.05, right: larguraTela * 0.05, bottom: bottom_sobre_box, top: top_sobre_box),
       duration: Duration(milliseconds: 500),
       width: larguraTela * 0.9,
       height: alturaTela * 0.6,
-      decoration: BoxDecoration(
-          color: Colors.red.withOpacity(0.9),
-          borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(color: Colors.red.withOpacity(0.9), borderRadius: BorderRadius.circular(20)),
       child: Column(
         children: [
           Row(
@@ -124,11 +121,27 @@ class _LoginViewState extends State<LoginView> {
       decoration: BoxDecoration(
         image: DecorationImage(
           image: NetworkImage('https://avatars2.githubusercontent.com/u/64334312?s=200&v=4'),
-          scale: 0.7,
+          scale: 0.4,
         ),
       ),
       width: larguraTela,
-      height: larguraTela * 0.5,
+      height: larguraTela / 2,
+    );
+  }
+
+  Widget RecuperarSenha(double alturaTela) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => RecoverPassword()),
+        );
+      },
+      child: Text(
+        'Recuperar senha',
+        style:
+            TextStyle(color: Colors.red, fontSize: alturaTela * 0.025, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+      ),
     );
   }
 }

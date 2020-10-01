@@ -24,6 +24,7 @@ class _Caixa_LoginState extends State<Caixa_Login> {
       //<---------LARGURA E ALTURA IGUAIS PRA FORMAR UM QUADRADO--------->
       height: widget.larguraTelaDisponivel / 1.1,
       width: widget.larguraTelaDisponivel / 1.1,
+      margin: EdgeInsets.only(left: 20,right: 20),
       decoration: BoxDecoration(
           color: Colors.lightGreenAccent[700],
           borderRadius: BorderRadius.circular(20)),
