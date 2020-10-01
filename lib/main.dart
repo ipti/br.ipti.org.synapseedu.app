@@ -12,7 +12,8 @@ import 'webview/models/webview_modelo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'template_questoes/text_question.dart';
-import 'template_questoes/multiple_choice.dart';
+// import 'template_questoes/multiple_choice.dart';
+import 'template_questoes/multichoice.dart';
 
 void main() async {
   //usando pra iniciar em outra tela
@@ -77,7 +78,7 @@ class Home extends StatelessWidget {
             ),
       ),
       // home: MultipleChoiceQuestion(),
-      home: LoginView(),
+      home: MultipleChoiceQuestion(),
       // initialRoute: '/',
       // routes: {
       //   '/': (context) => Base(),

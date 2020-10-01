@@ -2,6 +2,231 @@ import './share/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+import './question_provider.dart';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import './model.dart';
+
+String mockJson = '''[ {
+  "valid" : true,
+  "error" : [ "Num Cobjects: 1" ],
+  "cobjects" : [ {
+    "cobject_id" : "3902",
+    "description" : "",
+    "cobject_type" : "Atividade",
+    "template_name" : "Multipla Escolha",
+    "template_code" : "MTE",
+    "format_code" : "Vertical",
+    "interative_code" : "Click",
+    "theme" : null,
+    "status" : "on",
+    "goal" : "CONVERTER AS UNIDADES DE MEDIDAS: CAPACIDADE, VOLUME E SUPERFÍCIE",
+    "goal_id" : "10107",
+    "degree_name" : "Fundamental - 5º ANO/2",
+    "stage" : "18",
+    "year" : "5",
+    "grade" : "2",
+    "degree_parent" : "Fundamental Menor - 5º ANO",
+    "discipline" : "Matemática",
+    "content" : "Problemas",
+    "content_parent_name" : null,
+    "modality" : "Sonoro",
+    "content_parent" : null,
+    "id" : "1",
+    "total_pieces" : "11",
+    "screens" : [ {
+      "id" : "8619",
+      "cobject_id" : "3902",
+      "oldID" : null,
+      "position" : "0",
+      "piecesets" : [ {
+        "id" : "9007",
+        "description" : "",
+        "groups" : {
+          "1" : {
+            "elements" : [ {
+              "id" : "61908",
+              "piecesetElementID" : "17521",
+              "type" : "text",
+              "generalProperties" : [ {
+                "name" : "language",
+                "value" : "português"
+              }, {
+                "name" : "text",
+                "value" : "Uma piscina olímpica tem 200 dm³ de volume. Quantos decâmetros cúbicos tem essa piscina?"
+              } ],
+              "piecesetElement_Properties" : {
+                "grouping" : "1",
+                "layertype" : null
+              }
+            }, {
+              "id" : "61909",
+              "piecesetElementID" : "17522",
+              "type" : "multimidia",
+              "generalProperties" : [ {
+                "name" : "library_id",
+                "value" : "36709"
+              }, {
+                "name" : "width",
+                "value" : "1240"
+              }, {
+                "name" : "height",
+                "value" : "1240"
+              }, {
+                "name" : "src",
+                "value" : "30b987599888ca2f05669224378280ca.jpg"
+              }, {
+                "name" : "extension",
+                "value" : "jpg"
+              }, {
+                "name" : "alias",
+                "value" : "Pedro_Pensando_1"
+              }, {
+                "name" : "library_type",
+                "value" : "image"
+              } ],
+              "piecesetElement_Properties" : {
+                "grouping" : "1",
+                "layertype" : null
+              }
+            } ]
+          }
+        },
+        "pieces" : [ {
+          "id" : "9112",
+          "name" : null,
+          "description" : null,
+          "groups" : {
+            "1" : {
+              "elements" : [ {
+                "generalProperties" : [ {
+                  "name" : "language",
+                  "value" : "português"
+                }, {
+                  "name" : "text",
+                  "value" : "0,0002 dam³"
+                } ],
+                "id" : "61910",
+                "pieceElementID" : "44878",
+                "pieceElement_Properties" : {
+                  "grouping" : "1",
+                  "layertype" : "Acerto"
+                },
+                "type" : "text"
+              } ]
+            },
+            "2" : {
+              "elements" : [ {
+                "generalProperties" : [ {
+                  "name" : "language",
+                  "value" : "português"
+                }, {
+                  "name" : "text",
+                  "value" : "0,02 dam³"
+                } ],
+                "id" : "61911",
+                "pieceElementID" : "44879",
+                "pieceElement_Properties" : {
+                  "grouping" : "2",
+                  "layertype" : "Erro"
+                },
+                "type" : "text"
+              } ]
+            },
+            "3" : {
+              "elements" : [ {
+                "generalProperties" : [ {
+                  "name" : "language",
+                  "value" : "português"
+                }, {
+                  "name" : "text",
+                  "value" : "20 dam³"
+                }, {
+                  "name" : "width",
+                  "value" : "283"
+                }, {
+                  "name" : "height",
+                  "value" : "213"
+                }, {
+                  "name" : "content",
+                  "value" : "OBJECT"
+                }, {
+                  "name" : "nstyle",
+                  "value" : "Infantil"
+                }, {
+                  "name" : "extension",
+                  "value" : "jpg"
+                }, {
+                  "name" : "src",
+                  "value" : "803.jpg"
+                }, {
+                  "name" : "library_type",
+                  "value" : "image"
+                } ],
+                "id" : "61912",
+                "pieceElementID" : "44880",
+                "pieceElement_Properties" : {
+                  "grouping" : "3",
+                  "layertype" : "Erro"
+                },
+                "type" : "text"
+              } ]
+            },
+            "4" : {
+              "elements" : [ {
+                "generalProperties" : [ {
+                  "name" : "language",
+                  "value" : "português"
+                }, {
+                  "name" : "text",
+                  "value" : "2 000 dam³"
+                }, {
+                  "name" : "width",
+                  "value" : "303"
+                }, {
+                  "name" : "height",
+                  "value" : "286"
+                }, {
+                  "name" : "color",
+                  "value" : "COLOR"
+                }, {
+                  "name" : "content",
+                  "value" : "OBJECT"
+                }, {
+                  "name" : "nstyle",
+                  "value" : "Infantil"
+                }, {
+                  "name" : "extension",
+                  "value" : "jpg"
+                }, {
+                  "name" : "src",
+                  "value" : "409.jpg"
+                }, {
+                  "name" : "library_type",
+                  "value" : "image"
+                } ],
+                "id" : "61913",
+                "pieceElementID" : "44881",
+                "pieceElement_Properties" : {
+                  "grouping" : "4",
+                  "layertype" : "Erro"
+                },
+                "type" : "text"
+              } ]
+            }
+          },
+          "types_elements" : [ ]
+        } ],
+        "template_code" : "PRE"
+      } ]
+    }],
+    "elements" : [ ]
+  } ]
+} ]''';
+
+final cobject = StateNotifierProvider<Cobjects>((ref) {
+  return Cobjects();
+});
 
 class MultipleChoiceQuestion extends StatefulWidget {
   @override
@@ -139,7 +364,8 @@ class _MultipleChoiceQuestionState extends State<MultipleChoiceQuestion> {
                 onPressed: () {
                   _selectedButton > 2
                       ? print('Escolha uma opção')
-                      : print(_selectedButton);
+                      // : print(_selectedButton);
+                      : cobject;
                 },
                 minWidth: 200.0,
                 height: 45.0,
