@@ -63,6 +63,7 @@ class Home extends StatelessWidget {
       title: 'Elesson',
       theme: ThemeData(
         // brightness: Brightness.light,
+        backgroundColor: Colors.white,
         primarySwatch: Colors.lightGreen,
         accentColor: Colors.amber[900],
         visualDensity: VisualDensity.adaptivePlatformDensity,

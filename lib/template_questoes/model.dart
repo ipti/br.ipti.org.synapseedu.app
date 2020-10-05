@@ -133,7 +133,8 @@ class Question {
   String secondItemImage;
   String thirdItem;
   String thirdItemImage;
-  List<String> pieceImages;
+  List<String> piecesItem;
+  List<String> piecesImage;
   String firstLayertype;
   String secondLayertype;
   String thirdLayertype;
@@ -147,21 +148,32 @@ class Question {
     this.secondItemImage,
     this.thirdItem,
     this.thirdItemImage,
-    this.pieceImages,
+    this.piecesItem,
+    this.piecesImage,
     this.firstLayertype,
     this.secondLayertype,
     this.thirdLayertype,
   });
+  List<String> questionItems = [];
+  List<String> questionImages = [];
 
-  List<String> question = ['hey', 'hoy'];
+  List<String> addTextItems(Map<String, dynamic> json) {
+    //A implementação mudará quando tiver um exemplo sem bugs do json
+    json.forEach((key, value) {
+      questionItems.add(value["elements"][0]["generalProperties"][1]["value"]);
+    });
+    return questionItems;
+  }
+
   List addList(Map<String, dynamic> json) {
-    // question[0] = json["cobjects"][0]["screens"][0]["piecesets"][0]["pieces"][0]
-    //     ["groups"]["1"]["elements"][0]["generalProperties"][7]["value"];
-    // question.add(json["cobjects"][0]["screens"][0]["piecesets"][0]["pieces"][0]
-    //     ["groups"]["2"]["elements"][0]["generalProperties"][7]["value"]);
-    // question.add(json["cobjects"][0]["screens"][0]["piecesets"][0]["pieces"][0]
-    //     ["groups"]["3"]["elements"][0]["generalProperties"][7]["value"]);
-    // return [...question];
+    //A implementação mudará quando tiver um exemplo sem bugs do json
+    json.forEach((key, value) {
+      if (value["elements"][0]["generalProperties"].length > 2) {
+        questionImages
+            .add(value["elements"][0]["generalProperties"][7]["value"]);
+      }
+    });
+    return questionImages;
   }
 
   // factory Question.fromJson(Map<String, dynamic> json) => Question(
@@ -183,9 +195,9 @@ class Question {
       //     ["value"],
       thirdItem: json["cobjects"][0]["screens"][0]["piecesets"][0]["pieces"][0]
           ["groups"]["3"]["elements"][0]["generalProperties"][1]["value"],
-      thirdItemImage: json["cobjects"][0]["screens"][0]["piecesets"][0]
-              ["pieces"][0]["groups"]["3"]["elements"][0]["generalProperties"]
-          [7]["value"],
+      // thirdItemImage: json["cobjects"][0]["screens"][0]["piecesets"][0]
+      //         ["pieces"][0]["groups"]["3"]["elements"][0]["generalProperties"]
+      //     [7]["value"],
       firstLayertype: json["cobjects"][0]["screens"][0]["piecesets"][0]
               ["pieces"][0]["groups"]["1"]["elements"][0]
           ["pieceElement_Properties"]["layertype"],
@@ -195,7 +207,12 @@ class Question {
       thirdLayertype: json["cobjects"][0]["screens"][0]["piecesets"][0]
               ["pieces"][0]["groups"]["3"]["elements"][0]
           ["pieceElement_Properties"]["layertype"],
-      pieceImages: Question().addList(json),
+      piecesImage: Question().addList(json["cobjects"][0]["screens"][0]
+          ["piecesets"][0]["pieces"][0]["groups"]),
+      piecesItem: (Question().addTextItems(json["cobjects"][0]["screens"][0]
+          ["piecesets"][0]["pieces"][0]["groups"])),
+      // piecesItem.addAll(Question().addTextItems(json["cobjects"][0]["screens"][0]
+      // ["piecesets"][0]["pieces"][0]["groups"])),
     );
   }
 }
