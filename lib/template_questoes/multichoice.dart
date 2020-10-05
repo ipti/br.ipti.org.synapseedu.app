@@ -145,7 +145,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     // context.read(questionChangeNotifier).fetchCobjects();
 
     // if (questionChangeNotifier.items == null) print("nullou");
-
+    print('Imagem: ${question[0].questionImage}');
+    print("Mapa: ${question[0].header["image"]}");
     return Scaffold(
       body: TemplateSlider(
         title: Center(
@@ -157,8 +158,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
             ),
           ),
         ),
-        image: Image.network('http://dev.elesson.com.br:8080/library/image/' +
-            question[0].questionImage),
+        image: Image.network('https://elesson.com.br/app/library/image/' +
+            question[0].header["image"]),
         activityScreen: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -175,9 +176,9 @@ class MultipleChoiceQuestion extends ConsumerWidget {
               const SizedBox(
                 height: 35,
               ),
-              piece(0, context, watch, question[0]),
-              piece(1, context, watch, question[0]),
-              piece(2, context, watch, question[0]),
+              // piece(0, context, watch, question[0]),
+              // piece(1, context, watch, question[0]),
+              // piece(2, context, watch, question[0]),
               const SizedBox(
                 height: 35,
               ),
@@ -190,8 +191,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                         settings: RouteSettings(
-                          arguments: question[0],
-                        ),
+                            // arguments: question[0],
+                            ),
                         builder: (context) => MultipleChoiceQuestion(
                             // question: question[0].questionText,
                             )),

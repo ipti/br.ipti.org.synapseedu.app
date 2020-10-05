@@ -2830,7 +2830,7 @@ class Cobjects extends StateNotifier<List<Cobject>> {
     Map<String, dynamic> jsonImages;
     List<String> imageLink;
     //0 e 2 são MTE
-    mockJson = stringJson(0);
+    mockJson = stringJson(2);
 
     // var url =
     //     'http://app.elesson.com.br/api-synapse/synapse/offline/cobject/1471';
@@ -2866,11 +2866,19 @@ class Cobjects extends StateNotifier<List<Cobject>> {
 
       extractedData.forEach((json) {
         // print(json["cobjects"][0]["screens"][0]);
+
         loadedQuestion.add(Question.fromJson(json));
+        // json["cobjects"][0]["screens"][0]["piecesets"][0]["groups"]["1"]
+        //         ["elements"]
+        //     .forEach((value) {
+        //   if (value["type"] == "text") {
+        //     print('Texto: ${value["generalProperties"][1]["value"]}');
+        //   }
+        // });
 
         // loadedQuestion.add(Question().fromJson(json));
-        imageLink = Question().addList(json["cobjects"][0]["screens"][0]
-            ["piecesets"][0]["pieces"][0]["groups"]);
+        // imageLink = Question().addList(json["cobjects"][0]["screens"][0]
+        //     ["piecesets"][0]["pieces"][0]["groups"]);
       });
 
       // print("imageLinks: $imageLink");
