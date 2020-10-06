@@ -1,3 +1,5 @@
+import 'package:elesson/activity_selection/activity_selection_view.dart';
+
 import './share/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -237,6 +239,7 @@ List<bool> _buttonPressed = [false, false, false];
 int _selectedButton = 3;
 
 class _MultipleChoiceQuestionState extends State<MultipleChoiceQuestion> {
+
   Widget questionPiece(String item, int index) {
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -332,6 +335,7 @@ class _MultipleChoiceQuestionState extends State<MultipleChoiceQuestion> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: TemplateSlider(
         title: Text(

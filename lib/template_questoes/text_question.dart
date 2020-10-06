@@ -1,8 +1,13 @@
+import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 
 class TextQuestion extends ConsumerWidget {
+
+  static const routeName = '/PRE';
+  var CObject = new List<dynamic>();
+
   final _formKey = GlobalKey<FormState>();
   final _textController = TextEditingController();
 
@@ -22,6 +27,10 @@ class TextQuestion extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    final ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    CObject = args.CObject;
+    print(CObject);
+
     final buttonState = watch(buttonStateProvider).state;
     bool image = true;
     return Scaffold(
@@ -121,3 +130,9 @@ class TextQuestion extends ConsumerWidget {
     );
   }
 }
+
+
+// class ScreenArguments {
+//   final List<dynamic> CObject;
+//   ScreenArguments(this.CObject);
+// }

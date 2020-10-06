@@ -1,12 +1,16 @@
+import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/material.dart';
 
 class DragAndDrop extends StatefulWidget {
+  static const routeName = '/DDROP';
   @override
   _DragAndDropState createState() => _DragAndDropState();
 }
 
 class _DragAndDropState extends State<DragAndDrop> {
+  var CObject = new List<dynamic>();
+
   bool accepted = false;
 
   //<=======SENDER URL========>
@@ -29,6 +33,11 @@ class _DragAndDropState extends State<DragAndDrop> {
 
   @override
   Widget build(BuildContext context) {
+
+    final ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    CObject = args.CObject;
+    print(CObject);
+
     double larguraTela = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomPadding: true,

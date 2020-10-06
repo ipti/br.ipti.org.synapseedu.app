@@ -1,9 +1,12 @@
+import 'package:elesson/share/api.dart';
+import 'package:elesson/template_questoes/multiple_choice.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
+import 'activity_selection/activity_selection_view.dart';
 import 'login/login_view.dart';
 import 'recover_password/recover_password_view.dart';
 import 'register/register_view.dart';
@@ -14,8 +17,8 @@ import 'webview/models/webview_modelo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'template_questoes/text_question.dart';
-// import 'template_questoes/multiple_choice.dart';
-import 'template_questoes/multichoice.dart';
+import 'template_questoes/multiple_choice.dart';
+//import 'template_questoes/multichoice.dart';
 
 void main() async {
   //usando pra iniciar em outra tela
@@ -55,6 +58,9 @@ void main() async {
 }
 
 class Home extends StatelessWidget {
+  var tipo_questao;
+  var Cobject = new List<dynamic>();
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIOverlays([]);
@@ -79,12 +85,11 @@ class Home extends StatelessWidget {
               ),
             ),
       ),
-      // home: MultipleChoiceQuestion(),
-      home: MultipleChoiceQuestion(),
-      // initialRoute: '/',
-      // routes: {
-      //   '/': (context) => Base(),
-      // },
+      home: ActivitySelectionForm(),
+      routes: {
+        TextQuestion.routeName:(context) => TextQuestion(),
+        DragAndDrop.routeName:(context) => DragAndDrop(),
+      },
     );
   }
 }
