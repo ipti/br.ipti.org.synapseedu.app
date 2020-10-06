@@ -20,7 +20,7 @@ class API_ALUNO {
 }
   class API_COBJECT {
   static Future getQuestao(String id_cobject) async {
-  var url = BaseUrl + 'offline/cobject/' + id_cobject;
+  var url = 'https://elesson.com.br/api/offline/cobject/' + id_cobject;
   return await dio.get(url);
   }
 }

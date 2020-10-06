@@ -15,6 +15,7 @@ import 'package:dio/dio.dart';
 //lembrar de descomentar notifyListeners
 // class Cobjects with ChangeNotifier {
 class Cobjects extends StateNotifier<List<Cobject>> {
+
   Cobjects() : super([]);
 // class Cobjects extends ChangeNotifier {
   int _assuntoId;
@@ -3048,7 +3049,7 @@ class Cobjects extends StateNotifier<List<Cobject>> {
   // }
 
   // Future<void> fetchCobjects() async {
-  void fetchCobjects() {
+  void fetchCobjects(List<dynamic> CObject) {
     _items.clear();
     Map<String, dynamic> jsonImages;
     List<String> imageLink;
@@ -3056,6 +3057,8 @@ class Cobjects extends StateNotifier<List<Cobject>> {
 
     // A função stringJson contém as Strings com jsons de questões diferentes para testar antes de
     // obter a questão direto da API
+
+    //KEVENNY: COMENTEI ESSA LINHA PARA JOGAR O JSON DIRETO DA API
     mockJson = stringJson(3);
 
     // var url =
@@ -3068,7 +3071,13 @@ class Cobjects extends StateNotifier<List<Cobject>> {
       // final response = await http.get(url);
       // var extractedDataz =
       //     json.decode((response.data).toString()) as List<dynamic>;
-      var extractedData = json.decode(mockJson) as List<dynamic>;
+
+
+      String jssson = jsonEncode(CObject);
+      print(jssson);
+      var extractedData = json.decode(jssson) as List<dynamic>;
+
+      //var extractedData = json.decode(mockJson) as List<dynamic>;
 
       if (extractedData == null) {
         return null;

@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/all.dart';
 class TextQuestion extends ConsumerWidget {
 
   static const routeName = '/PRE';
+  // ignore: non_constant_identifier_names
   var CObject = new List<dynamic>();
 
   final _formKey = GlobalKey<FormState>();

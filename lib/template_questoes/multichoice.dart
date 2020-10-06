@@ -1,3 +1,5 @@
+import 'package:elesson/activity_selection/activity_selection_view.dart';
+
 import './share/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -20,7 +22,10 @@ final cobject = Provider<Cobjects>((ref) {
 // });
 
 class MultipleChoiceQuestion extends ConsumerWidget {
-  static const routeName = "mte";
+  static const routeName = '/MTE';
+
+  var CObject = new List<dynamic>();
+
   List<bool> _buttonPressed = [false, false, false];
   int _selectedButton = 3;
 
@@ -131,9 +136,15 @@ class MultipleChoiceQuestion extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+
+
+    final ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    CObject = args.CObject;
+    //print(CObject);
+
     // final cobjectsState = watch(cobject);
     // final cobjectsState = watch(cobject.state);
-    context.read(cobject).fetchCobjects();
+    context.read(cobject).fetchCobjects(CObject);
     List<Question> question = context.read(cobject).items;
     // print("\n Tamanho: ${question.length}");
 

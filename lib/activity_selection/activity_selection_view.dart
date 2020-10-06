@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:elesson/share/turmas.dart';
 import 'package:elesson/template_questoes/drag_and_drop.dart';
-import 'package:elesson/template_questoes/multiple_choice.dart';
+import 'package:elesson/template_questoes/multichoice.dart';
 import 'package:elesson/template_questoes/text_question.dart';
 import 'package:flutter/material.dart';
 import 'package:elesson/share/api.dart';
@@ -35,7 +35,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   bool checkAluno = true;
   bool checkMateria = true;
   //<=======================JOGAR AQUI O ID DO COBJET RECEBIDO===========================>
-  String ID_COBJECT = '1481';
+  String ID_COBJECT = '3976';
 
   var Cobject = new List<dynamic>();
   var tipo_questao;
@@ -81,9 +81,9 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
         case 'DDROP':
           Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, (Route<dynamic> route) => false,arguments: ScreenArguments(Cobject));
           break;
-        // case 'MTE':
-        //   Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, (Route<dynamic> route) => false,arguments: ScreenArguments(Cobject));
-        //   break;
+        case 'MTE':
+           Navigator.of(context).pushNamedAndRemoveUntil(MultipleChoiceQuestion.routeName, (Route<dynamic> route) => false,arguments: ScreenArguments(Cobject));
+           break;
         // case 'TXT':
         //   Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, (Route<dynamic> route) => false,arguments: ScreenArguments(Cobject));
         //   break;
