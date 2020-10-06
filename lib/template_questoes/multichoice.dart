@@ -59,7 +59,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     final buttonState = watch(buttonStateProvider).state;
     double cardSize = MediaQuery.of(context).size.height / 4.3;
     bool audio = false;
-    print(question.questionImage);
+    String grouping = (index + 1).toString();
     return Card(
       margin: EdgeInsets.all(10),
       elevation: 2,
@@ -75,14 +75,14 @@ class MultipleChoiceQuestion extends ConsumerWidget {
               padding: EdgeInsets.all(2),
               color: _buttonPressed[index] ? Colors.amber : Colors.green[300],
               child: question.questionImage == null
-                  // ? Image.network(
-                  //     'http://dev.elesson.com.br:8080/library/image/' +
-                  //         question.questionImage,
-                  //   )
-                  ? Image.asset('assets/img/placeholder.jpg')
+                  ? Image.network(
+                      'https://elesson.com.br/app/library/image/' +
+                          question.pieces[grouping]["image"],
+                    )
+                  // ? Image.asset('assets/img/placeholder.jpg')
                   : Container(
                       child: Text(
-                        question.piecesItem[index],
+                        question.pieces[grouping]["text"],
                         style: TextStyle(
                             fontWeight: FontWeight.w800, fontSize: 16),
                       ),
@@ -94,7 +94,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
               splashColor: Theme.of(context).accentColor,
               onPressed: () {
                 changeButtonColor(context, index);
-                // print(question.questionImage);
+                // if (question.pieces["correctAnswer"] == index + 1)
+                //   print("Acertou");
                 // setState(() {
                 //   for (int i = 0; i < 3; i++) {
                 //     if (_buttonPressed[i] == true && i != index)
@@ -122,10 +123,10 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   }
 
   void questionData(Question question) {
-    print('''${question.questionText}\n
-    a.${question.piecesItem[0]}
-    b.${question.piecesItem[1]}
-    c.${question.piecesItem[2]}''');
+    // print('''${question.questionText}\n
+    // a.${question.piecesItem[0]}
+    // b.${question.piecesItem[1]}
+    // c.${question.piecesItem[2]}''');
   }
 
   @override
@@ -134,24 +135,19 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     // final cobjectsState = watch(cobject.state);
     context.read(cobject).fetchCobjects();
     List<Question> question = context.read(cobject).items;
-    print("\n Tamanho: ${question.length}");
-
-    // questionData(question[0]);
-    // print('Aqui: ${question[0].piecesItem}');
-    // print('Aqui: ${question[0].piecesImage}');
+    // print("\n Tamanho: ${question.length}");
 
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
 
     // context.read(questionChangeNotifier).fetchCobjects();
 
-    // if (questionChangeNotifier.items == null) print("nullou");
-    print('Imagem: ${question[0].questionImage}');
-    print("Mapa: ${question[0].header["image"]}");
+    // print("Header: ${question[0].header}");
+    // print("Pieces: ${question[0].pieces}");
     return Scaffold(
       body: TemplateSlider(
         title: Center(
           child: Text(
-            question[0].questionText,
+            question[0].header["text"],
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 26,
@@ -160,6 +156,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
         ),
         image: Image.network('https://elesson.com.br/app/library/image/' +
             question[0].header["image"]),
+        // image: Image.asset('assets/img/logo.png'),
         activityScreen: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -176,9 +173,9 @@ class MultipleChoiceQuestion extends ConsumerWidget {
               const SizedBox(
                 height: 35,
               ),
-              // piece(0, context, watch, question[0]),
-              // piece(1, context, watch, question[0]),
-              // piece(2, context, watch, question[0]),
+              piece(0, context, watch, question[0]),
+              piece(1, context, watch, question[0]),
+              piece(2, context, watch, question[0]),
               const SizedBox(
                 height: 35,
               ),
@@ -235,7 +232,7 @@ class SecondRoute extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            Text(question.questionText),
+            // Text(question.questionText),
             RaisedButton(
               onPressed: () {
                 Navigator.pop(context);

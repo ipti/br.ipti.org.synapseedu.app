@@ -125,41 +125,17 @@ class Groups {
 // }
 
 class Question {
-  String questionText;
   String questionImage;
-  String firstItem;
-  String firstItemImage;
-  String secondItem;
-  String secondItemImage;
-  String thirdItem;
-  String thirdItemImage;
-  List<String> piecesItem;
-  List<String> piecesImage;
-  String firstLayertype;
-  String secondLayertype;
-  String thirdLayertype;
   Map<String, String> header;
+  Map<String, dynamic> pieces;
 
   Question({
-    this.questionText,
     this.questionImage,
-    this.firstItem,
-    this.firstItemImage,
-    this.secondItem,
-    this.secondItemImage,
-    this.thirdItem,
-    this.thirdItemImage,
-    this.piecesItem,
-    this.piecesImage,
-    this.firstLayertype,
-    this.secondLayertype,
-    this.thirdLayertype,
     this.header = const {},
+    this.pieces = const {},
   });
   List<String> questionItems = [];
   List<String> questionImages = [];
-  String imageLink = "";
-  String soundLink = "";
 
   List<String> addTextItems(Map<String, dynamic> json) {
     //A implementação mudará quando tiver um exemplo sem bugs do json
@@ -184,67 +160,45 @@ class Question {
     String text;
     for (var elements in json["cobjects"][0]["screens"][0]["piecesets"][0]
         ["groups"]["1"]["elements"]) {
-      // print(elements["type"]);
       if (elements["type"] == "text") {
-        // print(elements["type"]);
         text = elements["generalProperties"][1]["value"];
-        // print('Funcionou: $text');
         break;
       } else {
-        // print('Entrou aqui: ${elements["generalProperties"][1]["value"]}');
         text = "Não funcionou";
       }
     }
     return text;
   }
 
-  Map<String, String> map = {
-    "imagem": "",
-    "som": "",
-  };
   String src;
   Map<String, String> questionMultimediaSearch(Map<String, dynamic> json) {
     Map<String, String> srcMap = {
       "image": "",
       "sound": "",
+      "text": "",
     };
     for (var elements in json["cobjects"][0]["screens"][0]["piecesets"][0]
         ["groups"]["1"]["elements"]) {
-      print(elements["type"]);
       if (elements["type"] == "multimidia") {
         elements["generalProperties"].forEach((pair) {
           if (pair["name"] == "src") {
             src = pair["value"];
-            print("Atribuiu: ${pair["value"]}");
           }
           if (pair["name"] == "library_type") {
             if (pair["value"] == "image") {
-              map["imagem"] = src;
-              imageLink = src;
               srcMap.update("image", (value) => src);
-              print('É imagem: $imageLink');
-              return imageLink;
             } else {
-              soundLink = src;
-              map["som"] = src;
-              print('É som: $soundLink');
               srcMap.update("sound", (value) => src);
-              return soundLink;
             }
           }
         });
-        // print(elements["type"]);
-        // src = elements["generalProperties"][1]["value"];
-        // print('Funcionou: $src');
         // break;
-      } else {
-        print('Entrou aqui: ${elements["generalProperties"][1]["value"]}');
+      } else if (elements["type"] == "text") {
+        srcMap.update(
+            "text", (value) => elements["generalProperties"][1]["value"]);
         // src = "Não funcionou";
       }
-      print("executou");
     }
-    // print('Interno: ${imageLink} or $soundLink');
-    print('Retornou: $src');
     // if (imageLink != null) {
     //   print("entroukkkk");
     //   return imageLink;
@@ -252,57 +206,82 @@ class Question {
     return srcMap;
   }
 
+  Map<String, dynamic> questionItemSearch(Map<String, dynamic> groups) {
+    // Esse método busca pelos items de resposta na questão e retorna um mapa com os atributos:
+    // Lista de Map<grouping,elements> que contém uma lista dos groupings das questões e seus respectivos
+    // elementos.
+    // Também foi adicionado uma chave correctAnswer que obtém o grouping correto da questão, além de um
+    // uma chave composition que indica se na questão tem som, imagem e texto nos itens.
+
+    Map<String, dynamic> itemsMap = {
+      // "firstItem": {},
+      // "secondItem": {},
+      // "thirdItem": {},
+      "correctAnswer": 0,
+      "composition": {
+        "text": false,
+        "image": false,
+        "sound": false,
+      }
+    };
+    String src;
+    List<Map<String, String>> item = [
+      {"text": "", "sound": "", "image": ""},
+      {"text": "", "sound": "", "image": ""},
+      {"text": "", "sound": "", "image": ""},
+      {"text": "", "sound": "", "image": ""},
+      {"text": "", "sound": "", "image": ""}
+    ];
+    Map<String, String> map = {};
+    var index = 0;
+    groups.forEach((group, elements) {
+      elements.forEach((element, elementProperty) {
+        for (var value in elementProperty) {
+          if (value["pieceElement_Properties"]["layertype"] == "Acerto") {
+            itemsMap["correctAnswer"] =
+                int.parse(value["pieceElement_Properties"]["grouping"]);
+          }
+          // A parte abaixo começa a testar o tipo do item presente em elements para atribuir o caminho do item
+          // na respectiva chave. Assim que encontrar determinado tipo de elemento, ele também atualiza a
+          // chave que indica a composição da questão para verdadeiro.
+
+          if (value["type"] == "text") {
+            item[index].update(
+                "text", (val) => value["generalProperties"][1]["value"]);
+            if (itemsMap["composition"]["text"] == false)
+              itemsMap["composition"]["text"] = true;
+          } else if (value["type"] == "multimidia") {
+            // O pair abaixo representa o par com chaves 'name' e 'value' característicos do generalProperties.
+            for (var pair in value["generalProperties"]) {
+              if (pair["name"] == "src") {
+                if (pair["value"].endsWith(".mp3")) {
+                  item[index].update("sound", (val) => pair["value"]);
+                  if (itemsMap["composition"]["sound"] == false)
+                    itemsMap["composition"]["sound"] = true;
+                } else {
+                  item[index].update("image", (val) => pair["value"]);
+                  if (itemsMap["composition"]["image"] == false)
+                    itemsMap["composition"]["image"] = true;
+                }
+              }
+            }
+          }
+        }
+      });
+      itemsMap.putIfAbsent(group, () => item[index]);
+      index++;
+    });
+    return itemsMap;
+  }
+
   // factory Question.fromJson(Map<String, dynamic> json) => Question(
   static Question fromJson(Map<String, dynamic> json) {
     Map<String, String> mapa = Question().questionMultimediaSearch(json);
-    print('Funciona: $mapa');
     return Question(
-      // questionText: json["cobjects"][0]["screens"][0]["piecesets"][0]["groups"]
-      //     ["1"]["elements"][0]["generalProperties"][1]["value"],
-      questionText: Question().questionTextSearch(json),
-      // questionImage: Question().questionMultimediaSearch(json),
       questionImage: mapa["image"],
       header: Question().questionMultimediaSearch(json),
-      // json["cobjects"][0]["screens"][0]["piecesets"][0]["groups"]["1"]
-      //         ["elements"]
-      //     .forEach((value) {
-      //   if (value["type"] == "text") {
-      //     questionText:
-      //     value["generalProperties"][1]["value"];
-      //   }
-      // }),
-      // questionImage: json["cobjects"][0]["screens"][0]["piecesets"][0]["groups"]
-      //     ["1"]["elements"][1]["generalProperties"][3]["value"],
-      // firstItem: json["cobjects"][0]["screens"][0]["piecesets"][0]["pieces"][0]
-      //     ["groups"]["1"]["elements"][0]["generalProperties"][1]["value"],
-      // // firstItemImage: json["cobjects"][0]["screens"][0]["piecesets"][0]
-      // //         ["pieces"][0]["groups"]["1"]["elements"][0]["generalProperties"]
-      // //     [7]["value"],
-      // secondItem: json["cobjects"][0]["screens"][0]["piecesets"][0]["pieces"][0]
-      //     ["groups"]["2"]["elements"][0]["generalProperties"][1]["value"],
-      // // secondItemImage: json["cobjects"][0]["screens"][0]["piecesets"][0]
-      // //         ["pieces"][0]["groups"]["2"]["elements"][0]["generalProperties"][7]
-      // //     ["value"],
-      // thirdItem: json["cobjects"][0]["screens"][0]["piecesets"][0]["pieces"][0]
-      //     ["groups"]["3"]["elements"][0]["generalProperties"][1]["value"],
-      // // thirdItemImage: json["cobjects"][0]["screens"][0]["piecesets"][0]
-      // //         ["pieces"][0]["groups"]["3"]["elements"][0]["generalProperties"]
-      // //     [7]["value"],
-      // firstLayertype: json["cobjects"][0]["screens"][0]["piecesets"][0]
-      //         ["pieces"][0]["groups"]["1"]["elements"][0]
-      //     ["pieceElement_Properties"]["layertype"],
-      // secondLayertype: json["cobjects"][0]["screens"][0]["piecesets"][0]
-      //         ["pieces"][0]["groups"]["2"]["elements"][0]
-      //     ["pieceElement_Properties"]["layertype"],
-      // thirdLayertype: json["cobjects"][0]["screens"][0]["piecesets"][0]
-      //         ["pieces"][0]["groups"]["3"]["elements"][0]
-      //     ["pieceElement_Properties"]["layertype"],
-      // piecesImage: Question().addList(json["cobjects"][0]["screens"][0]
-      //     ["piecesets"][0]["pieces"][0]["groups"]),
-      // piecesItem: (Question().addTextItems(json["cobjects"][0]["screens"][0]
-      //     ["piecesets"][0]["pieces"][0]["groups"])),
-      // piecesItem.addAll(Question().addTextItems(json["cobjects"][0]["screens"][0]
-      // ["piecesets"][0]["pieces"][0]["groups"])),
+      pieces: Question().questionItemSearch(json["cobjects"][0]["screens"][0]
+          ["piecesets"][0]["pieces"][0]["groups"]),
     );
   }
 }

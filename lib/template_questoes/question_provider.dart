@@ -2399,7 +2399,7 @@ class Cobjects extends StateNotifier<List<Cobject>> {
     } ]
   } ]
 } ]''';
-    } else {
+    } else if (index == 2) {
       jason = '''[ {
   "valid" : true,
   "error" : [ "Num Cobjects: 1" ],
@@ -2808,6 +2808,229 @@ class Cobjects extends StateNotifier<List<Cobject>> {
     "elements" : [ ]
   } ]
 } ]''';
+    } else if (index == 3) {
+      jason = '''[ {
+  "valid" : true,
+  "error" : [ "Num Cobjects: 1" ],
+  "cobjects" : [ {
+    "cobject_id" : "3976",
+    "description" : "",
+    "cobject_type" : "Atividade",
+    "template_name" : "Multipla Escolha",
+    "template_code" : "MTE",
+    "format_code" : "Vertical",
+    "interative_code" : "Click",
+    "theme" : "ELESSON",
+    "status" : "on",
+    "goal" : "Identificar letra na palavra ",
+    "goal_id" : "15",
+    "degree_name" : "Fundamental - 1º ANO/1",
+    "stage" : "14",
+    "year" : "1",
+    "grade" : "1",
+    "degree_parent" : "Fundamental Menor - 1º ANO",
+    "discipline" : "Português",
+    "content" : "Português",
+    "content_parent_name" : null,
+    "modality" : null,
+    "content_parent" : null,
+    "id" : "1181",
+    "total_pieces" : "1",
+    "screens" : [ {
+      "id" : "9156",
+      "cobject_id" : "3976",
+      "oldID" : null,
+      "position" : "0",
+      "piecesets" : [ {
+        "id" : "9555",
+        "description" : "",
+        "groups" : {
+          "1" : {
+            "elements" : [ {
+              "id" : "64790",
+              "piecesetElementID" : "18684",
+              "type" : "text",
+              "generalProperties" : [ {
+                "name" : "language",
+                "value" : "português"
+              }, {
+                "name" : "text",
+                "value" : "Clique na letra que está contida na palavra apresentada."
+              } ],
+              "piecesetElement_Properties" : {
+                "grouping" : "1",
+                "layertype" : null
+              }
+            }, {
+              "id" : "64791",
+              "piecesetElementID" : "18685",
+              "type" : "multimidia",
+              "generalProperties" : [ {
+                "name" : "library_id",
+                "value" : "37431"
+              }, {
+                "name" : "src",
+                "value" : "f4024888affe967269443b5ad526ab0d.mp3"
+              }, {
+                "name" : "extension",
+                "value" : "mp3"
+              }, {
+                "name" : "alias",
+                "value" : "Clique na letra que está contida na palavra apresentada"
+              }, {
+                "name" : "library_type",
+                "value" : "sound"
+              } ],
+              "piecesetElement_Properties" : {
+                "grouping" : "1",
+                "layertype" : null
+              }
+            }, {
+              "id" : "64792",
+              "piecesetElementID" : "18686",
+              "type" : "multimidia",
+              "generalProperties" : [ {
+                "name" : "library_id",
+                "value" : "37432"
+              }, {
+                "name" : "width",
+                "value" : "400"
+              }, {
+                "name" : "height",
+                "value" : "401"
+              }, {
+                "name" : "src",
+                "value" : "f561c2fa650496c79a1b85fd306200d5.png"
+              }, {
+                "name" : "extension",
+                "value" : "png"
+              }, {
+                "name" : "alias",
+                "value" : "Bicicleta"
+              }, {
+                "name" : "library_type",
+                "value" : "image"
+              } ],
+              "piecesetElement_Properties" : {
+                "grouping" : "1",
+                "layertype" : null
+              }
+            } ]
+          }
+        },
+        "pieces" : [ {
+          "id" : "9688",
+          "name" : null,
+          "description" : null,
+          "groups" : {
+            "1" : {
+              "elements" : [ {
+                "generalProperties" : [ {
+                  "name" : "library_id",
+                  "value" : "37433"
+                }, {
+                  "name" : "width",
+                  "value" : "400"
+                }, {
+                  "name" : "height",
+                  "value" : "400"
+                }, {
+                  "name" : "src",
+                  "value" : "ab9253cc641cba78378b380f079fd54a.png"
+                }, {
+                  "name" : "extension",
+                  "value" : "png"
+                }, {
+                  "name" : "alias",
+                  "value" : "Lertra B"
+                }, {
+                  "name" : "library_type",
+                  "value" : "image"
+                } ],
+                "id" : "64793",
+                "pieceElementID" : "46587",
+                "pieceElement_Properties" : {
+                  "grouping" : "1",
+                  "layertype" : "Erro"
+                },
+                "type" : "multimidia"
+              } ]
+            },
+            "2" : {
+              "elements" : [ {
+                "generalProperties" : [ {
+                  "name" : "library_id",
+                  "value" : "37434"
+                }, {
+                  "name" : "width",
+                  "value" : "401"
+                }, {
+                  "name" : "height",
+                  "value" : "401"
+                }, {
+                  "name" : "src",
+                  "value" : "92f96652275fac134daff3ff604c7147.png"
+                }, {
+                  "name" : "extension",
+                  "value" : "png"
+                }, {
+                  "name" : "alias",
+                  "value" : "Letra D"
+                }, {
+                  "name" : "library_type",
+                  "value" : "image"
+                } ],
+                "id" : "64794",
+                "pieceElementID" : "46588",
+                "pieceElement_Properties" : {
+                  "grouping" : "2",
+                  "layertype" : "Erro"
+                },
+                "type" : "multimidia"
+              } ]
+            },
+            "3" : {
+              "elements" : [ {
+                "generalProperties" : [ {
+                  "name" : "library_id",
+                  "value" : "37435"
+                }, {
+                  "name" : "width",
+                  "value" : "401"
+                }, {
+                  "name" : "height",
+                  "value" : "401"
+                }, {
+                  "name" : "src",
+                  "value" : "48a8cc1dd280608621a4aeb582012e97.png"
+                }, {
+                  "name" : "extension",
+                  "value" : "png"
+                }, {
+                  "name" : "alias",
+                  "value" : "Letra P"
+                }, {
+                  "name" : "library_type",
+                  "value" : "image"
+                } ],
+                "id" : "64795",
+                "pieceElementID" : "46589",
+                "pieceElement_Properties" : {
+                  "grouping" : "3",
+                  "layertype" : "Erro"
+                },
+                "type" : "multimidia"
+              } ]
+            }
+          },
+          "types_elements" : [ ]
+        } ],
+        "template_code" : "PRE"
+      } ]
+    } ],
+    "elements" : [ ]
+  } ]
+} ]''';
     }
     return jason;
   }
@@ -2830,7 +3053,10 @@ class Cobjects extends StateNotifier<List<Cobject>> {
     Map<String, dynamic> jsonImages;
     List<String> imageLink;
     //0 e 2 são MTE
-    mockJson = stringJson(2);
+
+    // A função stringJson contém as Strings com jsons de questões diferentes para testar antes de
+    // obter a questão direto da API
+    mockJson = stringJson(3);
 
     // var url =
     //     'http://app.elesson.com.br/api-synapse/synapse/offline/cobject/1471';
@@ -2853,32 +3079,9 @@ class Cobjects extends StateNotifier<List<Cobject>> {
       final List<Cobject> loadedCobject = [];
       final List<Screen> loadedScreen = [];
       final List<Question> loadedQuestion = [];
-      // extractedData.forEach((json) {
-      //   // print(json["cobjects"][0]["screens"][0]);
-      //   loadedCobject.add(Cobject(
-      //     templateCode: json["cobjects"][0]["template_code"],
-      //     discipline: json["cobjects"][0]["discipline"],
-      //     modality: json["cobjects"][0]["modality"],
-      //     totalPieces: int.parse(json["cobjects"][0]["total_pieces"]),
-      //     screen: Screen.fromJson(json["cobjects"][0]["screens"][0]),
-      //   ));
-      // });
 
       extractedData.forEach((json) {
-        // print(json["cobjects"][0]["screens"][0]);
-
         loadedQuestion.add(Question.fromJson(json));
-        // json["cobjects"][0]["screens"][0]["piecesets"][0]["groups"]["1"]
-        //         ["elements"]
-        //     .forEach((value) {
-        //   if (value["type"] == "text") {
-        //     print('Texto: ${value["generalProperties"][1]["value"]}');
-        //   }
-        // });
-
-        // loadedQuestion.add(Question().fromJson(json));
-        // imageLink = Question().addList(json["cobjects"][0]["screens"][0]
-        //     ["piecesets"][0]["pieces"][0]["groups"]);
       });
 
       // print("imageLinks: $imageLink");
