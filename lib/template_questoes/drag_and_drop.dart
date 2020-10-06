@@ -1,9 +1,18 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
+import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/all.dart';
+
+import 'model.dart';
+
+final cobject = Provider<Cobjects>((ref) {
+  return Cobjects();
+});
 
 class DragAndDrop extends StatefulWidget {
   static const routeName = '/DDROP';
+
   @override
   _DragAndDropState createState() => _DragAndDropState();
 }
@@ -34,6 +43,9 @@ class _DragAndDropState extends State<DragAndDrop> {
   @override
   Widget build(BuildContext context) {
 
+    context.read(cobject).fetchCobjects(CObject);
+    List<Question> question = context.read(cobject).items;
+
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     CObject = args.CObject;
     print(CObject);
@@ -42,6 +54,11 @@ class _DragAndDropState extends State<DragAndDrop> {
     return Scaffold(
       resizeToAvoidBottomPadding: true,
       body: TemplateSlider(
+        title: Text(
+          question[0].header["text"],
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headline2,
+        ),
         activityScreen: DAD(larguraTela),
       ),
     );
@@ -197,13 +214,25 @@ class _DragAndDropState extends State<DragAndDrop> {
   void TradeValue(int ReceiverAtual, int data) {
     switch (ReceiverAtual) {
       case 1:
-        VALUE_SecondReceiver == data ? VALUE_SecondReceiver = 0 : VALUE_ThirdReceiver == data ? VALUE_ThirdReceiver = 0 : {};
+        VALUE_SecondReceiver == data
+            ? VALUE_SecondReceiver = 0
+            : VALUE_ThirdReceiver == data
+                ? VALUE_ThirdReceiver = 0
+                : {};
         break;
       case 2:
-        VALUE_FirstReceiver == data ? VALUE_FirstReceiver = 0 : VALUE_ThirdReceiver == data ? VALUE_ThirdReceiver = 0 : {};
+        VALUE_FirstReceiver == data
+            ? VALUE_FirstReceiver = 0
+            : VALUE_ThirdReceiver == data
+                ? VALUE_ThirdReceiver = 0
+                : {};
         break;
       case 3:
-        VALUE_FirstReceiver == data ? VALUE_FirstReceiver = 0 : VALUE_SecondReceiver == data ? VALUE_SecondReceiver = 0 : {};
+        VALUE_FirstReceiver == data
+            ? VALUE_FirstReceiver = 0
+            : VALUE_SecondReceiver == data
+                ? VALUE_SecondReceiver = 0
+                : {};
         break;
     }
   }

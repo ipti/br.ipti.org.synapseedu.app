@@ -1,7 +1,13 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
+import 'package:elesson/template_questoes/model.dart';
+import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
+
+final cobject = Provider<Cobjects>((ref) {
+  return Cobjects();
+});
 
 class TextQuestion extends ConsumerWidget {
 
@@ -32,17 +38,21 @@ class TextQuestion extends ConsumerWidget {
     CObject = args.CObject;
     print(CObject);
 
+    context.read(cobject).fetchCobjects(CObject);
+    List<Question> question = context.read(cobject).items;
+
+
     final buttonState = watch(buttonStateProvider).state;
     bool image = true;
     return Scaffold(
       body: TemplateSlider(
         title: Text(
-          "Texto da questão",
+          question[0].header["text"],
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline2,
         ),
-        image: Image.network(
-            'http://1.bp.blogspot.com/-Dk9tb3fDa68/UUN932BEVHI/AAAAAAAABNs/iqm8mdkMoA8/s1600/cubo_magico_montado.png'),
+        image: Image.network('https://elesson.com.br/app/library/image/' +
+            question[0].header["image"]),
         activityScreen: Container(
           margin: EdgeInsets.all(8),
           child: Form(
