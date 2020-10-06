@@ -25,7 +25,8 @@ class TemplateSlider extends StatelessWidget {
 
   Widget topScreen(double screenWidth, double screenHeight) {
     return Container(
-      decoration: BoxDecoration(color: Colors.grey[200]),
+      // decoration: BoxDecoration(color: Colors.grey[200]),
+      decoration: BoxDecoration(color: Colors.white),
       width: screenWidth,
       height: screenHeight,
       child: Column(
