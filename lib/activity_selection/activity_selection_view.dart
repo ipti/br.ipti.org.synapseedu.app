@@ -15,7 +15,8 @@ import 'package:elesson/share/api.dart';
 
 class ActivitySelectionForm extends StatefulWidget {
   @override
-  _ActivitySelectionFormState createState() => new _ActivitySelectionFormState();
+  _ActivitySelectionFormState createState() =>
+      new _ActivitySelectionFormState();
 }
 
 class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
@@ -28,14 +29,14 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   String nome_turma_selecionada = "Selecione Sua Turma";
   var id_turma_selecionada;
 
-  String nome_aluno_selecionada = "Selecione Sua Turma";
+  String nomeAlunoSelecionado = "Selecionar aluno(a)";
   var id_aluno_selecionada;
   bool valido;
 
   bool checkAluno = true;
   bool checkMateria = true;
   //<=======================JOGAR AQUI O ID DO COBJET RECEBIDO===========================>
-  String ID_COBJECT = '3977';
+  String cobjectId = '3977';
 
   var Cobject = new List<dynamic>();
   var tipo_questao;
@@ -45,6 +46,10 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   _ActivitySelectionFormState() {
     _getTurmas(ID_ESCOLA);
   }
+  //<===================================PARA OS TESTES =======================================================>
+  List questionType = ['MTE', 'PRE', 'DAD'];
+  String typeSelected = "Selecione o tipo da questão";
+
   //<=================================GETS DA API===============================================>
   _getTurmas(String id_escola) async {
     //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
@@ -74,19 +79,38 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
         Cobject = response.data;
         tipo_questao = Cobject[0]["cobjects"][0]["template_code"];
       });
-      switch(tipo_questao){
-        case 'PRE':
-          Navigator.of(context).pushNamedAndRemoveUntil(TextQuestion.routeName, (Route<dynamic> route) => false,arguments: ScreenArguments(Cobject));
-          break;
-        case 'DDROP':
-          Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, (Route<dynamic> route) => false,arguments: ScreenArguments(Cobject));
-          break;
-        case 'MTE':
-           Navigator.of(context).pushNamedAndRemoveUntil(MultipleChoiceQuestion.routeName, (Route<dynamic> route) => false,arguments: ScreenArguments(Cobject));
-           break;
+      switch (tipo_questao) {
+        // pushNamedAndRemoveUntil
+        // case 'PRE':
+        //   Navigator.of(context).pushNamedAndRemoveUntil(
+        //       TextQuestion.routeName, (Route<dynamic> route) => false,
+        //       arguments: ScreenArguments(Cobject));
+        //   break;
+        // case 'DDROP':
+        //   Navigator.of(context).pushNamedAndRemoveUntil(
+        //       DragAndDrop.routeName, (Route<dynamic> route) => false,
+        //       arguments: ScreenArguments(Cobject));
+        //   break;
+        // case 'MTE':
+        //   Navigator.of(context).pushNamedAndRemoveUntil(
+        //       MultipleChoiceQuestion.routeName, (Route<dynamic> route) => false,
+        //       arguments: ScreenArguments(Cobject));
+        //   break;
         // case 'TXT':
         //   Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, (Route<dynamic> route) => false,arguments: ScreenArguments(Cobject));
         //   break;
+        case 'PRE':
+          Navigator.of(context).pushNamed(TextQuestion.routeName,
+              arguments: ScreenArguments(Cobject));
+          break;
+        case 'DDROP':
+          Navigator.of(context).pushNamed(DragAndDrop.routeName,
+              arguments: ScreenArguments(Cobject));
+          break;
+        case 'MTE':
+          Navigator.of(context).pushNamed(MultipleChoiceQuestion.routeName,
+              arguments: ScreenArguments(Cobject));
+          break;
       }
     });
   }
@@ -104,7 +128,9 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
           child: Container(
             width: larguraTela,
             height: alturaTela * 0.08,
-            decoration: BoxDecoration(border: Border.all(color: Colors.green, width: 3), borderRadius: BorderRadius.circular(20)),
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.green, width: 3),
+                borderRadius: BorderRadius.circular(20)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -121,18 +147,21 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
         //<====NOME=====>
         GestureDetector(
           onTap: () {
-            showAlertDialog_Aluno(context);
+            // showAlertDialog_Aluno(context);
+            showQuestionAlertDialog(context);
           },
           child: Container(
             margin: EdgeInsets.only(top: 20),
             width: larguraTela,
             height: alturaTela * 0.08,
-            decoration: BoxDecoration(border: Border.all(color: Colors.green, width: 3), borderRadius: BorderRadius.circular(20)),
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.green, width: 3),
+                borderRadius: BorderRadius.circular(20)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  nome_aluno_selecionada,
+                  typeSelected,
                   style: TextStyle(fontSize: alturaTela * 0.02),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -204,22 +233,77 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      nome_aluno_selecionada = nome_aluno;
+                      nomeAlunoSelecionado = nome_aluno;
                       id_aluno_selecionada = id_aluno;
                       checkAluno = true;
-                      Direcionar_Para_Questao();
+                      direcionarParaQuestao();
                     });
                     Navigator.of(context).pop();
                     checkAluno = true;
-                    Direcionar_Para_Questao();
+                    direcionarParaQuestao();
+                    // print('''
+                    //     Nome selecionado:  $nomeAlunoSelecionado
+                    //     ID o aluno selecionada: $id_aluno_selecionada
+                    //   ''');
+                    print("Tipo da questão selecionada $typeSelected");
+                  },
+                  child: ListTile(
+                    title: Text(
+                      nome_aluno,
+                      style: TextStyle(fontSize: 20, color: Colors.black),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  showQuestionAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            height: MediaQuery.of(context).size.height * 0.5,
+            child: ListView.builder(
+              itemCount: questionType.length,
+              itemBuilder: (context, index) {
+                String qType = questionType[index];
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      typeSelected = qType;
+                      checkAluno = true;
+                      switch (typeSelected) {
+                        case "MTE":
+                          cobjectId = "3976";
+                          break;
+                        case "PRE":
+                          cobjectId = "3977";
+                          break;
+                        case "DAD":
+                          cobjectId = "3977";
+                          break;
+                        default:
+                      }
+                      direcionarParaQuestao();
+                    });
+                    Navigator.of(context).pop();
+                    checkAluno = true;
+                    direcionarParaQuestao();
                     print('''
-                        Nome selecionado:  $nome_aluno_selecionada
+                        Nome selecionado:  $nomeAlunoSelecionado
                         ID o aluno selecionada: $id_aluno_selecionada
                       ''');
                   },
                   child: ListTile(
                     title: Text(
-                      nome_aluno,
+                      questionType[index],
                       style: TextStyle(fontSize: 20, color: Colors.black),
                     ),
                   ),
@@ -280,7 +364,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                       onPressed: () {
                         setState(() {
                           checkMateria = true;
-                          Direcionar_Para_Questao();
+                          direcionarParaQuestao();
                         });
                       },
                       child: Text('Português'),
@@ -295,7 +379,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                       onPressed: () {
                         setState(() {
                           checkMateria = true;
-                          Direcionar_Para_Questao();
+                          direcionarParaQuestao();
                         });
                       },
                       child: Text('Matemática'),
@@ -321,9 +405,9 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   }
 
   // FUNÇÃO PARA RECEBER OS DADOS DO COBJECT QUANDO A TURMA E O ALUNO FOR SELECIONADO
-  void Direcionar_Para_Questao() {
+  void direcionarParaQuestao() {
     if (checkAluno == true && checkMateria == true) {
-      _getCobject(ID_COBJECT);
+      _getCobject(cobjectId);
     }
   }
 }

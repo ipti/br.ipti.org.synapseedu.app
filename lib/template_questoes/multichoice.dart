@@ -9,6 +9,8 @@ import './question_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import './model.dart';
 
+const String BASE_URL = 'https://elesson.com.br/app/library';
+
 final cobject = Provider<Cobjects>((ref) {
   return Cobjects();
 });
@@ -29,15 +31,12 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   List<bool> _buttonPressed = [false, false, false];
   int _selectedButton = 3;
 
-  void play() {
-    //Tocar áudio. Como ele necessita de um áudio exemplo, estou utilizando
-    //o ringtone player para testar.
+  AudioPlayer player = new AudioPlayer();
 
-    // AudioPlayer player = new AudioPlayer();
-    // await player.play("caminho");
+  void playSound(String sound) async {
+    await player.play(BASE_URL + '/sound/' + sound);
 
-    //Caso não tenha um áudio de exemplo
-    FlutterRingtonePlayer.playNotification();
+    // FlutterRingtonePlayer.playNotification();
   }
 
   final buttonStateProvider = StateProvider<bool>((ref) {
@@ -79,10 +78,9 @@ class MultipleChoiceQuestion extends ConsumerWidget {
               minWidth: 200,
               padding: EdgeInsets.all(2),
               color: _buttonPressed[index] ? Colors.amber : Colors.green[300],
-              child: question.questionImage == null
+              child: question.questionImage != null
                   ? Image.network(
-                      'https://elesson.com.br/app/library/image/' +
-                          question.pieces[grouping]["image"],
+                      BASE_URL + '/image/' + question.pieces[grouping]["image"],
                     )
                   // ? Image.asset('assets/img/placeholder.jpg')
                   : Container(
@@ -119,7 +117,9 @@ class MultipleChoiceQuestion extends ConsumerWidget {
               highlightColor: Theme.of(context).primaryColor,
               splashColor: Theme.of(context).primaryColor,
               onPressed: () {
-                play();
+                playSound(
+                  question.pieces[grouping]["sound"],
+                );
               },
             ),
         ],
@@ -136,8 +136,6 @@ class MultipleChoiceQuestion extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-
-
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     CObject = args.CObject;
     //print(CObject);
@@ -155,14 +153,34 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     // print("Header: ${question[0].header}");
     // print("Pieces: ${question[0].pieces}");
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.arrow_back_ios),
+        onPressed: () => {
+          Navigator.of(context).pop(),
+        },
+      ),
       body: TemplateSlider(
         title: Center(
-          child: Text(
-            question[0].header["text"],
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 26,
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            // alignment: Alignment.bottomLeft,
+            children: [
+              Text(
+                question[0].header["text"],
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 26,
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.volume_up),
+                highlightColor: Theme.of(context).primaryColor,
+                splashColor: Theme.of(context).primaryColor,
+                onPressed: () {
+                  playSound(question[0].header["sound"]);
+                },
+              ),
+            ],
           ),
         ),
         image: Image.network('https://elesson.com.br/app/library/image/' +
@@ -181,15 +199,9 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                   fontSize: 28,
                 ),
               ),
-              const SizedBox(
-                height: 35,
-              ),
               piece(0, context, watch, question[0]),
               piece(1, context, watch, question[0]),
               piece(2, context, watch, question[0]),
-              const SizedBox(
-                height: 35,
-              ),
               MaterialButton(
                 onPressed: () {
                   // _selectedButton > 2

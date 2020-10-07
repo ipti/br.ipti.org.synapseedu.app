@@ -15,7 +15,6 @@ import 'package:dio/dio.dart';
 //lembrar de descomentar notifyListeners
 // class Cobjects with ChangeNotifier {
 class Cobjects extends StateNotifier<List<Cobject>> {
-
   Cobjects() : super([]);
 // class Cobjects extends ChangeNotifier {
   int _assuntoId;
@@ -3038,17 +3037,8 @@ class Cobjects extends StateNotifier<List<Cobject>> {
 
   String mockJson;
 
-  // void getImageFromApi(String imageName) async {
-  //   try {
-  //     Response response = await Dio()
-  //         .get("http://dev.elesson.com.br:8080/library/image/" + imageName);
-  //     print(response.data);
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
-
   // Future<void> fetchCobjects() async {
+
   void fetchCobjects(List<dynamic> CObject) {
     _items.clear();
     Map<String, dynamic> jsonImages;
@@ -3072,19 +3062,15 @@ class Cobjects extends StateNotifier<List<Cobject>> {
       // var extractedDataz =
       //     json.decode((response.data).toString()) as List<dynamic>;
 
-
-      String jssson = jsonEncode(CObject);
-      print(jssson);
-      var extractedData = json.decode(jssson) as List<dynamic>;
+      String jasonEncoded = jsonEncode(CObject);
+      // print(jasonEncoded);
+      var extractedData = json.decode(jasonEncoded) as List<dynamic>;
 
       //var extractedData = json.decode(mockJson) as List<dynamic>;
 
       if (extractedData == null) {
         return null;
       }
-      // print(extractedData[0]["cobjects"][0]["screens"][0]["piecesets"][0]
-      //         ["groups"]
-      //     .length);
       final List<Cobject> loadedCobject = [];
       final List<Screen> loadedScreen = [];
       final List<Question> loadedQuestion = [];
@@ -3092,115 +3078,10 @@ class Cobjects extends StateNotifier<List<Cobject>> {
       extractedData.forEach((json) {
         loadedQuestion.add(Question.fromJson(json));
       });
-
-      // print("imageLinks: $imageLink");
-      // print(loadedQuestion[0].questionText);
-      // print(loadedQuestion[0].questionImage);
-      // print(loadedQuestion[0].firstItem);
-      // print(loadedQuestion[0].secondItem);
-      // print(loadedQuestion[0].thirdItem);
-      // print(loadedQuestion[0].thirdItemImage);
-      // print(loadedQuestion[0].firstLayertype);
-      // print(loadedQuestion[0].secondLayertype);
-      // print(loadedQuestion[0].thirdLayertype);
-      // print(loadedQuestion[0].piecesItem);
-      // print('Ibagens: ${loadedQuestion[0].piecesImage}');
-
-      // _assuntoId = loadedCobject[0].id;
-      // _items = loadedQuestion;
-      // _questionList = loadedQuestion;
       _questionList.addAll(loadedQuestion);
-      // print("Dentro: ${_questionList[0].piecesItem}");
-      // print(loadedCobject[0].screen.piecesets.piecesetId);
-
       // notifyListeners();
     } catch (error) {
       throw (error);
     }
   }
-
-  // void offlineAssuntos([bool filterByUser = false]) {
-  //   // final filterString = filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
-
-  //   final List<Assunto> loadedAssuntos = [];
-  //   loadedAssuntos.add(Assunto(
-  //     id: 5,
-  //     titulo: 'Radiologia',
-  //     dataHoraCriacao: DateTime.parse('25/06/2020'),
-  //     dataHoraModificacao: DateTime.parse('25/06/2020'),
-  //     // topicos: assunto['topicos'],
-  //   ));
-
-  //   _items = loadedAssuntos;
-  //   notifyListeners();
-  // }
-
-  // Future<void> addAssunto(Assunto assunto) async {
-  //   // final url = 'https://fluttershop-app.firebaseio.com/Assuntos.json?auth=$authToken';
-
-  //   // try {
-  //   //   final response = await http.post(
-  //   //     url, body: json.encode({
-  //   //       'id': assunto.id,
-  //   //       'titlo': assunto.titulo,
-  //   //       'imageUrl': assunto.imageUrl,
-  //   //       'price': assunto.price,
-  //   //       'creatorId': userId,
-  //   //     }),
-  //   //   );
-
-  //   //   final newAssunto = Assunto(
-  //   //     title: product.title,
-  //   //     description: product.description,
-  //   //     price: product.price,
-  //   //     imageUrl: product.imageUrl,
-  //   //     id: json.decode(response.body)['name'],
-  //   //   );
-
-  //   //   _items.add(newAssunto);
-  //   //   notifyListeners();
-
-  //   // } catch (error) {
-  //   //   throw error;
-  //   // }
-  //   //   // print(json.decode(response.body));
-  // }
-
-  // Future<void> updateAssunto(String id, Assunto newAssunto) async {
-  //   /*final prodIndex = _items.indexWhere((prod) => prod.id == id);
-  //   if (prodIndex >= 0) {
-  //     final url = 'https://fluttershop-app.firebaseio.com/products/$id.json?auth=$authToken';
-  //     await http.patch(
-  //       url,
-  //       body: json.encode({
-  //         'title': newAssunto.title,
-  //         'description': newAssunto.description,
-  //         'imageUrl': newAssunto.imageUrl,
-  //         'price': newAssunto.price,
-  //       })
-  //     );
-
-  //     _items[prodIndex] = newAssunto;
-  //     notifyListeners();
-  //   }*/
-  // }
-
-  // Future<void> deleteAssunto(String id) async {
-  //   // final url = 'https://fluttershop-app.firebaseio.com/products/$id.json?auth=$authToken';
-  //   // final existingAssuntoIndex = _items.indexWhere((prod) => prod.id == id);
-  //   // var existingAssunto = _items[existingAssuntoIndex];
-
-  //   // _items.removeAt(existingAssuntoIndex);
-  //   // notifyListeners();
-
-  //   // final response = await http.delete(url);
-
-  //   // if (response.statusCode >= 400) {
-  //   //   _items.insert(existingAssuntoIndex, existingAssunto);
-  //   //   notifyListeners();
-  //   //   throw HttpException('Could not delete product.');
-  //   // }
-
-  //   // existingAssunto = null;
-  // }
 }
