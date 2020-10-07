@@ -176,7 +176,9 @@ class Question {
       "image": "",
       "sound": "",
       "text": "",
+      "description": "",
     };
+    srcMap.update("description", (value) => json["cobjects"][0]["description"]);
     for (var elements in json["cobjects"][0]["screens"][0]["piecesets"][0]
         ["groups"]["1"]["elements"]) {
       if (elements["type"] == "multimidia") {
@@ -230,11 +232,13 @@ class Question {
       {"text": "", "sound": "", "image": ""},
       {"text": "", "sound": "", "image": ""},
       {"text": "", "sound": "", "image": ""},
+      {"text": "", "sound": "", "image": ""},
       {"text": "", "sound": "", "image": ""}
     ];
     Map<String, String> map = {};
     var index = 0;
     groups.forEach((group, elements) {
+      print(group);
       elements.forEach((element, elementProperty) {
         for (var value in elementProperty) {
           if (value["pieceElement_Properties"]["layertype"] == "Acerto") {

@@ -31,9 +31,12 @@ class _DragAndDropState extends State<DragAndDrop> {
       "https://i1.wp.com/socientifica.com.br/wp-content/uploads/2019/05/image_7150_1e-Hubble-Legacy-Field.jpg?resize=1140%2C1053&ssl=1";
 
   //<=======RECEIVER URL========>
-  String URL_FirstReceiver = "https://upload.wikimedia.org/wikipedia/commons/d/d0/Alvorada_de_outono_na_Imagem_de_Minas.JPG";
-  String URL_SecondReceiver = "https://upload.wikimedia.org/wikipedia/commons/d/d0/Alvorada_de_outono_na_Imagem_de_Minas.JPG";
-  String URL_ThirdReceiver = "https://upload.wikimedia.org/wikipedia/commons/d/d0/Alvorada_de_outono_na_Imagem_de_Minas.JPG";
+  String URL_FirstReceiver =
+      "https://upload.wikimedia.org/wikipedia/commons/d/d0/Alvorada_de_outono_na_Imagem_de_Minas.JPG";
+  String URL_SecondReceiver =
+      "https://upload.wikimedia.org/wikipedia/commons/d/d0/Alvorada_de_outono_na_Imagem_de_Minas.JPG";
+  String URL_ThirdReceiver =
+      "https://upload.wikimedia.org/wikipedia/commons/d/d0/Alvorada_de_outono_na_Imagem_de_Minas.JPG";
 
   //<=======RECEIVER VALUES========>
   int VALUE_FirstReceiver = 0;
@@ -42,7 +45,6 @@ class _DragAndDropState extends State<DragAndDrop> {
 
   @override
   Widget build(BuildContext context) {
-
     context.read(cobject).fetchCobjects(CObject);
     List<Question> question = context.read(cobject).items;
 
@@ -216,23 +218,17 @@ class _DragAndDropState extends State<DragAndDrop> {
       case 1:
         VALUE_SecondReceiver == data
             ? VALUE_SecondReceiver = 0
-            : VALUE_ThirdReceiver == data
-                ? VALUE_ThirdReceiver = 0
-                : {};
+            : VALUE_ThirdReceiver == data ? VALUE_ThirdReceiver = 0 : {};
         break;
       case 2:
         VALUE_FirstReceiver == data
             ? VALUE_FirstReceiver = 0
-            : VALUE_ThirdReceiver == data
-                ? VALUE_ThirdReceiver = 0
-                : {};
+            : VALUE_ThirdReceiver == data ? VALUE_ThirdReceiver = 0 : {};
         break;
       case 3:
         VALUE_FirstReceiver == data
             ? VALUE_FirstReceiver = 0
-            : VALUE_SecondReceiver == data
-                ? VALUE_SecondReceiver = 0
-                : {};
+            : VALUE_SecondReceiver == data ? VALUE_SecondReceiver = 0 : {};
         break;
     }
   }

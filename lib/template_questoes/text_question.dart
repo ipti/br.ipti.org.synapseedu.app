@@ -10,7 +10,6 @@ final cobject = Provider<Cobjects>((ref) {
 });
 
 class TextQuestion extends ConsumerWidget {
-
   static const routeName = '/PRE';
   // ignore: non_constant_identifier_names
   var CObject = new List<dynamic>();
@@ -36,18 +35,20 @@ class TextQuestion extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     CObject = args.CObject;
-    print(CObject);
+    // print(CObject);
 
     context.read(cobject).fetchCobjects(CObject);
     List<Question> question = context.read(cobject).items;
-
+    String questionDescription = question[0].header["description"];
+    String questionText = question[0].header["text"];
+    // print('Descrição:$questionDescription');
 
     final buttonState = watch(buttonStateProvider).state;
     bool image = true;
     return Scaffold(
       body: TemplateSlider(
         title: Text(
-          question[0].header["text"],
+          questionDescription,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline2,
         ),
@@ -62,14 +63,15 @@ class TextQuestion extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // if (image == true) Image.asset('assets/img/logo.png'),
-                Text(
-                  'Qual o nome do objeto da imagem?',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 28,
+                if (questionText.isEmpty)
+                  Text(
+                    questionText,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28,
+                    ),
                   ),
-                ),
                 SizedBox(height: 15),
                 Card(
                   child: TextFormField(
@@ -141,7 +143,6 @@ class TextQuestion extends ConsumerWidget {
     );
   }
 }
-
 
 // class ScreenArguments {
 //   final List<dynamic> CObject;

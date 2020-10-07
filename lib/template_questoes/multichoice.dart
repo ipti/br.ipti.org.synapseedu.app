@@ -142,9 +142,11 @@ class MultipleChoiceQuestion extends ConsumerWidget {
 
     // final cobjectsState = watch(cobject);
     // final cobjectsState = watch(cobject.state);
+    bool fetchBool = false;
+    if (fetchBool == false) {}
     context.read(cobject).fetchCobjects(CObject);
     List<Question> question = context.read(cobject).items;
-    // print("\n Tamanho: ${question.length}");
+    String questionDescription = question[0].header["description"];
 
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
 
@@ -152,6 +154,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
 
     // print("Header: ${question[0].header}");
     // print("Pieces: ${question[0].pieces}");
+
+    print('Descrição: ${question[0].header["description"]}');
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.arrow_back_ios),
@@ -165,13 +169,14 @@ class MultipleChoiceQuestion extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             // alignment: Alignment.bottomLeft,
             children: [
-              Text(
-                question[0].header["text"],
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 26,
+              if (questionDescription.isNotEmpty)
+                Text(
+                  question[0].header["text"],
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 26,
+                  ),
                 ),
-              ),
               IconButton(
                 icon: Icon(Icons.volume_up),
                 highlightColor: Theme.of(context).primaryColor,
@@ -192,7 +197,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
             // crossAxisAlignment: ,
             children: [
               Text(
-                'Como visto acima, faça pipipipopopó',
+                question[0].header["text"],
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
