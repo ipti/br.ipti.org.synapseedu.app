@@ -244,7 +244,6 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                     //     Nome selecionado:  $nomeAlunoSelecionado
                     //     ID o aluno selecionada: $id_aluno_selecionada
                     //   ''');
-                    print("Tipo da questão selecionada $typeSelected");
                   },
                   child: ListTile(
                     title: Text(
@@ -294,10 +293,6 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                     });
                     Navigator.of(context).pop();
                     checkAluno = true;
-                    print('''
-                        Nome selecionado:  $nomeAlunoSelecionado
-                        ID o aluno selecionada: $id_aluno_selecionada
-                      ''');
                   },
                   child: ListTile(
                     title: Text(

@@ -5,8 +5,10 @@ class TemplateSlider extends StatelessWidget {
   final Widget title;
   final Widget activityScreen;
   final Widget image;
+  final Widget sound;
 
-  const TemplateSlider({Key key, this.title, this.activityScreen, this.image})
+  const TemplateSlider(
+      {Key key, this.title, this.sound, this.activityScreen, this.image})
       : super(key: key);
 
   @override
@@ -25,6 +27,7 @@ class TemplateSlider extends StatelessWidget {
 
   Widget topScreen(double screenWidth, double screenHeight) {
     return Container(
+      margin: EdgeInsets.only(top: 10),
       // decoration: BoxDecoration(color: Colors.grey[200]),
       decoration: BoxDecoration(color: Colors.white),
       width: screenWidth,
@@ -33,6 +36,7 @@ class TemplateSlider extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(child: title != null ? title : Container()),
+          sound != null ? sound : Container(),
           image != null ? image : Container(),
         ],
       ),

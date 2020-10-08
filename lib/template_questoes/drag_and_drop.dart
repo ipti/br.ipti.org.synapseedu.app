@@ -1,4 +1,5 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
+import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/material.dart';
@@ -20,14 +21,12 @@ class DragAndDrop extends StatefulWidget {
 class _DragAndDropState extends State<DragAndDrop> {
   var CObject = new List<dynamic>();
 
-  String BASE_URL = 'https://elesson.com.br/app/library';
-
   bool accepted = false;
 
   //<=======RECEIVER VALUES========>
-  int VALUE_FirstReceiver = 0;
-  int VALUE_SecondReceiver = 0;
-  int VALUE_ThirdReceiver = 0;
+  int valueFirstReceiver = 0;
+  int valueSecondReceiver = 0;
+  int valueThirdReceiver = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +43,7 @@ class _DragAndDropState extends State<DragAndDrop> {
         ? Scaffold(
             resizeToAvoidBottomPadding: true,
             body: TemplateSlider(
+              sound: soundButton(context, question[0]),
               title: Text(
                 question[0].header["text"],
                 textAlign: TextAlign.center,
@@ -54,7 +54,8 @@ class _DragAndDropState extends State<DragAndDrop> {
           )
         : Scaffold(
             body: Center(
-              child: Column(mainAxisAlignment: MainAxisAlignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('CARREGANDO...'),
                   CircularProgressIndicator(),
@@ -86,12 +87,12 @@ class _DragAndDropState extends State<DragAndDrop> {
                 return true;
               },
               onAccept: (data) {
-                VALUE_FirstReceiver = data;
+                valueFirstReceiver = data;
                 TradeValue(1, data);
                 print("""
-                  1: $VALUE_FirstReceiver
-                  2: $VALUE_SecondReceiver
-                  3: $VALUE_ThirdReceiver
+                  1: $valueFirstReceiver
+                  2: $valueSecondReceiver
+                  3: $valueThirdReceiver
                   <---------------------->
                   """);
               },
@@ -118,12 +119,12 @@ class _DragAndDropState extends State<DragAndDrop> {
                 return true;
               },
               onAccept: (data) {
-                VALUE_SecondReceiver = data;
+                valueSecondReceiver = data;
                 TradeValue(2, data);
                 print("""
-                  1: $VALUE_FirstReceiver
-                  2: $VALUE_SecondReceiver
-                  3: $VALUE_ThirdReceiver
+                  1: $valueFirstReceiver
+                  2: $valueSecondReceiver
+                  3: $valueThirdReceiver
                   <---------------------->
                   """);
               },
@@ -150,12 +151,12 @@ class _DragAndDropState extends State<DragAndDrop> {
                 return true;
               },
               onAccept: (data) {
-                VALUE_ThirdReceiver = data;
+                valueThirdReceiver = data;
                 TradeValue(3, data);
                 print("""
-                  1: $VALUE_FirstReceiver
-                  2: $VALUE_SecondReceiver
-                  3: $VALUE_ThirdReceiver
+                  1: $valueFirstReceiver
+                  2: $valueSecondReceiver
+                  3: $valueThirdReceiver
                   <---------------------->
                   """);
               },
@@ -231,25 +232,19 @@ class _DragAndDropState extends State<DragAndDrop> {
   void TradeValue(int ReceiverAtual, int data) {
     switch (ReceiverAtual) {
       case 1:
-        VALUE_SecondReceiver == data
-            ? VALUE_SecondReceiver = 0
-            : VALUE_ThirdReceiver == data
-                ? VALUE_ThirdReceiver = 0
-                : {};
+        valueSecondReceiver == data
+            ? valueSecondReceiver = 0
+            : valueThirdReceiver == data ? valueThirdReceiver = 0 : {};
         break;
       case 2:
-        VALUE_FirstReceiver == data
-            ? VALUE_FirstReceiver = 0
-            : VALUE_ThirdReceiver == data
-                ? VALUE_ThirdReceiver = 0
-                : {};
+        valueFirstReceiver == data
+            ? valueFirstReceiver = 0
+            : valueThirdReceiver == data ? valueThirdReceiver = 0 : {};
         break;
       case 3:
-        VALUE_FirstReceiver == data
-            ? VALUE_FirstReceiver = 0
-            : VALUE_SecondReceiver == data
-                ? VALUE_SecondReceiver = 0
-                : {};
+        valueFirstReceiver == data
+            ? valueFirstReceiver = 0
+            : valueSecondReceiver == data ? valueSecondReceiver = 0 : {};
         break;
     }
   }

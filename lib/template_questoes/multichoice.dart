@@ -1,4 +1,5 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
+import 'package:elesson/share/question_widgets.dart';
 
 import './share/template_slider.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ import './question_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import './model.dart';
 
-const String BASE_URL = 'https://elesson.com.br/app/library';
+// const String BASE_URL = 'https://elesson.com.br/app/library';
 
 final cobject = Provider<Cobjects>((ref) {
   return Cobjects();
@@ -31,14 +32,6 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   List<bool> _buttonPressed = [false, false, false];
   int _selectedButton = 3;
 
-  AudioPlayer player = new AudioPlayer();
-
-  void playSound(String sound) async {
-    await player.play(BASE_URL + '/sound/' + sound);
-
-    // FlutterRingtonePlayer.playNotification();
-  }
-
   final buttonStateProvider = StateProvider<bool>((ref) {
     return false;
   });
@@ -48,7 +41,6 @@ class MultipleChoiceQuestion extends ConsumerWidget {
       if (_buttonPressed[i] == true && i != index) {
         _buttonPressed[i] = false;
         context.read(buttonStateProvider).state = false;
-        print('hello');
       }
     }
     if (_buttonPressed[index] == false) {
@@ -65,7 +57,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     bool audio = false;
     String grouping = (index + 1).toString();
     return Card(
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       elevation: 2,
       color: Colors.white,
       child: Stack(
@@ -76,7 +68,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                 BoxConstraints(maxHeight: cardSize, maxWidth: cardSize),
             child: MaterialButton(
               minWidth: 200,
-              padding: EdgeInsets.all(2),
+              padding: const EdgeInsets.all(2),
               color: _buttonPressed[index] ? Colors.amber : Colors.green[300],
               child: question.questionImage != null
                   ? Image.network(
@@ -89,7 +81,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                         style: TextStyle(
                             fontWeight: FontWeight.w800, fontSize: 16),
                       ),
-                      margin: EdgeInsets.all(20),
+                      margin: const EdgeInsets.all(20),
                     ),
               // height: cardSize,
               // minWidth: cardSize,
@@ -127,20 +119,11 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     );
   }
 
-  void questionData(Question question) {
-    // print('''${question.questionText}\n
-    // a.${question.piecesItem[0]}
-    // b.${question.piecesItem[1]}
-    // c.${question.piecesItem[2]}''');
-  }
-
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     CObject = args.CObject;
-    //print(CObject);
 
-    // final cobjectsState = watch(cobject);
     // final cobjectsState = watch(cobject.state);
     bool fetchBool = false;
     if (fetchBool == false) {}
@@ -149,13 +132,11 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     String questionDescription = question[0].header["description"];
 
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
-
     // context.read(questionChangeNotifier).fetchCobjects();
 
     // print("Header: ${question[0].header}");
     // print("Pieces: ${question[0].pieces}");
 
-    print('Descrição: ${question[0].header["description"]}');
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.arrow_back_ios),
@@ -171,20 +152,13 @@ class MultipleChoiceQuestion extends ConsumerWidget {
             children: [
               if (questionDescription.isNotEmpty)
                 Text(
-                  question[0].header["text"],
+                  questionDescription,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 26,
                   ),
                 ),
-              IconButton(
-                icon: Icon(Icons.volume_up),
-                highlightColor: Theme.of(context).primaryColor,
-                splashColor: Theme.of(context).primaryColor,
-                onPressed: () {
-                  playSound(question[0].header["sound"]);
-                },
-              ),
+              soundButton(context, question[0]),
             ],
           ),
         ),
@@ -207,21 +181,22 @@ class MultipleChoiceQuestion extends ConsumerWidget {
               piece(0, context, watch, question[0]),
               piece(1, context, watch, question[0]),
               piece(2, context, watch, question[0]),
+              // if (_selectedButton < 3)
               MaterialButton(
                 onPressed: () {
-                  // _selectedButton > 2
-                  //     ? print('Escolha uma opção')
-                  //     // : print(_selectedButton);
-                  //     : context.read(cobject).fetchCobjects();
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                        settings: RouteSettings(
-                            // arguments: question[0],
-                            ),
-                        builder: (context) => MultipleChoiceQuestion(
-                            // question: question[0].questionText,
-                            )),
-                  );
+                  _selectedButton > 2
+                      ? print('Escolha uma opção')
+                      //     // : print(_selectedButton);
+                      // : context.read(cobject).fetchCobjects(CObject);
+                      : Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                              settings: RouteSettings(
+                                arguments: ScreenArguments(CObject),
+                              ),
+                              builder: (context) => MultipleChoiceQuestion(
+                                  // question: question[0].questionText,
+                                  )),
+                        );
                 },
                 minWidth: 200.0,
                 height: 45.0,
@@ -239,35 +214,6 @@ class MultipleChoiceQuestion extends ConsumerWidget {
               )
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class SecondRoute extends StatelessWidget {
-  // final String question;
-
-  // SecondRoute({Key key, @required this.question}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final Question question = ModalRoute.of(context).settings.arguments;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Second Route"),
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            // Text(question.questionText),
-            RaisedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('Go back!'),
-            ),
-          ],
         ),
       ),
     );

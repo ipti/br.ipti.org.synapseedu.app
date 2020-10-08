@@ -1,4 +1,5 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
+import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/model.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/share/template_slider.dart';
@@ -41,10 +42,9 @@ class TextQuestion extends ConsumerWidget {
     List<Question> question = context.read(cobject).items;
     String questionDescription = question[0].header["description"];
     String questionText = question[0].header["text"];
-    // print('Descrição:$questionDescription');
 
     final buttonState = watch(buttonStateProvider).state;
-    bool image = true;
+
     return Scaffold(
       body: TemplateSlider(
         title: Text(
@@ -52,6 +52,7 @@ class TextQuestion extends ConsumerWidget {
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline2,
         ),
+        sound: soundButton(context, question[0]),
         image: Image.network('https://elesson.com.br/app/library/image/' +
             question[0].header["image"]),
         activityScreen: Container(
@@ -63,7 +64,7 @@ class TextQuestion extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // if (image == true) Image.asset('assets/img/logo.png'),
-                if (questionText.isEmpty)
+                if (questionText.isNotEmpty)
                   Text(
                     questionText,
                     textAlign: TextAlign.center,
@@ -100,7 +101,6 @@ class TextQuestion extends ConsumerWidget {
                     // apenas uma vez enquanto o texto estiver sendo digitado.
                     onChanged: (val) {
                       if (_textController.text.length == 1) {
-                        print('hello');
                         submitButton(context);
                       }
                     },
@@ -132,9 +132,6 @@ class TextQuestion extends ConsumerWidget {
                       maxLines: 1,
                     ),
                   ),
-                // if(_textController.text.isNotEmpty) {
-                //   submitButton(context)
-                // },
               ],
             ),
           ),
