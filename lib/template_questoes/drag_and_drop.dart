@@ -31,25 +31,37 @@ class _DragAndDropState extends State<DragAndDrop> {
 
   @override
   Widget build(BuildContext context) {
+    final ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    CObject = args.CObject;
+
+    print('SAIDA: $CObject');
+
     context.read(cobject).fetchCobjects(CObject);
     List<Question> question = context.read(cobject).items;
 
-    final ScreenArguments args = ModalRoute.of(context).settings.arguments;
-    CObject = args.CObject;
-    print('SAIDA: $CObject');
-
     double larguraTela = MediaQuery.of(context).size.width;
-    return Scaffold(
-      resizeToAvoidBottomPadding: true,
-      body: TemplateSlider(
-        title: Text(
-          question[0].header["text"],
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headline2,
-        ),
-        activityScreen: DAD(larguraTela,question[0]),
-      ),
-    );
+    return CObject.isNotEmpty
+        ? Scaffold(
+            resizeToAvoidBottomPadding: true,
+            body: TemplateSlider(
+              title: Text(
+                question[0].header["text"],
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headline2,
+              ),
+              activityScreen: DAD(larguraTela, question[0]),
+            ),
+          )
+        : Scaffold(
+            body: Center(
+              child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('CARREGANDO...'),
+                  CircularProgressIndicator(),
+                ],
+              ),
+            ),
+          );
   }
 
   Widget DAD(double larguraTela, Question question) {
@@ -162,13 +174,15 @@ class _DragAndDropState extends State<DragAndDrop> {
   }
 
   Widget DragSender(int index, double larguraTela, Question question) {
+    print('DragSender');
     String grouping = (index + 1).toString();
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey,
         borderRadius: BorderRadius.circular(20),
         image: DecorationImage(
-          image: NetworkImage(BASE_URL + '/image/' + question.pieces[grouping]["image"]),
+          image: NetworkImage(
+              BASE_URL + '/image/' + question.pieces[grouping]["image"]),
           fit: BoxFit.cover,
         ),
         border: Border.all(
@@ -182,6 +196,7 @@ class _DragAndDropState extends State<DragAndDrop> {
   }
 
   Widget DragReceiver(int index, double larguraTela, Question question) {
+    print('DragReceiver');
     String grouping = (index + 1).toString();
     switch (grouping) {
       case '4':
@@ -199,7 +214,8 @@ class _DragAndDropState extends State<DragAndDrop> {
         color: Colors.grey,
         borderRadius: BorderRadius.circular(20),
         image: DecorationImage(
-          image: NetworkImage(BASE_URL + '/image/' + question.pieces[grouping]["image"]),
+          image: NetworkImage(
+              BASE_URL + '/image/' + question.pieces[grouping]["image"]),
           fit: BoxFit.cover,
         ),
         border: Border.all(
@@ -217,17 +233,23 @@ class _DragAndDropState extends State<DragAndDrop> {
       case 1:
         VALUE_SecondReceiver == data
             ? VALUE_SecondReceiver = 0
-            : VALUE_ThirdReceiver == data ? VALUE_ThirdReceiver = 0 : {};
+            : VALUE_ThirdReceiver == data
+                ? VALUE_ThirdReceiver = 0
+                : {};
         break;
       case 2:
         VALUE_FirstReceiver == data
             ? VALUE_FirstReceiver = 0
-            : VALUE_ThirdReceiver == data ? VALUE_ThirdReceiver = 0 : {};
+            : VALUE_ThirdReceiver == data
+                ? VALUE_ThirdReceiver = 0
+                : {};
         break;
       case 3:
         VALUE_FirstReceiver == data
             ? VALUE_FirstReceiver = 0
-            : VALUE_SecondReceiver == data ? VALUE_SecondReceiver = 0 : {};
+            : VALUE_SecondReceiver == data
+                ? VALUE_SecondReceiver = 0
+                : {};
         break;
     }
   }

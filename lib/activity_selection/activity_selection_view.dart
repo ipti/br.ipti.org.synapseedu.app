@@ -240,7 +240,6 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                     });
                     Navigator.of(context).pop();
                     checkAluno = true;
-                    direcionarParaQuestao();
                     // print('''
                     //     Nome selecionado:  $nomeAlunoSelecionado
                     //     ID o aluno selecionada: $id_aluno_selecionada
@@ -295,7 +294,6 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                     });
                     Navigator.of(context).pop();
                     checkAluno = true;
-                    direcionarParaQuestao();
                     print('''
                         Nome selecionado:  $nomeAlunoSelecionado
                         ID o aluno selecionada: $id_aluno_selecionada
