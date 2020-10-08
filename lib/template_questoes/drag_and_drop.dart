@@ -20,23 +20,9 @@ class DragAndDrop extends StatefulWidget {
 class _DragAndDropState extends State<DragAndDrop> {
   var CObject = new List<dynamic>();
 
+  String BASE_URL = 'https://elesson.com.br/app/library';
+
   bool accepted = false;
-
-  //<=======SENDER URL========>
-  String URL_FirstSender =
-      "https://i1.wp.com/socientifica.com.br/wp-content/uploads/2019/05/image_7150_1e-Hubble-Legacy-Field.jpg?resize=1140%2C1053&ssl=1";
-  String URL_SecondSender =
-      "https://i1.wp.com/socientifica.com.br/wp-content/uploads/2019/05/image_7150_1e-Hubble-Legacy-Field.jpg?resize=1140%2C1053&ssl=1";
-  String URL_ThirdSender =
-      "https://i1.wp.com/socientifica.com.br/wp-content/uploads/2019/05/image_7150_1e-Hubble-Legacy-Field.jpg?resize=1140%2C1053&ssl=1";
-
-  //<=======RECEIVER URL========>
-  String URL_FirstReceiver =
-      "https://upload.wikimedia.org/wikipedia/commons/d/d0/Alvorada_de_outono_na_Imagem_de_Minas.JPG";
-  String URL_SecondReceiver =
-      "https://upload.wikimedia.org/wikipedia/commons/d/d0/Alvorada_de_outono_na_Imagem_de_Minas.JPG";
-  String URL_ThirdReceiver =
-      "https://upload.wikimedia.org/wikipedia/commons/d/d0/Alvorada_de_outono_na_Imagem_de_Minas.JPG";
 
   //<=======RECEIVER VALUES========>
   int VALUE_FirstReceiver = 0;
@@ -50,7 +36,7 @@ class _DragAndDropState extends State<DragAndDrop> {
 
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     CObject = args.CObject;
-    print(CObject);
+    print('SAIDA: $CObject');
 
     double larguraTela = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -61,12 +47,12 @@ class _DragAndDropState extends State<DragAndDrop> {
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline2,
         ),
-        activityScreen: DAD(larguraTela),
+        activityScreen: DAD(larguraTela,question[0]),
       ),
     );
   }
 
-  Widget DAD(double larguraTela) {
+  Widget DAD(double larguraTela, Question question) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
@@ -76,13 +62,13 @@ class _DragAndDropState extends State<DragAndDrop> {
           children: [
             Draggable(
               data: 1,
-              child: DragSender(larguraTela, URL_FirstSender),
-              feedback: DragSender(larguraTela, URL_FirstSender),
+              child: DragSender(0, larguraTela, question),
+              feedback: DragSender(0, larguraTela, question),
               childWhenDragging: DragSenderInvisible(larguraTela),
             ),
             DragTarget(
               builder: (context, List<int> candidateData, rejectedData) {
-                return DragReceiver(larguraTela, URL_FirstReceiver);
+                return DragReceiver(3, larguraTela, question);
               },
               onWillAccept: (data) {
                 return true;
@@ -106,15 +92,15 @@ class _DragAndDropState extends State<DragAndDrop> {
           children: [
             Draggable(
               data: 2,
-              child: DragSender(larguraTela, URL_SecondSender),
-              feedback: DragSender(larguraTela, URL_SecondSender),
+              child: DragSender(1, larguraTela, question),
+              feedback: DragSender(1, larguraTela, question),
               childWhenDragging: DragSenderInvisible(
                 larguraTela,
               ),
             ),
             DragTarget(
               builder: (context, List<int> candidateData, rejectedData) {
-                return DragReceiver(larguraTela, URL_SecondReceiver);
+                return DragReceiver(4, larguraTela, question);
               },
               onWillAccept: (data) {
                 return true;
@@ -138,15 +124,15 @@ class _DragAndDropState extends State<DragAndDrop> {
           children: [
             Draggable(
               data: 3,
-              child: DragSender(larguraTela, URL_ThirdSender),
-              feedback: DragSender(larguraTela, URL_ThirdSender),
+              child: DragSender(2, larguraTela, question),
+              feedback: DragSender(2, larguraTela, question),
               childWhenDragging: DragSenderInvisible(
                 larguraTela,
               ),
             ),
             DragTarget(
               builder: (context, List<int> candidateData, rejectedData) {
-                return DragReceiver(larguraTela, URL_ThirdReceiver);
+                return DragReceiver(5, larguraTela, question);
               },
               onWillAccept: (data) {
                 return true;
@@ -175,13 +161,14 @@ class _DragAndDropState extends State<DragAndDrop> {
     );
   }
 
-  Widget DragSender(double larguraTela, String url_imagem) {
+  Widget DragSender(int index, double larguraTela, Question question) {
+    String grouping = (index + 1).toString();
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey,
         borderRadius: BorderRadius.circular(20),
         image: DecorationImage(
-          image: NetworkImage(url_imagem),
+          image: NetworkImage(BASE_URL + '/image/' + question.pieces[grouping]["image"]),
           fit: BoxFit.cover,
         ),
         border: Border.all(
@@ -194,13 +181,25 @@ class _DragAndDropState extends State<DragAndDrop> {
     );
   }
 
-  Widget DragReceiver(double larguraTela, String url_imagem) {
+  Widget DragReceiver(int index, double larguraTela, Question question) {
+    String grouping = (index + 1).toString();
+    switch (grouping) {
+      case '4':
+        grouping = '1_1';
+        break;
+      case '5':
+        grouping = '2_1';
+        break;
+      case '6':
+        grouping = '3_1';
+        break;
+    }
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey,
         borderRadius: BorderRadius.circular(20),
         image: DecorationImage(
-          image: NetworkImage(url_imagem),
+          image: NetworkImage(BASE_URL + '/image/' + question.pieces[grouping]["image"]),
           fit: BoxFit.cover,
         ),
         border: Border.all(
