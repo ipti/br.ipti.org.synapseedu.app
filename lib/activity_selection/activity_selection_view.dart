@@ -287,6 +287,9 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                         case "DAD":
                           cobjectId = "3987";
                           break;
+                        case "TXT":
+                         cobjectId = "3988";
+                        break;
                         default:
                       }
                       DirecionarParaQuestao();
