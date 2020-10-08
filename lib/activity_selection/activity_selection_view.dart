@@ -23,17 +23,17 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   final _formKey = GlobalKey<FormState>();
 
 //<=====================================SELEÇÃO DE TURMAS E ALUNOS===========================================>
-  List turmas = new List<dynamic>();
-  List alunos = new List<dynamic>();
+  List classes = new List<dynamic>();
+  List students = new List<dynamic>();
 
-  String nome_turma_selecionada = "Selecione Sua Turma";
-  var id_turma_selecionada;
+  String selectedNameClass = "Selecione Sua Turma";
+  var selectedIdClass;
 
-  String nomeAlunoSelecionado = "Selecionar aluno(a)";
-  var id_aluno_selecionada;
-  bool valido;
+  String selectedNamestudents = "Selecionar aluno(a)";
+  var selectedIdstudents;
+  bool valid;
 
-  bool checkAluno = true;
+  bool checkStudent = true;
   bool checkMateria = true;
   //<=======================JOGAR AQUI O ID DO COBJET RECEBIDO===========================>
   String cobjectId = '3977';
@@ -41,21 +41,21 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   var Cobject = new List<dynamic>();
   var tipo_questao;
   //<===================================JOGAR AQUI O ID DA ESCOLA=============================================>
-  String ID_ESCOLA = "51";
+  String schoolId = "51";
 
   _ActivitySelectionFormState() {
-    _getTurmas(ID_ESCOLA);
+    _getTurmas(schoolId);
   }
   //<===================================PARA OS TESTES =======================================================>
   List questionType = ['MTE', 'PRE', 'DAD'];
   String typeSelected = "Selecione o tipo da questão";
 
   //<=================================GETS DA API===============================================>
-  _getTurmas(String id_escola) async {
+  _getTurmas(String schoolId) async {
     //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
-    API_TURMA.getTurmas(id_escola).then((response) {
+    API_TURMA.getTurmas(schoolId).then((response) {
       setState(() {
-        turmas = response.data[0]["classroom"];
+        classes = response.data[0]["classroom"];
         //print('EXIBINDO: $turmas');
       });
     });
@@ -65,16 +65,16 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
     //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>]
     API_ALUNO.getAlunos(id_turma_recebido).then((response) {
       setState(() {
-        valido = response.data[0]["valid"];
-        alunos = response.data[0]["person"];
+        valid = response.data[0]["valid"];
+        students = response.data[0]["person"];
         //print(response);
       });
     });
   }
 
-  _getCobject(String id_questao) async {
+  _getCobject(String questionId) async {
     //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
-    API_COBJECT.getQuestao(id_questao).then((response) {
+    API_COBJECT.getQuestao(questionId).then((response) {
       setState(() {
         Cobject = response.data;
         tipo_questao = Cobject[0]["cobjects"][0]["template_code"];
@@ -117,7 +117,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
 
   //<=================================WIDGET DE SELEÇÃO DE TURMA E ALUNO===============================================>
 
-  Widget TurmaENome(double alturaTela, double larguraTela) {
+  Widget TurmaENome(double heightScreen, double widthScreen) {
     return Column(
       children: [
         //<====TURMA=====>
@@ -126,8 +126,8 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
             showAlertDialog_Turma(context);
           },
           child: Container(
-            width: larguraTela,
-            height: alturaTela * 0.08,
+            width: widthScreen,
+            height: heightScreen * 0.08,
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.green, width: 3),
                 borderRadius: BorderRadius.circular(20)),
@@ -135,11 +135,11 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  nome_turma_selecionada,
-                  style: TextStyle(fontSize: alturaTela * 0.02),
+                  selectedNameClass,
+                  style: TextStyle(fontSize: heightScreen * 0.02),
                   overflow: TextOverflow.ellipsis,
                 ),
-                Icon(Icons.arrow_drop_down, size: alturaTela * 0.04),
+                Icon(Icons.arrow_drop_down, size: heightScreen * 0.04),
               ],
             ),
           ),
@@ -152,8 +152,8 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
           },
           child: Container(
             margin: EdgeInsets.only(top: 20),
-            width: larguraTela,
-            height: alturaTela * 0.08,
+            width: widthScreen,
+            height: heightScreen * 0.08,
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.green, width: 3),
                 borderRadius: BorderRadius.circular(20)),
@@ -162,10 +162,10 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
               children: [
                 Text(
                   typeSelected,
-                  style: TextStyle(fontSize: alturaTela * 0.02),
+                  style: TextStyle(fontSize: heightScreen * 0.02),
                   overflow: TextOverflow.ellipsis,
                 ),
-                Icon(Icons.arrow_drop_down, size: alturaTela * 0.04),
+                Icon(Icons.arrow_drop_down, size: heightScreen * 0.04),
               ],
             ),
           ),
@@ -185,26 +185,26 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
             width: MediaQuery.of(context).size.width * 0.9,
             height: MediaQuery.of(context).size.height * 0.5,
             child: ListView.builder(
-              itemCount: turmas.length,
+              itemCount: classes.length,
               itemBuilder: (context, index) {
-                String nome_turma = turmas[index]["name"];
-                String id_turma = turmas[index]["id"];
+                String className = classes[index]["name"];
+                String classId = classes[index]["id"];
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      nome_turma_selecionada = nome_turma;
-                      id_turma_selecionada = id_turma;
+                      selectedNameClass = className;
+                      selectedIdClass = classId;
                     });
                     Navigator.of(context).pop();
-                    _getAlunos(id_turma_selecionada);
+                    _getAlunos(selectedIdClass);
                     print('''
-                        Nome selecionado:  $nome_turma_selecionada
-                        ID da turma selecionada: $id_turma_selecionada
+                        Nome selecionado:  $selectedNameClass
+                        ID da turma selecionada: $selectedIdClass
                       ''');
                   },
                   child: ListTile(
                     title: Text(
-                      nome_turma,
+                      className,
                       style: TextStyle(fontSize: 20, color: Colors.black),
                     ),
                   ),
@@ -226,20 +226,20 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
             width: MediaQuery.of(context).size.width * 0.9,
             height: MediaQuery.of(context).size.height * 0.5,
             child: ListView.builder(
-              itemCount: alunos.length,
+              itemCount: students.length,
               itemBuilder: (context, index) {
-                String nome_aluno = alunos[index]["name"];
-                String id_aluno = alunos[index]["id"];
+                String studentName = students[index]["name"];
+                String studentId = students[index]["id"];
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      nomeAlunoSelecionado = nome_aluno;
-                      id_aluno_selecionada = id_aluno;
-                      checkAluno = true;
-                      direcionarParaQuestao();
+                      selectedNamestudents = studentName;
+                      selectedIdstudents = studentId;
+                      checkStudent = true;
+                      DirecionarParaQuestao();
                     });
                     Navigator.of(context).pop();
-                    checkAluno = true;
+                    checkStudent = true;
                     // print('''
                     //     Nome selecionado:  $nomeAlunoSelecionado
                     //     ID o aluno selecionada: $id_aluno_selecionada
@@ -247,7 +247,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                   },
                   child: ListTile(
                     title: Text(
-                      nome_aluno,
+                      studentName,
                       style: TextStyle(fontSize: 20, color: Colors.black),
                     ),
                   ),
@@ -276,7 +276,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                   onTap: () {
                     setState(() {
                       typeSelected = qType;
-                      checkAluno = true;
+                      checkStudent = true;
                       switch (typeSelected) {
                         case "MTE":
                           cobjectId = "3976";
@@ -289,10 +289,10 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                           break;
                         default:
                       }
-                      direcionarParaQuestao();
+                      DirecionarParaQuestao();
                     });
                     Navigator.of(context).pop();
-                    checkAluno = true;
+                    checkStudent = true;
                   },
                   child: ListTile(
                     title: Text(
@@ -313,8 +313,8 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
 
   @override
   Widget build(BuildContext context) {
-    double alturaTela = MediaQuery.of(context).size.height;
-    double larguraTela = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+    double widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomPadding: true,
       appBar: AppBar(
@@ -340,7 +340,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                   height: 10.0,
                 ),
                 //...getFormWidget(),
-                TurmaENome(alturaTela, larguraTela),
+                TurmaENome(heightScreen, widthScreen),
                 SizedBox(
                   height: 10.0,
                 ),
@@ -357,7 +357,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                       onPressed: () {
                         setState(() {
                           checkMateria = true;
-                          direcionarParaQuestao();
+                          DirecionarParaQuestao();
                         });
                       },
                       child: Text('Português'),
@@ -372,7 +372,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                       onPressed: () {
                         setState(() {
                           checkMateria = true;
-                          direcionarParaQuestao();
+                          DirecionarParaQuestao();
                         });
                       },
                       child: Text('Matemática'),
@@ -398,8 +398,8 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   }
 
   // FUNÇÃO PARA RECEBER OS DADOS DO COBJECT QUANDO A TURMA E O ALUNO FOR SELECIONADO
-  void direcionarParaQuestao() {
-    if (checkAluno == true && checkMateria == true) {
+  void DirecionarParaQuestao() {
+    if (checkStudent == true && checkMateria == true) {
       _getCobject(cobjectId);
     }
   }

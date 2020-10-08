@@ -65,18 +65,18 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  Widget EscolaESerie(double larguraTela) {
+  Widget EscolaESerie(double widthScreen) {
     return Row(
       children: [
-        SchoolList(larguraTela),
-        Expanded(child: Serie(larguraTela)),
+        SchoolList(widthScreen),
+        Expanded(child: Serie(widthScreen)),
       ],
     );
   }
 
-  Widget SchoolList(double larguraTela) {
+  Widget SchoolList(double widthScreen) {
     return Container(
-      width: larguraTela * 0.7,
+      width: widthScreen * 0.7,
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.only(top: 7, bottom: 7),
       decoration: BoxDecoration(
@@ -115,9 +115,9 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  Widget Serie(double larguraTela) {
+  Widget Serie(double widthScreen) {
     return Container(
-      width: larguraTela * 0.7,
+      width: widthScreen * 0.7,
       margin: EdgeInsets.only(top: 10,bottom: 10,right: 10),
       padding: EdgeInsets.only(top: 7, bottom: 7),
       decoration: BoxDecoration(

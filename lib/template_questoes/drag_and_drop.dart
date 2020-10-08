@@ -38,7 +38,7 @@ class _DragAndDropState extends State<DragAndDrop> {
     context.read(cobject).fetchCobjects(CObject);
     List<Question> question = context.read(cobject).items;
 
-    double larguraTela = MediaQuery.of(context).size.width;
+    double widthScreen = MediaQuery.of(context).size.width;
     return CObject.isNotEmpty
         ? Scaffold(
             resizeToAvoidBottomPadding: true,
@@ -49,7 +49,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headline2,
               ),
-              activityScreen: DAD(larguraTela, question[0]),
+              activityScreen: DAD(widthScreen, question[0]),
             ),
           )
         : Scaffold(
@@ -65,7 +65,7 @@ class _DragAndDropState extends State<DragAndDrop> {
           );
   }
 
-  Widget DAD(double larguraTela, Question question) {
+  Widget DAD(double widthScreen, Question question) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
@@ -75,13 +75,13 @@ class _DragAndDropState extends State<DragAndDrop> {
           children: [
             Draggable(
               data: 1,
-              child: DragSender(0, larguraTela, question),
-              feedback: DragSender(0, larguraTela, question),
-              childWhenDragging: DragSenderInvisible(larguraTela),
+              child: DragSender(0, widthScreen, question),
+              feedback: DragSender(0, widthScreen, question),
+              childWhenDragging: DragSenderInvisible(widthScreen),
             ),
             DragTarget(
               builder: (context, List<int> candidateData, rejectedData) {
-                return DragReceiver(3, larguraTela, question);
+                return DragReceiver(3, widthScreen, question);
               },
               onWillAccept: (data) {
                 return true;
@@ -105,15 +105,15 @@ class _DragAndDropState extends State<DragAndDrop> {
           children: [
             Draggable(
               data: 2,
-              child: DragSender(1, larguraTela, question),
-              feedback: DragSender(1, larguraTela, question),
+              child: DragSender(1, widthScreen, question),
+              feedback: DragSender(1, widthScreen, question),
               childWhenDragging: DragSenderInvisible(
-                larguraTela,
+                widthScreen,
               ),
             ),
             DragTarget(
               builder: (context, List<int> candidateData, rejectedData) {
-                return DragReceiver(4, larguraTela, question);
+                return DragReceiver(4, widthScreen, question);
               },
               onWillAccept: (data) {
                 return true;
@@ -137,15 +137,15 @@ class _DragAndDropState extends State<DragAndDrop> {
           children: [
             Draggable(
               data: 3,
-              child: DragSender(2, larguraTela, question),
-              feedback: DragSender(2, larguraTela, question),
+              child: DragSender(2, widthScreen, question),
+              feedback: DragSender(2, widthScreen, question),
               childWhenDragging: DragSenderInvisible(
-                larguraTela,
+                widthScreen,
               ),
             ),
             DragTarget(
               builder: (context, List<int> candidateData, rejectedData) {
-                return DragReceiver(5, larguraTela, question);
+                return DragReceiver(5, widthScreen, question);
               },
               onWillAccept: (data) {
                 return true;
@@ -167,14 +167,14 @@ class _DragAndDropState extends State<DragAndDrop> {
     );
   }
 
-  Widget DragSenderInvisible(double larguraTela) {
+  Widget DragSenderInvisible(double widthScreen) {
     return Container(
-      width: larguraTela * 0.3,
-      height: larguraTela * 0.3,
+      width: widthScreen * 0.3,
+      height: widthScreen * 0.3,
     );
   }
 
-  Widget DragSender(int index, double larguraTela, Question question) {
+  Widget DragSender(int index, double widthScreen, Question question) {
     print('DragSender');
     String grouping = (index + 1).toString();
     return Container(
@@ -191,12 +191,12 @@ class _DragAndDropState extends State<DragAndDrop> {
           width: 2,
         ),
       ),
-      width: larguraTela * 0.3,
-      height: larguraTela * 0.3,
+      width: widthScreen * 0.3,
+      height: widthScreen * 0.3,
     );
   }
 
-  Widget DragReceiver(int index, double larguraTela, Question question) {
+  Widget DragReceiver(int index, double widthScreen, Question question) {
     print('DragReceiver');
     String grouping = (index + 1).toString();
     switch (grouping) {
@@ -224,13 +224,13 @@ class _DragAndDropState extends State<DragAndDrop> {
           width: 2,
         ),
       ),
-      width: larguraTela * 0.3,
-      height: larguraTela * 0.3,
+      width: widthScreen * 0.3,
+      height: widthScreen * 0.3,
     );
   }
 
-  void TradeValue(int ReceiverAtual, int data) {
-    switch (ReceiverAtual) {
+  void TradeValue(int ReceiverIndex, int data) {
+    switch (ReceiverIndex) {
       case 1:
         valueSecondReceiver == data
             ? valueSecondReceiver = 0
