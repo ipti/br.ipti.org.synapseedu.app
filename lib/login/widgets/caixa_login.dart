@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class LoginBox extends StatefulWidget {
-  final double larguraTelaDisponivel;
+  final double widthSceenAvailable;
 
-  LoginBox(this.larguraTelaDisponivel);
+  LoginBox(this.widthSceenAvailable);
 
   @override
   _LoginBoxState createState() => _LoginBoxState();
@@ -12,17 +12,17 @@ class LoginBox extends StatefulWidget {
 // final exibirErro = StateProvider((ref) => false);
 
 class _LoginBoxState extends State<LoginBox> {
-  final usuario = TextEditingController();
-  final senha = TextEditingController();
+  final user = TextEditingController();
+  final password = TextEditingController();
 
-  bool exibirErro = false;
+  bool showError = false;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       //<---------LARGURA E ALTURA IGUAIS PRA FORMAR UM QUADRADO--------->
-      height: widget.larguraTelaDisponivel / 1.1,
-      width: widget.larguraTelaDisponivel / 1.1,
+      height: widget.widthSceenAvailable / 1.1,
+      width: widget.widthSceenAvailable / 1.1,
       margin: EdgeInsets.only(left: 20, right: 20),
       decoration: BoxDecoration(
           color: Colors.lightGreenAccent[700],
@@ -35,18 +35,18 @@ class _LoginBoxState extends State<LoginBox> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.white,
-              fontSize: widget.larguraTelaDisponivel * 0.09,
+              fontSize: widget.widthSceenAvailable * 0.09,
             ),
           ),
-          loginInput('Usuário', widget.larguraTelaDisponivel),
-          loginInput('Senha', widget.larguraTelaDisponivel),
+          loginInput('Usuário', widget.widthSceenAvailable),
+          loginInput('Senha', widget.widthSceenAvailable),
           login(),
           Text(
-            exibirErro ? 'Verifique seus dados de acesso' : "",
+            showError ? 'Verifique seus dados de acesso' : "",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: widget.larguraTelaDisponivel * 0.04,
+              fontSize: widget.widthSceenAvailable * 0.04,
               color: Colors.red,
             ),
           ),
@@ -71,7 +71,7 @@ class _LoginBoxState extends State<LoginBox> {
           hintStyle:
               TextStyle(color: Colors.grey, fontSize: availableWidth * 0.07),
         ),
-        controller: inputString == 'Usuário' ? usuario : senha,
+        controller: inputString == 'Usuário' ? user : password,
       ),
     );
   }
@@ -85,7 +85,7 @@ class _LoginBoxState extends State<LoginBox> {
         validateUser()
             ? null
             : setState(() {
-                exibirErro = true;
+                showError = true;
               });
       }, // adicionar função ao tocar no botão
       child: Container(
@@ -99,7 +99,7 @@ class _LoginBoxState extends State<LoginBox> {
           'entrar',
           style: TextStyle(
             color: letterColor,
-            fontSize: widget.larguraTelaDisponivel * 0.09,
+            fontSize: widget.widthSceenAvailable * 0.09,
           ),
         ),
       ),
@@ -108,6 +108,6 @@ class _LoginBoxState extends State<LoginBox> {
 
   bool validateUser() {
     // enquanto não estamos comunicando com o servidor
-    return usuario == 'admin' && senha == '123456' ? true : false;
+    return user == 'admin' && password == '123456' ? true : false;
   }
 }

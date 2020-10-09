@@ -20,6 +20,7 @@ class DragAndDrop extends StatefulWidget {
 
 class _DragAndDropState extends State<DragAndDrop> {
   var cobject = new List<dynamic>();
+  int questionIndex;
 
   bool accepted = false;
 
@@ -32,6 +33,7 @@ class _DragAndDropState extends State<DragAndDrop> {
   Widget build(BuildContext context) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     cobject = args.cobject;
+    questionIndex = args.questionIndex;
 
     // print('SAIDA: $cobject');
 
@@ -45,11 +47,11 @@ class _DragAndDropState extends State<DragAndDrop> {
             body: TemplateSlider(
               sound: soundButton(context, question[0]),
               title: Text(
-                question[0].header["text"],
+                question[questionIndex].header["text"],
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headline2,
               ),
-              activityScreen: DAD(widthScreen, question[0]),
+              activityScreen: DAD(widthScreen, question[questionIndex]),
             ),
           )
         : Scaffold(

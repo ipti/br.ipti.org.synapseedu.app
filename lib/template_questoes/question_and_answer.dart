@@ -14,6 +14,8 @@ class TextQuestion extends ConsumerWidget {
   static const routeName = '/PRE';
   // ignore: non_constant_identifier_names
   var cobject = new List<dynamic>();
+  int questionIndex;
+
 
   final _formKey = GlobalKey<FormState>();
   final _textController = TextEditingController();
@@ -37,12 +39,13 @@ class TextQuestion extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     cobject = args.cobject;
+    questionIndex = args.questionIndex;
     // print(cobject);
 
     context.read(cobjectProvider).fetchCobjects(cobject);
     List<Question> question = context.read(cobjectProvider).items;
-    String questionDescription = question[0].header["description"];
-    String questionText = question[0].header["text"];
+    String questionDescription = question[questionIndex].header["description"];
+    String questionText = question[questionIndex].header["text"];
 
     final buttonState = watch(buttonStateProvider).state;
 
@@ -53,7 +56,7 @@ class TextQuestion extends ConsumerWidget {
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline2,
         ),
-        sound: soundButton(context, question[0]),
+        sound: soundButton(context, question[questionIndex]),
         image: Image.network('https://elesson.com.br/app/library/image/' +
             question[0].header["image"]),
         activityScreen: Container(

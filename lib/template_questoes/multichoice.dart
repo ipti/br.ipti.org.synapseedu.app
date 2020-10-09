@@ -26,6 +26,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   static const routeName = '/MTE';
 
   var cobject = new List<dynamic>();
+  int questionIndex;
 
   List<bool> _buttonPressed = [false, false, false];
   int _selectedButton = 3;
@@ -121,13 +122,15 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     cobject = args.cobject;
+    questionIndex = args.questionIndex;
+
 
     // final cobjectProvidersState = watch(cobjectProvider.state);
     bool fetchBool = false;
     if (fetchBool == false) {}
     context.read(cobjectProvider).fetchCobjects(cobject);
     List<Question> question = context.read(cobjectProvider).items;
-    String questionDescription = question[0].header["description"];
+    String questionDescription = question[questionIndex].header["description"];
 
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
     // context.read(questionChangeNotifier).fetchCobjects();
@@ -156,7 +159,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                     fontSize: 26,
                   ),
                 ),
-              soundButton(context, question[0]),
+              soundButton(context, question[questionIndex]),
             ],
           ),
         ),
@@ -176,9 +179,9 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                   fontSize: 28,
                 ),
               ),
-              piece(0, context, watch, question[0]),
-              piece(1, context, watch, question[0]),
-              piece(2, context, watch, question[0]),
+              piece(0, context, watch, question[questionIndex]),
+              piece(1, context, watch, question[questionIndex]),
+              piece(2, context, watch, question[questionIndex]),
               // if (_selectedButton < 3)
               MaterialButton(
                 onPressed: () {
@@ -189,7 +192,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                       : Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                               settings: RouteSettings(
-                                arguments: ScreenArguments(cobject),
+                                arguments: ScreenArguments(cobject, questionIndex++),
                               ),
                               builder: (context) => MultipleChoiceQuestion(
                                   // question: question[0].questionText,

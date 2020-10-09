@@ -17,8 +17,8 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    double alturaTela = MediaQuery.of(context).size.height;
-    double larguraTela = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
+    double widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -27,10 +27,10 @@ class _RegisterViewState extends State<RegisterView> {
             Logo(),
             Entrada(_templateController, 'Nome Do Responsavel'),
             Entrada(_studentNameController, 'Nome do Aluno'),
-            EscolaESerie(larguraTela),
+            EscolaESerie(widthScreen),
             Entrada(_emailNameController, 'Email'),
             Entrada(_passwordNameController, 'Senha'),
-            BtnCadastrar(larguraTela, alturaTela),
+            BtnCadastrar(widthScreen, heightScreen),
           ],
         ),
       ),
@@ -48,11 +48,11 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  Widget BtnCadastrar(double larguraTela, double alturaTela) {
+  Widget BtnCadastrar(double widthScreen, double heightScreen) {
     return Container(
       margin: EdgeInsets.only(top: 20, bottom: 20),
-      width: larguraTela * 0.5,
-      height: alturaTela * 0.08,
+      width: widthScreen * 0.5,
+      height: heightScreen * 0.08,
       decoration: BoxDecoration(
         color: Colors.green,
         borderRadius: BorderRadius.circular(20),

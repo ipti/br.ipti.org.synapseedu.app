@@ -14,31 +14,56 @@ class TXTQuestion extends ConsumerWidget {
   static const routeName = '/TXT';
 
   var cobject = new List<dynamic>();
+  int questionIndex;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     cobject = args.cobject;
+    questionIndex = args.questionIndex;
 
     context.read(cobjectProvider).fetchCobjects(cobject);
     List<Question> question = context.read(cobjectProvider).items;
-    String questionDescription = question[0].header["description"];
-    // String headerText = question[0].header["text"];
 
-    String questionText = question[0].pieces['1']['text'];
+    String questionDescription = question[questionIndex].header["description"];
+    String headerText = question[questionIndex].header["text"];
+
+    String questionText = question[questionIndex].pieces['1']['text'];
 
     return Scaffold(
       body: TemplateSlider(
         title: Text(
-          questionDescription,
+          headerText,
+          //questionDescription,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline2,
         ),
-        sound: soundButton(context, question[0]),
+        sound: soundButton(context, question[questionIndex]),
         image: Image.network('https://elesson.com.br/app/library/image/' +
-            question[0].header["image"]),
+            question[questionIndex].header["image"]),
         activityScreen: Container(
-          child: Text(questionText),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(question[0].header.toString()),
+              MaterialButton(
+                onPressed: () {},
+                minWidth: 200.0,
+                height: 45.0,
+                color: Colors.indigo,
+                splashColor: Theme.of(context).accentColor,
+                child: Text(
+                  "Lido!",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: "Alike",
+                    fontSize: 16.0,
+                  ),
+                  maxLines: 1,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

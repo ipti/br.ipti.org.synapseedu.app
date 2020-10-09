@@ -99,19 +99,19 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
         //   break;
         case 'PRE':
           Navigator.of(context).pushNamed(TextQuestion.routeName,
-              arguments: ScreenArguments(cobject));
+              arguments: ScreenArguments(cobject,0));
           break;
         case 'DDROP':
           Navigator.of(context).pushNamed(DragAndDrop.routeName,
-              arguments: ScreenArguments(cobject));
+              arguments: ScreenArguments(cobject,0));
           break;
         case 'MTE':
           Navigator.of(context).pushNamed(MultipleChoiceQuestion.routeName,
-              arguments: ScreenArguments(cobject));
+              arguments: ScreenArguments(cobject,0));
           break;
         case 'TXT':
           Navigator.of(context).pushNamed(TXTQuestion.routeName,
-              arguments: ScreenArguments(cobject));
+              arguments: ScreenArguments(cobject,0));
           break;
       }
     });
@@ -411,5 +411,6 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
 
 class ScreenArguments {
   final List<dynamic> cobject;
-  ScreenArguments(this.cobject);
+  final int questionIndex;
+  ScreenArguments(this.cobject, this.questionIndex);
 }
