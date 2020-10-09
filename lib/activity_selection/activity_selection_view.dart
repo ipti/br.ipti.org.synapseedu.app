@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'package:elesson/share/turmas.dart';
 import 'package:elesson/template_questoes/drag_and_drop.dart';
 import 'package:elesson/template_questoes/multichoice.dart';
-import 'package:elesson/template_questoes/text_question.dart';
+import 'package:elesson/template_questoes/text.dart';
+import 'package:elesson/template_questoes/question_and_answer.dart';
 import 'package:flutter/material.dart';
 import 'package:elesson/share/api.dart';
 
@@ -47,7 +47,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
     _getTurmas(schoolId);
   }
   //<===================================PARA OS TESTES =======================================================>
-  List questionType = ['MTE', 'PRE', 'DAD'];
+  List questionType = ['MTE', 'PRE', 'DAD', 'TXT'];
   String typeSelected = "Selecione o tipo da questão";
 
   //<=================================GETS DA API===============================================>
@@ -62,7 +62,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   }
 
   _getAlunos(String id_turma_recebido) async {
-    //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>]
+    //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
     API_ALUNO.getAlunos(id_turma_recebido).then((response) {
       setState(() {
         valid = response.data[0]["valid"];
@@ -109,6 +109,10 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
           break;
         case 'MTE':
           Navigator.of(context).pushNamed(MultipleChoiceQuestion.routeName,
+              arguments: ScreenArguments(Cobject));
+          break;
+        case 'TXT':
+          Navigator.of(context).pushNamed(TXTQuestion.routeName,
               arguments: ScreenArguments(Cobject));
           break;
       }
@@ -288,9 +292,8 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                           cobjectId = "3987";
                           break;
                         case "TXT":
-                         cobjectId = "3988";
-                        break;
-                        default:
+                          cobjectId = "3988";
+                          break;
                       }
                       DirecionarParaQuestao();
                     });

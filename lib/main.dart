@@ -1,4 +1,5 @@
 import 'package:elesson/share/api.dart';
+import 'package:elesson/template_questoes/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -14,7 +15,7 @@ import 'webview/base.dart';
 import 'webview/models/webview_modelo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'template_questoes/text_question.dart';
+import 'template_questoes/question_and_answer.dart';
 //import 'template_questoes/multiple_choice.dart';
 import 'package:elesson/template_questoes/multichoice.dart';
 
@@ -89,6 +90,7 @@ class Home extends StatelessWidget {
         TextQuestion.routeName:(context) => TextQuestion(),
         DragAndDrop.routeName:(context) => DragAndDrop(),
         MultipleChoiceQuestion.routeName:(context) => MultipleChoiceQuestion(),
+        TXTQuestion.routeName:(context) => TXTQuestion(),
       },
     );
   }
