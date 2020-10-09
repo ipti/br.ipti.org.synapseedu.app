@@ -1,4 +1,4 @@
-import 'dart:io';
+// import 'package:elesson/share/turmas.dart';
 import 'package:elesson/template_questoes/drag_and_drop.dart';
 import 'package:elesson/template_questoes/multichoice.dart';
 import 'package:elesson/template_questoes/text.dart';
@@ -6,12 +6,10 @@ import 'package:elesson/template_questoes/question_and_answer.dart';
 import 'package:flutter/material.dart';
 import 'package:elesson/share/api.dart';
 
-/**
- * Form de seleção das atividades. A primeira tela após o usuário logar.
- * No momento, só temos a tela básica com dados falsos. Os próximos passos
- * envolvem a conexão com a API para e o polimento da tela em conjunto
- * com os designers do projeto.
- */
+// Form de seleção das atividades. A primeira tela após o usuário logar.
+// No momento, só temos a tela básica com dados falsos. Os próximos passos
+// envolvem a conexão com a API para e o polimento da tela em conjunto
+// com os designers do projeto.
 
 class ActivitySelectionForm extends StatefulWidget {
   @override
@@ -34,12 +32,12 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   bool valid;
 
   bool checkStudent = true;
-  bool checkMateria = true;
+  bool checkDiscipline = true;
   //<=======================JOGAR AQUI O ID DO COBJET RECEBIDO===========================>
   String cobjectId = '3977';
 
-  var Cobject = new List<dynamic>();
-  var tipo_questao;
+  var cobject = new List<dynamic>();
+  var questionType;
   //<===================================JOGAR AQUI O ID DA ESCOLA=============================================>
   String schoolId = "51";
 
@@ -47,7 +45,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
     _getTurmas(schoolId);
   }
   //<===================================PARA OS TESTES =======================================================>
-  List questionType = ['MTE', 'PRE', 'DAD', 'TXT'];
+  List questionTypeList = ['MTE', 'PRE', 'DAD', 'TXT'];
   String typeSelected = "Selecione o tipo da questão";
 
   //<=================================GETS DA API===============================================>
@@ -61,9 +59,9 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
     });
   }
 
-  _getAlunos(String id_turma_recebido) async {
+  _getAlunos(String classIdReceived) async {
     //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
-    API_ALUNO.getAlunos(id_turma_recebido).then((response) {
+    API_ALUNO.getAlunos(classIdReceived).then((response) {
       setState(() {
         valid = response.data[0]["valid"];
         students = response.data[0]["person"];
@@ -76,44 +74,44 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
     //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
     API_COBJECT.getQuestao(questionId).then((response) {
       setState(() {
-        Cobject = response.data;
-        tipo_questao = Cobject[0]["cobjects"][0]["template_code"];
+        cobject = response.data;
+        questionType = cobject[0]["cobjects"][0]["template_code"];
       });
-      switch (tipo_questao) {
+      switch (questionType) {
         // pushNamedAndRemoveUntil
         // case 'PRE':
         //   Navigator.of(context).pushNamedAndRemoveUntil(
         //       TextQuestion.routeName, (Route<dynamic> route) => false,
-        //       arguments: ScreenArguments(Cobject));
+        //       arguments: ScreenArguments(cobject));
         //   break;
         // case 'DDROP':
         //   Navigator.of(context).pushNamedAndRemoveUntil(
         //       DragAndDrop.routeName, (Route<dynamic> route) => false,
-        //       arguments: ScreenArguments(Cobject));
+        //       arguments: ScreenArguments(cobject));
         //   break;
         // case 'MTE':
         //   Navigator.of(context).pushNamedAndRemoveUntil(
         //       MultipleChoiceQuestion.routeName, (Route<dynamic> route) => false,
-        //       arguments: ScreenArguments(Cobject));
+        //       arguments: ScreenArguments(cobject));
         //   break;
         // case 'TXT':
-        //   Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, (Route<dynamic> route) => false,arguments: ScreenArguments(Cobject));
+        //   Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, (Route<dynamic> route) => false,arguments: ScreenArguments(cobject));
         //   break;
         case 'PRE':
           Navigator.of(context).pushNamed(TextQuestion.routeName,
-              arguments: ScreenArguments(Cobject));
+              arguments: ScreenArguments(cobject));
           break;
         case 'DDROP':
           Navigator.of(context).pushNamed(DragAndDrop.routeName,
-              arguments: ScreenArguments(Cobject));
+              arguments: ScreenArguments(cobject));
           break;
         case 'MTE':
           Navigator.of(context).pushNamed(MultipleChoiceQuestion.routeName,
-              arguments: ScreenArguments(Cobject));
+              arguments: ScreenArguments(cobject));
           break;
         case 'TXT':
           Navigator.of(context).pushNamed(TXTQuestion.routeName,
-              arguments: ScreenArguments(Cobject));
+              arguments: ScreenArguments(cobject));
           break;
       }
     });
@@ -121,13 +119,13 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
 
   //<=================================WIDGET DE SELEÇÃO DE TURMA E ALUNO===============================================>
 
-  Widget TurmaENome(double heightScreen, double widthScreen) {
+  Widget classAndName(double heightScreen, double widthScreen) {
     return Column(
       children: [
         //<====TURMA=====>
         GestureDetector(
           onTap: () {
-            showAlertDialog_Turma(context);
+            classAlertDialog(context);
           },
           child: Container(
             width: widthScreen,
@@ -151,7 +149,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
         //<====NOME=====>
         GestureDetector(
           onTap: () {
-            // showAlertDialog_Aluno(context);
+            // studentAlertDialog(context);
             showQuestionAlertDialog(context);
           },
           child: Container(
@@ -180,7 +178,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
 
   //<=================================DIALOG DE SELEÇÃO DE TURMA E ALUNO===============================================>
 
-  showAlertDialog_Turma(BuildContext context) {
+  classAlertDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -221,7 +219,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
     );
   }
 
-  showAlertDialog_Aluno(BuildContext context) {
+  studentAlertDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -240,7 +238,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                       selectedNamestudents = studentName;
                       selectedIdstudents = studentId;
                       checkStudent = true;
-                      DirecionarParaQuestao();
+                      redirectToQuestion();
                     });
                     Navigator.of(context).pop();
                     checkStudent = true;
@@ -273,9 +271,9 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
             width: MediaQuery.of(context).size.width * 0.9,
             height: MediaQuery.of(context).size.height * 0.5,
             child: ListView.builder(
-              itemCount: questionType.length,
+              itemCount: questionTypeList.length,
               itemBuilder: (context, index) {
-                String qType = questionType[index];
+                String qType = questionTypeList[index];
                 return GestureDetector(
                   onTap: () {
                     setState(() {
@@ -295,14 +293,14 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                           cobjectId = "3988";
                           break;
                       }
-                      DirecionarParaQuestao();
+                      redirectToQuestion();
                     });
                     Navigator.of(context).pop();
                     checkStudent = true;
                   },
                   child: ListTile(
                     title: Text(
-                      questionType[index],
+                      questionTypeList[index],
                       style: TextStyle(fontSize: 20, color: Colors.black),
                     ),
                   ),
@@ -346,7 +344,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                   height: 10.0,
                 ),
                 //...getFormWidget(),
-                TurmaENome(heightScreen, widthScreen),
+                classAndName(heightScreen, widthScreen),
                 SizedBox(
                   height: 10.0,
                 ),
@@ -362,8 +360,8 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                       ),
                       onPressed: () {
                         setState(() {
-                          checkMateria = true;
-                          DirecionarParaQuestao();
+                          checkDiscipline = true;
+                          redirectToQuestion();
                         });
                       },
                       child: Text('Português'),
@@ -377,8 +375,8 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                       ),
                       onPressed: () {
                         setState(() {
-                          checkMateria = true;
-                          DirecionarParaQuestao();
+                          checkDiscipline = true;
+                          redirectToQuestion();
                         });
                       },
                       child: Text('Matemática'),
@@ -404,14 +402,14 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   }
 
   // FUNÇÃO PARA RECEBER OS DADOS DO COBJECT QUANDO A TURMA E O ALUNO FOR SELECIONADO
-  void DirecionarParaQuestao() {
-    if (checkStudent == true && checkMateria == true) {
+  void redirectToQuestion() {
+    if (checkStudent == true && checkDiscipline == true) {
       _getCobject(cobjectId);
     }
   }
 }
 
 class ScreenArguments {
-  final List<dynamic> CObject;
-  ScreenArguments(this.CObject);
+  final List<dynamic> cobject;
+  ScreenArguments(this.cobject);
 }

@@ -8,13 +8,12 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-
-  int mostarSobre = 0;
-  double bottom_sobre_box = 0.0;
-  double top_sobre_box = 0.0;
+  int showAbout = 0;
+  double bottomAboutBox = 0.0;
+  double topAboutBox = 0.0;
 
   //<==========DEFINIR AQUI O QUE APARECERÁ NA TELA DE SOBRE=============>
-  String sobre_text = "";
+  String aboutText = "";
 
   @override
   Widget build(BuildContext context) {
@@ -30,25 +29,25 @@ class _LoginViewState extends State<LoginView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Logo(larguraTela),
-                  Caixa_Login(larguraTela),
-                  RecuperarSenha(alturaTela),
+                  logo(larguraTela),
+                  LoginBox(larguraTela),
+                  recoverPassword(alturaTela),
                 ],
               ),
             ),
           ),
-          BotaoSobre(larguraTela, alturaTela),
-          Sobre(larguraTela, alturaTela),
+          aboutButton(larguraTela, alturaTela),
+          about(larguraTela, alturaTela),
         ],
       ),
     );
   }
 
-  Widget BotaoSobre(double larguraTela, double alturaTela) {
+  Widget aboutButton(double larguraTela, double alturaTela) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          mostarSobre = 1;
+          showAbout = 1;
         });
       },
       child: Container(
@@ -56,7 +55,9 @@ class _LoginViewState extends State<LoginView> {
         width: larguraTela * 0.2,
         decoration: BoxDecoration(
           color: Colors.lightGreenAccent[700],
-          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20)),
         ),
         margin: EdgeInsets.only(
           left: larguraTela * 0.06,
@@ -65,31 +66,40 @@ class _LoginViewState extends State<LoginView> {
         child: Center(
           child: Text(
             'Sobre',
-            style: TextStyle(fontSize: larguraTela * 0.04, fontWeight: FontWeight.bold, color: Colors.white),
+            style: TextStyle(
+                fontSize: larguraTela * 0.04,
+                fontWeight: FontWeight.bold,
+                color: Colors.white),
           ),
         ),
       ),
     );
   }
 
-  Widget Sobre(double larguraTela, double alturaTela) {
-    switch (mostarSobre) {
+  Widget about(double larguraTela, double alturaTela) {
+    switch (showAbout) {
       case 0:
-        bottom_sobre_box = alturaTela;
-        top_sobre_box = 0;
+        bottomAboutBox = alturaTela;
+        topAboutBox = 0;
         break;
       case 1:
-        bottom_sobre_box = 0;
-        top_sobre_box = alturaTela * 0.2;
+        bottomAboutBox = 0;
+        topAboutBox = alturaTela * 0.2;
         break;
     }
 
     return AnimatedContainer(
-      margin: EdgeInsets.only(left: larguraTela * 0.05, right: larguraTela * 0.05, bottom: bottom_sobre_box, top: top_sobre_box),
+      margin: EdgeInsets.only(
+          left: larguraTela * 0.05,
+          right: larguraTela * 0.05,
+          bottom: bottomAboutBox,
+          top: topAboutBox),
       duration: Duration(milliseconds: 500),
       width: larguraTela * 0.9,
       height: alturaTela * 0.6,
-      decoration: BoxDecoration(color: Colors.red.withOpacity(0.9), borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(
+          color: Colors.red.withOpacity(0.9),
+          borderRadius: BorderRadius.circular(20)),
       child: Column(
         children: [
           Row(
@@ -102,25 +112,26 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 onPressed: () {
                   setState(() {
-                    mostarSobre = 0;
+                    showAbout = 0;
                   });
                 },
               )
             ],
           ),
           Container(
-            child: Text(sobre_text),
+            child: Text(aboutText),
           ),
         ],
       ),
     );
   }
 
-  Widget Logo(double larguraTela) {
+  Widget logo(double larguraTela) {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage('https://avatars2.githubusercontent.com/u/64334312?s=200&v=4'),
+          image: NetworkImage(
+              'https://avatars2.githubusercontent.com/u/64334312?s=200&v=4'),
           scale: 0.4,
         ),
       ),
@@ -129,7 +140,7 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  Widget RecuperarSenha(double alturaTela) {
+  Widget recoverPassword(double alturaTela) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -139,8 +150,11 @@ class _LoginViewState extends State<LoginView> {
       },
       child: Text(
         'Recuperar senha',
-        style:
-            TextStyle(color: Colors.red, fontSize: alturaTela * 0.025, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+        style: TextStyle(
+            color: Colors.red,
+            fontSize: alturaTela * 0.025,
+            fontWeight: FontWeight.bold,
+            decoration: TextDecoration.underline),
       ),
     );
   }

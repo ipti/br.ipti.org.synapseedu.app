@@ -1,13 +1,10 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-/**
- * Form de seleção das atividades. A primeira tela após o usuário logar.
- * No momento, só temos a tela básica com dados falsos. Os próximos passos
- * envolvem a conexão com a API para e o polimento da tela em conjunto
- * com os designers do projeto.
- */
+// Form de seleção das atividades. A primeira tela após o usuário logar.
+// No momento, só temos a tela básica com dados falsos. Os próximos passos
+// envolvem a conexão com a API para e o polimento da tela em conjunto
+// com os designers do projeto.
 
 class ActivitySelectionForm extends StatefulWidget {
   @override

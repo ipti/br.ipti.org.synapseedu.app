@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/all.dart';
 
 import 'model.dart';
 
-final cobject = Provider<Cobjects>((ref) {
+final cobjectProvider = Provider<Cobjects>((ref) {
   return Cobjects();
 });
 
@@ -19,7 +19,7 @@ class DragAndDrop extends StatefulWidget {
 }
 
 class _DragAndDropState extends State<DragAndDrop> {
-  var CObject = new List<dynamic>();
+  var cobject = new List<dynamic>();
 
   bool accepted = false;
 
@@ -31,15 +31,15 @@ class _DragAndDropState extends State<DragAndDrop> {
   @override
   Widget build(BuildContext context) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
-    CObject = args.CObject;
+    cobject = args.cobject;
 
-    print('SAIDA: $CObject');
+    // print('SAIDA: $cobject');
 
-    context.read(cobject).fetchCobjects(CObject);
-    List<Question> question = context.read(cobject).items;
+    context.read(cobjectProvider).fetchCobjects(cobject);
+    List<Question> question = context.read(cobjectProvider).items;
 
     double widthScreen = MediaQuery.of(context).size.width;
-    return CObject.isNotEmpty
+    return cobject.isNotEmpty
         ? Scaffold(
             resizeToAvoidBottomPadding: true,
             body: TemplateSlider(
@@ -65,6 +65,7 @@ class _DragAndDropState extends State<DragAndDrop> {
           );
   }
 
+  // ignore: non_constant_identifier_names
   Widget DAD(double widthScreen, Question question) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -75,20 +76,20 @@ class _DragAndDropState extends State<DragAndDrop> {
           children: [
             Draggable(
               data: 1,
-              child: DragSender(0, widthScreen, question),
-              feedback: DragSender(0, widthScreen, question),
-              childWhenDragging: DragSenderInvisible(widthScreen),
+              child: dragSender(0, widthScreen, question),
+              feedback: dragSender(0, widthScreen, question),
+              childWhenDragging: dragSenderInvisible(widthScreen),
             ),
             DragTarget(
               builder: (context, List<int> candidateData, rejectedData) {
-                return DragReceiver(3, widthScreen, question);
+                return dragReceiver(3, widthScreen, question);
               },
               onWillAccept: (data) {
                 return true;
               },
               onAccept: (data) {
                 valueFirstReceiver = data;
-                TradeValue(1, data);
+                tradeValue(1, data);
                 print("""
                   1: $valueFirstReceiver
                   2: $valueSecondReceiver
@@ -105,22 +106,22 @@ class _DragAndDropState extends State<DragAndDrop> {
           children: [
             Draggable(
               data: 2,
-              child: DragSender(1, widthScreen, question),
-              feedback: DragSender(1, widthScreen, question),
-              childWhenDragging: DragSenderInvisible(
+              child: dragSender(1, widthScreen, question),
+              feedback: dragSender(1, widthScreen, question),
+              childWhenDragging: dragSenderInvisible(
                 widthScreen,
               ),
             ),
             DragTarget(
               builder: (context, List<int> candidateData, rejectedData) {
-                return DragReceiver(4, widthScreen, question);
+                return dragReceiver(4, widthScreen, question);
               },
               onWillAccept: (data) {
                 return true;
               },
               onAccept: (data) {
                 valueSecondReceiver = data;
-                TradeValue(2, data);
+                tradeValue(2, data);
                 print("""
                   1: $valueFirstReceiver
                   2: $valueSecondReceiver
@@ -137,22 +138,22 @@ class _DragAndDropState extends State<DragAndDrop> {
           children: [
             Draggable(
               data: 3,
-              child: DragSender(2, widthScreen, question),
-              feedback: DragSender(2, widthScreen, question),
-              childWhenDragging: DragSenderInvisible(
+              child: dragSender(2, widthScreen, question),
+              feedback: dragSender(2, widthScreen, question),
+              childWhenDragging: dragSenderInvisible(
                 widthScreen,
               ),
             ),
             DragTarget(
               builder: (context, List<int> candidateData, rejectedData) {
-                return DragReceiver(5, widthScreen, question);
+                return dragReceiver(5, widthScreen, question);
               },
               onWillAccept: (data) {
                 return true;
               },
               onAccept: (data) {
                 valueThirdReceiver = data;
-                TradeValue(3, data);
+                tradeValue(3, data);
                 print("""
                   1: $valueFirstReceiver
                   2: $valueSecondReceiver
@@ -167,15 +168,15 @@ class _DragAndDropState extends State<DragAndDrop> {
     );
   }
 
-  Widget DragSenderInvisible(double widthScreen) {
+  Widget dragSenderInvisible(double widthScreen) {
     return Container(
       width: widthScreen * 0.3,
       height: widthScreen * 0.3,
     );
   }
 
-  Widget DragSender(int index, double widthScreen, Question question) {
-    print('DragSender');
+  Widget dragSender(int index, double widthScreen, Question question) {
+    print('dragSender');
     String grouping = (index + 1).toString();
     return Container(
       decoration: BoxDecoration(
@@ -196,8 +197,8 @@ class _DragAndDropState extends State<DragAndDrop> {
     );
   }
 
-  Widget DragReceiver(int index, double widthScreen, Question question) {
-    print('DragReceiver');
+  Widget dragReceiver(int index, double widthScreen, Question question) {
+    print('dragReceiver');
     String grouping = (index + 1).toString();
     switch (grouping) {
       case '4':
@@ -229,21 +230,24 @@ class _DragAndDropState extends State<DragAndDrop> {
     );
   }
 
-  void TradeValue(int ReceiverIndex, int data) {
-    switch (ReceiverIndex) {
+  void tradeValue(int receiverIndex, int data) {
+    switch (receiverIndex) {
       case 1:
         valueSecondReceiver == data
             ? valueSecondReceiver = 0
+            // ignore: unnecessary_statements
             : valueThirdReceiver == data ? valueThirdReceiver = 0 : {};
         break;
       case 2:
         valueFirstReceiver == data
             ? valueFirstReceiver = 0
+            // ignore: unnecessary_statements
             : valueThirdReceiver == data ? valueThirdReceiver = 0 : {};
         break;
       case 3:
         valueFirstReceiver == data
             ? valueFirstReceiver = 0
+            // ignore: unnecessary_statements
             : valueSecondReceiver == data ? valueSecondReceiver = 0 : {};
         break;
     }

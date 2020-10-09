@@ -6,16 +6,16 @@ class RecoverPassword extends StatefulWidget {
 }
 
 class _RecoverPasswordState extends State<RecoverPassword> {
-  final _templateController = TextEditingController();
-  final _2templateController = TextEditingController();
-  String colegioValue = null;
-  String serieValue = null;
+  final _nameTemplateController = TextEditingController();
+  final _emailTemplateController = TextEditingController();
+  String colegioValue;
+  String serieValue;
 
 //Navigator.of(context).pop();
   @override
   Widget build(BuildContext context) {
-    double alturaTela = MediaQuery.of(context).size.height;
-    double larguraTela = MediaQuery.of(context).size.width;
+    double _screenHeight = MediaQuery.of(context).size.height;
+    double _screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Stack(
         children: [
@@ -26,25 +26,28 @@ class _RecoverPasswordState extends State<RecoverPassword> {
               child: Container(
                 child: Icon(
                   Icons.arrow_back,
-                  size: alturaTela * 0.05,
+                  size: _screenHeight * 0.05,
                 ),
                 margin: EdgeInsets.all(10),
               )),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Logo(),
+              logo(),
               Container(
                   padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
                   child: Text(
                     "RECUPERAR SENHA",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: alturaTela * 0.05, color: Colors.green, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: _screenHeight * 0.05,
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold),
                   )),
-              Entrada(_templateController, 'Nome do Aluno'),
-              EscolaESerie(larguraTela),
-              Entrada(_2templateController, 'Email'),
-              BtnRecuperar(larguraTela, alturaTela),
+              recoverInput(_nameTemplateController, 'Nome do Aluno'),
+              schoolAndGrade(_screenWidth),
+              recoverInput(_emailTemplateController, 'Email'),
+              recoverPasswordButton(_screenWidth, _screenHeight),
             ],
           ),
         ],
@@ -52,24 +55,26 @@ class _RecoverPasswordState extends State<RecoverPassword> {
     );
   }
 
-  Widget Logo() {
+  Widget logo() {
     return Expanded(
       child: Image(
-        image: NetworkImage('https://avatars2.githubusercontent.com/u/64334312?s=200&v=4', scale: 0.6),
+        image: NetworkImage(
+            'https://avatars2.githubusercontent.com/u/64334312?s=200&v=4',
+            scale: 0.6),
       ),
     );
   }
 
-  Widget BtnRecuperar(double larguraTela, double alturaTela) {
+  Widget recoverPasswordButton(double _screenWidth, double _screenHeight) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         //todo criar função para recuperar senha do usuário
         Navigator.of(context).pop();
       },
       child: Container(
         margin: EdgeInsets.only(top: 20, bottom: 20),
-        width: larguraTela * 0.5,
-        height: alturaTela * 0.08,
+        width: _screenWidth * 0.5,
+        height: _screenHeight * 0.08,
         decoration: BoxDecoration(
           color: Colors.green,
           borderRadius: BorderRadius.circular(20),
@@ -85,18 +90,18 @@ class _RecoverPasswordState extends State<RecoverPassword> {
     );
   }
 
-  Widget EscolaESerie(double larguraTela) {
+  Widget schoolAndGrade(double _screenWidth) {
     return Row(
       children: [
-        SchoolList(larguraTela),
-        Expanded(child: Serie(larguraTela)),
+        schoolList(_screenWidth),
+        Expanded(child: grade(_screenWidth)),
       ],
     );
   }
 
-  Widget SchoolList(double larguraTela) {
+  Widget schoolList(double _screenWidth) {
     return Container(
-      width: larguraTela * 0.7,
+      width: _screenWidth * 0.7,
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.only(top: 7, bottom: 7),
       decoration: BoxDecoration(
@@ -124,7 +129,8 @@ class _RecoverPasswordState extends State<RecoverPassword> {
             });
           },
           //<=============== OS DADOS COM NOME DAS ESCOLAS DEVEM SER DEIXADOS AQUI =====================>
-          items: <String>['Colégio 1', 'Colégio 2', 'Colégio 3'].map<DropdownMenuItem<String>>((String value) {
+          items: <String>['Colégio 1', 'Colégio 2', 'Colégio 3']
+              .map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),
@@ -135,9 +141,9 @@ class _RecoverPasswordState extends State<RecoverPassword> {
     );
   }
 
-  Widget Serie(double larguraTela) {
+  Widget grade(double _screenWidth) {
     return Container(
-      width: larguraTela * 0.7,
+      width: _screenWidth * 0.7,
       margin: EdgeInsets.only(top: 10, bottom: 10, right: 10),
       padding: EdgeInsets.only(top: 7, bottom: 7),
       decoration: BoxDecoration(
@@ -164,7 +170,8 @@ class _RecoverPasswordState extends State<RecoverPassword> {
           });
         },
         //<=============== OS DADOS COM NOME DAS ESCOLAS DEVEM SER DEIXADOS AQUI =====================>
-        items: <String>['9º ano', '8º ano', '7º ano'].map<DropdownMenuItem<String>>(
+        items: <String>['9º ano', '8º ano', '7º ano']
+            .map<DropdownMenuItem<String>>(
           (String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -176,7 +183,7 @@ class _RecoverPasswordState extends State<RecoverPassword> {
     );
   }
 
-  Widget Entrada(TextEditingController controller, String hintText) {
+  Widget recoverInput(TextEditingController controller, String hintText) {
     return Container(
       child: TextFormField(
         controller: controller,

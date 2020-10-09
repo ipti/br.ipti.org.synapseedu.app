@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vertical_tabs/vertical_tabs.dart';
 
 class TemplateSlider extends StatelessWidget {
   final Widget title;

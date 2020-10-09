@@ -27,7 +27,7 @@ class Activities extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double _halfHeight = MediaQuery.of(context).size.height / 2;
+    // double _halfHeight = MediaQuery.of(context).size.height / 2;
     int index = 0;
 
     return Scaffold(
@@ -44,20 +44,6 @@ class Activities extends StatelessWidget {
         ],
       ),
       body: _buildPageView(index, context),
-      // body: Column(
-      //   children: [
-      //     Container(
-      //       color: Colors.grey[200],
-      //       height: _halfHeight,
-      //       width: double.infinity,
-      //       child: Text('Hello'),
-      //     ),
-      //     Container(
-      //       child: Text('Hey'),
-      //       width: double.infinity,
-      //     )
-      //   ],
-      // ),
     );
   }
 }

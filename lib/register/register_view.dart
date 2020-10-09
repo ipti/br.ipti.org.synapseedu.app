@@ -7,13 +7,13 @@ class RegisterView extends StatefulWidget {
 
 class _RegisterViewState extends State<RegisterView> {
   final _templateController = TextEditingController();
-  final _2templateController = TextEditingController();
-  final _3templateController = TextEditingController();
-  final _4templateController = TextEditingController();
+  final _studentNameController = TextEditingController();
+  final _emailNameController = TextEditingController();
+  final _passwordNameController = TextEditingController();
   //CRIAR TEXTCONTROLLERS PARA CADA ENTRADA
 
-  String colegioValue = null;
-  String serieValue = null;
+  String colegioValue;
+  String serieValue;
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +26,10 @@ class _RegisterViewState extends State<RegisterView> {
           children: <Widget>[
             Logo(),
             Entrada(_templateController, 'Nome Do Responsavel'),
-            Entrada(_2templateController, 'Nome do Aluno'),
+            Entrada(_studentNameController, 'Nome do Aluno'),
             EscolaESerie(larguraTela),
-            Entrada(_3templateController, 'Email'),
-            Entrada(_4templateController, 'Senha'),
+            Entrada(_emailNameController, 'Email'),
+            Entrada(_passwordNameController, 'Senha'),
             BtnCadastrar(larguraTela, alturaTela),
           ],
         ),
@@ -41,7 +41,9 @@ class _RegisterViewState extends State<RegisterView> {
     return Container(
       margin: EdgeInsets.all(20),
       child: Image(
-        image: NetworkImage('https://avatars2.githubusercontent.com/u/64334312?s=200&v=4', scale: 0.7),
+        image: NetworkImage(
+            'https://avatars2.githubusercontent.com/u/64334312?s=200&v=4',
+            scale: 0.7),
       ),
     );
   }
@@ -93,18 +95,19 @@ class _RegisterViewState extends State<RegisterView> {
           value: colegioValue,
           icon: Expanded(
               child: Icon(
-                Icons.arrow_drop_down,
-                size: 40,
-              )),
+            Icons.arrow_drop_down,
+            size: 40,
+          )),
           elevation: 16,
-          style: TextStyle(color: Colors.black,fontSize: 20),
+          style: TextStyle(color: Colors.black, fontSize: 20),
           onChanged: (String newValue) {
             setState(() {
               colegioValue = newValue;
             });
           },
           //<=============== OS DADOS COM NOME DAS ESCOLAS DEVEM SER DEIXADOS AQUI =====================>
-          items: <String>['Colégio 1', 'Colégio 2', 'Colégio 3'].map<DropdownMenuItem<String>>((String value) {
+          items: <String>['Colégio 1', 'Colégio 2', 'Colégio 3']
+              .map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),
@@ -118,7 +121,7 @@ class _RegisterViewState extends State<RegisterView> {
   Widget Serie(double widthScreen) {
     return Container(
       width: widthScreen * 0.7,
-      margin: EdgeInsets.only(top: 10,bottom: 10,right: 10),
+      margin: EdgeInsets.only(top: 10, bottom: 10, right: 10),
       padding: EdgeInsets.only(top: 7, bottom: 7),
       decoration: BoxDecoration(
         color: Colors.grey.withOpacity(0.3),
@@ -128,14 +131,14 @@ class _RegisterViewState extends State<RegisterView> {
       child: DropdownButton<String>(
         hint: Text(
           'Série',
-          style: TextStyle(color: Colors.black,fontSize: 20),
+          style: TextStyle(color: Colors.black, fontSize: 20),
         ),
         value: serieValue,
         icon: Expanded(
             child: Icon(
-              Icons.arrow_drop_down,
-              size: 40,
-            )),
+          Icons.arrow_drop_down,
+          size: 40,
+        )),
         elevation: 16,
         style: TextStyle(color: Colors.black),
         onChanged: (String newValue) {
@@ -144,8 +147,9 @@ class _RegisterViewState extends State<RegisterView> {
           });
         },
         //<=============== OS DADOS COM NOME DAS ESCOLAS DEVEM SER DEIXADOS AQUI =====================>
-        items: <String>['9º ano', '8º ano', '7º ano'].map<DropdownMenuItem<String>>(
-              (String value) {
+        items: <String>['9º ano', '8º ano', '7º ano']
+            .map<DropdownMenuItem<String>>(
+          (String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),

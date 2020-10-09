@@ -13,12 +13,12 @@ class BaseModel extends ChangeNotifier {
     this._currentWebViewModel = currentWebViewModel;
   }
 
-  UnmodifiableListView<WebViewPagina> get webViewTabs => UnmodifiableListView(_webViewPaginas);
+  UnmodifiableListView<WebViewPagina> get webViewTabs =>
+      UnmodifiableListView(_webViewPaginas);
 
   void addTab(WebViewPagina webViewTab) {
     _webViewPaginas.add(webViewTab);
   }
-
 }
 
 class WebViewModel extends ChangeNotifier {
@@ -33,5 +33,4 @@ class WebViewModel extends ChangeNotifier {
           ios: IOSInAppWebViewOptions(),
         );
   }
-
 }

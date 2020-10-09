@@ -1,6 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
 import '../template_questoes/model.dart';
-import '../template_questoes/question_provider.dart';
 import 'package:flutter/material.dart';
 
 // Contém alguns métodos e variáveis globais necessárias para as questões.

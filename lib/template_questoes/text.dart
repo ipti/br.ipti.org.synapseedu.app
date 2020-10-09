@@ -6,24 +6,24 @@ import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 
-final cobject = Provider<Cobjects>((ref) {
+final cobjectProvider = Provider<Cobjects>((ref) {
   return Cobjects();
 });
 
 class TXTQuestion extends ConsumerWidget {
   static const routeName = '/TXT';
 
-  var CObject = new List<dynamic>();
+  var cobject = new List<dynamic>();
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
-    CObject = args.CObject;
+    cobject = args.cobject;
 
-    context.read(cobject).fetchCobjects(CObject);
-    List<Question> question = context.read(cobject).items;
+    context.read(cobjectProvider).fetchCobjects(cobject);
+    List<Question> question = context.read(cobjectProvider).items;
     String questionDescription = question[0].header["description"];
-    String headerText = question[0].header["text"];
+    // String headerText = question[0].header["text"];
 
     String questionText = question[0].pieces['1']['text'];
 

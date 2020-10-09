@@ -156,20 +156,6 @@ class Question {
     return questionImages;
   }
 
-  String questionTextSearch(Map<String, dynamic> json) {
-    String text;
-    for (var elements in json["cobjects"][0]["screens"][0]["piecesets"][0]
-        ["groups"]["1"]["elements"]) {
-      if (elements["type"] == "text") {
-        text = elements["generalProperties"][1]["value"];
-        break;
-      } else {
-        text = "Não funcionou";
-      }
-    }
-    return text;
-  }
-
   String src;
   Map<String, String> questionMultimediaSearch(Map<String, dynamic> json) {
     Map<String, String> srcMap = {
@@ -226,7 +212,7 @@ class Question {
         "sound": false,
       }
     };
-    String src;
+
     List<Map<String, String>> item = [
       {"text": "", "sound": "", "image": ""},
       {"text": "", "sound": "", "image": ""},
@@ -235,10 +221,9 @@ class Question {
       {"text": "", "sound": "", "image": ""},
       {"text": "", "sound": "", "image": ""}
     ];
-    Map<String, String> map = {};
+
     var index = 0;
     groups.forEach((group, elements) {
-      print(group);
       elements.forEach((element, elementProperty) {
         for (var value in elementProperty) {
           if (value["pieceElement_Properties"]["layertype"] == "Acerto") {

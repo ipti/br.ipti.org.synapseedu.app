@@ -27,7 +27,7 @@ class Activities extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double _halfHeight = MediaQuery.of(context).size.height / 2;
+    // double _halfHeight = MediaQuery.of(context).size.height / 2;
     int index = 0;
 
     return Scaffold(

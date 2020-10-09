@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Caixa_Login extends StatefulWidget {
+class LoginBox extends StatefulWidget {
   final double larguraTelaDisponivel;
 
-  Caixa_Login(this.larguraTelaDisponivel);
+  LoginBox(this.larguraTelaDisponivel);
 
   @override
-  _Caixa_LoginState createState() => _Caixa_LoginState();
+  _LoginBoxState createState() => _LoginBoxState();
 }
 
 // final exibirErro = StateProvider((ref) => false);
 
-class _Caixa_LoginState extends State<Caixa_Login> {
+class _LoginBoxState extends State<LoginBox> {
   final usuario = TextEditingController();
   final senha = TextEditingController();
 
@@ -24,7 +23,7 @@ class _Caixa_LoginState extends State<Caixa_Login> {
       //<---------LARGURA E ALTURA IGUAIS PRA FORMAR UM QUADRADO--------->
       height: widget.larguraTelaDisponivel / 1.1,
       width: widget.larguraTelaDisponivel / 1.1,
-      margin: EdgeInsets.only(left: 20,right: 20),
+      margin: EdgeInsets.only(left: 20, right: 20),
       decoration: BoxDecoration(
           color: Colors.lightGreenAccent[700],
           borderRadius: BorderRadius.circular(20)),
@@ -39,9 +38,9 @@ class _Caixa_LoginState extends State<Caixa_Login> {
               fontSize: widget.larguraTelaDisponivel * 0.09,
             ),
           ),
-          Entrada('Usuário', widget.larguraTelaDisponivel),
-          Entrada('Senha', widget.larguraTelaDisponivel),
-          Entrar(),
+          loginInput('Usuário', widget.larguraTelaDisponivel),
+          loginInput('Senha', widget.larguraTelaDisponivel),
+          login(),
           Text(
             exibirErro ? 'Verifique seus dados de acesso' : "",
             textAlign: TextAlign.center,
@@ -56,7 +55,7 @@ class _Caixa_LoginState extends State<Caixa_Login> {
     );
   }
 
-  Widget Entrada(String Variavel, double LarguraDisponivel) {
+  Widget loginInput(String inputString, double availableWidth) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -64,26 +63,26 @@ class _Caixa_LoginState extends State<Caixa_Login> {
       ),
       margin: EdgeInsets.only(top: 10, bottom: 10, left: 30, right: 30),
       child: TextFormField(
-        style: TextStyle(fontSize: LarguraDisponivel * 0.07),
+        style: TextStyle(fontSize: availableWidth * 0.07),
         textAlign: TextAlign.center,
         decoration: InputDecoration(
           border: InputBorder.none,
-          hintText: Variavel,
+          hintText: inputString,
           hintStyle:
-              TextStyle(color: Colors.grey, fontSize: LarguraDisponivel * 0.07),
+              TextStyle(color: Colors.grey, fontSize: availableWidth * 0.07),
         ),
-        controller: Variavel == 'Usuário' ? usuario : senha,
+        controller: inputString == 'Usuário' ? usuario : senha,
       ),
     );
   }
 
-  Widget Entrar() {
-    Color cor_letra = Colors.orange;
-    Color cor_botao = Colors.white;
+  Widget login() {
+    Color letterColor = Colors.orange;
+    Color buttonColor = Colors.white;
 
     return GestureDetector(
       onTap: () {
-        ValidarUsuario()
+        validateUser()
             ? null
             : setState(() {
                 exibirErro = true;
@@ -92,14 +91,14 @@ class _Caixa_LoginState extends State<Caixa_Login> {
       child: Container(
         padding: EdgeInsets.only(left: 20, right: 20),
         decoration: BoxDecoration(
-          color: cor_botao,
+          color: buttonColor,
           border: Border.all(width: 5, color: Colors.orange),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Text(
           'entrar',
           style: TextStyle(
-            color: cor_letra,
+            color: letterColor,
             fontSize: widget.larguraTelaDisponivel * 0.09,
           ),
         ),
@@ -107,7 +106,7 @@ class _Caixa_LoginState extends State<Caixa_Login> {
     );
   }
 
-  bool ValidarUsuario() {
+  bool validateUser() {
     // enquanto não estamos comunicando com o servidor
     return usuario == 'admin' && senha == '123456' ? true : false;
   }

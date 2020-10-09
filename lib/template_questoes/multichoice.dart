@@ -3,8 +3,6 @@ import 'package:elesson/share/question_widgets.dart';
 
 import './share/template_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import './question_provider.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,11 +10,11 @@ import './model.dart';
 
 // const String BASE_URL = 'https://elesson.com.br/app/library';
 
-final cobject = Provider<Cobjects>((ref) {
+final cobjectProvider = Provider<Cobjects>((ref) {
   return Cobjects();
 });
 
-// final cobject = StateNotifierProvider<Cobjects>((ref) {
+// final cobjectProvider = StateNotifierProvider<Cobjects>((ref) {
 //   return Cobjects();
 // });
 
@@ -27,7 +25,7 @@ final cobject = Provider<Cobjects>((ref) {
 class MultipleChoiceQuestion extends ConsumerWidget {
   static const routeName = '/MTE';
 
-  var CObject = new List<dynamic>();
+  var cobject = new List<dynamic>();
 
   List<bool> _buttonPressed = [false, false, false];
   int _selectedButton = 3;
@@ -122,13 +120,13 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
-    CObject = args.CObject;
+    cobject = args.cobject;
 
-    // final cobjectsState = watch(cobject.state);
+    // final cobjectProvidersState = watch(cobjectProvider.state);
     bool fetchBool = false;
     if (fetchBool == false) {}
-    context.read(cobject).fetchCobjects(CObject);
-    List<Question> question = context.read(cobject).items;
+    context.read(cobjectProvider).fetchCobjects(cobject);
+    List<Question> question = context.read(cobjectProvider).items;
     String questionDescription = question[0].header["description"];
 
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
@@ -187,11 +185,11 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                   _selectedButton > 2
                       ? print('Escolha uma opção')
                       //     // : print(_selectedButton);
-                      // : context.read(cobject).fetchCobjects(CObject);
+                      // : context.read(cobjectProvider).fetchCobjects(cobject);
                       : Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                               settings: RouteSettings(
-                                arguments: ScreenArguments(CObject),
+                                arguments: ScreenArguments(cobject),
                               ),
                               builder: (context) => MultipleChoiceQuestion(
                                   // question: question[0].questionText,

@@ -1,23 +1,18 @@
-import 'package:elesson/share/api.dart';
-import 'package:elesson/template_questoes/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:provider/provider.dart';
-
-import 'activity_selection/activity_selection_view.dart';
-import 'login/login_view.dart';
-import 'recover_password/recover_password_view.dart';
-import 'register/register_view.dart';
-import 'template_questoes/drag_and_drop.dart';
-import 'template_questoes/share/template_slider.dart';
-import 'webview/base.dart';
-import 'webview/models/webview_modelo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'template_questoes/question_and_answer.dart';
-//import 'template_questoes/multiple_choice.dart';
-import 'package:elesson/template_questoes/multichoice.dart';
+import 'activity_selection/activity_selection_view.dart';
+// import 'login/login_view.dart';
+// import 'recover_password/recover_password_view.dart';
+// import 'register/register_view.dart';
+// import 'webview/base.dart';
+// import 'webview/models/webview_modelo.dart';
+
+import './template_questoes/text.dart';
+import './template_questoes/multichoice.dart';
+import './template_questoes/drag_and_drop.dart';
+import './template_questoes/question_and_answer.dart';
 
 void main() async {
   //usando pra iniciar em outra tela
@@ -57,8 +52,8 @@ void main() async {
 }
 
 class Home extends StatelessWidget {
-  var tipo_questao;
-  var Cobject = new List<dynamic>();
+  var questionType;
+  var cobject = new List<dynamic>();
 
   @override
   Widget build(BuildContext context) {
@@ -87,10 +82,10 @@ class Home extends StatelessWidget {
       ),
       home: ActivitySelectionForm(),
       routes: {
-        TextQuestion.routeName:(context) => TextQuestion(),
-        DragAndDrop.routeName:(context) => DragAndDrop(),
-        MultipleChoiceQuestion.routeName:(context) => MultipleChoiceQuestion(),
-        TXTQuestion.routeName:(context) => TXTQuestion(),
+        TextQuestion.routeName: (context) => TextQuestion(),
+        DragAndDrop.routeName: (context) => DragAndDrop(),
+        MultipleChoiceQuestion.routeName: (context) => MultipleChoiceQuestion(),
+        TXTQuestion.routeName: (context) => TXTQuestion(),
       },
     );
   }

@@ -6,19 +6,20 @@ import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 
-final cobject = Provider<Cobjects>((ref) {
+final cobjectProvider = Provider<Cobjects>((ref) {
   return Cobjects();
 });
 
 class TextQuestion extends ConsumerWidget {
   static const routeName = '/PRE';
   // ignore: non_constant_identifier_names
-  var CObject = new List<dynamic>();
+  var cobject = new List<dynamic>();
 
   final _formKey = GlobalKey<FormState>();
   final _textController = TextEditingController();
 
   @override
+  // ignore: override_on_non_overriding_member
   void dispose() {
     _textController.dispose();
   }
@@ -35,11 +36,11 @@ class TextQuestion extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
-    CObject = args.CObject;
-    // print(CObject);
+    cobject = args.cobject;
+    // print(cobject);
 
-    context.read(cobject).fetchCobjects(CObject);
-    List<Question> question = context.read(cobject).items;
+    context.read(cobjectProvider).fetchCobjects(cobject);
+    List<Question> question = context.read(cobjectProvider).items;
     String questionDescription = question[0].header["description"];
     String questionText = question[0].header["text"];
 
@@ -142,6 +143,6 @@ class TextQuestion extends ConsumerWidget {
 }
 
 // class ScreenArguments {
-//   final List<dynamic> CObject;
-//   ScreenArguments(this.CObject);
+//   final List<dynamic> cobject;
+//   ScreenArguments(this.cobject);
 // }
