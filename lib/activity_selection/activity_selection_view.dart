@@ -42,16 +42,16 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   String schoolId = "51";
 
   _ActivitySelectionFormState() {
-    _getTurmas(schoolId);
+    _getClasses(schoolId);
   }
   //<===================================PARA OS TESTES =======================================================>
   List questionTypeList = ['MTE', 'PRE', 'DAD', 'TXT'];
   String typeSelected = "Selecione o tipo da questão";
 
   //<=================================GETS DA API===============================================>
-  _getTurmas(String schoolId) async {
+  _getClasses(String schoolId) async {
     //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
-    API_TURMA.getTurmas(schoolId).then((response) {
+    ApiClass.getClasses(schoolId).then((response) {
       setState(() {
         classes = response.data[0]["classroom"];
         //print('EXIBINDO: $turmas');
@@ -59,9 +59,9 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
     });
   }
 
-  _getAlunos(String classIdReceived) async {
+  _getStudents(String classIdReceived) async {
     //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
-    API_ALUNO.getAlunos(classIdReceived).then((response) {
+    ApiStudent.getStudents(classIdReceived).then((response) {
       setState(() {
         valid = response.data[0]["valid"];
         students = response.data[0]["person"];
@@ -72,7 +72,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
 
   _getCobject(String questionId) async {
     //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
-    API_COBJECT.getQuestao(questionId).then((response) {
+    ApiCobject.getQuestao(questionId).then((response) {
       setState(() {
         cobject = response.data;
         questionType = cobject[0]["cobjects"][0]["template_code"];
@@ -98,20 +98,20 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
         //   Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, (Route<dynamic> route) => false,arguments: ScreenArguments(cobject));
         //   break;
         case 'PRE':
-          Navigator.of(context).pushNamed(TextQuestion.routeName,
-              arguments: ScreenArguments(cobject,0));
+          Navigator.of(context).pushNamed(SingleLineTextQuestion.routeName,
+              arguments: ScreenArguments(cobject, 0, 'PRE'));
           break;
         case 'DDROP':
           Navigator.of(context).pushNamed(DragAndDrop.routeName,
-              arguments: ScreenArguments(cobject,0));
+              arguments: ScreenArguments(cobject, 0, 'DDROP'));
           break;
         case 'MTE':
           Navigator.of(context).pushNamed(MultipleChoiceQuestion.routeName,
-              arguments: ScreenArguments(cobject,0));
+              arguments: ScreenArguments(cobject, 0, 'MTE'));
           break;
         case 'TXT':
-          Navigator.of(context).pushNamed(TXTQuestion.routeName,
-              arguments: ScreenArguments(cobject,0));
+          Navigator.of(context).pushNamed(TextQuestion.routeName,
+              arguments: ScreenArguments(cobject, 0, 'TXT'));
           break;
       }
     });
@@ -198,7 +198,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                       selectedIdClass = classId;
                     });
                     Navigator.of(context).pop();
-                    _getAlunos(selectedIdClass);
+                    _getStudents(selectedIdClass);
                     print('''
                         Nome selecionado:  $selectedNameClass
                         ID da turma selecionada: $selectedIdClass
@@ -412,5 +412,6 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
 class ScreenArguments {
   final List<dynamic> cobject;
   final int questionIndex;
-  ScreenArguments(this.cobject, this.questionIndex);
+  final String questionType;
+  ScreenArguments(this.cobject, this.questionIndex, this.questionType);
 }

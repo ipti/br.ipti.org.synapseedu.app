@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 
 class TemplateSlider extends StatelessWidget {
   final Widget title;
-  final Widget activityScreen;
+  final Widget text;
   final Widget image;
   final Widget sound;
+  final Widget activityScreen;
 
   const TemplateSlider(
-      {Key key, this.title, this.sound, this.activityScreen, this.image})
+      {Key key,
+      this.title,
+      this.text,
+      this.sound,
+      this.activityScreen,
+      this.image})
       : super(key: key);
 
   @override
@@ -35,6 +41,7 @@ class TemplateSlider extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(child: title != null ? title : Container()),
+          text != null ? text : Container(),
           sound != null ? sound : Container(),
           image != null ? image : Container(),
         ],

@@ -24,20 +24,20 @@ class _RegisterViewState extends State<RegisterView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            Logo(),
-            Entrada(_templateController, 'Nome Do Responsavel'),
-            Entrada(_studentNameController, 'Nome do Aluno'),
-            EscolaESerie(widthScreen),
-            Entrada(_emailNameController, 'Email'),
-            Entrada(_passwordNameController, 'Senha'),
-            BtnCadastrar(widthScreen, heightScreen),
+            logo(),
+            inputWidget(_templateController, 'Nome Do Responsavel'),
+            inputWidget(_studentNameController, 'Nome do Aluno'),
+            schoolAndGrade(widthScreen),
+            inputWidget(_emailNameController, 'Email'),
+            inputWidget(_passwordNameController, 'Senha'),
+            registerButton(widthScreen, heightScreen),
           ],
         ),
       ),
     );
   }
 
-  Widget Logo() {
+  Widget logo() {
     return Container(
       margin: EdgeInsets.all(20),
       child: Image(
@@ -48,7 +48,7 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  Widget BtnCadastrar(double widthScreen, double heightScreen) {
+  Widget registerButton(double widthScreen, double heightScreen) {
     return Container(
       margin: EdgeInsets.only(top: 20, bottom: 20),
       width: widthScreen * 0.5,
@@ -67,16 +67,16 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  Widget EscolaESerie(double widthScreen) {
+  Widget schoolAndGrade(double widthScreen) {
     return Row(
       children: [
-        SchoolList(widthScreen),
-        Expanded(child: Serie(widthScreen)),
+        schoolList(widthScreen),
+        Expanded(child: gradeWidget(widthScreen)),
       ],
     );
   }
 
-  Widget SchoolList(double widthScreen) {
+  Widget schoolList(double widthScreen) {
     return Container(
       width: widthScreen * 0.7,
       margin: EdgeInsets.all(10),
@@ -118,7 +118,7 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  Widget Serie(double widthScreen) {
+  Widget gradeWidget(double widthScreen) {
     return Container(
       width: widthScreen * 0.7,
       margin: EdgeInsets.only(top: 10, bottom: 10, right: 10),
@@ -161,7 +161,7 @@ class _RegisterViewState extends State<RegisterView> {
   }
 
   //<====parametros(controller , texto inicial)====>
-  Widget Entrada(TextEditingController controller, String hintText) {
+  Widget inputWidget(TextEditingController controller, String hintText) {
     return Container(
       child: TextFormField(
         controller: controller,

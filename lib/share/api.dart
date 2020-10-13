@@ -5,23 +5,23 @@ import 'package:dio/dio.dart';
 var dio = Dio();
 const BaseUrl = "http://app.elesson.com.br/api-synapse/synapse/";
 
-class API_TURMA {
-  static Future getTurmas(String id_escola) async {
-    var url = BaseUrl + 'school/classroom/' + id_escola;
+class ApiClass {
+  static Future getClasses(String schoolId) async {
+    var url = BaseUrl + 'school/classroom/' + schoolId;
     return await dio.get(url);
   }
 }
 
-class API_ALUNO {
-  static Future getAlunos(String id_turma) async {
-    var url = BaseUrl + 'students/' + id_turma;
+class ApiStudent {
+  static Future getStudents(String classId) async {
+    var url = BaseUrl + 'students/' + classId;
     return await dio.get(url);
   }
 }
-  class API_COBJECT {
-  static Future getQuestao(String id_cobject) async {
-  var url = 'https://elesson.com.br/api/offline/cobject/' + id_cobject;
-  return await dio.get(url);
+
+class ApiCobject {
+  static Future getQuestao(String cobjectId) async {
+    var url = 'https://elesson.com.br/api/offline/cobject/' + cobjectId;
+    return await dio.get(url);
   }
 }
-

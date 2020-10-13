@@ -27,6 +27,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
 
   var cobject = new List<dynamic>();
   int questionIndex;
+  String questionType;
 
   List<bool> _buttonPressed = [false, false, false];
   int _selectedButton = 3;
@@ -123,7 +124,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     cobject = args.cobject;
     questionIndex = args.questionIndex;
-
+    questionType = args.questionType;
 
     // final cobjectProvidersState = watch(cobjectProvider.state);
     bool fetchBool = false;
@@ -134,7 +135,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
 
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
     // context.read(questionChangeNotifier).fetchCobjects();
-
+    // print(questionIndex);
     // print("Header: ${question[0].header}");
     // print("Pieces: ${question[0].pieces}");
 
@@ -192,12 +193,13 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                       : Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                               settings: RouteSettings(
-                                arguments: ScreenArguments(cobject, questionIndex++),
+                                arguments: ScreenArguments(
+                                    cobject, ++questionIndex, 'MTE'),
                               ),
-                              builder: (context) => MultipleChoiceQuestion(
-                                  // question: question[0].questionText,
-                                  )),
+                              builder: (context) => MultipleChoiceQuestion()),
                         );
+                  // : submitAnswer(
+                  //     context, cobject, questionType, questionIndex);
                 },
                 minWidth: 200.0,
                 height: 45.0,

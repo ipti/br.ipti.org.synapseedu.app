@@ -10,12 +10,11 @@ final cobjectProvider = Provider<Cobjects>((ref) {
   return Cobjects();
 });
 
-class TextQuestion extends ConsumerWidget {
+class SingleLineTextQuestion extends ConsumerWidget {
   static const routeName = '/PRE';
   // ignore: non_constant_identifier_names
   var cobject = new List<dynamic>();
   int questionIndex;
-
 
   final _formKey = GlobalKey<FormState>();
   final _textController = TextEditingController();
@@ -40,7 +39,6 @@ class TextQuestion extends ConsumerWidget {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     cobject = args.cobject;
     questionIndex = args.questionIndex;
-    // print(cobject);
 
     context.read(cobjectProvider).fetchCobjects(cobject);
     List<Question> question = context.read(cobjectProvider).items;
