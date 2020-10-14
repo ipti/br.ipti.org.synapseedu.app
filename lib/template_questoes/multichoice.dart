@@ -130,14 +130,15 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     bool fetchBool = false;
     if (fetchBool == false) {}
     context.read(cobjectProvider).fetchCobjects(cobject);
-    List<Question> question = context.read(cobjectProvider).items;
-    String questionDescription = question[questionIndex].header["description"];
+    // List<Question> question = context.read(cobjectProvider).items;
+    List<Cobject> cobjectList = context.read(cobjectProvider).items;
+    String questionDescription = cobjectList[0].description;
 
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
     // context.read(questionChangeNotifier).fetchCobjects();
     // print(questionIndex);
-    // print("Header: ${question[0].header}");
-    // print("Pieces: ${question[0].pieces}");
+    // print("Header: ${cobjectList[0].questions[0].header}");
+    // print("Pieces: ${cobjectList[0].questions[0].pieces}");
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -160,12 +161,12 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                     fontSize: 26,
                   ),
                 ),
-              soundButton(context, question[questionIndex]),
+              soundButton(context, cobjectList[0].questions[questionIndex]),
             ],
           ),
         ),
         image: Image.network('https://elesson.com.br/app/library/image/' +
-            question[0].header["image"]),
+            cobjectList[0].questions[0].header["image"]),
         // image: Image.asset('assets/img/logo.png'),
         activityScreen: Container(
           child: Column(
@@ -173,16 +174,16 @@ class MultipleChoiceQuestion extends ConsumerWidget {
             // crossAxisAlignment: ,
             children: [
               Text(
-                question[0].header["text"],
+                cobjectList[0].questions[0].header["text"],
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 28,
                 ),
               ),
-              piece(0, context, watch, question[questionIndex]),
-              piece(1, context, watch, question[questionIndex]),
-              piece(2, context, watch, question[questionIndex]),
+              piece(0, context, watch, cobjectList[0].questions[0]),
+              piece(1, context, watch, cobjectList[0].questions[0]),
+              piece(2, context, watch, cobjectList[0].questions[0]),
               // if (_selectedButton < 3)
               MaterialButton(
                 onPressed: () {

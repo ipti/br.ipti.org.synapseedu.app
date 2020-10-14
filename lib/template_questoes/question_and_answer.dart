@@ -41,9 +41,12 @@ class SingleLineTextQuestion extends ConsumerWidget {
     questionIndex = args.questionIndex;
 
     context.read(cobjectProvider).fetchCobjects(cobject);
-    List<Question> question = context.read(cobjectProvider).items;
-    String questionDescription = question[questionIndex].header["description"];
-    String questionText = question[questionIndex].header["text"];
+    // List<Question> question = context.read(cobjectProvider).items;
+    List<Cobject> cobjectList = context.read(cobjectProvider).items;
+    String questionDescription =
+        cobjectList[0].questions[questionIndex].header["description"];
+    String questionText =
+        cobjectList[0].questions[questionIndex].header["text"];
 
     final buttonState = watch(buttonStateProvider).state;
 
@@ -54,9 +57,9 @@ class SingleLineTextQuestion extends ConsumerWidget {
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline2,
         ),
-        sound: soundButton(context, question[questionIndex]),
+        sound: soundButton(context, cobjectList[0].questions[questionIndex]),
         image: Image.network('https://elesson.com.br/app/library/image/' +
-            question[0].header["image"]),
+            cobjectList[0].questions[0].header["image"]),
         activityScreen: Container(
           margin: EdgeInsets.all(8),
           child: Form(

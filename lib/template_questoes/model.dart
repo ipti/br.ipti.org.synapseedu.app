@@ -1,68 +1,68 @@
 import 'dart:convert';
 
-Cobject userFromJson(String str) => Cobject.fromJson(json.decode(str));
+// Cobject userFromJson(String str) => Cobject.fromJson(json.decode(str));
 
-String userToJson(Cobject data) => json.encode(data.toJson());
+// String userToJson(Cobject data) => json.encode(data.toJson());
 
-class Cobject {
-  String templateCode;
-  String discipline;
-  String modality;
-  int totalPieces;
-  Screen screen;
+// class Cobject {
+//   String templateCode;
+//   String discipline;
+//   String modality;
+//   int totalPieces;
+//   Screen screen;
 
-  Cobject({
-    this.templateCode,
-    this.discipline,
-    this.modality,
-    this.totalPieces,
-    this.screen,
-  });
+//   Cobject({
+//     this.templateCode,
+//     this.discipline,
+//     this.modality,
+//     this.totalPieces,
+//     this.screen,
+//   });
 
-  factory Cobject.fromJson(Map<String, dynamic> json) => Cobject(
-        templateCode: json["template_code"],
-        discipline: json["discipline"],
-        modality: json["modality"],
-        totalPieces: int.parse(json["total_pieces"]),
-        screen: Screen.fromJson(json["screen"]),
-      );
+//   factory Cobject.fromJson(Map<String, dynamic> json) => Cobject(
+//         templateCode: json["template_code"],
+//         discipline: json["discipline"],
+//         modality: json["modality"],
+//         totalPieces: int.parse(json["total_pieces"]),
+//         screen: Screen.fromJson(json["screen"]),
+//       );
 
-  Map<String, dynamic> toJson() => {
-        "template_code": templateCode,
-        "discipline": discipline,
-        "modality": modality,
-        "total_pieces": totalPieces.toString(),
-        "screen": screen.toJson(),
-      };
-}
+//   Map<String, dynamic> toJson() => {
+//         "template_code": templateCode,
+//         "discipline": discipline,
+//         "modality": modality,
+//         "total_pieces": totalPieces.toString(),
+//         "screen": screen.toJson(),
+//       };
+// }
 
-class Screen {
-  String id;
-  String cbojectId;
-  String position;
-  Pieceset piecesets;
+// class Screen {
+//   String id;
+//   String cbojectId;
+//   String position;
+//   Pieceset piecesets;
 
-  Screen({
-    this.id,
-    this.cbojectId,
-    this.position,
-    this.piecesets,
-  });
+//   Screen({
+//     this.id,
+//     this.cbojectId,
+//     this.position,
+//     this.piecesets,
+//   });
 
-  factory Screen.fromJson(Map<String, dynamic> json) => Screen(
-        id: json["id"],
-        cbojectId: json["cobject_id"],
-        position: json["position"],
-        piecesets: Pieceset.fromJson(json["piecesets"][0]),
-      );
+//   factory Screen.fromJson(Map<String, dynamic> json) => Screen(
+//         id: json["id"],
+//         cbojectId: json["cobject_id"],
+//         position: json["position"],
+//         piecesets: Pieceset.fromJson(json["piecesets"][0]),
+//       );
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "cboject_id": cbojectId,
-        "position": position,
-        // "piecesets": piecesets.toJson(),
-      };
-}
+//   Map<String, dynamic> toJson() => {
+//         "id": id,
+//         "cboject_id": cbojectId,
+//         "position": position,
+//         // "piecesets": piecesets.toJson(),
+//       };
+// }
 
 class Pieceset {
   String piecesetId;
@@ -124,6 +124,16 @@ class Groups {
 //       };
 // }
 
+class Cobject {
+  String description;
+  List<Question> questions;
+
+  Cobject({
+    this.description,
+    this.questions = const [],
+  });
+}
+
 class Question {
   String questionImage;
   Map<String, String> header;
@@ -164,9 +174,8 @@ class Question {
       "text": "",
       "description": "",
     };
-    srcMap.update("description", (value) => json["cobjects"][0]["description"]);
-    for (var elements in json["cobjects"][0]["screens"][0]["piecesets"][0]
-        ["groups"]["1"]["elements"]) {
+    // srcMap.update("description", (value) => json["cobjects"][0]["description"]);
+    for (var elements in json["piecesets"][0]["groups"]["1"]["elements"]) {
       if (elements["type"] == "multimidia") {
         elements["generalProperties"].forEach((pair) {
           if (pair["name"] == "src") {
@@ -264,13 +273,35 @@ class Question {
   }
 
   // factory Question.fromJson(Map<String, dynamic> json) => Question(
-  static Question fromJson(Map<String, dynamic> json) {
-    Map<String, String> mapa = Question().questionMultimediaSearch(json);
-    return Question(
-      questionImage: mapa["image"],
-      header: Question().questionMultimediaSearch(json),
-      pieces: Question().questionItemSearch(json["cobjects"][0]["screens"][0]
-          ["piecesets"][0]["pieces"][0]["groups"]),
+
+  List<Question> insertQuestionList(Map<String, dynamic> cobject) {
+    List<Question> questionList = [];
+
+    cobject["screens"].forEach((screens) {
+      questionList.add(Question(
+        header: Question().questionMultimediaSearch(screens),
+        pieces: Question()
+            .questionItemSearch(screens["piecesets"][0]["pieces"][0]["groups"]),
+      ));
+    });
+    return questionList;
+  }
+
+  static Cobject fromJson(Map<String, dynamic> json) {
+    // Map<String, String> mapa = Question().questionMultimediaSearch(json);
+
+    // List<Question> addQuestion = [];
+
+    return Cobject(
+      description: json["description"],
+      questions: Question().insertQuestionList(json),
     );
+
+    // return Question(
+    //   questionImage: mapa["image"],
+    //   header: Question().questionMultimediaSearch(json),
+    //   pieces: Question()
+    //       .questionItemSearch(json["piecesets"][0]["pieces"][0]["groups"]),
+    // );
   }
 }

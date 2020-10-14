@@ -24,22 +24,27 @@ class TextQuestion extends ConsumerWidget {
     cobject = args.cobject;
     questionIndex = args.questionIndex;
     questionType = args.questionType;
-    if (fetch == false) {
-      context.read(cobjectProvider).fetchCobjects(cobject);
-      print("fetch");
-      fetch = true;
-    } else
-      print("no fetch");
+    // if (fetch == false) {
+    context.read(cobjectProvider).fetchCobjects(cobject);
+    //   print("fetch");
+    //   fetch = true;
+    // } else
+    //   print("no fetch");
 
-    List<Question> question = context.read(cobjectProvider).items;
+    // List<Question> question = context.read(cobjectProvider).items;
+    List<Cobject> cobjectList = context.read(cobjectProvider).items;
 
-    String questionDescription = question[questionIndex].header["description"];
-    String headerText = question[questionIndex].header["text"];
+    // String questionDescription =
+    //     cobjectList[0].questions[questionIndex].header["description"];
+    String questionDescription = cobjectList[0].description;
+    String headerText = cobjectList[0].questions[questionIndex].header["text"];
 
-    String questionText = question[questionIndex].pieces['1']['text'];
+    String questionText =
+        cobjectList[0].questions[questionIndex].pieces['1']['text'];
 
-    // print("Header: ${question[0].header}");
-    // print("Pieces: ${question[0].pieces}");
+    print("Header: ${cobjectList[0].questions[0].header}");
+    print("Pieces: ${cobjectList[0].questions[0].pieces}");
+    print("Pieces2: ${cobjectList[0].questions[1].pieces}");
 
     return Scaffold(
       body: TemplateSlider(
@@ -49,9 +54,9 @@ class TextQuestion extends ConsumerWidget {
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline2,
         ),
-        sound: soundButton(context, question[questionIndex]),
+        sound: soundButton(context, cobjectList[0].questions[questionIndex]),
         image: Image.network('https://elesson.com.br/app/library/image/' +
-            question[questionIndex].header["image"]),
+            cobjectList[0].questions[questionIndex].header["image"]),
         text: Text(headerText),
         activityScreen: Container(
           child: Column(

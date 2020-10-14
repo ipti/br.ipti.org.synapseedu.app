@@ -38,20 +38,22 @@ class _DragAndDropState extends State<DragAndDrop> {
     // print('SAIDA: $cobject');
 
     context.read(cobjectProvider).fetchCobjects(cobject);
-    List<Question> question = context.read(cobjectProvider).items;
+    // List<Question> question = context.read(cobjectProvider).items;
+    List<Cobject> cobjects = context.read(cobjectProvider).items;
 
     double widthScreen = MediaQuery.of(context).size.width;
     return cobject.isNotEmpty
         ? Scaffold(
             resizeToAvoidBottomPadding: true,
             body: TemplateSlider(
-              sound: soundButton(context, question[0]),
+              sound: soundButton(context, cobject[0].questions[0]),
               title: Text(
-                question[questionIndex].header["text"],
+                cobject[0].questions[questionIndex].header["text"],
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headline2,
               ),
-              activityScreen: DAD(widthScreen, question[questionIndex]),
+              activityScreen:
+                  DAD(widthScreen, cobject[0].questions[questionIndex]),
             ),
           )
         : Scaffold(

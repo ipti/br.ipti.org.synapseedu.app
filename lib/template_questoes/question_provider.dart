@@ -11,10 +11,15 @@ import 'package:flutter_riverpod/all.dart';
 class Cobjects extends StateNotifier<List<Cobject>> {
   Cobjects() : super([]);
 
-  final List<Question> _questionList = [];
-  List<Question> _items = [];
+  // final List<Question> _questionList = [];
+  // List<Question> _items = [];
 
-  List<Question> get items => UnmodifiableListView(_questionList);
+  // List<Question> get items => UnmodifiableListView(_questionList);
+
+  final List<Cobject> _cobjectList = [];
+  List<Cobject> _items = [];
+
+  List<Cobject> get items => UnmodifiableListView(_cobjectList);
 
   readFile() async {
     var dio = Dio();
@@ -53,11 +58,28 @@ class Cobjects extends StateNotifier<List<Cobject>> {
         return null;
       }
       final List<Question> loadedQuestion = [];
-
-      cobjectData.forEach((json) {
-        loadedQuestion.add(Question.fromJson(json));
+      final List<Cobject> loadedCobjects = [];
+      int index = 0;
+      // cobjectData[0]["cobjects"].forEach((cobjectsJson) {
+      //   cobjectsJson["screens"].forEach((screens) {
+      //     loadedQuestion.add(Question.fromJson(screens));
+      //   });
+      //   // loadedQuestion.add(Question.fromJson(json, index));
+      //   // index++;
+      // });
+      cobjectData[0]["cobjects"].forEach((cobjectsJson) {
+        loadedCobjects.add(Question.fromJson(cobjectsJson));
+        // cobjectsJson["screens"].forEach((screens) {
+        //   loadedQuestion.add(Question.fromJson(screens));
+        // });
+        // loadedQuestion.add(Question.fromJson(json, index));
+        // index++;
       });
-      _questionList.addAll(loadedQuestion);
+
+      // print(loadedCobjects[0].questions[0].header);
+      // _questionList.addAll(loadedQuestion);
+      _cobjectList.addAll(loadedCobjects);
+
       // notifyListeners();
     } catch (error) {
       throw (error);
