@@ -13,7 +13,7 @@ final cobjectProvider = Provider<Cobjects>((ref) {
 class SingleLineTextQuestion extends ConsumerWidget {
   static const routeName = '/PRE';
   // ignore: non_constant_identifier_names
-  var cobject = new List<dynamic>();
+  var cobjectList = new List<Cobject>();
   int questionIndex;
 
   final _formKey = GlobalKey<FormState>();
@@ -31,18 +31,18 @@ class SingleLineTextQuestion extends ConsumerWidget {
 
   void submitButton(BuildContext context) {
     // print(context.read(buttonStateProvider).state);
-    context.read(buttonStateProvider).state = true;
+    //context.read(buttonStateProvider).state = true;
   }
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
-    cobject = args.cobject;
+    cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
 
-    context.read(cobjectProvider).fetchCobjects(cobject);
+    //context.read(cobjectProvider).fetchCobjects(cobject);
     // List<Question> question = context.read(cobjectProvider).items;
-    List<Cobject> cobjectList = context.read(cobjectProvider).items;
+    //List<Cobject> cobjectList = context.read(cobjectProvider).items;
     String questionDescription =
         cobjectList[0].questions[questionIndex].header["description"];
     String questionText =

@@ -6,14 +6,10 @@ import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 
-final cobjectProvider = Provider<Cobjects>((ref) {
-  return Cobjects();
-});
-
 class TextQuestion extends ConsumerWidget {
   static const routeName = '/TXT';
 
-  var cobject = new List<dynamic>();
+  var cobjectList = new List<Cobject>();
   int questionIndex;
   String questionType;
   bool fetch = false;
@@ -21,19 +17,19 @@ class TextQuestion extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
-    cobject = args.cobject;
+    cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
     questionType = args.questionType;
 
     if (fetch == false) {
-      context.read(cobjectProvider).fetchCobjects(cobject);
+      //context.read(cobjectProvider).fetchCobjects(cobject);
       print("fetch");
       fetch = true;
     } else
       print("no fetch");
 
     // List<Question> question = context.read(cobjectProvider).items;
-    List<Cobject> cobjectList = context.read(cobjectProvider).items;
+    //List<Cobject> cobjectList = context.read(cobjectProvider).items;
 
     // String questionDescription =
     //     cobjectList[0].questions[questionIndex].header["description"];
@@ -67,7 +63,10 @@ class TextQuestion extends ConsumerWidget {
               // submitAnswer(context, cobject, questionType, questionIndex),
               MaterialButton(
                 onPressed: () {
-                  print("lido");
+                  print('questionIndex: $questionIndex, outro: ${cobjectList[0].questions.length-1}');
+                  questionIndex < cobjectList[0].questions.length -1?
+                  Navigator.of(context).pushReplacementNamed(TextQuestion.routeName,arguments: ScreenArguments(cobjectList,++questionIndex,'TXT'))
+                      : Navigator.of(context).pop();
                 },
                 minWidth: 200.0,
                 height: 45.0,

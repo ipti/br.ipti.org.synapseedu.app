@@ -1,10 +1,13 @@
 // import 'package:elesson/share/turmas.dart';
 import 'package:elesson/template_questoes/drag_and_drop.dart';
+import 'package:elesson/template_questoes/model.dart';
 import 'package:elesson/template_questoes/multichoice.dart';
+import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/text.dart';
 import 'package:elesson/template_questoes/question_and_answer.dart';
 import 'package:flutter/material.dart';
 import 'package:elesson/share/api.dart';
+import 'package:flutter_riverpod/all.dart';
 
 // Form de seleção das atividades. A primeira tela após o usuário logar.
 // No momento, só temos a tela básica com dados falsos. Os próximos passos
@@ -77,6 +80,8 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
         cobject = response.data;
         questionType = cobject[0]["cobjects"][0]["template_code"];
       });
+      context.read(cobjectProvider).fetchCobjects(cobject);
+      List<Cobject> cobjectList = context.read(cobjectProvider).items;
       switch (questionType) {
         // pushNamedAndRemoveUntil
         // case 'PRE':
@@ -99,23 +104,27 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
         //   break;
         case 'PRE':
           Navigator.of(context).pushNamed(SingleLineTextQuestion.routeName,
-              arguments: ScreenArguments(cobject, 0, 'PRE'));
+              arguments: ScreenArguments(cobjectList, 0, 'PRE'));
           break;
         case 'DDROP':
           Navigator.of(context).pushNamed(DragAndDrop.routeName,
-              arguments: ScreenArguments(cobject, 0, 'DDROP'));
+              arguments: ScreenArguments(cobjectList, 0, 'DDROP'));
           break;
         case 'MTE':
           Navigator.of(context).pushNamed(MultipleChoiceQuestion.routeName,
-              arguments: ScreenArguments(cobject, 0, 'MTE'));
+              arguments: ScreenArguments(cobjectList, 0, 'MTE'));
           break;
         case 'TXT':
           Navigator.of(context).pushNamed(TextQuestion.routeName,
-              arguments: ScreenArguments(cobject, 0, 'TXT'));
+              arguments: ScreenArguments(cobjectList, 0, 'TXT'));
           break;
       }
     });
   }
+
+  final cobjectProvider = Provider<Cobjects>((ref) {
+    return Cobjects();
+  });
 
   //<=================================WIDGET DE SELEÇÃO DE TURMA E ALUNO===============================================>
 
@@ -410,8 +419,9 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
 }
 
 class ScreenArguments {
-  final List<dynamic> cobject;
+  //final List<dynamic> cobject;
+  List<Cobject> cobjectList;
   final int questionIndex;
   final String questionType;
-  ScreenArguments(this.cobject, this.questionIndex, this.questionType);
+  ScreenArguments(this.cobjectList, this.questionIndex, this.questionType);
 }

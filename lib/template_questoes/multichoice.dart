@@ -25,7 +25,7 @@ final cobjectProvider = Provider<Cobjects>((ref) {
 class MultipleChoiceQuestion extends ConsumerWidget {
   static const routeName = '/MTE';
 
-  var cobject = new List<dynamic>();
+  var cobjectList = new List<Cobject>();
   int questionIndex;
   String questionType;
 
@@ -124,21 +124,21 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
-    cobject = args.cobject;
+    cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
     questionType = args.questionType;
 
     // final cobjectProvidersState = watch(cobjectProvider.state);
 
     if (fetch == false) {
-      context.read(cobjectProvider).fetchCobjects(cobject);
+      //context.read(cobjectProvider).fetchCobjects(cobject);
       print("fetch");
       fetch = true;
     } else
       print("no fetch");
 
     // context.read(cobjectProvider).fetchCobjects(cobject);
-    List<Cobject> cobjectList = context.read(cobjectProvider).items;
+    //List<Cobject> cobjectList = context.read(cobjectProvider).items;
 
     String questionDescription = cobjectList[0].description;
 
@@ -203,7 +203,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                           MaterialPageRoute(
                               settings: RouteSettings(
                                 arguments: ScreenArguments(
-                                    cobject, ++questionIndex, 'MTE'),
+                                    cobjectList, ++questionIndex, 'MTE'),
                               ),
                               builder: (context) => MultipleChoiceQuestion()),
                         );

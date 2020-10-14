@@ -19,7 +19,7 @@ class DragAndDrop extends StatefulWidget {
 }
 
 class _DragAndDropState extends State<DragAndDrop> {
-  var cobject = new List<dynamic>();
+  var cobjectList = new List<Cobject>();
   int questionIndex;
 
   bool accepted = false;
@@ -32,18 +32,17 @@ class _DragAndDropState extends State<DragAndDrop> {
   @override
   Widget build(BuildContext context) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
-    cobject = args.cobject;
+    cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
 
     // print('SAIDA: $cobject');
 
-    context.read(cobjectProvider).fetchCobjects(cobject);
+    //context.read(cobjectProvider).fetchCobjects(cobject);
     // List<Question> question = context.read(cobjectProvider).items;
-    List<Cobject> cobjectList = context.read(cobjectProvider).items;
+    //List<Cobject> cobjectList = context.read(cobjectProvider).items;
 
     double widthScreen = MediaQuery.of(context).size.width;
-    return cobject.isNotEmpty
-        ? Scaffold(
+    return Scaffold(
             resizeToAvoidBottomPadding: true,
             body: TemplateSlider(
               sound: soundButton(context, cobjectList[0].questions[0]),
@@ -55,18 +54,18 @@ class _DragAndDropState extends State<DragAndDrop> {
               activityScreen:
                   DAD(widthScreen, cobjectList[0].questions[questionIndex]),
             ),
-          )
-        : Scaffold(
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('CARREGANDO...'),
-                  CircularProgressIndicator(),
-                ],
-              ),
-            ),
           );
+        // : Scaffold(
+        //     body: Center(
+        //       child: Column(
+        //         mainAxisAlignment: MainAxisAlignment.center,
+        //         children: [
+        //           Text('CARREGANDO...'),
+        //           CircularProgressIndicator(),
+        //         ],
+        //       ),
+        //     ),
+        //   );
   }
 
   // ignore: non_constant_identifier_names
