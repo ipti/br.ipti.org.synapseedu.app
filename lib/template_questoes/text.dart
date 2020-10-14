@@ -24,12 +24,13 @@ class TextQuestion extends ConsumerWidget {
     cobject = args.cobject;
     questionIndex = args.questionIndex;
     questionType = args.questionType;
-    // if (fetch == false) {
-    context.read(cobjectProvider).fetchCobjects(cobject);
-    //   print("fetch");
-    //   fetch = true;
-    // } else
-    //   print("no fetch");
+
+    if (fetch == false) {
+      context.read(cobjectProvider).fetchCobjects(cobject);
+      print("fetch");
+      fetch = true;
+    } else
+      print("no fetch");
 
     // List<Question> question = context.read(cobjectProvider).items;
     List<Cobject> cobjectList = context.read(cobjectProvider).items;
@@ -42,9 +43,9 @@ class TextQuestion extends ConsumerWidget {
     String questionText =
         cobjectList[0].questions[questionIndex].pieces['1']['text'];
 
-    print("Header: ${cobjectList[0].questions[0].header}");
-    print("Pieces: ${cobjectList[0].questions[0].pieces}");
-    print("Pieces2: ${cobjectList[0].questions[1].pieces}");
+    // print("Header: ${cobjectList[0].questions[0].header}");
+    // print("Pieces: ${cobjectList[0].questions[0].pieces}");
+    // print("Pieces2: ${cobjectList[0].questions[1].pieces}");
 
     return Scaffold(
       body: TemplateSlider(

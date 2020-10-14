@@ -56,6 +56,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     double cardSize = MediaQuery.of(context).size.height / 4.3;
     bool audio = false;
     String grouping = (index + 1).toString();
+    print('Imagem $grouping: ${question.pieces[grouping]["image"]}');
     return Card(
       margin: const EdgeInsets.all(10),
       elevation: 2,
@@ -70,7 +71,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
               minWidth: 200,
               padding: const EdgeInsets.all(2),
               color: _buttonPressed[index] ? Colors.amber : Colors.green[300],
-              child: question.questionImage != null
+              child: question.pieces[grouping]["image"] != null
                   ? Image.network(
                       BASE_URL + '/image/' + question.pieces[grouping]["image"],
                     )
@@ -119,6 +120,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     );
   }
 
+  bool fetch = false;
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
@@ -127,11 +129,17 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     questionType = args.questionType;
 
     // final cobjectProvidersState = watch(cobjectProvider.state);
-    bool fetchBool = false;
-    if (fetchBool == false) {}
-    context.read(cobjectProvider).fetchCobjects(cobject);
-    // List<Question> question = context.read(cobjectProvider).items;
+
+    if (fetch == false) {
+      context.read(cobjectProvider).fetchCobjects(cobject);
+      print("fetch");
+      fetch = true;
+    } else
+      print("no fetch");
+
+    // context.read(cobjectProvider).fetchCobjects(cobject);
     List<Cobject> cobjectList = context.read(cobjectProvider).items;
+
     String questionDescription = cobjectList[0].description;
 
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
