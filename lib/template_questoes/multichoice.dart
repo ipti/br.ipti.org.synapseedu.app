@@ -130,23 +130,9 @@ class MultipleChoiceQuestion extends ConsumerWidget {
 
     // final cobjectProvidersState = watch(cobjectProvider.state);
 
-    if (fetch == false) {
-      //context.read(cobjectProvider).fetchCobjects(cobject);
-      print("fetch");
-      fetch = true;
-    } else
-      print("no fetch");
-
-    // context.read(cobjectProvider).fetchCobjects(cobject);
-    //List<Cobject> cobjectList = context.read(cobjectProvider).items;
-
     String questionDescription = cobjectList[0].description;
 
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
-    // context.read(questionChangeNotifier).fetchCobjects();
-    // print(questionIndex);
-    // print("Header: ${cobjectList[0].questions[0].header}");
-    // print("Pieces: ${cobjectList[0].questions[0].pieces}");
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -175,11 +161,9 @@ class MultipleChoiceQuestion extends ConsumerWidget {
         ),
         image: Image.network('https://elesson.com.br/app/library/image/' +
             cobjectList[0].questions[0].header["image"]),
-        // image: Image.asset('assets/img/logo.png'),
         activityScreen: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            // crossAxisAlignment: ,
             children: [
               Text(
                 cobjectList[0].questions[0].header["text"],
@@ -197,8 +181,6 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                 onPressed: () {
                   _selectedButton > 2
                       ? print('Escolha uma opção')
-                      //     // : print(_selectedButton);
-                      // : context.read(cobjectProvider).fetchCobjects(cobject);
                       : Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                               settings: RouteSettings(
@@ -207,8 +189,6 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                               ),
                               builder: (context) => MultipleChoiceQuestion()),
                         );
-                  // : submitAnswer(
-                  //     context, cobject, questionType, questionIndex);
                 },
                 minWidth: 200.0,
                 height: 45.0,

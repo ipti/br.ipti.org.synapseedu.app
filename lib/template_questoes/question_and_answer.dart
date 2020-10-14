@@ -40,9 +40,6 @@ class SingleLineTextQuestion extends ConsumerWidget {
     cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
 
-    //context.read(cobjectProvider).fetchCobjects(cobject);
-    // List<Question> question = context.read(cobjectProvider).items;
-    //List<Cobject> cobjectList = context.read(cobjectProvider).items;
     String questionDescription =
         cobjectList[0].questions[questionIndex].header["description"];
     String questionText =

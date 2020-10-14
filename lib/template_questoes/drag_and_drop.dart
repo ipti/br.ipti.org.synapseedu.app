@@ -35,37 +35,20 @@ class _DragAndDropState extends State<DragAndDrop> {
     cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
 
-    // print('SAIDA: $cobject');
-
-    //context.read(cobjectProvider).fetchCobjects(cobject);
-    // List<Question> question = context.read(cobjectProvider).items;
-    //List<Cobject> cobjectList = context.read(cobjectProvider).items;
-
     double widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
-            resizeToAvoidBottomPadding: true,
-            body: TemplateSlider(
-              sound: soundButton(context, cobjectList[0].questions[0]),
-              title: Text(
-                cobjectList[0].questions[questionIndex].header["text"],
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headline2,
-              ),
-              activityScreen:
-                  DAD(widthScreen, cobjectList[0].questions[questionIndex]),
-            ),
-          );
-        // : Scaffold(
-        //     body: Center(
-        //       child: Column(
-        //         mainAxisAlignment: MainAxisAlignment.center,
-        //         children: [
-        //           Text('CARREGANDO...'),
-        //           CircularProgressIndicator(),
-        //         ],
-        //       ),
-        //     ),
-        //   );
+      resizeToAvoidBottomPadding: true,
+      body: TemplateSlider(
+        sound: soundButton(context, cobjectList[0].questions[0]),
+        title: Text(
+          cobjectList[0].questions[questionIndex].header["text"],
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headline2,
+        ),
+        activityScreen:
+            DAD(widthScreen, cobjectList[0].questions[questionIndex]),
+      ),
+    );
   }
 
   // ignore: non_constant_identifier_names
@@ -238,20 +221,23 @@ class _DragAndDropState extends State<DragAndDrop> {
       case 1:
         valueSecondReceiver == data
             ? valueSecondReceiver = 0
-            // ignore: unnecessary_statements
-            : valueThirdReceiver == data ? valueThirdReceiver = 0 : {};
+            : valueThirdReceiver == data
+                ? valueThirdReceiver = 0
+                : {};
         break;
       case 2:
         valueFirstReceiver == data
             ? valueFirstReceiver = 0
-            // ignore: unnecessary_statements
-            : valueThirdReceiver == data ? valueThirdReceiver = 0 : {};
+            : valueThirdReceiver == data
+                ? valueThirdReceiver = 0
+                : {};
         break;
       case 3:
         valueFirstReceiver == data
             ? valueFirstReceiver = 0
-            // ignore: unnecessary_statements
-            : valueSecondReceiver == data ? valueSecondReceiver = 0 : {};
+            : valueSecondReceiver == data
+                ? valueSecondReceiver = 0
+                : {};
         break;
     }
   }

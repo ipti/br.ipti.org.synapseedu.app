@@ -83,25 +83,6 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
       context.read(cobjectProvider).fetchCobjects(cobject);
       List<Cobject> cobjectList = context.read(cobjectProvider).items;
       switch (questionType) {
-        // pushNamedAndRemoveUntil
-        // case 'PRE':
-        //   Navigator.of(context).pushNamedAndRemoveUntil(
-        //       TextQuestion.routeName, (Route<dynamic> route) => false,
-        //       arguments: ScreenArguments(cobject));
-        //   break;
-        // case 'DDROP':
-        //   Navigator.of(context).pushNamedAndRemoveUntil(
-        //       DragAndDrop.routeName, (Route<dynamic> route) => false,
-        //       arguments: ScreenArguments(cobject));
-        //   break;
-        // case 'MTE':
-        //   Navigator.of(context).pushNamedAndRemoveUntil(
-        //       MultipleChoiceQuestion.routeName, (Route<dynamic> route) => false,
-        //       arguments: ScreenArguments(cobject));
-        //   break;
-        // case 'TXT':
-        //   Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, (Route<dynamic> route) => false,arguments: ScreenArguments(cobject));
-        //   break;
         case 'PRE':
           Navigator.of(context).pushNamed(SingleLineTextQuestion.routeName,
               arguments: ScreenArguments(cobjectList, 0, 'PRE'));
