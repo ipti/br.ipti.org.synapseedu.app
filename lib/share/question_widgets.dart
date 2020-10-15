@@ -3,9 +3,13 @@ import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/template_questoes/drag_and_drop.dart';
 import 'package:elesson/template_questoes/multichoice.dart';
 import 'package:elesson/template_questoes/question_and_answer.dart';
+import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/text.dart';
+import 'package:flutter_riverpod/all.dart';
 import '../template_questoes/model.dart';
 import 'package:flutter/material.dart';
+
+import 'api.dart';
 
 // Contém alguns métodos e variáveis globais necessárias para as questões.
 
@@ -19,6 +23,38 @@ void playSound(String sound) async {
 
   // FlutterRingtonePlayer.playNotification();
 }
+
+var cobjectList = new List<Cobject>();
+var cobject = new List<dynamic>();
+
+getCobject(int listQuestionIndex,BuildContext context) async {
+  cobjectList.clear();
+  //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
+  ApiCobject.getQuestao(questionList[listQuestionIndex]).then((response) {
+      cobject = response.data;
+      var questionType = cobject[0]["cobjects"][0]["template_code"];
+    context.read(cobjectProvider).fetchCobjects(cobject);
+    cobjectList = context.read(cobjectProvider).items;
+    switch (questionType) {
+      case 'PRE':
+        Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName('/'),arguments: ScreenArguments(cobjectList, 0, 'MTE',listQuestionIndex));
+        break;
+      case 'DDROP':
+        Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, ModalRoute.withName('/'),arguments: ScreenArguments(cobjectList, 0, 'MTE',listQuestionIndex));
+        break;
+      case 'MTE':
+        Navigator.of(context).pushNamedAndRemoveUntil(MultipleChoiceQuestion.routeName, ModalRoute.withName('/'),arguments: ScreenArguments(cobjectList, 0, 'MTE',listQuestionIndex));
+        break;
+      case 'TXT':
+        Navigator.of(context).pushNamedAndRemoveUntil(TextQuestion.routeName, ModalRoute.withName('/'),arguments: ScreenArguments(cobjectList, 0, 'MTE',listQuestionIndex));
+        break;
+    }
+  });
+}
+
+final cobjectProvider = Provider<Cobjects>((ref) {
+  return Cobjects();
+});
 
 Widget soundButton(BuildContext context, Question question) {
   return question.header["sound"].isNotEmpty

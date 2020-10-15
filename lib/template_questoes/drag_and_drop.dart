@@ -21,6 +21,7 @@ class DragAndDrop extends StatefulWidget {
 class _DragAndDropState extends State<DragAndDrop> {
   var cobjectList = new List<Cobject>();
   int questionIndex;
+  int listQuestionIndex;
 
   bool accepted = false;
 
@@ -34,11 +35,17 @@ class _DragAndDropState extends State<DragAndDrop> {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
+    listQuestionIndex = args.listQuestionIndex;
 
     double widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomPadding: true,
       body: TemplateSlider(
+        image: cobjectList[0].questions[0].header['image'] != ''
+            ? Image.network(BASE_URL +
+                '/image/' +
+                cobjectList[0].questions[0].header['image'])
+            : Container(),
         sound: soundButton(context, cobjectList[0].questions[0]),
         title: Text(
           cobjectList[0].questions[questionIndex].header["text"],
@@ -150,6 +157,17 @@ class _DragAndDropState extends State<DragAndDrop> {
             ),
           ],
         ),
+        FloatingActionButton(
+          onPressed: () {
+            questionIndex < cobjectList[0].questions.length - 1
+                ? Navigator.of(context).pushReplacementNamed(
+                    DragAndDrop.routeName,
+                    arguments: ScreenArguments(cobjectList, ++questionIndex,
+                        'DDROP', listQuestionIndex))
+                : getCobject(++listQuestionIndex, context);
+          },
+          child: Icon(Icons.navigate_next),
+        ),
       ],
     );
   }
@@ -162,7 +180,6 @@ class _DragAndDropState extends State<DragAndDrop> {
   }
 
   Widget dragSender(int index, double widthScreen, Question question) {
-    print('dragSender');
     String grouping = (index + 1).toString();
     return Container(
       decoration: BoxDecoration(
@@ -184,7 +201,6 @@ class _DragAndDropState extends State<DragAndDrop> {
   }
 
   Widget dragReceiver(int index, double widthScreen, Question question) {
-    print('dragReceiver');
     String grouping = (index + 1).toString();
     switch (grouping) {
       case '4':

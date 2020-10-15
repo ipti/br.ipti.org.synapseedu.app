@@ -81,8 +81,10 @@ class Home extends StatelessWidget {
               ),
             ),
       ),
-      home: ActivitySelectionForm(),
+      //home: ActivitySelectionForm(),
+      initialRoute: '/',
       routes: {
+        '/': (context)=> ActivitySelectionForm(),
         SingleLineTextQuestion.routeName: (context) => SingleLineTextQuestion(),
         DragAndDrop.routeName: (context) => DragAndDrop(),
         MultipleChoiceQuestion.routeName: (context) => MultipleChoiceQuestion(),

@@ -38,7 +38,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   bool checkStudent = true;
   bool checkDiscipline = true;
   //<=======================JOGAR AQUI O ID DO COBJET RECEBIDO===========================>
-  String cobjectId = '3977';
+  int cobjectId;
 
   var cobject = new List<dynamic>();
   var questionType;
@@ -74,40 +74,40 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
     });
   }
 
-  _getCobject() async {
-    //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
-    ApiCobject.getQuestao(questionList[0]).then((response) {
-      setState(() {
-        cobject = response.data;
-        questionType = cobject[0]["cobjects"][0]["template_code"];
-      });
-      context.read(cobjectProvider).fetchCobjects(cobject);
-      List<Cobject> cobjectList = context.read(cobjectProvider).items;
-      switch (questionType) {
-        case 'PRE':
-          //NAVIGATOR(CObject processado, index da primeira questão, tipo);
-          Navigator.of(context).pushNamed(SingleLineTextQuestion.routeName,
-              arguments: ScreenArguments(cobjectList, 0, 'PRE',0));
-          break;
-        case 'DDROP':
-          Navigator.of(context).pushNamed(DragAndDrop.routeName,
-              arguments: ScreenArguments(cobjectList, 0, 'DDROP',0));
-          break;
-        case 'MTE':
-          Navigator.of(context).pushNamed(MultipleChoiceQuestion.routeName,
-              arguments: ScreenArguments(cobjectList, 0, 'MTE',0));
-          break;
-        case 'TXT':
-          Navigator.of(context).pushNamed(TextQuestion.routeName,
-              arguments: ScreenArguments(cobjectList, 0, 'TXT',0));
-          break;
-      }
-    });
-  }
-
-  final cobjectProvider = Provider<Cobjects>((ref) {
-    return Cobjects();
-  });
+  // _getCobject() async {
+  //   //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
+  //   ApiCobject.getQuestao(questionList[0]).then((response) {
+  //     setState(() {
+  //       cobject = response.data;
+  //       questionType = cobject[0]["cobjects"][0]["template_code"];
+  //     });
+  //     context.read(cobjectProvider).fetchCobjects(cobject);
+  //     List<Cobject> cobjectList = context.read(cobjectProvider).items;
+  //     switch (questionType) {
+  //       case 'PRE':
+  //         //NAVIGATOR(CObject processado, index da primeira questão, tipo);
+  //         Navigator.of(context).pushNamed(SingleLineTextQuestion.routeName,
+  //             arguments: ScreenArguments(cobjectList, 0, 'PRE',0));
+  //         break;
+  //       case 'DDROP':
+  //         Navigator.of(context).pushNamed(DragAndDrop.routeName,
+  //             arguments: ScreenArguments(cobjectList, 0, 'DDROP',0));
+  //         break;
+  //       case 'MTE':
+  //         Navigator.of(context).pushNamed(MultipleChoiceQuestion.routeName,
+  //             arguments: ScreenArguments(cobjectList, 0, 'MTE',0));
+  //         break;
+  //       case 'TXT':
+  //         Navigator.of(context).pushNamed(TextQuestion.routeName,
+  //             arguments: ScreenArguments(cobjectList, 0, 'TXT',0));
+  //         break;
+  //     }
+  //   });
+  // }
+  //
+  // final cobjectProvider = Provider<Cobjects>((ref) {
+  //   return Cobjects();
+  // });
 
   //<=================================WIDGET DE SELEÇÃO DE TURMA E ALUNO===============================================>
 
@@ -230,7 +230,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                       selectedNamestudents = studentName;
                       selectedIdstudents = studentId;
                       checkStudent = true;
-                      redirectToQuestion();
+                      //redirectToQuestion();
                     });
                     Navigator.of(context).pop();
                     checkStudent = true;
@@ -273,19 +273,19 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                       checkStudent = true;
                       switch (typeSelected) {
                         case "MTE":
-                          cobjectId = "3976";
+                          cobjectId = 3;
                           break;
                         case "PRE":
-                          cobjectId = "3977";
+                          cobjectId = 2;
                           break;
                         case "DAD":
-                          cobjectId = "3987";
+                          cobjectId = 1;
                           break;
                         case "TXT":
-                          cobjectId = "3988";
+                          cobjectId = 0;
                           break;
                       }
-                      redirectToQuestion();
+                      redirectToQuestion(cobjectId);
                     });
                     Navigator.of(context).pop();
                     checkStudent = true;
@@ -353,7 +353,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                       onPressed: () {
                         setState(() {
                           checkDiscipline = true;
-                          redirectToQuestion();
+                          //redirectToQuestion();
                         });
                       },
                       child: Text('Português'),
@@ -368,7 +368,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                       onPressed: () {
                         setState(() {
                           checkDiscipline = true;
-                          redirectToQuestion();
+                          //redirectToQuestion();
                         });
                       },
                       child: Text('Matemática'),
@@ -394,9 +394,9 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   }
 
   // FUNÇÃO PARA RECEBER OS DADOS DO COBJECT QUANDO A TURMA E O ALUNO FOR SELECIONADO
-  void redirectToQuestion() {
+  void redirectToQuestion(int cobjectIdIndex) {
     if (checkStudent == true && checkDiscipline == true) {
-      _getCobject();
+      getCobject(cobjectIdIndex,context);
     }
   }
 }

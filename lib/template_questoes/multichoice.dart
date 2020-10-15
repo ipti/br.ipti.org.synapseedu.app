@@ -1,5 +1,6 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/share/question_widgets.dart';
+import 'package:flutter/services.dart';
 
 import './share/template_slider.dart';
 import 'package:flutter/material.dart';
@@ -50,8 +51,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     _selectedButton = index;
   }
 
-  Widget piece(
-      int index, BuildContext context, ScopedReader watch, Question question) {
+  Widget piece(int index, BuildContext context, ScopedReader watch, Question question) {
     final buttonState = watch(buttonStateProvider).state;
     double cardSize = MediaQuery.of(context).size.height / 4.3;
     bool audio = false;
@@ -65,8 +65,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
         alignment: Alignment.bottomLeft,
         children: [
           ConstrainedBox(
-            constraints:
-                BoxConstraints(maxHeight: cardSize, maxWidth: cardSize),
+            constraints: BoxConstraints(maxHeight: cardSize, maxWidth: cardSize),
             child: MaterialButton(
               minWidth: 200,
               padding: const EdgeInsets.all(2),
@@ -79,8 +78,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                   : Container(
                       child: Text(
                         question.pieces[grouping]["text"],
-                        style: TextStyle(
-                            fontWeight: FontWeight.w800, fontSize: 16),
+                        style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
                       ),
                       margin: const EdgeInsets.all(20),
                     ),
@@ -121,6 +119,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   }
 
   bool fetch = false;
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
@@ -129,7 +128,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     var listQuestionIndex = args.listQuestionIndex;
 
     // final cobjectProvidersState = watch(cobjectProvider.state);
-
+    SystemChrome.setEnabledSystemUIOverlays([]);
     String questionDescription = cobjectList[0].description;
 
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
@@ -159,8 +158,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
             ],
           ),
         ),
-        image: Image.network('https://elesson.com.br/app/library/image/' +
-            cobjectList[0].questions[0].header["image"]),
+        image: Image.network('https://elesson.com.br/app/library/image/' + cobjectList[0].questions[0].header["image"]),
         activityScreen: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -179,16 +177,21 @@ class MultipleChoiceQuestion extends ConsumerWidget {
               // if (_selectedButton < 3)
               MaterialButton(
                 onPressed: () {
-                  _selectedButton > 2
-                      ? print('Escolha uma opção')
-                      : Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                              settings: RouteSettings(
-                                arguments: ScreenArguments(
-                                    cobjectList, ++questionIndex, 'MTE',listQuestionIndex),
-                              ),
-                              builder: (context) => MultipleChoiceQuestion()),
-                        );
+                  if (_selectedButton > 2) {
+                    // se tiver alguma opção selecionada
+                    print('Escolha uma opção');
+                  } else {
+                    if (questionIndex < cobjectList[0].questions.length - 1) {
+                      // se ele ainda tiver questoes dentro do cobject
+                      Navigator.of(context).pushReplacementNamed(MultipleChoiceQuestion.routeName, arguments: ScreenArguments(cobjectList, ++questionIndex, 'MTE', listQuestionIndex));
+                    } else {
+                      if (++listQuestionIndex < questionList.length) {
+                        getCobject(++listQuestionIndex, context);
+                      } else {
+                        Navigator.of(context).pop();
+                      }
+                    }
+                  }
                 },
                 minWidth: 200.0,
                 height: 45.0,

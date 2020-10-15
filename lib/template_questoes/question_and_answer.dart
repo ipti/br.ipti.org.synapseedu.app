@@ -15,6 +15,7 @@ class SingleLineTextQuestion extends ConsumerWidget {
   // ignore: non_constant_identifier_names
   var cobjectList = new List<Cobject>();
   int questionIndex;
+  int listQuestionIndex;
 
   final _formKey = GlobalKey<FormState>();
   final _textController = TextEditingController();
@@ -31,7 +32,7 @@ class SingleLineTextQuestion extends ConsumerWidget {
 
   void submitButton(BuildContext context) {
     // print(context.read(buttonStateProvider).state);
-    //context.read(buttonStateProvider).state = true;
+    context.read(buttonStateProvider).state = true;
   }
 
   @override
@@ -39,6 +40,7 @@ class SingleLineTextQuestion extends ConsumerWidget {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
+    listQuestionIndex = args.listQuestionIndex;
 
     String questionDescription =
         cobjectList[0].questions[questionIndex].header["description"];
@@ -119,6 +121,9 @@ class SingleLineTextQuestion extends ConsumerWidget {
                   MaterialButton(
                     onPressed: () {
                       print(_textController.text);
+                      questionIndex < cobjectList[0].questions.length -1?
+                      Navigator.of(context).pushReplacementNamed(SingleLineTextQuestion.routeName,arguments: ScreenArguments(cobjectList,++questionIndex,'PRE',listQuestionIndex))
+                          : getCobject(++listQuestionIndex,context);
                     },
                     minWidth: 200.0,
                     height: 45.0,
