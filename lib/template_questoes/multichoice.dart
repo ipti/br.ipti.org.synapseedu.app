@@ -126,7 +126,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
-    questionType = args.questionType;
+    var listQuestionIndex = args.listQuestionIndex;
 
     // final cobjectProvidersState = watch(cobjectProvider.state);
 
@@ -185,7 +185,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                           MaterialPageRoute(
                               settings: RouteSettings(
                                 arguments: ScreenArguments(
-                                    cobjectList, ++questionIndex, 'MTE'),
+                                    cobjectList, ++questionIndex, 'MTE',listQuestionIndex),
                               ),
                               builder: (context) => MultipleChoiceQuestion()),
                         );

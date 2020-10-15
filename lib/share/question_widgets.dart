@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 
 const String BASE_URL = 'https://elesson.com.br/app/library';
 
+List<String> questionList = ['3988','3987','3977','3976'];
+
 AudioPlayer player = new AudioPlayer();
 void playSound(String sound) async {
   await player.play(BASE_URL + '/sound/' + sound);
@@ -32,7 +34,7 @@ Widget soundButton(BuildContext context, Question question) {
 }
 
 Widget submitAnswer(BuildContext context, List<dynamic> cobject,
-    String questionType, int questionIndex) {
+    String questionType, int questionIndex, int listQuestionType) {
   Widget questionBuilder;
 
   switch (questionType) {
@@ -57,7 +59,7 @@ Widget submitAnswer(BuildContext context, List<dynamic> cobject,
         MaterialPageRoute(
             settings: RouteSettings(
               arguments:
-                  ScreenArguments(cobject, ++questionIndex, questionType),
+                  ScreenArguments(cobject, ++questionIndex, questionType,listQuestionType),
             ),
             builder: (context) => questionBuilder),
       );

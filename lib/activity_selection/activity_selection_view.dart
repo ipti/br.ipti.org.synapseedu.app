@@ -1,4 +1,5 @@
 // import 'package:elesson/share/turmas.dart';
+import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/drag_and_drop.dart';
 import 'package:elesson/template_questoes/model.dart';
 import 'package:elesson/template_questoes/multichoice.dart';
@@ -73,9 +74,9 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
     });
   }
 
-  _getCobject(String questionId) async {
+  _getCobject() async {
     //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
-    ApiCobject.getQuestao(questionId).then((response) {
+    ApiCobject.getQuestao(questionList[0]).then((response) {
       setState(() {
         cobject = response.data;
         questionType = cobject[0]["cobjects"][0]["template_code"];
@@ -84,20 +85,21 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
       List<Cobject> cobjectList = context.read(cobjectProvider).items;
       switch (questionType) {
         case 'PRE':
+          //NAVIGATOR(CObject processado, index da primeira questão, tipo);
           Navigator.of(context).pushNamed(SingleLineTextQuestion.routeName,
-              arguments: ScreenArguments(cobjectList, 0, 'PRE'));
+              arguments: ScreenArguments(cobjectList, 0, 'PRE',0));
           break;
         case 'DDROP':
           Navigator.of(context).pushNamed(DragAndDrop.routeName,
-              arguments: ScreenArguments(cobjectList, 0, 'DDROP'));
+              arguments: ScreenArguments(cobjectList, 0, 'DDROP',0));
           break;
         case 'MTE':
           Navigator.of(context).pushNamed(MultipleChoiceQuestion.routeName,
-              arguments: ScreenArguments(cobjectList, 0, 'MTE'));
+              arguments: ScreenArguments(cobjectList, 0, 'MTE',0));
           break;
         case 'TXT':
           Navigator.of(context).pushNamed(TextQuestion.routeName,
-              arguments: ScreenArguments(cobjectList, 0, 'TXT'));
+              arguments: ScreenArguments(cobjectList, 0, 'TXT',0));
           break;
       }
     });
@@ -394,15 +396,15 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   // FUNÇÃO PARA RECEBER OS DADOS DO COBJECT QUANDO A TURMA E O ALUNO FOR SELECIONADO
   void redirectToQuestion() {
     if (checkStudent == true && checkDiscipline == true) {
-      _getCobject(cobjectId);
+      _getCobject();
     }
   }
 }
 
 class ScreenArguments {
-  //final List<dynamic> cobject;
   List<Cobject> cobjectList;
   final int questionIndex;
   final String questionType;
-  ScreenArguments(this.cobjectList, this.questionIndex, this.questionType);
+  final int listQuestionIndex;
+  ScreenArguments(this.cobjectList, this.questionIndex, this.questionType, this.listQuestionIndex);
 }
