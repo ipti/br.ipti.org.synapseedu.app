@@ -15,9 +15,10 @@ import 'api.dart';
 
 const String BASE_URL = 'https://elesson.com.br/app/library';
 
-List<String> questionList = ['3988','3987','3977','3976'];
+List<String> questionList = ['3988', '3987', '3977', '3976'];
 
 AudioPlayer player = new AudioPlayer();
+
 void playSound(String sound) async {
   await player.play(BASE_URL + '/sound/' + sound);
 
@@ -27,26 +28,30 @@ void playSound(String sound) async {
 var cobjectList = new List<Cobject>();
 var cobject = new List<dynamic>();
 
-getCobject(int listQuestionIndex,BuildContext context) async {
+getCobject(int listQuestionIndex, BuildContext context) async {
   cobjectList.clear();
   //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
   ApiCobject.getQuestao(questionList[listQuestionIndex]).then((response) {
-      cobject = response.data;
-      var questionType = cobject[0]["cobjects"][0]["template_code"];
+    cobject = response.data;
+    var questionType = cobject[0]["cobjects"][0]["template_code"];
     context.read(cobjectProvider).fetchCobjects(cobject);
     cobjectList = context.read(cobjectProvider).items;
     switch (questionType) {
       case 'PRE':
-        Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName('/'),arguments: ScreenArguments(cobjectList, 0, 'MTE',listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName('/'),
+            arguments: ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
         break;
       case 'DDROP':
-        Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, ModalRoute.withName('/'),arguments: ScreenArguments(cobjectList, 0, 'MTE',listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, ModalRoute.withName('/'),
+            arguments: ScreenArguments(cobjectList, 0, 'DDROP', listQuestionIndex));
         break;
       case 'MTE':
-        Navigator.of(context).pushNamedAndRemoveUntil(MultipleChoiceQuestion.routeName, ModalRoute.withName('/'),arguments: ScreenArguments(cobjectList, 0, 'MTE',listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(MultipleChoiceQuestion.routeName, ModalRoute.withName('/'),
+            arguments: ScreenArguments(cobjectList, 0, 'MTE', listQuestionIndex));
         break;
       case 'TXT':
-        Navigator.of(context).pushNamedAndRemoveUntil(TextQuestion.routeName, ModalRoute.withName('/'),arguments: ScreenArguments(cobjectList, 0, 'MTE',listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(TextQuestion.routeName, ModalRoute.withName('/'),
+            arguments: ScreenArguments(cobjectList, 0, 'TXT', listQuestionIndex));
         break;
     }
   });
@@ -69,36 +74,35 @@ Widget soundButton(BuildContext context, Question question) {
       : null;
 }
 
-Widget submitAnswer(BuildContext context, List<dynamic> cobject,
-    String questionType, int questionIndex, int listQuestionType) {
-  Widget questionBuilder;
-
-  switch (questionType) {
-    case 'PRE':
-      questionBuilder = SingleLineTextQuestion();
-      break;
-    case 'DDROP':
-      questionBuilder = DragAndDrop();
-      break;
-    case 'MTE':
-      questionBuilder = TextQuestion();
-      break;
-    case 'TXT':
-      questionBuilder = TextQuestion();
-      break;
-  }
-
+Widget submitAnswer(BuildContext context, List<Cobject> cobjectList, String questionType, int questionIndex, int listQuestionIndex) {
   return MaterialButton(
     onPressed: () {
-      print("Enviando: ${questionIndex + 1}");
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-            settings: RouteSettings(
-              arguments:
-                  ScreenArguments(cobject, ++questionIndex, questionType,listQuestionType),
-            ),
-            builder: (context) => questionBuilder),
-      );
+      if (questionIndex < cobjectList[0].questions.length) {
+        switch (questionType) {
+          case 'PRE':
+            Navigator.of(context).pushReplacementNamed(SingleLineTextQuestion.routeName,
+                arguments: ScreenArguments(cobjectList, questionIndex, 'PRE', listQuestionIndex));
+            break;
+          case 'DDROP':
+            Navigator.of(context)
+                .pushReplacementNamed(DragAndDrop.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'DDROP', listQuestionIndex));
+            break;
+          case 'MTE':
+            Navigator.of(context).pushReplacementNamed(MultipleChoiceQuestion.routeName,
+                arguments: ScreenArguments(cobjectList, questionIndex, 'MTE', listQuestionIndex));
+            break;
+          case 'TXT':
+            Navigator.of(context)
+                .pushReplacementNamed(TextQuestion.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'TXT', listQuestionIndex));
+            break;
+        }
+      } else {
+        if (++listQuestionIndex < questionList.length) {
+          getCobject(listQuestionIndex, context);
+        } else {
+          Navigator.of(context).pop();
+        }
+      }
     },
     minWidth: 200.0,
     height: 45.0,

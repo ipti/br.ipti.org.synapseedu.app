@@ -174,39 +174,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
               piece(0, context, watch, cobjectList[0].questions[0]),
               piece(1, context, watch, cobjectList[0].questions[0]),
               piece(2, context, watch, cobjectList[0].questions[0]),
-              // if (_selectedButton < 3)
-              MaterialButton(
-                onPressed: () {
-                  if (_selectedButton > 2) {
-                    // se tiver alguma opção selecionada
-                    print('Escolha uma opção');
-                  } else {
-                    if (questionIndex < cobjectList[0].questions.length - 1) {
-                      // se ele ainda tiver questoes dentro do cobject
-                      Navigator.of(context).pushReplacementNamed(MultipleChoiceQuestion.routeName, arguments: ScreenArguments(cobjectList, ++questionIndex, 'MTE', listQuestionIndex));
-                    } else {
-                      if (++listQuestionIndex < questionList.length) {
-                        getCobject(++listQuestionIndex, context);
-                      } else {
-                        Navigator.of(context).pop();
-                      }
-                    }
-                  }
-                },
-                minWidth: 200.0,
-                height: 45.0,
-                color: Colors.indigo,
-                splashColor: Theme.of(context).accentColor,
-                child: Text(
-                  "Enviar Resposta",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: "Alike",
-                    fontSize: 16.0,
-                  ),
-                  maxLines: 1,
-                ),
-              )
+              //if (_selectedButton > 2) {
+              submitAnswer(context, cobjectList, 'MTE', ++questionIndex, listQuestionIndex),
             ],
           ),
         ),

@@ -118,27 +118,7 @@ class SingleLineTextQuestion extends ConsumerWidget {
                 ),
                 SizedBox(height: 15),
                 if (_textController.text.isNotEmpty)
-                  MaterialButton(
-                    onPressed: () {
-                      print(_textController.text);
-                      questionIndex < cobjectList[0].questions.length -1?
-                      Navigator.of(context).pushReplacementNamed(SingleLineTextQuestion.routeName,arguments: ScreenArguments(cobjectList,++questionIndex,'PRE',listQuestionIndex))
-                          : getCobject(++listQuestionIndex,context);
-                    },
-                    minWidth: 200.0,
-                    height: 45.0,
-                    color: Theme.of(context).primaryColor,
-                    splashColor: Theme.of(context).accentColor,
-                    child: Text(
-                      "Enviar Resposta",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: "Alike",
-                        fontSize: 16.0,
-                      ),
-                      maxLines: 1,
-                    ),
-                  ),
+                submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex),
               ],
             ),
           ),

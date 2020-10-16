@@ -17,8 +17,7 @@ import 'package:flutter_riverpod/all.dart';
 
 class ActivitySelectionForm extends StatefulWidget {
   @override
-  _ActivitySelectionFormState createState() =>
-      new _ActivitySelectionFormState();
+  _ActivitySelectionFormState createState() => new _ActivitySelectionFormState();
 }
 
 class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
@@ -37,17 +36,20 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
 
   bool checkStudent = true;
   bool checkDiscipline = true;
+
   //<=======================JOGAR AQUI O ID DO COBJET RECEBIDO===========================>
   int cobjectId;
 
   var cobject = new List<dynamic>();
   var questionType;
+
   //<===================================JOGAR AQUI O ID DA ESCOLA=============================================>
   String schoolId = "51";
 
   _ActivitySelectionFormState() {
     _getClasses(schoolId);
   }
+
   //<===================================PARA OS TESTES =======================================================>
   List questionTypeList = ['MTE', 'PRE', 'DAD', 'TXT'];
   String typeSelected = "Selecione o tipo da questão";
@@ -122,9 +124,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
           child: Container(
             width: widthScreen,
             height: heightScreen * 0.08,
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.green, width: 3),
-                borderRadius: BorderRadius.circular(20)),
+            decoration: BoxDecoration(border: Border.all(color: Colors.green, width: 3), borderRadius: BorderRadius.circular(20)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -148,9 +148,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
             margin: EdgeInsets.only(top: 20),
             width: widthScreen,
             height: heightScreen * 0.08,
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.green, width: 3),
-                borderRadius: BorderRadius.circular(20)),
+            decoration: BoxDecoration(border: Border.all(color: Colors.green, width: 3), borderRadius: BorderRadius.circular(20)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -396,7 +394,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   // FUNÇÃO PARA RECEBER OS DADOS DO COBJECT QUANDO A TURMA E O ALUNO FOR SELECIONADO
   void redirectToQuestion(int cobjectIdIndex) {
     if (checkStudent == true && checkDiscipline == true) {
-      getCobject(cobjectIdIndex,context);
+      getCobject(cobjectIdIndex, context);
     }
   }
 }
@@ -406,5 +404,6 @@ class ScreenArguments {
   final int questionIndex;
   final String questionType;
   final int listQuestionIndex;
+
   ScreenArguments(this.cobjectList, this.questionIndex, this.questionType, this.listQuestionIndex);
 }

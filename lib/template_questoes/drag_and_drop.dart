@@ -157,17 +157,7 @@ class _DragAndDropState extends State<DragAndDrop> {
             ),
           ],
         ),
-        FloatingActionButton(
-          onPressed: () {
-            questionIndex < cobjectList[0].questions.length - 1
-                ? Navigator.of(context).pushReplacementNamed(
-                    DragAndDrop.routeName,
-                    arguments: ScreenArguments(cobjectList, ++questionIndex,
-                        'DDROP', listQuestionIndex))
-                : getCobject(++listQuestionIndex, context);
-          },
-          child: Icon(Icons.navigate_next),
-        ),
+        submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex),
       ],
     );
   }
