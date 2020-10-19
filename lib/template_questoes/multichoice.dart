@@ -1,5 +1,6 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/share/question_widgets.dart';
+import '../template_questoes/share/button_widgets.dart';
 import 'package:flutter/services.dart';
 
 import './share/template_slider.dart';
@@ -51,12 +52,15 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     _selectedButton = index;
   }
 
-  Widget piece(int index, BuildContext context, ScopedReader watch, Question question) {
+  Widget piece(
+      int index, BuildContext context, ScopedReader watch, Question question) {
     final buttonState = watch(buttonStateProvider).state;
-    double cardSize = MediaQuery.of(context).size.height / 4.3;
+    double cardSize = MediaQuery.of(context).size.height / 4.5;
+    // double cardSize = 158.29;
+    print(cardSize);
     bool audio = false;
     String grouping = (index + 1).toString();
-    print('Imagem $grouping: ${question.pieces[grouping]["image"]}');
+    // print('Imagem $grouping: ${question.pieces[grouping]["image"]}');
     return Card(
       margin: const EdgeInsets.all(10),
       elevation: 2,
@@ -65,7 +69,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
         alignment: Alignment.bottomLeft,
         children: [
           ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: cardSize, maxWidth: cardSize),
+            constraints:
+                BoxConstraints(maxHeight: cardSize, maxWidth: cardSize),
             child: MaterialButton(
               minWidth: 200,
               padding: const EdgeInsets.all(2),
@@ -78,7 +83,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                   : Container(
                       child: Text(
                         question.pieces[grouping]["text"],
-                        style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w800, fontSize: 16),
                       ),
                       margin: const EdgeInsets.all(20),
                     ),
@@ -134,12 +140,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.arrow_back_ios),
-        onPressed: () => {
-          Navigator.of(context).pop(),
-        },
-      ),
+      bottomNavigationBar: bottomNavBar(context),
       body: TemplateSlider(
         title: Center(
           child: Column(
@@ -158,7 +159,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
             ],
           ),
         ),
-        image: Image.network('https://elesson.com.br/app/library/image/' + cobjectList[0].questions[0].header["image"]),
+        image: Image.network('https://elesson.com.br/app/library/image/' +
+            cobjectList[0].questions[0].header["image"]),
         activityScreen: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -175,7 +177,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
               piece(1, context, watch, cobjectList[0].questions[0]),
               piece(2, context, watch, cobjectList[0].questions[0]),
               //if (_selectedButton > 2) {
-              submitAnswer(context, cobjectList, 'MTE', ++questionIndex, listQuestionIndex),
+              // submitAnswer(context, cobjectList, 'MTE', ++questionIndex,
+              //     listQuestionIndex),
             ],
           ),
         ),

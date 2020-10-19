@@ -51,7 +51,7 @@ class TemplateSlider extends StatelessWidget {
 
   Widget bottomScreen(double screenWidth, double screenHeight) {
     return Container(
-      decoration: BoxDecoration(color: Colors.grey[300]),
+      // decoration: BoxDecoration(color: Colors.grey[300]),
       width: screenWidth,
       height: screenHeight,
       child: activityScreen,
