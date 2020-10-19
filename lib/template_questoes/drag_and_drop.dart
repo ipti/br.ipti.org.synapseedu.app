@@ -2,6 +2,7 @@ import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/share/template_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 
@@ -30,6 +31,8 @@ class _DragAndDropState extends State<DragAndDrop> {
   int valueSecondReceiver = 0;
   int valueThirdReceiver = 0;
 
+  bool showConfirmButton = false;
+
   @override
   Widget build(BuildContext context) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
@@ -38,8 +41,9 @@ class _DragAndDropState extends State<DragAndDrop> {
     listQuestionIndex = args.listQuestionIndex;
 
     double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
     return Scaffold(
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomPadding: false,
       body: TemplateSlider(
         image: cobjectList[0].questions[0].header['image'] != ''
             ? Image.network(BASE_URL +
@@ -53,128 +57,138 @@ class _DragAndDropState extends State<DragAndDrop> {
           style: Theme.of(context).textTheme.headline2,
         ),
         activityScreen:
-            DAD(widthScreen, cobjectList[0].questions[questionIndex]),
+            DAD(heightScreen, widthScreen, cobjectList[0].questions[questionIndex]),
       ),
+      //bottomNavigationBar: BottomNavibar(),
     );
   }
 
   // ignore: non_constant_identifier_names
-  Widget DAD(double widthScreen, Question question) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        //<=================PRIMEIRA=====================>
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Draggable(
-              data: 1,
-              child: dragSender(0, widthScreen, question),
-              feedback: dragSender(0, widthScreen, question),
-              childWhenDragging: dragSenderInvisible(widthScreen),
-            ),
-            DragTarget(
-              builder: (context, List<int> candidateData, rejectedData) {
-                return dragReceiver(3, widthScreen, question);
-              },
-              onWillAccept: (data) {
-                return true;
-              },
-              onAccept: (data) {
-                valueFirstReceiver = data;
-                tradeValue(1, data);
-                print("""
-                  1: $valueFirstReceiver
-                  2: $valueSecondReceiver
-                  3: $valueThirdReceiver
-                  <---------------------->
-                  """);
-              },
-            ),
-          ],
-        ),
-        //<=================SEGUNDA=====================>
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Draggable(
-              data: 2,
-              child: dragSender(1, widthScreen, question),
-              feedback: dragSender(1, widthScreen, question),
-              childWhenDragging: dragSenderInvisible(
-                widthScreen,
+  Widget DAD(double heightScreen, double widthScreen, Question question) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 12),
+      child: Wrap(
+        children: <Widget>[
+          //<=================TITULO=====================>
+          Container(
+            height: heightScreen/6.7,
+            width: widthScreen,
+            color: Colors.green,
+          ),
+          //<=================PRIMEIRA=====================>
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Draggable(
+                data: 1,
+                child: dragSender(0, widthScreen, question),
+                feedback: dragSender(0, widthScreen, question),
+                childWhenDragging: dragSenderInvisible(widthScreen),
               ),
-            ),
-            DragTarget(
-              builder: (context, List<int> candidateData, rejectedData) {
-                return dragReceiver(4, widthScreen, question);
-              },
-              onWillAccept: (data) {
-                return true;
-              },
-              onAccept: (data) {
-                valueSecondReceiver = data;
-                tradeValue(2, data);
-                print("""
-                  1: $valueFirstReceiver
-                  2: $valueSecondReceiver
-                  3: $valueThirdReceiver
-                  <---------------------->
-                  """);
-              },
-            ),
-          ],
-        ),
-        //<=================TERCEIRA=====================>
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Draggable(
-              data: 3,
-              child: dragSender(2, widthScreen, question),
-              feedback: dragSender(2, widthScreen, question),
-              childWhenDragging: dragSenderInvisible(
-                widthScreen,
+              DragTarget(
+                builder: (context, List<int> candidateData, rejectedData) {
+                  return dragReceiver(3, widthScreen, question);
+                },
+                onWillAccept: (data) {
+                  return true;
+                },
+                onAccept: (data) {
+                  valueFirstReceiver = data;
+                  tradeValue(1, data);
+                  print("""
+                    1: $valueFirstReceiver
+                    2: $valueSecondReceiver
+                    3: $valueThirdReceiver
+                    <---------------------->
+                    """);
+                },
               ),
-            ),
-            DragTarget(
-              builder: (context, List<int> candidateData, rejectedData) {
-                return dragReceiver(5, widthScreen, question);
-              },
-              onWillAccept: (data) {
-                return true;
-              },
-              onAccept: (data) {
-                valueThirdReceiver = data;
-                tradeValue(3, data);
-                print("""
-                  1: $valueFirstReceiver
-                  2: $valueSecondReceiver
-                  3: $valueThirdReceiver
-                  <---------------------->
-                  """);
-              },
-            ),
-          ],
-        ),
-        submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex),
-      ],
+            ],
+          ),
+          //<=================SEGUNDA=====================>
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Draggable(
+                data: 2,
+                child: dragSender(1, widthScreen, question),
+                feedback: dragSender(1, widthScreen, question),
+                childWhenDragging: dragSenderInvisible(
+                  widthScreen,
+                ),
+              ),
+              DragTarget(
+                builder: (context, List<int> candidateData, rejectedData) {
+                  return dragReceiver(4, widthScreen, question);
+                },
+                onWillAccept: (data) {
+                  return true;
+                },
+                onAccept: (data) {
+                  valueSecondReceiver = data;
+                  tradeValue(2, data);
+                  print("""
+                    1: $valueFirstReceiver
+                    2: $valueSecondReceiver
+                    3: $valueThirdReceiver
+                    <---------------------->
+                    """);
+                },
+              ),
+            ],
+          ),
+          //<=================TERCEIRA=====================>
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Draggable(
+                data: 3,
+                child: dragSender(2, widthScreen, question),
+                feedback: dragSender(2, widthScreen, question),
+                childWhenDragging: dragSenderInvisible(
+                  widthScreen,
+                ),
+              ),
+              DragTarget(
+                builder: (context, List<int> candidateData, rejectedData) {
+                  return dragReceiver(5, widthScreen, question);
+                },
+                onWillAccept: (data) {
+                  return true;
+                },
+                onAccept: (data) {
+                  valueThirdReceiver = data;
+                  tradeValue(3, data);
+                  print("""
+                    1: $valueFirstReceiver
+                    2: $valueSecondReceiver
+                    3: $valueThirdReceiver
+                    <---------------------->
+                    """);
+                },
+              ),
+            ],
+          ),
+          // submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex),
+        ],
+      ),
     );
   }
 
   Widget dragSenderInvisible(double widthScreen) {
     return Container(
-      width: widthScreen * 0.3,
-      height: widthScreen * 0.3,
+      width: widthScreen/2.6,
+      height: widthScreen/2.6,
     );
   }
 
   Widget dragSender(int index, double widthScreen, Question question) {
     String grouping = (index + 1).toString();
     return Container(
+      margin: EdgeInsets.only(top: 8,left: 16),
       decoration: BoxDecoration(
         color: Colors.grey,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
         image: DecorationImage(
           image: NetworkImage(
               BASE_URL + '/image/' + question.pieces[grouping]["image"]),
@@ -185,8 +199,8 @@ class _DragAndDropState extends State<DragAndDrop> {
           width: 2,
         ),
       ),
-      width: widthScreen * 0.3,
-      height: widthScreen * 0.3,
+      width: widthScreen/2.6,
+      height: widthScreen/2.6,
     );
   }
 
@@ -204,9 +218,10 @@ class _DragAndDropState extends State<DragAndDrop> {
         break;
     }
     return Container(
+      margin: EdgeInsets.only(top: 8,right: 16),
       decoration: BoxDecoration(
         color: Colors.grey,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
         image: DecorationImage(
           image: NetworkImage(
               BASE_URL + '/image/' + question.pieces[grouping]["image"]),
@@ -217,8 +232,8 @@ class _DragAndDropState extends State<DragAndDrop> {
           width: 2,
         ),
       ),
-      width: widthScreen * 0.3,
-      height: widthScreen * 0.3,
+      width: widthScreen/2.6,
+      height: widthScreen/2.6,
     );
   }
 
