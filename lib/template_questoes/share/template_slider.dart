@@ -33,6 +33,14 @@ class _TemplateSliderState extends State<TemplateSlider> {
 
   Widget topScreen(double screenWidth, double screenHeight) {
     return GestureDetector(
+      onVerticalDragDown: (details) {
+        //print(details.localPosition.direction);
+        if (details.localPosition.direction > 1) {
+          setState(() {
+            showSecondScreen = true;
+          });
+        }
+      },
       child: Container(
         margin: EdgeInsets.only(bottom: screenHeight * 0.1),
         // decoration: BoxDecoration(color: Colors.grey[200]),
@@ -54,6 +62,14 @@ class _TemplateSliderState extends State<TemplateSlider> {
 
   Widget bottomScreen(double screenWidth, double screenHeight) {
     return GestureDetector(
+      onHorizontalDragDown: (details) {
+        print(details.localPosition.direction);
+        if (details.localPosition.direction < 1) {
+          setState(() {
+            showSecondScreen = false;
+          });
+        }
+      },
       child: AnimatedContainer(
         duration: Duration(milliseconds: 500),
         margin: showSecondScreen == true ? EdgeInsets.only(bottom: screenHeight * 0.1) : EdgeInsets.only(top: screenHeight),
@@ -87,7 +103,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: Icon(
-                Icons.settings,size: 40,
+                Icons.settings,
+                size: 40,
                 color: Color(0xFF0000FF),
               ),
               onPressed: () => {
@@ -137,7 +154,10 @@ class _TemplateSliderState extends State<TemplateSlider> {
                             fontWeight: FontWeight.w900,
                           ),
                         ),
-                        Icon(Icons.keyboard_arrow_down,size: 40,),
+                        Icon(
+                          Icons.keyboard_arrow_down,
+                          size: 40,
+                        ),
                       ],
                     )
                   : Icon(
