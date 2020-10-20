@@ -9,6 +9,7 @@ import './question_provider.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import './model.dart';
+import './image_detail_screen.dart';
 
 // const String BASE_URL = 'https://elesson.com.br/app/library';
 
@@ -63,8 +64,10 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     // print('Imagem $grouping: ${question.pieces[grouping]["image"]}');
     return Card(
       margin: const EdgeInsets.all(10),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       elevation: 2,
-      color: Colors.white,
+      color: Colors.red,
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
@@ -75,23 +78,36 @@ class MultipleChoiceQuestion extends ConsumerWidget {
               minWidth: 200,
               padding: const EdgeInsets.all(2),
               color: _buttonPressed[index] ? Colors.amber : Colors.green[300],
-              child: question.pieces[grouping]["image"] != null
-                  ? Image.network(
-                      BASE_URL + '/image/' + question.pieces[grouping]["image"],
-                    )
-                  // ? Image.asset('assets/img/placeholder.jpg')
-                  : Container(
-                      child: Text(
-                        question.pieces[grouping]["text"],
-                        style: TextStyle(
-                            fontWeight: FontWeight.w800, fontSize: 16),
+              child: Hero(
+                tag: grouping,
+                child: question.pieces[grouping]["image"] != null
+                    ? Image.network(
+                        BASE_URL +
+                            '/image/' +
+                            question.pieces[grouping]["image"],
+                      )
+                    // ? Image.asset('assets/img/placeholder.jpg')
+                    : Container(
+                        child: Text(
+                          question.pieces[grouping]["text"],
+                          style: TextStyle(
+                              fontWeight: FontWeight.w800, fontSize: 16),
+                        ),
+                        margin: const EdgeInsets.all(20),
                       ),
-                      margin: const EdgeInsets.all(20),
-                    ),
+              ),
               // height: cardSize,
               // minWidth: cardSize,
               highlightColor: Theme.of(context).accentColor,
               splashColor: Theme.of(context).accentColor,
+              onLongPress: () {
+                print('long press');
+                Navigator.of(context).pushNamed(
+                  ImageDetailScreen.routeName,
+                  arguments: DetailScreenArguments(
+                      grouping: grouping, question: question),
+                );
+              },
               onPressed: () {
                 changeButtonColor(context, index);
                 // if (question.pieces["correctAnswer"] == index + 1)

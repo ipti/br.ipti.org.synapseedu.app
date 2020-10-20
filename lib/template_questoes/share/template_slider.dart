@@ -7,7 +7,14 @@ class TemplateSlider extends StatefulWidget {
   final Widget sound;
   final Widget activityScreen;
 
-  const TemplateSlider({Key key, this.title, this.text, this.sound, this.activityScreen, this.image}) : super(key: key);
+  const TemplateSlider(
+      {Key key,
+      this.title,
+      this.text,
+      this.sound,
+      this.activityScreen,
+      this.image})
+      : super(key: key);
 
   @override
   _TemplateSliderState createState() => _TemplateSliderState();
@@ -72,7 +79,9 @@ class _TemplateSliderState extends State<TemplateSlider> {
       },
       child: AnimatedContainer(
         duration: Duration(milliseconds: 500),
-        margin: showSecondScreen == true ? EdgeInsets.only(bottom: screenHeight * 0.1) : EdgeInsets.only(top: screenHeight),
+        margin: showSecondScreen == true
+            ? EdgeInsets.only(bottom: screenHeight * 0)
+            : EdgeInsets.only(top: screenHeight),
         decoration: BoxDecoration(color: Colors.grey[300]),
         width: screenWidth,
         height: screenHeight,
