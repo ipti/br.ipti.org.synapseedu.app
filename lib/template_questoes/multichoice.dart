@@ -53,8 +53,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     _selectedButton = index;
   }
 
-  Widget piece(
-      int index, BuildContext context, ScopedReader watch, Question question) {
+  Widget piece(int index, BuildContext context, ScopedReader watch, Question question) {
     final buttonState = watch(buttonStateProvider).state;
     double cardSize = MediaQuery.of(context).size.height / 4.5;
     // double cardSize = 158.29;
@@ -72,8 +71,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
         alignment: Alignment.bottomLeft,
         children: [
           ConstrainedBox(
-            constraints:
-                BoxConstraints(maxHeight: cardSize, maxWidth: cardSize),
+            constraints: BoxConstraints(maxHeight: cardSize, maxWidth: cardSize),
             child: MaterialButton(
               minWidth: 200,
               padding: const EdgeInsets.all(2),
@@ -82,16 +80,13 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                 tag: grouping,
                 child: question.pieces[grouping]["image"] != null
                     ? Image.network(
-                        BASE_URL +
-                            '/image/' +
-                            question.pieces[grouping]["image"],
+                        BASE_URL + '/image/' + question.pieces[grouping]["image"],
                       )
                     // ? Image.asset('assets/img/placeholder.jpg')
                     : Container(
                         child: Text(
                           question.pieces[grouping]["text"],
-                          style: TextStyle(
-                              fontWeight: FontWeight.w800, fontSize: 16),
+                          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
                         ),
                         margin: const EdgeInsets.all(20),
                       ),
@@ -104,8 +99,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                 print('long press');
                 Navigator.of(context).pushNamed(
                   ImageDetailScreen.routeName,
-                  arguments: DetailScreenArguments(
-                      grouping: grouping, question: question),
+                  arguments: DetailScreenArguments(grouping: grouping, question: question),
                 );
               },
               onPressed: () {
@@ -175,26 +169,29 @@ class MultipleChoiceQuestion extends ConsumerWidget {
             ],
           ),
         ),
-        image: Image.network('https://elesson.com.br/app/library/image/' +
-            cobjectList[0].questions[0].header["image"]),
+        image: Image.network('https://elesson.com.br/app/library/image/' + cobjectList[0].questions[0].header["image"]),
         activityScreen: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Wrap(
             children: [
-              Text(
-                cobjectList[0].questions[0].header["text"],
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 28,
-                ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    cobjectList[0].questions[0].header["text"],
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28,
+                    ),
+                  ),
+                  piece(0, context, watch, cobjectList[0].questions[0]),
+                  piece(1, context, watch, cobjectList[0].questions[0]),
+                  piece(2, context, watch, cobjectList[0].questions[0]),
+                  //if (_selectedButton > 2) {
+                  // submitAnswer(context, cobjectList, 'MTE', ++questionIndex,
+                  //     listQuestionIndex),
+                ],
               ),
-              piece(0, context, watch, cobjectList[0].questions[0]),
-              piece(1, context, watch, cobjectList[0].questions[0]),
-              piece(2, context, watch, cobjectList[0].questions[0]),
-              //if (_selectedButton > 2) {
-              // submitAnswer(context, cobjectList, 'MTE', ++questionIndex,
-              //     listQuestionIndex),
             ],
           ),
         ),

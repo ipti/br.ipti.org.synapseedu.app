@@ -41,7 +41,7 @@ class _DragAndDropState extends State<DragAndDrop> {
     listQuestionIndex = args.listQuestionIndex;
 
     double widthScreen = MediaQuery.of(context).size.width;
-    double heightScreen = MediaQuery.of(context).size.height;
+    double heightScreen = MediaQuery.of(context).size.height*0.93;
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: TemplateSlider(
@@ -71,103 +71,112 @@ class _DragAndDropState extends State<DragAndDrop> {
         children: <Widget>[
           //<=================TITULO=====================>
           Container(
-            height: heightScreen/6.7,
+            height: heightScreen*0.15,
             width: widthScreen,
             color: Colors.green,
           ),
-          //<=================PRIMEIRA=====================>
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Draggable(
-                data: 1,
-                child: dragSender(0, widthScreen, question),
-                feedback: dragSender(0, widthScreen, question),
-                childWhenDragging: dragSenderInvisible(widthScreen),
-              ),
-              DragTarget(
-                builder: (context, List<int> candidateData, rejectedData) {
-                  return dragReceiver(3, widthScreen, question);
-                },
-                onWillAccept: (data) {
-                  return true;
-                },
-                onAccept: (data) {
-                  valueFirstReceiver = data;
-                  tradeValue(1, data);
-                  print("""
+          Container(
+            height: heightScreen*0.85,
+            padding: EdgeInsets.only(top: 12, bottom: 12),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                //<=================PRIMEIRA=====================>
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Draggable(
+                      data: 1,
+                      child: dragSender(0, widthScreen, question),
+                      feedback: dragSender(0, widthScreen, question),
+                      childWhenDragging: dragSenderInvisible(widthScreen),
+                    ),
+                    DragTarget(
+                      builder: (context, List<int> candidateData, rejectedData) {
+                        return dragReceiver(3, widthScreen, question);
+                      },
+                      onWillAccept: (data) {
+                        return true;
+                      },
+                      onAccept: (data) {
+                        valueFirstReceiver = data;
+                        tradeValue(1, data);
+                        print("""
                     1: $valueFirstReceiver
                     2: $valueSecondReceiver
                     3: $valueThirdReceiver
                     <---------------------->
                     """);
-                },
-              ),
-            ],
-          ),
-          //<=================SEGUNDA=====================>
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Draggable(
-                data: 2,
-                child: dragSender(1, widthScreen, question),
-                feedback: dragSender(1, widthScreen, question),
-                childWhenDragging: dragSenderInvisible(
-                  widthScreen,
+                      },
+                    ),
+                  ],
                 ),
-              ),
-              DragTarget(
-                builder: (context, List<int> candidateData, rejectedData) {
-                  return dragReceiver(4, widthScreen, question);
-                },
-                onWillAccept: (data) {
-                  return true;
-                },
-                onAccept: (data) {
-                  valueSecondReceiver = data;
-                  tradeValue(2, data);
-                  print("""
+                //<=================SEGUNDA=====================>
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Draggable(
+                      data: 2,
+                      child: dragSender(1, widthScreen, question),
+                      feedback: dragSender(1, widthScreen, question),
+                      childWhenDragging: dragSenderInvisible(
+                        widthScreen,
+                      ),
+                    ),
+                    DragTarget(
+                      builder: (context, List<int> candidateData, rejectedData) {
+                        return dragReceiver(4, widthScreen, question);
+                      },
+                      onWillAccept: (data) {
+                        return true;
+                      },
+                      onAccept: (data) {
+                        valueSecondReceiver = data;
+                        tradeValue(2, data);
+                        print("""
                     1: $valueFirstReceiver
                     2: $valueSecondReceiver
                     3: $valueThirdReceiver
                     <---------------------->
                     """);
-                },
-              ),
-            ],
-          ),
-          //<=================TERCEIRA=====================>
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Draggable(
-                data: 3,
-                child: dragSender(2, widthScreen, question),
-                feedback: dragSender(2, widthScreen, question),
-                childWhenDragging: dragSenderInvisible(
-                  widthScreen,
+                      },
+                    ),
+                  ],
                 ),
-              ),
-              DragTarget(
-                builder: (context, List<int> candidateData, rejectedData) {
-                  return dragReceiver(5, widthScreen, question);
-                },
-                onWillAccept: (data) {
-                  return true;
-                },
-                onAccept: (data) {
-                  valueThirdReceiver = data;
-                  tradeValue(3, data);
-                  print("""
+                //<=================TERCEIRA=====================>
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Draggable(
+                      data: 3,
+                      child: dragSender(2, widthScreen, question),
+                      feedback: dragSender(2, widthScreen, question),
+                      childWhenDragging: dragSenderInvisible(
+                        widthScreen,
+                      ),
+                    ),
+                    DragTarget(
+                      builder: (context, List<int> candidateData, rejectedData) {
+                        return dragReceiver(5, widthScreen, question);
+                      },
+                      onWillAccept: (data) {
+                        return true;
+                      },
+                      onAccept: (data) {
+                        valueThirdReceiver = data;
+                        tradeValue(3, data);
+                        print("""
                     1: $valueFirstReceiver
                     2: $valueSecondReceiver
                     3: $valueThirdReceiver
                     <---------------------->
                     """);
-                },
-              ),
-            ],
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
           // submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex),
         ],
@@ -185,7 +194,7 @@ class _DragAndDropState extends State<DragAndDrop> {
   Widget dragSender(int index, double widthScreen, Question question) {
     String grouping = (index + 1).toString();
     return Container(
-      margin: EdgeInsets.only(top: 8,left: 16),
+      margin: EdgeInsets.only(left: 16,),
       decoration: BoxDecoration(
         color: Colors.grey,
         borderRadius: BorderRadius.circular(12),
@@ -218,7 +227,7 @@ class _DragAndDropState extends State<DragAndDrop> {
         break;
     }
     return Container(
-      margin: EdgeInsets.only(top: 8,right: 16),
+      margin: EdgeInsets.only(right: 16),
       decoration: BoxDecoration(
         color: Colors.grey,
         borderRadius: BorderRadius.circular(12),

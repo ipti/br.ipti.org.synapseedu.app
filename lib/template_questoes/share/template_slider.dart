@@ -31,8 +31,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
 
     return Stack(
       children: [
-        topScreen(screenWidth, screenHeight),
-        bottomScreen(screenWidth, screenHeight),
+        topScreen(screenWidth, screenHeight*0.93),
+        bottomScreen(screenWidth, screenHeight*0.93),
         bottomNavBar(context, screenHeight),
       ],
     );
@@ -40,16 +40,15 @@ class _TemplateSliderState extends State<TemplateSlider> {
 
   Widget topScreen(double screenWidth, double screenHeight) {
     return GestureDetector(
-      onVerticalDragDown: (details) {
-        //print(details.localPosition.direction);
-        if (details.localPosition.direction > 1) {
+      onPanUpdate: (details) {
+        if (details.delta.dy < 0) {
           setState(() {
             showSecondScreen = true;
           });
         }
       },
       child: Container(
-        margin: EdgeInsets.only(bottom: screenHeight * 0.1),
+        //margin: EdgeInsets.only(bottom: screenHeight * 0.1),
         // decoration: BoxDecoration(color: Colors.grey[200]),
         decoration: BoxDecoration(color: Colors.white),
         width: screenWidth,
@@ -69,9 +68,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
 
   Widget bottomScreen(double screenWidth, double screenHeight) {
     return GestureDetector(
-      onHorizontalDragDown: (details) {
-        print(details.localPosition.direction);
-        if (details.localPosition.direction < 1) {
+      onPanUpdate: (details) {
+        if (details.delta.dy > 0) {
           setState(() {
             showSecondScreen = false;
           });
@@ -80,7 +78,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
       child: AnimatedContainer(
         duration: Duration(milliseconds: 500),
         margin: showSecondScreen == true
-            ? EdgeInsets.only(bottom: screenHeight * 0)
+            ? EdgeInsets.only(bottom: 0)
             : EdgeInsets.only(top: screenHeight),
         decoration: BoxDecoration(color: Colors.grey[300]),
         width: screenWidth,
@@ -93,14 +91,14 @@ class _TemplateSliderState extends State<TemplateSlider> {
   Widget bottomNavBar(BuildContext context, double screenHeight) {
     return Container(
       color: Colors.blue,
-      margin: EdgeInsets.only(top: screenHeight * 0.9),
-      height: screenHeight * 0.1,
+      margin: EdgeInsets.only(top: screenHeight * 0.93),
+      height: screenHeight * 0.07,
       // color: Color.fromRGBO(255, 255, 255, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(12.0),
+          Container(
+            margin: EdgeInsets.only(left: 12),
             child: OutlineButton(
               padding: EdgeInsets.all(0),
               borderSide: BorderSide(
@@ -142,8 +140,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
                 Navigator.of(context).pop(),
               },
             ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
+          Container(
+            margin: EdgeInsets.only(right: 12.0),
             child: OutlineButton(
               padding: EdgeInsets.all(0),
               borderSide: BorderSide(
