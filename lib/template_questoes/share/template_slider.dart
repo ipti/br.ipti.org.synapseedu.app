@@ -80,7 +80,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
         margin: showSecondScreen == true
             ? EdgeInsets.only(bottom: 0)
             : EdgeInsets.only(top: screenHeight),
-        decoration: BoxDecoration(color: Colors.grey[300]),
+        decoration: BoxDecoration(color: Colors.white),
         width: screenWidth,
         height: screenHeight,
         child: widget.activityScreen,

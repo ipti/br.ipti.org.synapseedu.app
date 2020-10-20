@@ -37,6 +37,7 @@ dependencies:
   audioplayers: ^0.16.1
   dio: ^3.0.10
   google_fonts: ^1.1.1
+  fdottedline: ^1.0.1
 
 dev_dependencies:
   flutter_test:
