@@ -38,20 +38,28 @@ getCobject(int listQuestionIndex, BuildContext context) async {
     cobjectList = context.read(cobjectProvider).items;
     switch (questionType) {
       case 'PRE':
-        Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName('/'),
-            arguments: ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            SingleLineTextQuestion.routeName, ModalRoute.withName('/'),
+            arguments:
+                ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
         break;
       case 'DDROP':
-        Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, ModalRoute.withName('/'),
-            arguments: ScreenArguments(cobjectList, 0, 'DDROP', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            DragAndDrop.routeName, ModalRoute.withName('/'),
+            arguments:
+                ScreenArguments(cobjectList, 0, 'DDROP', listQuestionIndex));
         break;
       case 'MTE':
-        Navigator.of(context).pushNamedAndRemoveUntil(MultipleChoiceQuestion.routeName, ModalRoute.withName('/'),
-            arguments: ScreenArguments(cobjectList, 0, 'MTE', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            MultipleChoiceQuestion.routeName, ModalRoute.withName('/'),
+            arguments:
+                ScreenArguments(cobjectList, 0, 'MTE', listQuestionIndex));
         break;
       case 'TXT':
-        Navigator.of(context).pushNamedAndRemoveUntil(TextQuestion.routeName, ModalRoute.withName('/'),
-            arguments: ScreenArguments(cobjectList, 0, 'TXT', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            TextQuestion.routeName, ModalRoute.withName('/'),
+            arguments:
+                ScreenArguments(cobjectList, 0, 'TXT', listQuestionIndex));
         break;
     }
   });
@@ -63,37 +71,61 @@ final cobjectProvider = Provider<Cobjects>((ref) {
 
 Widget soundButton(BuildContext context, Question question) {
   return question.header["sound"].isNotEmpty
-      ? IconButton(
-          icon: Icon(Icons.volume_up),
-          highlightColor: Theme.of(context).primaryColor,
-          splashColor: Theme.of(context).primaryColor,
-          onPressed: () {
-            playSound(question.header["sound"]);
-          },
+      // ? IconButton(
+      //     icon: Icon(Icons.volume_up),
+      //     highlightColor: Theme.of(context).primaryColor,
+      //     splashColor: Theme.of(context).primaryColor,
+      //     onPressed: () {
+      //       playSound(question.header["sound"]);
+      //     },
+      //   )
+      ? OutlineButton(
+          padding: EdgeInsets.all(6),
+          borderSide: BorderSide(
+            color: Color.fromRGBO(0, 0, 255, 1),
+          ),
+          color: Colors.white,
+          textColor: Color(0xFF0000FF),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+          ),
+          child: Icon(
+            Icons.volume_up,
+            size: 40,
+            color: Color(0xFF0000FF),
+          ),
+          onPressed: () => {playSound(question.header["sound"])},
         )
       : null;
 }
 
-Widget submitAnswer(BuildContext context, List<Cobject> cobjectList, String questionType, int questionIndex, int listQuestionIndex) {
+Widget submitAnswer(BuildContext context, List<Cobject> cobjectList,
+    String questionType, int questionIndex, int listQuestionIndex) {
   return MaterialButton(
     onPressed: () {
       if (questionIndex < cobjectList[0].questions.length) {
         switch (questionType) {
           case 'PRE':
-            Navigator.of(context).pushReplacementNamed(SingleLineTextQuestion.routeName,
-                arguments: ScreenArguments(cobjectList, questionIndex, 'PRE', listQuestionIndex));
+            Navigator.of(context).pushReplacementNamed(
+                SingleLineTextQuestion.routeName,
+                arguments: ScreenArguments(
+                    cobjectList, questionIndex, 'PRE', listQuestionIndex));
             break;
           case 'DDROP':
-            Navigator.of(context)
-                .pushReplacementNamed(DragAndDrop.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'DDROP', listQuestionIndex));
+            Navigator.of(context).pushReplacementNamed(DragAndDrop.routeName,
+                arguments: ScreenArguments(
+                    cobjectList, questionIndex, 'DDROP', listQuestionIndex));
             break;
           case 'MTE':
-            Navigator.of(context).pushReplacementNamed(MultipleChoiceQuestion.routeName,
-                arguments: ScreenArguments(cobjectList, questionIndex, 'MTE', listQuestionIndex));
+            Navigator.of(context).pushReplacementNamed(
+                MultipleChoiceQuestion.routeName,
+                arguments: ScreenArguments(
+                    cobjectList, questionIndex, 'MTE', listQuestionIndex));
             break;
           case 'TXT':
-            Navigator.of(context)
-                .pushReplacementNamed(TextQuestion.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'TXT', listQuestionIndex));
+            Navigator.of(context).pushReplacementNamed(TextQuestion.routeName,
+                arguments: ScreenArguments(
+                    cobjectList, questionIndex, 'TXT', listQuestionIndex));
             break;
         }
       } else {

@@ -53,7 +53,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     _selectedButton = index;
   }
 
-  Widget piece(int index, BuildContext context, ScopedReader watch, Question question) {
+  Widget piece(
+      int index, BuildContext context, ScopedReader watch, Question question) {
     final buttonState = watch(buttonStateProvider).state;
     double cardSize = MediaQuery.of(context).size.height / 4.5;
     // double cardSize = 158.29;
@@ -71,7 +72,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
         alignment: Alignment.bottomLeft,
         children: [
           ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: cardSize, maxWidth: cardSize),
+            constraints:
+                BoxConstraints(maxHeight: cardSize, maxWidth: cardSize),
             child: MaterialButton(
               minWidth: 200,
               padding: const EdgeInsets.all(2),
@@ -80,13 +82,16 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                 tag: grouping,
                 child: question.pieces[grouping]["image"] != null
                     ? Image.network(
-                        BASE_URL + '/image/' + question.pieces[grouping]["image"],
+                        BASE_URL +
+                            '/image/' +
+                            question.pieces[grouping]["image"],
                       )
                     // ? Image.asset('assets/img/placeholder.jpg')
                     : Container(
                         child: Text(
                           question.pieces[grouping]["text"],
-                          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w800, fontSize: 16),
                         ),
                         margin: const EdgeInsets.all(20),
                       ),
@@ -99,11 +104,13 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                 print('long press');
                 Navigator.of(context).pushNamed(
                   ImageDetailScreen.routeName,
-                  arguments: DetailScreenArguments(grouping: grouping, question: question),
+                  arguments: DetailScreenArguments(
+                      grouping: grouping, question: question),
                 );
               },
               onPressed: () {
                 changeButtonColor(context, index);
+                if (showConfirmButton == false) showConfirmButton = true;
                 // if (question.pieces["correctAnswer"] == index + 1)
                 //   print("Acertou");
                 // setState(() {
@@ -135,6 +142,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   }
 
   bool fetch = false;
+  bool showConfirmButton = false;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -150,8 +158,9 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
 
     return Scaffold(
-      bottomNavigationBar: bottomNavBar(context),
+      // bottomNavigationBar: bottomNavBar(context),
       body: TemplateSlider(
+        showConfirmButton: showConfirmButton,
         title: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -165,11 +174,12 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                     fontSize: 26,
                   ),
                 ),
-              soundButton(context, cobjectList[0].questions[questionIndex]),
+              // soundButton(context, cobjectList[0].questions[questionIndex]),
             ],
           ),
         ),
-        image: Image.network('https://elesson.com.br/app/library/image/' + cobjectList[0].questions[0].header["image"]),
+        image: Image.network('https://elesson.com.br/app/library/image/' +
+            cobjectList[0].questions[0].header["image"]),
         activityScreen: Container(
           child: Wrap(
             children: [
@@ -187,6 +197,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                   piece(0, context, watch, cobjectList[0].questions[0]),
                   piece(1, context, watch, cobjectList[0].questions[0]),
                   piece(2, context, watch, cobjectList[0].questions[0]),
+
                   //if (_selectedButton > 2) {
                   // submitAnswer(context, cobjectList, 'MTE', ++questionIndex,
                   //     listQuestionIndex),

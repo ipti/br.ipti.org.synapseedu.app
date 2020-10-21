@@ -41,7 +41,7 @@ class _DragAndDropState extends State<DragAndDrop> {
     listQuestionIndex = args.listQuestionIndex;
 
     double widthScreen = MediaQuery.of(context).size.width;
-    double heightScreen = MediaQuery.of(context).size.height*0.93;
+    double heightScreen = MediaQuery.of(context).size.height * 0.93;
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: TemplateSlider(
@@ -56,8 +56,8 @@ class _DragAndDropState extends State<DragAndDrop> {
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline2,
         ),
-        activityScreen:
-            DAD(heightScreen, widthScreen, cobjectList[0].questions[questionIndex]),
+        activityScreen: DAD(heightScreen - 12, widthScreen,
+            cobjectList[0].questions[questionIndex]),
       ),
       //bottomNavigationBar: BottomNavibar(),
     );
@@ -71,12 +71,12 @@ class _DragAndDropState extends State<DragAndDrop> {
         children: <Widget>[
           //<=================TITULO=====================>
           Container(
-            height: heightScreen*0.15,
+            height: heightScreen * 0.15,
             width: widthScreen,
             color: Colors.green,
           ),
           Container(
-            height: heightScreen*0.85,
+            height: heightScreen * 0.85,
             padding: EdgeInsets.only(top: 12, bottom: 12),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -92,7 +92,8 @@ class _DragAndDropState extends State<DragAndDrop> {
                       childWhenDragging: dragSenderInvisible(widthScreen),
                     ),
                     DragTarget(
-                      builder: (context, List<int> candidateData, rejectedData) {
+                      builder:
+                          (context, List<int> candidateData, rejectedData) {
                         return dragReceiver(3, widthScreen, question);
                       },
                       onWillAccept: (data) {
@@ -124,7 +125,8 @@ class _DragAndDropState extends State<DragAndDrop> {
                       ),
                     ),
                     DragTarget(
-                      builder: (context, List<int> candidateData, rejectedData) {
+                      builder:
+                          (context, List<int> candidateData, rejectedData) {
                         return dragReceiver(4, widthScreen, question);
                       },
                       onWillAccept: (data) {
@@ -156,7 +158,8 @@ class _DragAndDropState extends State<DragAndDrop> {
                       ),
                     ),
                     DragTarget(
-                      builder: (context, List<int> candidateData, rejectedData) {
+                      builder:
+                          (context, List<int> candidateData, rejectedData) {
                         return dragReceiver(5, widthScreen, question);
                       },
                       onWillAccept: (data) {
@@ -186,15 +189,17 @@ class _DragAndDropState extends State<DragAndDrop> {
 
   Widget dragSenderInvisible(double widthScreen) {
     return Container(
-      width: widthScreen/2.6,
-      height: widthScreen/2.6,
+      width: widthScreen / 2.6,
+      height: widthScreen / 2.6,
     );
   }
 
   Widget dragSender(int index, double widthScreen, Question question) {
     String grouping = (index + 1).toString();
     return Container(
-      margin: EdgeInsets.only(left: 16,),
+      margin: EdgeInsets.only(
+        left: 16,
+      ),
       decoration: BoxDecoration(
         color: Colors.grey,
         borderRadius: BorderRadius.circular(12),
@@ -208,8 +213,8 @@ class _DragAndDropState extends State<DragAndDrop> {
           width: 2,
         ),
       ),
-      width: widthScreen/2.6,
-      height: widthScreen/2.6,
+      width: widthScreen / 2.6,
+      height: widthScreen / 2.6,
     );
   }
 
@@ -241,8 +246,8 @@ class _DragAndDropState extends State<DragAndDrop> {
           width: 2,
         ),
       ),
-      width: widthScreen/2.6,
-      height: widthScreen/2.6,
+      width: widthScreen / 2.6,
+      height: widthScreen / 2.6,
     );
   }
 
@@ -251,23 +256,17 @@ class _DragAndDropState extends State<DragAndDrop> {
       case 1:
         valueSecondReceiver == data
             ? valueSecondReceiver = 0
-            : valueThirdReceiver == data
-                ? valueThirdReceiver = 0
-                : {};
+            : valueThirdReceiver == data ? valueThirdReceiver = 0 : {};
         break;
       case 2:
         valueFirstReceiver == data
             ? valueFirstReceiver = 0
-            : valueThirdReceiver == data
-                ? valueThirdReceiver = 0
-                : {};
+            : valueThirdReceiver == data ? valueThirdReceiver = 0 : {};
         break;
       case 3:
         valueFirstReceiver == data
             ? valueFirstReceiver = 0
-            : valueSecondReceiver == data
-                ? valueSecondReceiver = 0
-                : {};
+            : valueSecondReceiver == data ? valueSecondReceiver = 0 : {};
         break;
     }
   }

@@ -79,7 +79,8 @@ class Home extends StatelessWidget {
         buttonTheme: ButtonThemeData(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18),
-            side: BorderSide(color: Color(0x3300004C)),
+            // side: BorderSide(color: Color(0x3300004C), width: 1),
+            side: BorderSide(color: Color(0xFF00004C), width: 1),
           ),
           splashColor: Colors.amber[900],
           // minWidth: 120,

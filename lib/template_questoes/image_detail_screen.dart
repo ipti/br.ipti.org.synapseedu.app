@@ -62,29 +62,17 @@ class ImageDetailScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              // Card(
+              //   child: Text(
+              //     'Id mollit occaecat mollit dolore cupidatat aliquip sunt est. Ut id elit nisi incididunt in. Nisi nostrud ut in esse voluptate.',
+              //     style: TextStyle(fontSize: 18),
+              //   ),
+              // ),
               SafeArea(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    OutlineButton(
-                      padding: EdgeInsets.all(6),
-                      borderSide: BorderSide(
-                        color: Color.fromRGBO(0, 0, 255, 1),
-                      ),
-                      color: Colors.white,
-                      textColor: Color(0xFF0000FF),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      child: Icon(
-                        Icons.volume_up,
-                        size: 40,
-                        color: Color(0xFF0000FF),
-                      ),
-                      onPressed: () => {
-                        Navigator.of(context).pop(),
-                      },
-                    ),
+                    soundButton(context, question),
                     ButtonTheme(
                       minWidth: buttonWidth,
                       height: buttonHeight,
