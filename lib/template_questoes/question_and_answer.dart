@@ -65,7 +65,7 @@ class SingleLineTextQuestion extends ConsumerWidget {
             key: _formKey,
             child: Column(
               // crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // if (image == true) Image.asset('assets/img/logo.png'),
                 if (questionText.isNotEmpty)
@@ -118,7 +118,11 @@ class SingleLineTextQuestion extends ConsumerWidget {
                 ),
                 SizedBox(height: 15),
                 if (_textController.text.isNotEmpty)
-                submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4.0),
+                    child: submitAnswer(context, cobjectList, 'PRE',
+                        ++questionIndex, listQuestionIndex),
+                  ),
               ],
             ),
           ),

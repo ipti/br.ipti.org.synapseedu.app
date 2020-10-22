@@ -54,20 +54,31 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   }
 
   Widget piece(
-      int index, BuildContext context, ScopedReader watch, Question question) {
+      int index,
+      BuildContext context,
+      ScopedReader watch,
+      Question question,
+      double buttonHeight,
+      double screenHeight,
+      double textCardHeight) {
     final buttonState = watch(buttonStateProvider).state;
-    double cardSize = MediaQuery.of(context).size.height / 4.5;
+
     // double cardSize = 158.29;
-    print(cardSize);
+    double availableSpaceForCards =
+        screenHeight - textCardHeight - buttonHeight - 12;
+    double marginBetweenCards = 0.0147 * availableSpaceForCards;
+    double cardSize =
+        (availableSpaceForCards - 24 - 2 * marginBetweenCards) / 3;
+
     bool audio = false;
     String grouping = (index + 1).toString();
-    // print('Imagem $grouping: ${question.pieces[grouping]["image"]}');
     return Card(
-      margin: const EdgeInsets.all(10),
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      margin: EdgeInsets.only(bottom: index < 2 ? marginBetweenCards : 0),
+      clipBehavior: Clip.hardEdge,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
       elevation: 2,
-      color: Colors.red,
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
@@ -75,9 +86,16 @@ class MultipleChoiceQuestion extends ConsumerWidget {
             constraints:
                 BoxConstraints(maxHeight: cardSize, maxWidth: cardSize),
             child: MaterialButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: BorderSide(
+                      color: _buttonPressed[index]
+                          ? Color(0xFF00DC8C)
+                          : Color(0x6E729166),
+                      width: 3)),
               minWidth: 200,
-              padding: const EdgeInsets.all(2),
-              color: _buttonPressed[index] ? Colors.amber : Colors.green[300],
+              padding: const EdgeInsets.all(0),
+              // color: _buttonPressed[index] ? Colors.amber : Colors.green[300],
               child: Hero(
                 tag: grouping,
                 child: question.pieces[grouping]["image"] != null
@@ -150,32 +168,26 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
     var listQuestionIndex = args.listQuestionIndex;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double textCardHeight = 0.0985 * screenHeight;
+    double buttonHeight =
+        48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
 
     // final cobjectProvidersState = watch(cobjectProvider.state);
     SystemChrome.setEnabledSystemUIOverlays([]);
     String questionDescription = cobjectList[0].description;
-
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
 
     return Scaffold(
       // bottomNavigationBar: bottomNavBar(context),
       body: TemplateSlider(
         showConfirmButton: showConfirmButton,
-        title: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            // alignment: Alignment.bottomLeft,
-            children: [
-              if (questionDescription.isNotEmpty)
-                Text(
-                  questionDescription,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 26,
-                  ),
-                ),
-              // soundButton(context, cobjectList[0].questions[questionIndex]),
-            ],
+        title: Text(
+          questionDescription,
+          textAlign: TextAlign.justify,
+          maxLines: 3,
+          style: TextStyle(
+            fontSize: 26,
           ),
         ),
         image: Image.network('https://elesson.com.br/app/library/image/' +
@@ -186,21 +198,37 @@ class MultipleChoiceQuestion extends ConsumerWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
-                    cobjectList[0].questions[0].header["text"],
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 28,
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+                    height: textCardHeight,
+                    child: Text(
+                      cobjectList[0].questions[0].header["text"],
+                      // textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        // fontFamily: 'Mulish',
+                      ),
                     ),
                   ),
-                  piece(0, context, watch, cobjectList[0].questions[0]),
-                  piece(1, context, watch, cobjectList[0].questions[0]),
-                  piece(2, context, watch, cobjectList[0].questions[0]),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 0, vertical: 12),
+                    child: Column(
+                      children: [
+                        piece(0, context, watch, cobjectList[0].questions[0],
+                            buttonHeight, screenHeight, textCardHeight),
+                        piece(1, context, watch, cobjectList[0].questions[0],
+                            buttonHeight, screenHeight, textCardHeight),
+                        piece(2, context, watch, cobjectList[0].questions[0],
+                            buttonHeight, screenHeight, textCardHeight),
+                      ],
+                    ),
+                  ),
 
-                  //if (_selectedButton > 2) {
-                  // submitAnswer(context, cobjectList, 'MTE', ++questionIndex,
-                  //     listQuestionIndex),
+                  // if (_selectedButton < 2)
+                  //   submitAnswer(context, cobjectList, 'MTE', ++questionIndex,
+                  //       listQuestionIndex),
                 ],
               ),
             ],

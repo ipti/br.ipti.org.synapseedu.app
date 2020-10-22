@@ -101,53 +101,66 @@ Widget soundButton(BuildContext context, Question question) {
 
 Widget submitAnswer(BuildContext context, List<Cobject> cobjectList,
     String questionType, int questionIndex, int listQuestionIndex) {
-  return MaterialButton(
-    onPressed: () {
-      if (questionIndex < cobjectList[0].questions.length) {
-        switch (questionType) {
-          case 'PRE':
-            Navigator.of(context).pushReplacementNamed(
-                SingleLineTextQuestion.routeName,
-                arguments: ScreenArguments(
-                    cobjectList, questionIndex, 'PRE', listQuestionIndex));
-            break;
-          case 'DDROP':
-            Navigator.of(context).pushReplacementNamed(DragAndDrop.routeName,
-                arguments: ScreenArguments(
-                    cobjectList, questionIndex, 'DDROP', listQuestionIndex));
-            break;
-          case 'MTE':
-            Navigator.of(context).pushReplacementNamed(
-                MultipleChoiceQuestion.routeName,
-                arguments: ScreenArguments(
-                    cobjectList, questionIndex, 'MTE', listQuestionIndex));
-            break;
-          case 'TXT':
-            Navigator.of(context).pushReplacementNamed(TextQuestion.routeName,
-                arguments: ScreenArguments(
-                    cobjectList, questionIndex, 'TXT', listQuestionIndex));
-            break;
-        }
-      } else {
-        if (++listQuestionIndex < questionList.length) {
-          getCobject(listQuestionIndex, context);
-        } else {
-          Navigator.of(context).pop();
-        }
-      }
-    },
-    minWidth: 200.0,
-    height: 45.0,
-    color: Theme.of(context).primaryColor,
-    splashColor: Theme.of(context).accentColor,
-    child: Text(
-      "Enviar Resposta",
-      style: TextStyle(
+  double screenHeight = MediaQuery.of(context).size.height;
+  double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+  return Align(
+    child: ButtonTheme(
+      minWidth: 259,
+      height: buttonHeight,
+      child: MaterialButton(
+        padding: EdgeInsets.all(8),
         color: Colors.white,
-        fontFamily: "Alike",
-        fontSize: 16.0,
+        textColor: Color(0xFF00DC8C),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          side: BorderSide(
+            color: Color(0xFF00DC8C),
+          ),
+        ),
+        child: Text(
+          'CONFIRMAR',
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+            fontSize: 18,
+          ),
+        ),
+        onPressed: () {
+          if (questionIndex < cobjectList[0].questions.length) {
+            switch (questionType) {
+              case 'PRE':
+                Navigator.of(context).pushReplacementNamed(
+                    SingleLineTextQuestion.routeName,
+                    arguments: ScreenArguments(
+                        cobjectList, questionIndex, 'PRE', listQuestionIndex));
+                break;
+              case 'DDROP':
+                Navigator.of(context).pushReplacementNamed(
+                    DragAndDrop.routeName,
+                    arguments: ScreenArguments(cobjectList, questionIndex,
+                        'DDROP', listQuestionIndex));
+                break;
+              case 'MTE':
+                Navigator.of(context).pushReplacementNamed(
+                    MultipleChoiceQuestion.routeName,
+                    arguments: ScreenArguments(
+                        cobjectList, questionIndex, 'MTE', listQuestionIndex));
+                break;
+              case 'TXT':
+                Navigator.of(context).pushReplacementNamed(
+                    TextQuestion.routeName,
+                    arguments: ScreenArguments(
+                        cobjectList, questionIndex, 'TXT', listQuestionIndex));
+                break;
+            }
+          } else {
+            if (++listQuestionIndex < questionList.length) {
+              getCobject(listQuestionIndex, context);
+            } else {
+              Navigator.of(context).pop();
+            }
+          }
+        },
       ),
-      maxLines: 1,
     ),
   );
 }

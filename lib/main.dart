@@ -96,7 +96,7 @@ class Home extends StatelessWidget {
         //       ),
         //     ),
         fontFamily: 'Mulish',
-        // textTheme: GoogleFonts.muliTextTheme(),
+        textTheme: GoogleFonts.muliTextTheme(),
       ),
       //home: ActivitySelectionForm(),
       initialRoute: '/',
