@@ -95,7 +95,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      showFirstSender == true ? sender(1, 0, widthScreen, question) : undo(1, widthScreen),
+                      showFirstSender == true ? sender(1, 1, widthScreen, question) : undo(1, widthScreen),
                       DragTarget(
                         builder: (context, List<int> candidateData, rejectedData) {
                           return Container(
@@ -117,13 +117,13 @@ class _DragAndDropState extends State<DragAndDrop> {
                         onAccept: (data) {
                           updateSender(data);
                           tradeValue(1, data);
-                          updateReceiver(valueFirstReceiver.toString(), 1, question);
+                          updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 1, question);
                           print("""
-                      1: $valueFirstReceiver
-                      2: $valueSecondReceiver
-                      3: $valueThirdReceiver
-                      <---------------------->
-                      """);
+                            1: $valueFirstReceiver
+                            2: $valueSecondReceiver
+                            3: $valueThirdReceiver
+                            <---------------------->
+                          """);
                         },
                       ),
                     ],
@@ -132,7 +132,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      showSecondSender == true ? sender(2, 1, widthScreen, question) : undo(2, widthScreen),
+                      showSecondSender == true ? sender(2, 2, widthScreen, question) : undo(2, widthScreen),
                       DragTarget(
                         builder: (context, List<int> candidateData, rejectedData) {
                           return Container(
@@ -153,13 +153,13 @@ class _DragAndDropState extends State<DragAndDrop> {
                         onAccept: (data) {
                           updateSender(data);
                           tradeValue(2, data);
-                          updateReceiver(valueSecondReceiver.toString(), 2, question);
+                          updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 2, question);
                           print("""
-                      1: $valueFirstReceiver
-                      2: $valueSecondReceiver
-                      3: $valueThirdReceiver
-                      <---------------------->
-                      """);
+                            1: $valueFirstReceiver
+                            2: $valueSecondReceiver
+                            3: $valueThirdReceiver
+                            <---------------------->
+                          """);
                         },
                       ),
                     ],
@@ -168,7 +168,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      showThirdSender == true ? sender(3, 2, widthScreen, question) : undo(3, widthScreen),
+                      showThirdSender == true ? sender(3, 3, widthScreen, question) : undo(3, widthScreen),
                       DragTarget(
                         builder: (context, List<int> candidateData, rejectedData) {
                           return Container(
@@ -189,13 +189,13 @@ class _DragAndDropState extends State<DragAndDrop> {
                         onAccept: (data) {
                           updateSender(data);
                           tradeValue(3, data);
-                          updateReceiver(valueThirdReceiver.toString(), 3, question);
+                          updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 3, question);
                           print("""
-                      1: $valueFirstReceiver
-                      2: $valueSecondReceiver
-                      3: $valueThirdReceiver
-                      <---------------------->
-                      """);
+                            1: $valueFirstReceiver
+                            2: $valueSecondReceiver
+                            3: $valueThirdReceiver
+                            <---------------------->
+                           """);
                         },
                       ),
                     ],
@@ -216,6 +216,38 @@ class _DragAndDropState extends State<DragAndDrop> {
       child: dragSenderTemplate(index, widthScreen, question),
       feedback: dragSenderTemplate(index, widthScreen, question),
       childWhenDragging: dragSenderInvisible(widthScreen),
+    );
+  }
+
+  Widget receiver(int index, double widthScreen, Question question) {
+    return DragTarget(
+      builder: (context, List<int> candidateData, rejectedData) {
+        return Container(
+          margin: EdgeInsets.only(right: 16),
+          width: widthScreen / 2.35,
+          height: widthScreen / 2.6,
+          child: Stack(
+            children: [
+              box(index, widthScreen, question),
+              dragReceiverTemplate(index, widthScreen, question),
+            ],
+          ),
+        );
+      },
+      onWillAccept: (data) {
+        return true;
+      },
+      onAccept: (data) {
+        updateSender(data);
+        tradeValue(index, data);
+        updateReceiver(valueThirdReceiver.toString(), index, question);
+        print("""
+          1: $valueFirstReceiver
+          2: $valueSecondReceiver
+          3: $valueThirdReceiver
+          <---------------------->
+         """);
+      },
     );
   }
 
@@ -349,11 +381,11 @@ class _DragAndDropState extends State<DragAndDrop> {
             decoration: BoxDecoration(
               color: Colors.grey,
               borderRadius: BorderRadius.circular(12),
-              // image: DecorationImage(
-              //   //image: NetworkImage(BASE_URL + '/image/' + question.pieces[grouping]["image"]),
-              //   image: NetworkImage(urlToThisReceiver),
-              //   fit: BoxFit.cover,
-              // ),
+              image: DecorationImage(
+                //image: NetworkImage(BASE_URL + '/image/' + question.pieces[grouping]["image"]),
+                image: NetworkImage(urlToThisReceiver),
+                fit: BoxFit.cover,
+              ),
               border: Border.all(
                 color: Color.fromRGBO(110, 114, 145, 0.2),
                 width: 2,
@@ -361,9 +393,6 @@ class _DragAndDropState extends State<DragAndDrop> {
             ),
             width: widthScreen / 2.6,
             height: widthScreen / 2.6,
-            child: Center(
-              child: Text(urlToThisReceiver),
-            ),
           )
         : dragSenderInvisible(widthScreen);
   }
