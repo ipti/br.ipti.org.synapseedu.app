@@ -309,6 +309,16 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   Widget build(BuildContext context) {
     double heightScreen = MediaQuery.of(context).size.height;
     double widthScreen = MediaQuery.of(context).size.width;
+
+    print(heightScreen);
+    if(heightScreen > 823){
+      fonteDaLetra = 22;
+    }else if(heightScreen< 640){
+      fonteDaLetra = 14;
+    }else{
+      fonteDaLetra = 16;
+    }
+
     return Scaffold(
       resizeToAvoidBottomPadding: true,
       appBar: AppBar(

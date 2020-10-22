@@ -1,23 +1,16 @@
 // import 'package:elesson/template_questoes/share/button_widgets.dart';
+import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
 
 class TemplateSlider extends StatefulWidget {
   final Widget title;
   final Widget text;
-  final Widget image;
+  final String linkImage;
   final Widget sound;
   bool showConfirmButton;
   final Widget activityScreen;
 
-  TemplateSlider(
-      {Key key,
-      this.title,
-      this.text,
-      this.sound,
-      this.showConfirmButton,
-      this.activityScreen,
-      this.image})
-      : super(key: key);
+  TemplateSlider({Key key, this.title, this.text, this.sound, this.showConfirmButton, this.activityScreen, this.linkImage}) : super(key: key);
 
   @override
   _TemplateSliderState createState() => _TemplateSliderState();
@@ -25,16 +18,15 @@ class TemplateSlider extends StatefulWidget {
 
 class _TemplateSliderState extends State<TemplateSlider> {
   bool showSecondScreen = false;
+
   // bool showConfirmButton = false;
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    double buttonHeight =
-        48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
-    double buttonWidth =
-        259 > screenWidth * 0.63017 ? 259 : screenWidth * 0.63017;
+    double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+    double buttonWidth = 259 > screenWidth * 0.63017 ? 259 : screenWidth * 0.63017;
 
     return Scaffold(
       floatingActionButton: Padding(
@@ -93,8 +85,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
               ),
             showSecondScreen != true
                 ? ButtonTheme(
-                    minWidth:
-                        150 > 0.3649 * screenWidth ? 150 : 0.3649 * screenWidth,
+                    minWidth: 150 > 0.3649 * screenWidth ? 150 : 0.3649 * screenWidth,
                     height: buttonHeight,
                     child: MaterialButton(
                       padding: EdgeInsets.all(0),
@@ -179,18 +170,42 @@ class _TemplateSliderState extends State<TemplateSlider> {
         }
       },
       child: Container(
-        //margin: EdgeInsets.only(bottom: screenHeight * 0.1),
-        // decoration: BoxDecoration(color: Colors.grey[200]),
         decoration: BoxDecoration(color: Colors.white),
         width: screenWidth,
         height: screenHeight,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(child: widget.title != null ? widget.title : Container()),
-            widget.text != null ? widget.text : Container(),
-            widget.sound != null ? widget.sound : Container(),
-            widget.image != null ? widget.image : Container(),
+          children: <Widget>[
+            Container(
+              child: Center(child: Text('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',style: TextStyle(fontSize: fonteDaLetra))),
+              height: (screenHeight * 0.145) - 12,
+              padding: EdgeInsets.only(left: 16, right: 16),
+              margin: EdgeInsets.only(top: 12),
+            ),
+            widget.linkImage != null ? Expanded(
+              child: Container(
+                child: Center(
+                  child: Container(alignment: Alignment.center,
+                    height: screenWidth,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(width: 3, color: Color.fromRGBO(110, 114, 145, 0.2)),
+                      image: DecorationImage(
+                        image: NetworkImage(widget.linkImage),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+                padding: EdgeInsets.only(left: 16, right: 16),
+                height: screenHeight * 0.70,
+              ),
+            ): Container(),
+            Container(
+              child: Center(child: Text('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',style: TextStyle(fontSize: fonteDaLetra),)),
+              height: (screenHeight * 0.145) - 12,
+              padding: EdgeInsets.only(left: 16, right: 16),
+              margin: EdgeInsets.only(bottom: 12),
+            ),
           ],
         ),
       ),
@@ -208,9 +223,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
       },
       child: AnimatedContainer(
         duration: Duration(milliseconds: 500),
-        margin: showSecondScreen == true
-            ? EdgeInsets.only(bottom: 0)
-            : EdgeInsets.only(top: screenHeight),
+        margin: showSecondScreen == true ? EdgeInsets.only(bottom: 0) : EdgeInsets.only(top: screenHeight),
         decoration: BoxDecoration(color: Colors.white),
         width: screenWidth,
         height: screenHeight,

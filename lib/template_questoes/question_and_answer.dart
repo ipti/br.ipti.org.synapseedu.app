@@ -57,8 +57,8 @@ class SingleLineTextQuestion extends ConsumerWidget {
           style: Theme.of(context).textTheme.headline2,
         ),
         sound: soundButton(context, cobjectList[0].questions[questionIndex]),
-        image: Image.network('https://elesson.com.br/app/library/image/' +
-            cobjectList[0].questions[0].header["image"]),
+        linkImage: 'https://elesson.com.br/app/library/image/' +
+            cobjectList[0].questions[0].header["image"],
         activityScreen: Container(
           margin: EdgeInsets.all(8),
           child: Form(

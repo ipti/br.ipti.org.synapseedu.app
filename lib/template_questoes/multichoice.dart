@@ -190,8 +190,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
             fontSize: 26,
           ),
         ),
-        image: Image.network('https://elesson.com.br/app/library/image/' +
-            cobjectList[0].questions[0].header["image"]),
+        linkImage: 'https://elesson.com.br/app/library/image/' +
+            cobjectList[0].questions[0].header["image"],
         activityScreen: Container(
           child: Wrap(
             children: [

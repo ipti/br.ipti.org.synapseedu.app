@@ -45,19 +45,14 @@ class _DragAndDropState extends State<DragAndDrop> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: TemplateSlider(
-        image: cobjectList[0].questions[0].header['image'] != ''
-            ? Image.network(BASE_URL +
-                '/image/' +
-                cobjectList[0].questions[0].header['image'])
-            : Container(),
+        linkImage: cobjectList[0].questions[0].header['image'] != '' ? BASE_URL + '/image/' + cobjectList[0].questions[0].header['image'] : '',
         sound: soundButton(context, cobjectList[0].questions[0]),
         title: Text(
           cobjectList[0].questions[questionIndex].header["text"],
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline2,
         ),
-        activityScreen: DAD(heightScreen - 12, widthScreen,
-            cobjectList[0].questions[questionIndex]),
+        activityScreen: DAD(heightScreen - 12, widthScreen, cobjectList[0].questions[questionIndex]),
       ),
       //bottomNavigationBar: BottomNavibar(),
     );
@@ -92,8 +87,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                       childWhenDragging: dragSenderInvisible(widthScreen),
                     ),
                     DragTarget(
-                      builder:
-                          (context, List<int> candidateData, rejectedData) {
+                      builder: (context, List<int> candidateData, rejectedData) {
                         return dragReceiver(3, widthScreen, question);
                       },
                       onWillAccept: (data) {
@@ -125,8 +119,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                       ),
                     ),
                     DragTarget(
-                      builder:
-                          (context, List<int> candidateData, rejectedData) {
+                      builder: (context, List<int> candidateData, rejectedData) {
                         return dragReceiver(4, widthScreen, question);
                       },
                       onWillAccept: (data) {
@@ -158,8 +151,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                       ),
                     ),
                     DragTarget(
-                      builder:
-                          (context, List<int> candidateData, rejectedData) {
+                      builder: (context, List<int> candidateData, rejectedData) {
                         return dragReceiver(5, widthScreen, question);
                       },
                       onWillAccept: (data) {
@@ -204,8 +196,7 @@ class _DragAndDropState extends State<DragAndDrop> {
         color: Colors.grey,
         borderRadius: BorderRadius.circular(12),
         image: DecorationImage(
-          image: NetworkImage(
-              BASE_URL + '/image/' + question.pieces[grouping]["image"]),
+          image: NetworkImage(BASE_URL + '/image/' + question.pieces[grouping]["image"]),
           fit: BoxFit.cover,
         ),
         border: Border.all(
@@ -237,8 +228,7 @@ class _DragAndDropState extends State<DragAndDrop> {
         color: Colors.grey,
         borderRadius: BorderRadius.circular(12),
         image: DecorationImage(
-          image: NetworkImage(
-              BASE_URL + '/image/' + question.pieces[grouping]["image"]),
+          image: NetworkImage(BASE_URL + '/image/' + question.pieces[grouping]["image"]),
           fit: BoxFit.cover,
         ),
         border: Border.all(
@@ -256,17 +246,23 @@ class _DragAndDropState extends State<DragAndDrop> {
       case 1:
         valueSecondReceiver == data
             ? valueSecondReceiver = 0
-            : valueThirdReceiver == data ? valueThirdReceiver = 0 : {};
+            : valueThirdReceiver == data
+                ? valueThirdReceiver = 0
+                : {};
         break;
       case 2:
         valueFirstReceiver == data
             ? valueFirstReceiver = 0
-            : valueThirdReceiver == data ? valueThirdReceiver = 0 : {};
+            : valueThirdReceiver == data
+                ? valueThirdReceiver = 0
+                : {};
         break;
       case 3:
         valueFirstReceiver == data
             ? valueFirstReceiver = 0
-            : valueSecondReceiver == data ? valueSecondReceiver = 0 : {};
+            : valueSecondReceiver == data
+                ? valueSecondReceiver = 0
+                : {};
         break;
     }
   }

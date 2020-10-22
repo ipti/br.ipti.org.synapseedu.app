@@ -19,6 +19,8 @@ List<String> questionList = ['3988', '3987', '3977', '3976'];
 
 AudioPlayer player = new AudioPlayer();
 
+double fonteDaLetra;
+
 void playSound(String sound) async {
   await player.play(BASE_URL + '/sound/' + sound);
 

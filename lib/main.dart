@@ -17,6 +17,7 @@ import './template_questoes/multichoice.dart';
 import './template_questoes/drag_and_drop.dart';
 import './template_questoes/question_and_answer.dart';
 import './login/login_view.dart';
+import 'share/question_widgets.dart';
 
 void main() async {
   //usando pra iniciar em outra tela
