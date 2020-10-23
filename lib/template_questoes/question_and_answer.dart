@@ -57,15 +57,15 @@ class SingleLineTextQuestion extends ConsumerWidget {
           style: Theme.of(context).textTheme.headline2,
         ),
         sound: soundButton(context, cobjectList[0].questions[questionIndex]),
-        image: Image.network('https://elesson.com.br/app/library/image/' +
-            cobjectList[0].questions[0].header["image"]),
+        linkImage: 'https://elesson.com.br/app/library/image/' +
+            cobjectList[0].questions[0].header["image"],
         activityScreen: Container(
           margin: EdgeInsets.all(8),
           child: Form(
             key: _formKey,
             child: Column(
               // crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // if (image == true) Image.asset('assets/img/logo.png'),
                 if (questionText.isNotEmpty)
@@ -118,7 +118,11 @@ class SingleLineTextQuestion extends ConsumerWidget {
                 ),
                 SizedBox(height: 15),
                 if (_textController.text.isNotEmpty)
-                submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4.0),
+                    child: submitAnswer(context, cobjectList, 'PRE',
+                        ++questionIndex, listQuestionIndex),
+                  ),
               ],
             ),
           ),

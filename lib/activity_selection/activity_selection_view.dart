@@ -17,7 +17,8 @@ import 'package:flutter_riverpod/all.dart';
 
 class ActivitySelectionForm extends StatefulWidget {
   @override
-  _ActivitySelectionFormState createState() => new _ActivitySelectionFormState();
+  _ActivitySelectionFormState createState() =>
+      new _ActivitySelectionFormState();
 }
 
 class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
@@ -124,14 +125,19 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
           child: Container(
             width: widthScreen,
             height: heightScreen * 0.08,
-            decoration: BoxDecoration(border: Border.all(color: Colors.green, width: 3), borderRadius: BorderRadius.circular(20)),
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.green, width: 3),
+                borderRadius: BorderRadius.circular(20)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  selectedNameClass,
-                  style: TextStyle(fontSize: heightScreen * 0.02),
-                  overflow: TextOverflow.ellipsis,
+                Padding(
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: Text(
+                    selectedNameClass,
+                    style: TextStyle(fontSize: heightScreen * 0.02),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 Icon(Icons.arrow_drop_down, size: heightScreen * 0.04),
               ],
@@ -148,14 +154,19 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
             margin: EdgeInsets.only(top: 20),
             width: widthScreen,
             height: heightScreen * 0.08,
-            decoration: BoxDecoration(border: Border.all(color: Colors.green, width: 3), borderRadius: BorderRadius.circular(20)),
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.green, width: 3),
+                borderRadius: BorderRadius.circular(20)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  typeSelected,
-                  style: TextStyle(fontSize: heightScreen * 0.02),
-                  overflow: TextOverflow.ellipsis,
+                Padding(
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: Text(
+                    typeSelected,
+                    style: TextStyle(fontSize: heightScreen * 0.02),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 Icon(Icons.arrow_drop_down, size: heightScreen * 0.04),
               ],
@@ -309,6 +320,22 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   Widget build(BuildContext context) {
     double heightScreen = MediaQuery.of(context).size.height;
     double widthScreen = MediaQuery.of(context).size.width;
+
+    print(heightScreen);
+    if (heightScreen > 990) {
+      fonteDaLetra = 28;
+      headerFontSize = 24;
+    } else if (heightScreen > 822 && heightScreen <= 990) {
+      fonteDaLetra = 22;
+      headerFontSize = 18;
+    } else if (heightScreen < 639) {
+      fonteDaLetra = 14;
+      headerFontSize = 16;
+    } else {
+      fonteDaLetra = 16;
+      headerFontSize = 12;
+    }
+
     return Scaffold(
       resizeToAvoidBottomPadding: true,
       appBar: AppBar(
@@ -405,5 +432,6 @@ class ScreenArguments {
   final String questionType;
   final int listQuestionIndex;
 
-  ScreenArguments(this.cobjectList, this.questionIndex, this.questionType, this.listQuestionIndex);
+  ScreenArguments(this.cobjectList, this.questionIndex, this.questionType,
+      this.listQuestionIndex);
 }
