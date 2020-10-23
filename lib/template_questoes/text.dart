@@ -37,8 +37,7 @@ class TextQuestion extends ConsumerWidget {
             cobjectList[0].questions[questionIndex].header["image"],
         text: Text(headerText),
         activityScreen: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Wrap(
             children: [
               Text(questionText),
               submitAnswer(context, cobjectList, 'TXT', ++questionIndex, listQuestionIndex),
