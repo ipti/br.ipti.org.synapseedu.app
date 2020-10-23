@@ -152,7 +152,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
         }
       },
       child: Container(
-        //margin: EdgeInsets.only(bottom: screenHeight * 0.1),
+        margin: EdgeInsets.only(bottom: 12),
         // decoration: BoxDecoration(color: Colors.grey[200]),
         decoration: BoxDecoration(color: Colors.white),
         width: screenWidth,

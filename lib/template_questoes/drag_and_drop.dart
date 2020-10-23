@@ -61,9 +61,14 @@ class _DragAndDropState extends State<DragAndDrop> {
             : Container(),
         sound: soundButton(context, cobjectList[0].questions[0]),
         title: Text(
+          cobjectList[0].description,
+          textAlign: TextAlign.center,
+          //style: TextStyle(fontSize: fonteDaLetra), DESCOMENTAR DEPOIS DE UNIR
+        ),
+        text: Text(
           cobjectList[0].questions[questionIndex].header["text"],
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headline2,
+          //style: TextStyle(fontSize: fonteDaLetra), DESCOMENTAR DEPOIS DE UNIR
         ),
         activityScreen: DAD(heightScreen - 12, widthScreen, cobjectList[0].questions[questionIndex]),
       ),
