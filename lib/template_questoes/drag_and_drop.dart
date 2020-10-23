@@ -79,15 +79,28 @@ class _DragAndDropState extends State<DragAndDrop> {
         children: <Widget>[
           //<=================TITULO=====================>
           Container(
+            padding: EdgeInsets.only(top: 12, left: 16, right: 16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromRGBO(0, 0, 76, 0.1),
+                  spreadRadius: 1,
+                ),
+              ],
+            ),
             height: heightScreen * 0.15,
             width: widthScreen,
-            color: Colors.green,
+            child: Center(
+                child: Text(
+                  'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+                )),
           ),
           Container(
             height: heightScreen * 0.85,
             padding: EdgeInsets.only(top: 12, bottom: 12),
             child: Stack(children: [
-              Center(child: Image.asset('assets/img/divisoria.png')),
+              Center(child: Image.asset('assets/img/divisoria.png',scale: .9)),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -268,43 +281,31 @@ class _DragAndDropState extends State<DragAndDrop> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(Icons.settings_backup_restore),
-                Text('DESFAZER'),
+                Text('DESFAZER',style: TextStyle(color: Color.fromRGBO(189, 0, 255, 0.4),fontWeight: FontWeight.bold),),
               ],
             ),
           ),
-          color: Colors.grey,
-          strokeWidth: 2,
+          color: Color.fromRGBO(189, 0, 255, 0.2),
+          strokeWidth: 4,
           corner: FDottedLineCorner.all(12),
-          dottedLength: 8,
+          dottedLength: 6,
         ),
       ),
     );
   }
 
   Widget box(int index, double widthScreen, Question question) {
-    String grouping;
-    switch (index) {
-      case 1:
-        grouping = '1_1';
-        break;
-      case 2:
-        grouping = '2_1';
-        break;
-      case 3:
-        grouping = '3_1';
-        break;
-    }
     return Container(
       margin: EdgeInsets.only(right: 0, left: widthScreen * 0.039),
       decoration: BoxDecoration(
         color: Colors.grey,
         borderRadius: BorderRadius.circular(12),
         image: DecorationImage(
-          image: NetworkImage(BASE_URL + '/image/' + question.pieces[grouping]["image"]),
+          image: NetworkImage(BASE_URL + '/image/' + question.pieces['$index' + '_1']["image"]),
           fit: BoxFit.cover,
         ),
         border: Border.all(
-          color: Color.fromRGBO(110, 114, 145, 0.2),
+          color: Color.fromRGBO(189, 0, 255, 0.2),
           width: 2,
         ),
       ),
@@ -321,8 +322,6 @@ class _DragAndDropState extends State<DragAndDrop> {
   }
 
   Widget dragSenderTemplate(int index, double widthScreen, Question question) {
-    String grouping = (index + 1).toString();
-    //print('GROUPING SENDER: $grouping');
     return Container(
       margin: EdgeInsets.only(
         left: 16,
@@ -330,10 +329,10 @@ class _DragAndDropState extends State<DragAndDrop> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        // image: DecorationImage(
-        //   image: NetworkImage(BASE_URL + '/image/' + question.pieces[grouping]["image"]),
-        //   fit: BoxFit.cover,
-        // ),
+        image: DecorationImage(
+          image: NetworkImage(BASE_URL + '/image/' + question.pieces[index.toString()]["image"]),
+          fit: BoxFit.cover,
+        ),
         border: Border.all(
           color: Color.fromRGBO(110, 114, 145, 0.2),
           width: 2,
@@ -341,15 +340,10 @@ class _DragAndDropState extends State<DragAndDrop> {
       ),
       width: widthScreen / 2.6,
       height: widthScreen / 2.6,
-      child: Center(
-        child: Text(index.toString()),
-      ),
     );
   }
 
   Widget dragReceiverTemplate(int index, double widthScreen, Question question) {
-    String grouping = (index).toString();
-    //('GROUPING RECEIVER: $grouping');
     String urlToThisReceiver = '';
     bool show = false;
     switch (index) {
@@ -358,42 +352,38 @@ class _DragAndDropState extends State<DragAndDrop> {
           show = true;
           urlToThisReceiver = urlFirstBox;
         }
-        grouping = '1_1';
         break;
       case 2:
         if (urlSecondBox != '') {
           show = true;
           urlToThisReceiver = urlSecondBox;
         }
-        grouping = '2_1';
         break;
       case 3:
         if (urlThirdBox != '') {
           show = true;
           urlToThisReceiver = urlThirdBox;
         }
-        grouping = '3_1';
         break;
     }
     return show != false
         ? Container(
-            margin: EdgeInsets.only(right: 16),
-            decoration: BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.circular(12),
-              image: DecorationImage(
-                //image: NetworkImage(BASE_URL + '/image/' + question.pieces[grouping]["image"]),
-                image: NetworkImage(urlToThisReceiver),
-                fit: BoxFit.cover,
-              ),
-              border: Border.all(
-                color: Color.fromRGBO(110, 114, 145, 0.2),
-                width: 2,
-              ),
-            ),
-            width: widthScreen / 2.6,
-            height: widthScreen / 2.6,
-          )
+      margin: EdgeInsets.only(right: 16),
+      decoration: BoxDecoration(
+        color: Colors.grey,
+        borderRadius: BorderRadius.circular(12),
+        image: DecorationImage(
+          image: NetworkImage(urlToThisReceiver),
+          fit: BoxFit.cover,
+        ),
+        border: Border.all(
+          color: Color.fromRGBO(189, 0, 255, 0.4),
+          width: 2,
+        ),
+      ),
+      width: widthScreen / 2.6,
+      height: widthScreen / 2.6,
+    )
         : dragSenderInvisible(widthScreen);
   }
 
@@ -401,15 +391,15 @@ class _DragAndDropState extends State<DragAndDrop> {
     String grouping = (index).toString();
     switch (index) {
       case 1:
-        //urlFirstBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
+      //urlFirstBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
         urlFirstBox = data;
         break;
       case 2:
-        //urlSecondBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
+      //urlSecondBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
         urlSecondBox = data;
         break;
       case 3:
-        //urlThirdBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
+      //urlThirdBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
         urlThirdBox = data;
         break;
     }
