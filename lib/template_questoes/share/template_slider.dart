@@ -2,7 +2,6 @@
 import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class TemplateSlider extends StatefulWidget {
   final Widget title;
   final Widget text;
@@ -11,7 +10,15 @@ class TemplateSlider extends StatefulWidget {
   bool showConfirmButton;
   final Widget activityScreen;
 
-  TemplateSlider({Key key, this.title, this.text, this.sound, this.showConfirmButton, this.activityScreen, this.linkImage}) : super(key: key);
+  TemplateSlider(
+      {Key key,
+      this.title,
+      this.text,
+      this.sound,
+      this.showConfirmButton,
+      this.activityScreen,
+      this.linkImage})
+      : super(key: key);
 
   @override
   _TemplateSliderState createState() => _TemplateSliderState();
@@ -26,7 +33,10 @@ class _TemplateSliderState extends State<TemplateSlider> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+    double buttonHeight =
+        48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+    double buttonWidth =
+        259 > screenWidth * 0.63017 ? 259 : screenWidth * 0.63017;
 
     return Scaffold(
       floatingActionButton: Container(
@@ -88,7 +98,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
             //   ),
             showSecondScreen != true
                 ? ButtonTheme(
-                    minWidth: 150 > 0.3649 * screenWidth ? 150 : 0.3649 * screenWidth,
+                    minWidth:
+                        150 > 0.3649 * screenWidth ? 150 : 0.3649 * screenWidth,
                     height: buttonHeight,
                     child: MaterialButton(
                       padding: EdgeInsets.all(0),
@@ -157,7 +168,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
       // bottomNavigationBar: bottomNavigationBar(context),
       body: Stack(
         children: [
-          //topScreen(screenWidth, screenHeight - buttonHeight - 24),
+          topScreen(screenWidth, screenHeight - buttonHeight - 24),
           bottomScreen(screenWidth, screenHeight),
           // navBarTest(context),
         ],
@@ -195,7 +206,9 @@ class _TemplateSliderState extends State<TemplateSlider> {
                           height: screenWidth,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(18),
-                            border: Border.all(width: 3, color: Color.fromRGBO(110, 114, 145, 0.2)),
+                            border: Border.all(
+                                width: 3,
+                                color: Color.fromRGBO(110, 114, 145, 0.2)),
                             image: DecorationImage(
                               image: NetworkImage(widget.linkImage),
                               fit: BoxFit.cover,
@@ -232,9 +245,10 @@ class _TemplateSliderState extends State<TemplateSlider> {
         }
       },
       child: AnimatedContainer(
-        padding: EdgeInsets.all(0),
         duration: Duration(milliseconds: 500),
-        margin: showSecondScreen == true ? EdgeInsets.only(bottom: 0) : EdgeInsets.only(top: screenHeight),
+        margin: showSecondScreen == true
+            ? EdgeInsets.only(bottom: 0)
+            : EdgeInsets.only(top: screenHeight),
         decoration: BoxDecoration(color: Colors.white),
         width: screenWidth,
         height: screenHeight,

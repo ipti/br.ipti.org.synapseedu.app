@@ -75,7 +75,6 @@ class _DragAndDropState extends State<DragAndDrop> {
     );
   }
 
-  // ignore: non_constant_identifier_names
   Widget DAD(double heightScreen, double widthScreen, Question question, String questionText) {
     return Container(
       margin: EdgeInsets.only(bottom: 12),
@@ -367,6 +366,7 @@ class _DragAndDropState extends State<DragAndDrop> {
   }
 
   void updateReceiver(String data, int index, Question question) {
+    String grouping = (index).toString();
     switch (index) {
       case 1:
         urlFirstBox = data;
