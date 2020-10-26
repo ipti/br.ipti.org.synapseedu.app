@@ -187,10 +187,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
         child: Column(
           children: <Widget>[
             Container(
-              child: Center(
-                  child: Text(
-                      'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-                      style: TextStyle(fontSize: fonteDaLetra))),
+              child: Center(child: widget.title),
               height: (screenHeight * 0.145) - 12,
               padding: EdgeInsets.only(left: 16, right: 16),
               margin: EdgeInsets.only(top: 12),
@@ -224,12 +221,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                   )
                 : Container(),
             Container(
-              child: Center(
-                child: Text(
-                  'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-                  style: TextStyle(fontSize: fonteDaLetra),
-                ),
-              ),
+              child: Center(child: widget.text),
               height: (screenHeight * 0.145) - 12,
               padding: EdgeInsets.only(left: 16, right: 16),
               margin: EdgeInsets.only(bottom: 12),

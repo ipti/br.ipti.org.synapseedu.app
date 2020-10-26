@@ -196,9 +196,9 @@ class MultipleChoiceQuestion extends ConsumerWidget {
           questionDescription,
           textAlign: TextAlign.justify,
           maxLines: 3,
-          style: TextStyle(
-            fontSize: 26,
-          ),
+          // style: TextStyle(
+          //   fontSize: fonteDaLetra,
+          // ),
         ),
         linkImage: imageLink.isNotEmpty
             ? 'https://elesson.com.br/app/library/image/' + imageLink
