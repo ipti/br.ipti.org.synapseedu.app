@@ -10,7 +10,15 @@ class TemplateSlider extends StatefulWidget {
   bool showConfirmButton;
   final Widget activityScreen;
 
-  TemplateSlider({Key key, this.title, this.text, this.sound, this.showConfirmButton, this.activityScreen, this.linkImage}) : super(key: key);
+  TemplateSlider(
+      {Key key,
+      this.title,
+      this.text,
+      this.sound,
+      this.showConfirmButton,
+      this.activityScreen,
+      this.linkImage})
+      : super(key: key);
 
   @override
   _TemplateSliderState createState() => _TemplateSliderState();
@@ -25,8 +33,10 @@ class _TemplateSliderState extends State<TemplateSlider> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
-    double buttonWidth = 259 > screenWidth * 0.63017 ? 259 : screenWidth * 0.63017;
+    double buttonHeight =
+        48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+    double buttonWidth =
+        259 > screenWidth * 0.63017 ? 259 : screenWidth * 0.63017;
 
     return Scaffold(
       floatingActionButton: Padding(
@@ -57,94 +67,95 @@ class _TemplateSliderState extends State<TemplateSlider> {
                 },
               ),
             ),
-            if (widget.showConfirmButton == true && showSecondScreen == true)
-              ButtonTheme(
-                minWidth: 259,
-                height: buttonHeight,
-                child: MaterialButton(
-                  padding: EdgeInsets.all(8),
-                  color: Colors.white,
-                  textColor: Color(0xFF00DC8C),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                    side: BorderSide(
-                      color: Color(0xFF00DC8C),
-                    ),
-                  ),
-                  child: Text(
-                    'CONFIRMAR',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 18,
-                    ),
-                  ),
-                  onPressed: () => {
-                    Navigator.of(context).pop(),
-                  },
-                ),
-              ),
+            // if (widget.showConfirmButton == true && showSecondScreen == true)
+            //   ButtonTheme(
+            //     minWidth: 259,
+            //     height: buttonHeight,
+            //     child: MaterialButton(
+            //       padding: EdgeInsets.all(8),
+            //       color: Colors.white,
+            //       textColor: Color(0xFF00DC8C),
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(12.0),
+            //         side: BorderSide(
+            //           color: Color(0xFF00DC8C),
+            //         ),
+            //       ),
+            //       child: Text(
+            //         'CONFIRMAR',
+            //         style: TextStyle(
+            //           fontWeight: FontWeight.w900,
+            //           fontSize: 18,
+            //         ),
+            //       ),
+            //       onPressed: () => {
+            //         Navigator.of(context).pop(),
+            //       },
+            //     ),
+            //   ),
             showSecondScreen != true
                 ? ButtonTheme(
-              minWidth: 150 > 0.3649 * screenWidth ? 150 : 0.3649 * screenWidth,
-              height: buttonHeight,
-              child: MaterialButton(
-                padding: EdgeInsets.all(0),
-                color: Colors.white,
-                textColor: Color(0xFF0000FF),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                  side: BorderSide(
-                    color: Color.fromRGBO(0, 0, 255, 0.2),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      'VER MAIS',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
+                    minWidth:
+                        150 > 0.3649 * screenWidth ? 150 : 0.3649 * screenWidth,
+                    height: buttonHeight,
+                    child: MaterialButton(
+                      padding: EdgeInsets.all(0),
+                      color: Colors.white,
+                      textColor: Color(0xFF0000FF),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        side: BorderSide(
+                          color: Color.fromRGBO(0, 0, 255, 0.2),
+                        ),
                       ),
+                      child: Row(
+                        children: [
+                          Text(
+                            'VER MAIS',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                          Icon(
+                            Icons.keyboard_arrow_down,
+                            size: 40,
+                          ),
+                        ],
+                      ),
+                      onPressed: () => {
+                        setState(() {
+                          showSecondScreen = !showSecondScreen;
+                        }),
+                        print('mudou'),
+                      },
                     ),
-                    Icon(
-                      Icons.keyboard_arrow_down,
-                      size: 40,
-                    ),
-                  ],
-                ),
-                onPressed: () => {
-                  setState(() {
-                    showSecondScreen = !showSecondScreen;
-                  }),
-                  print('mudou'),
-                },
-              ),
-            )
+                  )
                 : ButtonTheme(
-              minWidth: buttonHeight,
-              height: buttonHeight,
-              child: MaterialButton(
-                padding: EdgeInsets.all(0),
-                color: Colors.white,
-                textColor: Color(0xFF0000FF),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                  side: BorderSide(
-                    color: Color.fromRGBO(0, 0, 255, 1),
+                    minWidth: buttonHeight,
+                    height: buttonHeight,
+                    child: MaterialButton(
+                      padding: EdgeInsets.all(0),
+                      color: Colors.white,
+                      textColor: Color(0xFF0000FF),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        side: BorderSide(
+                          color: Color.fromRGBO(0, 0, 255, 1),
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.keyboard_arrow_up,
+                        color: Color(0xFF0000FF),
+                        size: 40,
+                      ),
+                      onPressed: () => {
+                        setState(() {
+                          showSecondScreen = !showSecondScreen;
+                        }),
+                      },
+                    ),
                   ),
-                ),
-                child: Icon(
-                  Icons.keyboard_arrow_up,
-                  color: Color(0xFF0000FF),
-                  size: 40,
-                ),
-                onPressed: () => {
-                  setState(() {
-                    showSecondScreen = !showSecondScreen;
-                  }),
-                },
-              ),
-            ),
           ],
         ),
       ),
@@ -183,27 +194,34 @@ class _TemplateSliderState extends State<TemplateSlider> {
               padding: EdgeInsets.only(left: 16, right: 16),
               margin: EdgeInsets.only(top: 12),
             ),
-            widget.linkImage != null ? Expanded(
-              child: Container(
-                child: Center(
-                  child: Container(alignment: Alignment.center,
-                    height: screenWidth,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(width: 3, color: Color.fromRGBO(110, 114, 145, 0.2)),
-                      image: DecorationImage(
-                        image: NetworkImage(widget.linkImage),
-                        fit: BoxFit.cover,
+            widget.linkImage != null
+                ? Expanded(
+                    child: Container(
+                      child: Center(
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: screenWidth,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(18),
+                            border: Border.all(
+                                width: 3,
+                                color: Color.fromRGBO(110, 114, 145, 0.2)),
+                            image: DecorationImage(
+                              image: NetworkImage(widget.linkImage),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
                       ),
+                      padding: EdgeInsets.only(left: 16, right: 16),
+                      height: screenHeight * 0.70,
                     ),
-                  ),
-                ),
-                padding: EdgeInsets.only(left: 16, right: 16),
-                height: screenHeight * 0.70,
-              ),
-            ): Container(),
+                  )
+                : Container(),
             Container(
-              child: Center(child: widget.text,),
+              child: Center(
+                child: widget.text,
+              ),
               height: (screenHeight * 0.145) - 12,
               padding: EdgeInsets.only(left: 16, right: 16),
               margin: EdgeInsets.only(bottom: 12),
@@ -225,7 +243,9 @@ class _TemplateSliderState extends State<TemplateSlider> {
       },
       child: AnimatedContainer(
         duration: Duration(milliseconds: 500),
-        margin: showSecondScreen == true ? EdgeInsets.only(bottom: 0) : EdgeInsets.only(top: screenHeight),
+        margin: showSecondScreen == true
+            ? EdgeInsets.only(bottom: 0)
+            : EdgeInsets.only(top: screenHeight),
         decoration: BoxDecoration(color: Colors.white),
         width: screenWidth,
         height: screenHeight,
