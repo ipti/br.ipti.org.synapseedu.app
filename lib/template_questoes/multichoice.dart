@@ -205,6 +205,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
             : null,
         activityScreen: Container(
           child: Wrap(
+            alignment: WrapAlignment.center,
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 32, bottom: 48),
