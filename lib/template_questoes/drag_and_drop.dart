@@ -48,9 +48,14 @@ class _DragAndDropState extends State<DragAndDrop> {
         linkImage: cobjectList[0].questions[0].header['image'] != '' ? BASE_URL + '/image/' + cobjectList[0].questions[0].header['image'] : '',
         sound: soundButton(context, cobjectList[0].questions[0]),
         title: Text(
+          cobjectList[0].description,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: fonteDaLetra),
+        ),
+        text: Text(
           cobjectList[0].questions[questionIndex].header["text"],
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headline2,
+          style: TextStyle(fontSize: fonteDaLetra),
         ),
         activityScreen: DAD(heightScreen - 12, widthScreen, cobjectList[0].questions[questionIndex]),
       ),
