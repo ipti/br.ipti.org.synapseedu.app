@@ -63,7 +63,7 @@ class _DragAndDropState extends State<DragAndDrop> {
         title: Text(
           cobjectList[0].description,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: fonteDaLetra,fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: fonteDaLetra, fontWeight: FontWeight.bold),
         ),
         text: Text(
           cobjectList[0].questions[questionIndex].header["text"],
@@ -75,7 +75,6 @@ class _DragAndDropState extends State<DragAndDrop> {
     );
   }
 
-  // ignore: non_constant_identifier_names
   Widget DAD(double heightScreen, double widthScreen, Question question, String questionText) {
     return Container(
       margin: EdgeInsets.only(bottom: 12),
@@ -129,7 +128,6 @@ class _DragAndDropState extends State<DragAndDrop> {
                               ],
                             ),
                           );
-                          //return dragReceiver(3, widthScreen, question);
                         },
                         onWillAccept: (data) {
                           return true;
@@ -224,7 +222,9 @@ class _DragAndDropState extends State<DragAndDrop> {
               ),
             ]),
           ),
-          valueFirstReceiver != 0 && valueSecondReceiver != 0 && valueThirdReceiver != 0 ? submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex): Container(),
+          valueFirstReceiver != 0 && valueSecondReceiver != 0 && valueThirdReceiver != 0
+              ? submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex)
+              : Container(),
         ],
       ),
     );
@@ -236,38 +236,6 @@ class _DragAndDropState extends State<DragAndDrop> {
       child: dragSenderTemplate(index, widthScreen, question),
       feedback: dragSenderTemplate(index, widthScreen, question),
       childWhenDragging: dragSenderInvisible(widthScreen),
-    );
-  }
-
-  Widget receiver(int index, double widthScreen, Question question) {
-    return DragTarget(
-      builder: (context, List<int> candidateData, rejectedData) {
-        return Container(
-          margin: EdgeInsets.only(right: 16),
-          width: widthScreen / 2.35,
-          height: widthScreen / 2.6,
-          child: Stack(
-            children: [
-              box(index, widthScreen, question),
-              dragReceiverTemplate(index, widthScreen, question),
-            ],
-          ),
-        );
-      },
-      onWillAccept: (data) {
-        return true;
-      },
-      onAccept: (data) {
-        updateSender(data);
-        tradeValue(index, data);
-        updateReceiver(valueThirdReceiver.toString(), index, question);
-        print("""
-          1: $valueFirstReceiver
-          2: $valueSecondReceiver
-          3: $valueThirdReceiver
-          <---------------------->
-         """);
-      },
     );
   }
 
@@ -401,15 +369,12 @@ class _DragAndDropState extends State<DragAndDrop> {
     String grouping = (index).toString();
     switch (index) {
       case 1:
-        //urlFirstBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
         urlFirstBox = data;
         break;
       case 2:
-        //urlSecondBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
         urlSecondBox = data;
         break;
       case 3:
-        //urlThirdBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
         urlThirdBox = data;
         break;
     }
@@ -472,7 +437,6 @@ class _DragAndDropState extends State<DragAndDrop> {
 
   void updateSender(int index) {
     setState(() {
-      //print('INDEX UPDATER: $index');
       switch (index) {
         case 1:
           showFirstSender = !showFirstSender;

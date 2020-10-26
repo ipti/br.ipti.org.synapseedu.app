@@ -39,8 +39,11 @@ class _TemplateSliderState extends State<TemplateSlider> {
         259 > screenWidth * 0.63017 ? 259 : screenWidth * 0.63017;
 
     return Scaffold(
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(12.0),
+      floatingActionButton: Container(
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: showSecondScreen == false ? Colors.white : Colors.transparent,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
