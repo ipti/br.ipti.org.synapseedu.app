@@ -51,6 +51,8 @@ class _DragAndDropState extends State<DragAndDrop> {
     questionIndex = args.questionIndex;
     listQuestionIndex = args.listQuestionIndex;
 
+    String questionText = cobjectList[0].questions[questionIndex].header["text"];
+
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height * 0.93;
     return Scaffold(
@@ -58,30 +60,26 @@ class _DragAndDropState extends State<DragAndDrop> {
       body: TemplateSlider(
         linkImage: cobjectList[0].questions[0].header['image'] != ''
             ? BASE_URL + '/image/' + cobjectList[0].questions[0].header['image']
-            : '',
-        // image: cobjectList[0].questions[0].header['image'] != ''
-        //     ? Image.network(BASE_URL + '/image/' + cobjectList[0].questions[0].header['image'])
-        //     : Container(),
+            : "",
         sound: soundButton(context, cobjectList[0].questions[0]),
         title: Text(
           cobjectList[0].description,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: fonteDaLetra),
+          //style: TextStyle(fontSize: fonteDaLetra), DESCOMENTAR DEPOIS DE UNIR
         ),
         text: Text(
           cobjectList[0].questions[questionIndex].header["text"],
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: fonteDaLetra),
+          //style: TextStyle(fontSize: fonteDaLetra), DESCOMENTAR DEPOIS DE UNIR
         ),
-        activityScreen: DAD(heightScreen - 12, widthScreen,
-            cobjectList[0].questions[questionIndex]),
+        activityScreen: DAD(heightScreen - 12, widthScreen, cobjectList[0].questions[questionIndex],questionText),
       ),
       //bottomNavigationBar: BottomNavibar(),
     );
   }
 
   // ignore: non_constant_identifier_names
-  Widget DAD(double heightScreen, double widthScreen, Question question) {
+  Widget DAD(double heightScreen, double widthScreen, Question question, String questionText) {
     return Container(
       margin: EdgeInsets.only(bottom: 12),
       child: Wrap(
@@ -101,15 +99,17 @@ class _DragAndDropState extends State<DragAndDrop> {
             height: heightScreen * 0.15,
             width: widthScreen,
             child: Center(
-                child: Text(
-              'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-            )),
+              child: Text(
+                questionText,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: fonteDaLetra),
+            ),),
           ),
           Container(
             height: heightScreen * 0.85,
             padding: EdgeInsets.only(top: 12, bottom: 12),
             child: Stack(children: [
-              Center(child: Image.asset('assets/img/divisoria.png', scale: .9)),
+              Center(child: Image.asset('assets/img/divisoria.png',scale: .9)),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -117,12 +117,9 @@ class _DragAndDropState extends State<DragAndDrop> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      showFirstSender == true
-                          ? sender(1, 1, widthScreen, question)
-                          : undo(1, widthScreen),
+                      showFirstSender == true ? sender(1, 1, widthScreen, question) : undo(1, widthScreen),
                       DragTarget(
-                        builder:
-                            (context, List<int> candidateData, rejectedData) {
+                        builder: (context, List<int> candidateData, rejectedData) {
                           return Container(
                             margin: EdgeInsets.only(right: 16),
                             width: widthScreen / 2.35,
@@ -142,12 +139,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                         onAccept: (data) {
                           updateSender(data);
                           tradeValue(1, data);
-                          updateReceiver(
-                              BASE_URL +
-                                  '/image/' +
-                                  question.pieces[data.toString()]["image"],
-                              1,
-                              question);
+                          updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 1, question);
                           print("""
                             1: $valueFirstReceiver
                             2: $valueSecondReceiver
@@ -162,12 +154,9 @@ class _DragAndDropState extends State<DragAndDrop> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      showSecondSender == true
-                          ? sender(2, 2, widthScreen, question)
-                          : undo(2, widthScreen),
+                      showSecondSender == true ? sender(2, 2, widthScreen, question) : undo(2, widthScreen),
                       DragTarget(
-                        builder:
-                            (context, List<int> candidateData, rejectedData) {
+                        builder: (context, List<int> candidateData, rejectedData) {
                           return Container(
                             margin: EdgeInsets.only(right: 16),
                             width: widthScreen / 2.35,
@@ -186,12 +175,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                         onAccept: (data) {
                           updateSender(data);
                           tradeValue(2, data);
-                          updateReceiver(
-                              BASE_URL +
-                                  '/image/' +
-                                  question.pieces[data.toString()]["image"],
-                              2,
-                              question);
+                          updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 2, question);
                           print("""
                             1: $valueFirstReceiver
                             2: $valueSecondReceiver
@@ -206,12 +190,9 @@ class _DragAndDropState extends State<DragAndDrop> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      showThirdSender == true
-                          ? sender(3, 3, widthScreen, question)
-                          : undo(3, widthScreen),
+                      showThirdSender == true ? sender(3, 3, widthScreen, question) : undo(3, widthScreen),
                       DragTarget(
-                        builder:
-                            (context, List<int> candidateData, rejectedData) {
+                        builder: (context, List<int> candidateData, rejectedData) {
                           return Container(
                             margin: EdgeInsets.only(right: 16),
                             width: widthScreen / 2.35,
@@ -230,12 +211,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                         onAccept: (data) {
                           updateSender(data);
                           tradeValue(3, data);
-                          updateReceiver(
-                              BASE_URL +
-                                  '/image/' +
-                                  question.pieces[data.toString()]["image"],
-                              3,
-                              question);
+                          updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 3, question);
                           print("""
                             1: $valueFirstReceiver
                             2: $valueSecondReceiver
@@ -314,12 +290,7 @@ class _DragAndDropState extends State<DragAndDrop> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(Icons.settings_backup_restore),
-                Text(
-                  'DESFAZER',
-                  style: TextStyle(
-                      color: Color.fromRGBO(189, 0, 255, 0.4),
-                      fontWeight: FontWeight.bold),
-                ),
+                Text('DESFAZER',style: TextStyle(color: Color.fromRGBO(189, 0, 255, 0.4),fontWeight: FontWeight.bold),),
               ],
             ),
           ),
@@ -339,8 +310,7 @@ class _DragAndDropState extends State<DragAndDrop> {
         color: Colors.grey,
         borderRadius: BorderRadius.circular(12),
         image: DecorationImage(
-          image: NetworkImage(
-              BASE_URL + '/image/' + question.pieces['$index' + '_1']["image"]),
+          image: NetworkImage(BASE_URL + '/image/' + question.pieces['$index' + '_1']["image"]),
           fit: BoxFit.cover,
         ),
         border: Border.all(
@@ -369,10 +339,7 @@ class _DragAndDropState extends State<DragAndDrop> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         image: DecorationImage(
-          // image: NetworkImage(BASE_URL + '/image/' + question.pieces[grouping]["image"]),
-          image: NetworkImage(BASE_URL +
-              '/image/' +
-              question.pieces[index.toString()]["image"]),
+          image: NetworkImage(BASE_URL + '/image/' + question.pieces[index.toString()]["image"]),
           fit: BoxFit.cover,
         ),
         border: Border.all(
@@ -385,8 +352,7 @@ class _DragAndDropState extends State<DragAndDrop> {
     );
   }
 
-  Widget dragReceiverTemplate(
-      int index, double widthScreen, Question question) {
+  Widget dragReceiverTemplate(int index, double widthScreen, Question question) {
     String urlToThisReceiver = '';
     bool show = false;
     switch (index) {
@@ -411,23 +377,22 @@ class _DragAndDropState extends State<DragAndDrop> {
     }
     return show != false
         ? Container(
-            margin: EdgeInsets.only(right: 16),
-            decoration: BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.circular(12),
-              image: DecorationImage(
-                // image: NetworkImage(BASE_URL + '/image/' + question.pieces[grouping]["image"]),
-                image: NetworkImage(urlToThisReceiver),
-                fit: BoxFit.cover,
-              ),
-              border: Border.all(
-                color: Color.fromRGBO(189, 0, 255, 0.4),
-                width: 2,
-              ),
-            ),
-            width: widthScreen / 2.6,
-            height: widthScreen / 2.6,
-          )
+      margin: EdgeInsets.only(right: 16),
+      decoration: BoxDecoration(
+        color: Colors.grey,
+        borderRadius: BorderRadius.circular(12),
+        image: DecorationImage(
+          image: NetworkImage(urlToThisReceiver),
+          fit: BoxFit.cover,
+        ),
+        border: Border.all(
+          color: Color.fromRGBO(189, 0, 255, 0.4),
+          width: 2,
+        ),
+      ),
+      width: widthScreen / 2.6,
+      height: widthScreen / 2.6,
+    )
         : dragSenderInvisible(widthScreen);
   }
 
@@ -435,15 +400,15 @@ class _DragAndDropState extends State<DragAndDrop> {
     String grouping = (index).toString();
     switch (index) {
       case 1:
-        //urlFirstBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
+      //urlFirstBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
         urlFirstBox = data;
         break;
       case 2:
-        //urlSecondBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
+      //urlSecondBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
         urlSecondBox = data;
         break;
       case 3:
-        //urlThirdBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
+      //urlThirdBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
         urlThirdBox = data;
         break;
     }

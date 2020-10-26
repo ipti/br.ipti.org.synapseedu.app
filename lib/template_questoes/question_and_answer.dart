@@ -45,8 +45,7 @@ class SingleLineTextQuestion extends ConsumerWidget {
     listQuestionIndex = args.listQuestionIndex;
 
     String questionDescription = cobjectList[0].description;
-    String questionText =
-        cobjectList[0].questions[questionIndex].header["text"];
+    String questionText = cobjectList[0].questions[questionIndex].header["text"];
 
     final buttonState = watch(buttonStateProvider).state;
 
@@ -68,16 +67,15 @@ class SingleLineTextQuestion extends ConsumerWidget {
           style: TextStyle(fontSize: fonteDaLetra),
         ),
         sound: soundButton(context, cobjectList[0].questions[questionIndex]),
-        linkImage: 'https://elesson.com.br/app/library/image/' +
-            cobjectList[0].questions[0].header["image"],
-        activityScreen: Container(
-          margin: EdgeInsets.all(8),
-          child: Form(
-            key: _formKey,
-            child: Column(
+        linkImage: 'https://elesson.com.br/app/library/image/' + cobjectList[0].questions[0].header["image"],
+        activityScreen: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            reverse: true,
+            child: Wrap(
               // crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
                 // if (image == true) Image.asset('assets/img/logo.png'),
                 //if (questionText.isNotEmpty)
                 Container(
@@ -106,8 +104,7 @@ class SingleLineTextQuestion extends ConsumerWidget {
                   height: heightScreen * 0.70,
                   child: Center(
                     child: Container(
-                      margin: EdgeInsets.only(
-                          right: 16, left: 16, bottom: heightScreen / 3),
+                      margin: EdgeInsets.only(right: 16, left: 16, bottom: heightScreen / 3),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
@@ -156,13 +153,12 @@ class SingleLineTextQuestion extends ConsumerWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
-                if (_textController.text.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 4.0),
-                    child: submitAnswer(context, cobjectList, 'PRE',
-                        ++questionIndex, listQuestionIndex),
-                  ),
+                // SizedBox(height: 15),
+                // if (_textController.text.isNotEmpty)
+                //   Padding(
+                //     padding: const EdgeInsets.only(bottom: 4.0),
+                //     child: submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex),
+                //   ),
               ],
             ),
           ),
