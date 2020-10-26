@@ -1,3 +1,4 @@
+import 'package:elesson/template_questoes/image_detail_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +17,7 @@ import './template_questoes/multichoice.dart';
 import './template_questoes/drag_and_drop.dart';
 import './template_questoes/question_and_answer.dart';
 import './login/login_view.dart';
+import 'share/question_widgets.dart';
 
 void main() async {
   //usando pra iniciar em outra tela
@@ -76,6 +78,11 @@ class Home extends StatelessWidget {
         accentColor: Color(0xFF0000FF),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         buttonTheme: ButtonThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+            // side: BorderSide(color: Color(0x3300004C), width: 1),
+            side: BorderSide(color: Color(0xFF00004C), width: 1),
+          ),
           splashColor: Colors.amber[900],
           // minWidth: 120,
           minWidth: 0,
@@ -90,7 +97,7 @@ class Home extends StatelessWidget {
         //       ),
         //     ),
         fontFamily: 'Mulish',
-        // textTheme: GoogleFonts.muliTextTheme(),
+        textTheme: GoogleFonts.muliTextTheme(),
       ),
       //home: ActivitySelectionForm(),
       initialRoute: '/',
@@ -100,6 +107,7 @@ class Home extends StatelessWidget {
         DragAndDrop.routeName: (context) => DragAndDrop(),
         MultipleChoiceQuestion.routeName: (context) => MultipleChoiceQuestion(),
         TextQuestion.routeName: (context) => TextQuestion(),
+        ImageDetailScreen.routeName: (context) => ImageDetailScreen(),
       },
     );
   }

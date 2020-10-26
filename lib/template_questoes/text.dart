@@ -33,8 +33,8 @@ class TextQuestion extends ConsumerWidget {
           style: Theme.of(context).textTheme.headline2,
         ),
         sound: soundButton(context, cobjectList[0].questions[questionIndex]),
-        image: Image.network('https://elesson.com.br/app/library/image/' +
-            cobjectList[0].questions[questionIndex].header["image"]),
+        linkImage: 'https://elesson.com.br/app/library/image/' +
+            cobjectList[0].questions[questionIndex].header["image"],
         text: Text(headerText),
         activityScreen: Container(
           child: Column(

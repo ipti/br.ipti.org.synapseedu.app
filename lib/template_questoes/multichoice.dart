@@ -9,6 +9,7 @@ import './question_provider.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import './model.dart';
+import './image_detail_screen.dart';
 
 // const String BASE_URL = 'https://elesson.com.br/app/library';
 
@@ -53,47 +54,88 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   }
 
   Widget piece(
-      int index, BuildContext context, ScopedReader watch, Question question) {
+      int index,
+      BuildContext context,
+      ScopedReader watch,
+      Question question,
+      double buttonHeight,
+      double screenHeight,
+      double textCardHeight) {
     final buttonState = watch(buttonStateProvider).state;
-    double cardSize = MediaQuery.of(context).size.height / 4.5;
-    // double cardSize = 158.29;
-    print(cardSize);
-    bool audio = false;
+
     String grouping = (index + 1).toString();
-    // print('Imagem $grouping: ${question.pieces[grouping]["image"]}');
+    // double cardHeight = 158.29;
+    double availableSpaceForCards =
+        screenHeight - textCardHeight - buttonHeight - 12 - 32;
+    double marginBetweenCards = 0.0147 * availableSpaceForCards;
+    double cardHeight =
+        (availableSpaceForCards - 24 - 2 * marginBetweenCards) / 3;
+    double cardWidth = question.pieces[grouping]["image"].isNotEmpty
+        ? cardHeight
+        : double.infinity;
+
+    bool audio = false;
+
     return Card(
-      margin: const EdgeInsets.all(10),
+      margin: EdgeInsets.only(
+          bottom: index < 2 ? marginBetweenCards : 0, left: 12, right: 12),
+      clipBehavior: Clip.hardEdge,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
       elevation: 2,
-      color: Colors.white,
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
           ConstrainedBox(
             constraints:
-                BoxConstraints(maxHeight: cardSize, maxWidth: cardSize),
+                BoxConstraints(maxHeight: cardHeight, maxWidth: cardWidth),
             child: MaterialButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: BorderSide(
+                      color: _buttonPressed[index]
+                          ? Color(0xFF00DC8C)
+                          : Color(0x6E729166),
+                      width: 3)),
               minWidth: 200,
-              padding: const EdgeInsets.all(2),
-              color: _buttonPressed[index] ? Colors.amber : Colors.green[300],
-              child: question.pieces[grouping]["image"] != null
-                  ? Image.network(
-                      BASE_URL + '/image/' + question.pieces[grouping]["image"],
-                    )
-                  // ? Image.asset('assets/img/placeholder.jpg')
-                  : Container(
-                      child: Text(
-                        question.pieces[grouping]["text"],
-                        style: TextStyle(
-                            fontWeight: FontWeight.w800, fontSize: 16),
+              padding: const EdgeInsets.all(0),
+              // color: _buttonPressed[index] ? Colors.amber : Colors.green[300],
+              child: Hero(
+                tag: grouping,
+                child: question.pieces[grouping]["image"].isNotEmpty
+                    ? Image.network(
+                        BASE_URL +
+                            '/image/' +
+                            question.pieces[grouping]["image"],
+                      )
+                    // ? Image.asset('assets/img/placeholder.jpg')
+                    : Container(
+                        height: cardHeight,
+                        child: Text(
+                          question.pieces[grouping]["text"],
+                          style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: fonteDaLetra),
+                        ),
+                        margin: const EdgeInsets.all(20),
                       ),
-                      margin: const EdgeInsets.all(20),
-                    ),
-              // height: cardSize,
-              // minWidth: cardSize,
-              highlightColor: Theme.of(context).accentColor,
-              splashColor: Theme.of(context).accentColor,
+              ),
+              // height: cardHeight,
+              // minWidth: cardHeight,
+              highlightColor: Color(0xFF00DC8C),
+              splashColor: Color(0xFF00DC8C),
+              onLongPress: () {
+                if (question.pieces[grouping]["image"].isNotEmpty)
+                  Navigator.of(context).pushNamed(
+                    ImageDetailScreen.routeName,
+                    arguments: DetailScreenArguments(
+                        grouping: grouping, question: question),
+                  );
+              },
               onPressed: () {
                 changeButtonColor(context, index);
+                if (showConfirmButton == false) showConfirmButton = true;
                 // if (question.pieces["correctAnswer"] == index + 1)
                 //   print("Acertou");
                 // setState(() {
@@ -125,6 +167,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   }
 
   bool fetch = false;
+  bool showConfirmButton = false;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -132,53 +175,96 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
     var listQuestionIndex = args.listQuestionIndex;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double textCardHeight = 0.0985 * screenHeight;
+    double buttonHeight =
+        48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+
+    String imageLink = cobjectList[0].questions[questionIndex].header["image"];
+    if (imageLink.isEmpty) print('O link tá vazio: "$imageLink"');
+    if (imageLink == null) print('O link tá null: $imageLink');
 
     // final cobjectProvidersState = watch(cobjectProvider.state);
     SystemChrome.setEnabledSystemUIOverlays([]);
     String questionDescription = cobjectList[0].description;
-
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
-
     return Scaffold(
-      bottomNavigationBar: bottomNavBar(context),
+      // bottomNavigationBar: bottomNavBar(context),
       body: TemplateSlider(
-        title: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            // alignment: Alignment.bottomLeft,
-            children: [
-              if (questionDescription.isNotEmpty)
-                Text(
-                  questionDescription,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 26,
-                  ),
-                ),
-              soundButton(context, cobjectList[0].questions[questionIndex]),
-            ],
+        showConfirmButton: showConfirmButton,
+        title: Text(
+          questionDescription,
+          textAlign: TextAlign.justify,
+          maxLines: 3,
+          style: TextStyle(
+            fontSize: 26,
           ),
         ),
-        image: Image.network('https://elesson.com.br/app/library/image/' +
-            cobjectList[0].questions[0].header["image"]),
+        linkImage: imageLink.isNotEmpty
+            ? 'https://elesson.com.br/app/library/image/' + imageLink
+            : null,
         activityScreen: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Wrap(
+            alignment: WrapAlignment.center,
             children: [
-              Text(
-                cobjectList[0].questions[0].header["text"],
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 28,
+              Padding(
+                padding: const EdgeInsets.only(top: 32, bottom: 48),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+                      height: textCardHeight,
+                      child: Text(
+                        cobjectList[0].questions[questionIndex].header["text"],
+                        textAlign: TextAlign.justify,
+                        // textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: headerFontSize,
+                          // fontFamily: 'Mulish',
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 0, vertical: 12),
+                      child: Column(
+                        children: [
+                          piece(
+                              0,
+                              context,
+                              watch,
+                              cobjectList[0].questions[questionIndex],
+                              buttonHeight,
+                              screenHeight,
+                              textCardHeight),
+                          piece(
+                              1,
+                              context,
+                              watch,
+                              cobjectList[0].questions[questionIndex],
+                              buttonHeight,
+                              screenHeight,
+                              textCardHeight),
+                          piece(
+                              2,
+                              context,
+                              watch,
+                              cobjectList[0].questions[questionIndex],
+                              buttonHeight,
+                              screenHeight,
+                              textCardHeight),
+                        ],
+                      ),
+                    ),
+                    if (_selectedButton < 3)
+                      submitAnswer(context, cobjectList, 'MTE', ++questionIndex,
+                          listQuestionIndex),
+                  ],
                 ),
               ),
-              piece(0, context, watch, cobjectList[0].questions[0]),
-              piece(1, context, watch, cobjectList[0].questions[0]),
-              piece(2, context, watch, cobjectList[0].questions[0]),
-              //if (_selectedButton > 2) {
-              // submitAnswer(context, cobjectList, 'MTE', ++questionIndex,
-              //     listQuestionIndex),
             ],
           ),
         ),
