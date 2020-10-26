@@ -58,23 +58,20 @@ class _DragAndDropState extends State<DragAndDrop> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: TemplateSlider(
-        linkImage: cobjectList[0].questions[0].header['image'] != ''
-            ? BASE_URL + '/image/' + cobjectList[0].questions[0].header['image']
-            : "",
+        linkImage: cobjectList[0].questions[0].header['image'] != '' ? BASE_URL + '/image/' + cobjectList[0].questions[0].header['image'] : "",
         sound: soundButton(context, cobjectList[0].questions[0]),
         title: Text(
           cobjectList[0].description,
           textAlign: TextAlign.center,
-          //style: TextStyle(fontSize: fonteDaLetra), DESCOMENTAR DEPOIS DE UNIR
+          style: TextStyle(fontSize: fonteDaLetra,fontWeight: FontWeight.bold),
         ),
         text: Text(
           cobjectList[0].questions[questionIndex].header["text"],
           textAlign: TextAlign.center,
-          //style: TextStyle(fontSize: fonteDaLetra), DESCOMENTAR DEPOIS DE UNIR
+          style: TextStyle(fontSize: fonteDaLetra, fontWeight: FontWeight.bold),
         ),
-        activityScreen: DAD(heightScreen - 12, widthScreen, cobjectList[0].questions[questionIndex],questionText),
+        activityScreen: DAD(heightScreen - 12, widthScreen, cobjectList[0].questions[questionIndex], questionText),
       ),
-      //bottomNavigationBar: BottomNavibar(),
     );
   }
 
@@ -101,15 +98,16 @@ class _DragAndDropState extends State<DragAndDrop> {
             child: Center(
               child: Text(
                 questionText,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: fonteDaLetra),
-            ),),
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: fonteDaLetra),
+              ),
+            ),
           ),
           Container(
             height: heightScreen * 0.85,
             padding: EdgeInsets.only(top: 12, bottom: 12),
             child: Stack(children: [
-              Center(child: Image.asset('assets/img/divisoria.png',scale: .9)),
+              Center(child: Image.asset('assets/img/divisoria.png', scale: .9)),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -226,7 +224,7 @@ class _DragAndDropState extends State<DragAndDrop> {
               ),
             ]),
           ),
-          // submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex),
+          valueFirstReceiver != 0 && valueSecondReceiver != 0 && valueThirdReceiver != 0 ? submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex): Container(),
         ],
       ),
     );
@@ -290,7 +288,10 @@ class _DragAndDropState extends State<DragAndDrop> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(Icons.settings_backup_restore),
-                Text('DESFAZER',style: TextStyle(color: Color.fromRGBO(189, 0, 255, 0.4),fontWeight: FontWeight.bold),),
+                Text(
+                  'DESFAZER',
+                  style: TextStyle(color: Color.fromRGBO(189, 0, 255, 0.4), fontWeight: FontWeight.bold, fontSize: fonteDaLetra),
+                ),
               ],
             ),
           ),
@@ -377,22 +378,22 @@ class _DragAndDropState extends State<DragAndDrop> {
     }
     return show != false
         ? Container(
-      margin: EdgeInsets.only(right: 16),
-      decoration: BoxDecoration(
-        color: Colors.grey,
-        borderRadius: BorderRadius.circular(12),
-        image: DecorationImage(
-          image: NetworkImage(urlToThisReceiver),
-          fit: BoxFit.cover,
-        ),
-        border: Border.all(
-          color: Color.fromRGBO(189, 0, 255, 0.4),
-          width: 2,
-        ),
-      ),
-      width: widthScreen / 2.6,
-      height: widthScreen / 2.6,
-    )
+            margin: EdgeInsets.only(right: 16),
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(12),
+              image: DecorationImage(
+                image: NetworkImage(urlToThisReceiver),
+                fit: BoxFit.cover,
+              ),
+              border: Border.all(
+                color: Color.fromRGBO(189, 0, 255, 0.4),
+                width: 2,
+              ),
+            ),
+            width: widthScreen / 2.6,
+            height: widthScreen / 2.6,
+          )
         : dragSenderInvisible(widthScreen);
   }
 
@@ -400,15 +401,15 @@ class _DragAndDropState extends State<DragAndDrop> {
     String grouping = (index).toString();
     switch (index) {
       case 1:
-      //urlFirstBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
+        //urlFirstBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
         urlFirstBox = data;
         break;
       case 2:
-      //urlSecondBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
+        //urlSecondBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
         urlSecondBox = data;
         break;
       case 3:
-      //urlThirdBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
+        //urlThirdBox = BASE_URL + '/image/' + question.pieces[grouping]["image"];
         urlThirdBox = data;
         break;
     }

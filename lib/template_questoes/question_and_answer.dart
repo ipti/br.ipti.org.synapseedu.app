@@ -59,12 +59,12 @@ class SingleLineTextQuestion extends ConsumerWidget {
         title: Text(
           questionDescription,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: fonteDaLetra),
+          style: TextStyle(fontSize: fonteDaLetra,fontWeight: FontWeight.bold),
         ),
         text: Text(
           questionText,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: fonteDaLetra),
+          style: TextStyle(fontSize: fonteDaLetra,fontWeight: FontWeight.bold),
         ),
         sound: soundButton(context, cobjectList[0].questions[questionIndex]),
         linkImage: 'https://elesson.com.br/app/library/image/' + cobjectList[0].questions[0].header["image"],
@@ -73,14 +73,13 @@ class SingleLineTextQuestion extends ConsumerWidget {
           child: SingleChildScrollView(
             reverse: true,
             child: Wrap(
-              // crossAxisAlignment: CrossAxisAlignment.center,
               //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 // if (image == true) Image.asset('assets/img/logo.png'),
                 //if (questionText.isNotEmpty)
                 Container(
-                  padding: EdgeInsets.only(left: 16, right: 16),
-                  margin: EdgeInsets.only(bottom: heightScreen * 0.22),
+                  padding: EdgeInsets.only(left: 16, right: 16,top: 0),
+                  margin: EdgeInsets.only(bottom: _textController.text.isNotEmpty ? heightScreen * 0.22 : heightScreen * 0.22 + 15 + (48 > heightScreen * 0.0656 ? 48 : heightScreen * 0.0656)),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
@@ -95,13 +94,13 @@ class SingleLineTextQuestion extends ConsumerWidget {
                   child: Center(
                     child: Text(
                       questionText,
-                      style: TextStyle(fontSize: fonteDaLetra),
+                      style: TextStyle(fontSize: fonteDaLetra,fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
                 //SizedBox(height: 15),
                 Container(
-                  height: heightScreen * 0.70,
+                  height: (heightScreen * 0.70)-15 - (48 > heightScreen * 0.0656 ? 48 : heightScreen * 0.0656),
                   child: Center(
                     child: Container(
                       margin: EdgeInsets.only(right: 16, left: 16, bottom: heightScreen / 3),
@@ -153,12 +152,12 @@ class SingleLineTextQuestion extends ConsumerWidget {
                     ),
                   ),
                 ),
-                // SizedBox(height: 15),
-                // if (_textController.text.isNotEmpty)
-                //   Padding(
-                //     padding: const EdgeInsets.only(bottom: 4.0),
-                //     child: submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex),
-                //   ),
+                SizedBox(height: 15),
+                if (_textController.text.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0),
+                    child: submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex),
+                  ),
               ],
             ),
           ),

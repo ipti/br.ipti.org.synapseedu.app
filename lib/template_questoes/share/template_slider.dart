@@ -113,7 +113,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                           Text(
                             'VER MAIS',
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: fonteDaLetra,
                               fontWeight: FontWeight.w900,
                             ),
                           ),
