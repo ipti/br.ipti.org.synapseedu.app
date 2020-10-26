@@ -126,7 +126,7 @@ Widget submitAnswer(BuildContext context, List<Cobject> cobjectList,
           'CONFIRMAR',
           style: TextStyle(
             fontWeight: FontWeight.w900,
-            fontSize: fonteDaLetra,
+            fontSize: 18,
           ),
         ),
         onPressed: () {
