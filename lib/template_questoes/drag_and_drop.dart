@@ -366,7 +366,6 @@ class _DragAndDropState extends State<DragAndDrop> {
   }
 
   void updateReceiver(String data, int index, Question question) {
-    String grouping = (index).toString();
     switch (index) {
       case 1:
         urlFirstBox = data;

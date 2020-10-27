@@ -11,6 +11,7 @@ final cobjectProvider = Provider<Cobjects>((ref) {
   return Cobjects();
 });
 
+// ignore: must_be_immutable
 class SingleLineTextQuestion extends ConsumerWidget {
   static const routeName = '/PRE';
 
@@ -47,8 +48,6 @@ class SingleLineTextQuestion extends ConsumerWidget {
     String questionDescription = cobjectList[0].description;
     String questionText = cobjectList[0].questions[questionIndex].header["text"];
 
-    final buttonState = watch(buttonStateProvider).state;
-
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height * 0.93;
 
@@ -71,39 +70,13 @@ class SingleLineTextQuestion extends ConsumerWidget {
         activityScreen: Form(
           key: _formKey,
           child: SingleChildScrollView(
-            reverse: true,
+            reverse: false,
             child: Wrap(
-              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                // if (image == true) Image.asset('assets/img/logo.png'),
-                //if (questionText.isNotEmpty)
-                Container(
-                  padding: EdgeInsets.only(left: 16, right: 16,top: 0),
-                  margin: EdgeInsets.only(bottom: _textController.text.isNotEmpty ? heightScreen * 0.22 : heightScreen * 0.22 + 15 + (48 > heightScreen * 0.0656 ? 48 : heightScreen * 0.0656)),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromRGBO(0, 0, 76, 0.1),
-                        spreadRadius: 1,
-                      ),
-                    ],
-                  ),
-                  height: heightScreen * 0.15,
-                  width: widthScreen,
-                  child: Center(
-                    child: Text(
-                      questionText,
-                      style: TextStyle(fontSize: fonteDaLetra,fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-                //SizedBox(height: 15),
-                Container(
-                  height: (heightScreen * 0.70)-15 - (48 > heightScreen * 0.0656 ? 48 : heightScreen * 0.0656),
-                  child: Center(
-                    child: Container(
-                      margin: EdgeInsets.only(right: 16, left: 16, bottom: heightScreen / 3),
+                Stack(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(right: 16, left: 16, top: heightScreen*0.2),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
@@ -112,45 +85,68 @@ class SingleLineTextQuestion extends ConsumerWidget {
                         ),
                       ),
                       height: heightScreen / 3,
-                      child: TextFormField(
-                        maxLines: 3,
-                        minLines: 1,
-                        keyboardType: TextInputType.multiline,
-                        controller: _textController,
-                        autofocus: false,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: fonteDaLetra),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: 'Escreva a resposta aqui',
-                          contentPadding: const EdgeInsets.all(8.0),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.circular(25.7),
+                      child: Center(
+                        child: TextFormField(
+                          maxLines: 5,
+                          minLines: 1,
+                          keyboardType: TextInputType.multiline,
+                          controller: _textController,
+                          autofocus: false,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 18),
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintText: 'Escreva a resposta aqui',
+                            contentPadding: const EdgeInsets.all(8.0),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(25.7),
+                            ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(25.7),
+                            ),
                           ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.circular(25.7),
-                          ),
+                          // Utiliza o onChanged em conjunto com o provider para renderizar a UI assim que o form
+                          // receber um texto, acionando o botão. O condicional faz com que a UI seja renderizada
+                          // apenas uma vez enquanto o texto estiver sendo digitado.
+                          onChanged: (val) {
+                            if (_textController.text.length == 1) {
+                              submitButton(context);
+                            }
+                          },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Não se esqueça de digitar a resposta!';
+                            }
+                            return null;
+                          },
                         ),
-                        // Utiliza o onChanged em conjunto com o provider para renderizar a UI assim que o form
-                        // receber um texto, acionando o botão. O condicional faz com que a UI seja renderizada
-                        // apenas uma vez enquanto o texto estiver sendo digitado.
-                        onChanged: (val) {
-                          if (_textController.text.length == 1) {
-                            submitButton(context);
-                          }
-                        },
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Não se esqueça de digitar a resposta!';
-                          }
-                          return null;
-                        },
                       ),
                     ),
-                  ),
+                    Container(
+                      //padding: EdgeInsets.only(left: 16, right: 16, bottom: 0),
+                      margin: EdgeInsets.only(bottom: _textController.text.isNotEmpty ? (heightScreen * 0.93) -18 - (48>heightScreen * 0.0656 ? 48 : heightScreen * 0.0656):  heightScreen * 0.92),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromRGBO(0, 0, 76, 0.1),
+                            spreadRadius: 1,
+                          ),
+                        ],
+                      ),
+                      height: heightScreen * 0.15,
+                      width: widthScreen,
+                      child: Center(
+                        child: Text(
+                          questionText,
+                          style: TextStyle(fontSize: fonteDaLetra,fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 15),
                 if (_textController.text.isNotEmpty)
@@ -166,8 +162,3 @@ class SingleLineTextQuestion extends ConsumerWidget {
     );
   }
 }
-
-// class ScreenArguments {
-//   final List<dynamic> cobject;
-//   ScreenArguments(this.cobject);
-// }
