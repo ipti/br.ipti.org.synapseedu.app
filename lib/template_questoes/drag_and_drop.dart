@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:fdottedline/fdottedline.dart';
 
+import 'image_detail_screen.dart';
 import 'model.dart';
 
 final cobjectProvider = Provider<Cobjects>((ref) {
@@ -59,7 +60,7 @@ class _DragAndDropState extends State<DragAndDrop> {
       resizeToAvoidBottomPadding: false,
       body: TemplateSlider(
         linkImage: cobjectList[0].questions[0].header['image'] != '' ? BASE_URL + '/image/' + cobjectList[0].questions[0].header['image'] : "",
-        sound: soundButton(context, cobjectList[0].questions[0]),
+        sound: cobjectList[0].questions[0].header["sound"],
         title: Text(
           cobjectList[0].description,
           textAlign: TextAlign.center,
@@ -95,10 +96,15 @@ class _DragAndDropState extends State<DragAndDrop> {
             height: heightScreen * 0.15,
             width: widthScreen,
             child: Center(
-              child: Text(
-                questionText,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: fonteDaLetra),
+              child: GestureDetector(
+                onTap: () {
+                  playSound(cobjectList[0].questions[questionIndex].header["sound"]);
+                },
+                child: Text(
+                  questionText,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: fonteDaLetra),
+                ),
               ),
             ),
           ),
@@ -123,7 +129,16 @@ class _DragAndDropState extends State<DragAndDrop> {
                             height: widthScreen / 2.6,
                             child: Stack(
                               children: [
-                                box(1, widthScreen, question),
+                                GestureDetector(
+                                  child: box(1, widthScreen, question),
+                                  onLongPress: () {
+                                    if (question.pieces["1_1"]["image"].isNotEmpty)
+                                      Navigator.of(context).pushNamed(
+                                        ImageDetailScreen.routeName,
+                                        arguments: DetailScreenArguments(grouping: "1_1", question: question),
+                                      );
+                                  },
+                                ),
                                 dragReceiverTemplate(1, widthScreen, question),
                               ],
                             ),
@@ -159,7 +174,16 @@ class _DragAndDropState extends State<DragAndDrop> {
                             height: widthScreen / 2.6,
                             child: Stack(
                               children: [
-                                box(2, widthScreen, question),
+                                GestureDetector(
+                                  child: box(2, widthScreen, question),
+                                  onLongPress: () {
+                                    if (question.pieces["2_1"]["image"].isNotEmpty)
+                                      Navigator.of(context).pushNamed(
+                                        ImageDetailScreen.routeName,
+                                        arguments: DetailScreenArguments(grouping: "2_1", question: question),
+                                      );
+                                  },
+                                ),
                                 dragReceiverTemplate(2, widthScreen, question),
                               ],
                             ),
@@ -195,7 +219,16 @@ class _DragAndDropState extends State<DragAndDrop> {
                             height: widthScreen / 2.6,
                             child: Stack(
                               children: [
-                                box(3, widthScreen, question),
+                                GestureDetector(
+                                  child: box(3, widthScreen, question),
+                                  onLongPress: () {
+                                    if (question.pieces["3_1"]["image"].isNotEmpty)
+                                      Navigator.of(context).pushNamed(
+                                        ImageDetailScreen.routeName,
+                                        arguments: DetailScreenArguments(grouping: "3_1", question: question),
+                                      );
+                                  },
+                                ),
                                 dragReceiverTemplate(3, widthScreen, question),
                               ],
                             ),
@@ -231,11 +264,20 @@ class _DragAndDropState extends State<DragAndDrop> {
   }
 
   Widget sender(int data, int index, double widthScreen, Question question) {
-    return Draggable(
-      data: data,
-      child: dragSenderTemplate(index, widthScreen, question),
-      feedback: dragSenderTemplate(index, widthScreen, question),
-      childWhenDragging: dragSenderInvisible(widthScreen),
+    return GestureDetector(
+      onLongPress: () {
+        if (question.pieces[index.toString()]["image"].isNotEmpty)
+          Navigator.of(context).pushNamed(
+            ImageDetailScreen.routeName,
+            arguments: DetailScreenArguments(grouping: index.toString(), question: question),
+          );
+      },
+      child: Draggable(
+        data: data,
+        child: dragSenderTemplate(index, widthScreen, question),
+        feedback: dragSenderTemplate(index, widthScreen, question),
+        childWhenDragging: dragSenderInvisible(widthScreen),
+      ),
     );
   }
 

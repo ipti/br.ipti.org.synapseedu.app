@@ -66,7 +66,7 @@ class SingleLineTextQuestion extends ConsumerWidget {
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: fonteDaLetra, fontWeight: FontWeight.bold),
         ),
-        sound: soundButton(context, cobjectList[0].questions[questionIndex]),
+        sound: cobjectList[0].questions[questionIndex].header["sound"],
         linkImage: 'https://elesson.com.br/app/library/image/' +
             cobjectList[0].questions[0].header["image"],
         activityScreen: Form(
@@ -150,11 +150,16 @@ class SingleLineTextQuestion extends ConsumerWidget {
                       height: heightScreen * 0.15,
                       width: widthScreen,
                       child: Center(
-                        child: Text(
-                          questionText,
-                          style: TextStyle(
-                              fontSize: fonteDaLetra,
-                              fontWeight: FontWeight.bold),
+                        child: GestureDetector(
+                          onTap: (){
+                            playSound(cobjectList[0].questions[questionIndex].header["sound"]);
+                          },
+                          child: Text(
+                            questionText,
+                            style: TextStyle(
+                                fontSize: fonteDaLetra,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                     ),

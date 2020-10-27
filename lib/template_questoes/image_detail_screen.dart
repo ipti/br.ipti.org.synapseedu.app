@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'model.dart';
 
-class ImageDetailScreen extends StatelessWidget {
+class ImageDetailScreen extends StatefulWidget {
   // final String title;
   // final double price;
 
@@ -12,22 +12,22 @@ class ImageDetailScreen extends StatelessWidget {
   static const routeName = '/image-detail';
 
   @override
+  _ImageDetailScreenState createState() => _ImageDetailScreenState();
+}
+
+class _ImageDetailScreenState extends State<ImageDetailScreen> {
+  @override
   Widget build(BuildContext context) {
-    final arguments =
-        ModalRoute.of(context).settings.arguments as DetailScreenArguments;
+    final arguments = ModalRoute.of(context).settings.arguments as DetailScreenArguments;
     final grouping = arguments.grouping;
     Question question = arguments.question;
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    double buttonHeight =
-        48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
-    double buttonWidth =
-        133 > screenWidth * 0.3236 ? 133 : screenWidth * 0.3236;
+    double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+    double buttonWidth = 133 > screenWidth * 0.3236 ? 133 : screenWidth * 0.3236;
 
-    if (question.pieces[grouping]["image"].isEmpty)
-      print('IMAGEM É VAZIA:${question.pieces[grouping]["image"]}');
-
+    if (question.pieces[grouping]["image"].isEmpty) print('IMAGEM É VAZIA:${question.pieces[grouping]["image"]}');
     // final loadedProduct = Provider.of<Products>(
     //   context,
     //   listen: false,
@@ -60,9 +60,7 @@ class ImageDetailScreen extends StatelessWidget {
                   tag: grouping,
                   child: question.pieces[grouping]["image"].isNotEmpty
                       ? Image.network(
-                          BASE_URL +
-                              '/image/' +
-                              question.pieces[grouping]["image"],
+                          BASE_URL + '/image/' + question.pieces[grouping]["image"],
                           fit: BoxFit.fill,
                         )
                       : Text(question.pieces[grouping]["text"]),
@@ -79,7 +77,31 @@ class ImageDetailScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     if (soundButton(context, question) != null)
-                      soundButton(context, question),
+                      Container(
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(18), color: backgroudButtom),
+                        child: OutlineButton(
+                          padding: EdgeInsets.all(6),
+                          borderSide: BorderSide(
+                            color: Color.fromRGBO(0, 0, 255, 1),
+                          ),
+                          color: backgroudButtom,
+                          textColor: Color(0xFF0000FF),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          child: Icon(
+                            Icons.volume_up,
+                            size: 40,
+                            color: Color(0xFF0000FF),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              backgroudButtom = Color(0xFF0000FF).withOpacity(0.2);
+                            });
+                            playSoundDetailScreen(question.header["sound"]);
+                          },
+                        ),
+                      ),
                     ButtonTheme(
                       minWidth: buttonWidth,
                       height: buttonHeight,
@@ -88,7 +110,7 @@ class ImageDetailScreen extends StatelessWidget {
                         borderSide: BorderSide(
                           color: const Color.fromRGBO(0, 0, 255, 1),
                         ),
-                        color: Colors.white,
+                        color: Colors.red,
                         textColor: const Color(0xFF0000FF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
@@ -124,6 +146,15 @@ class ImageDetailScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void playSoundDetailScreen(String sound) async {
+    await player.play(BASE_URL + '/sound/' + sound);
+    player.onPlayerCompletion.listen((event) {
+      setState(() {
+        backgroudButtom = Colors.white;
+      });
+    });
   }
 }
 

@@ -23,8 +23,7 @@ class TextQuestion extends ConsumerWidget {
     String questionDescription = cobjectList[0].description;
     String headerText = cobjectList[0].questions[questionIndex].header["text"];
 
-    String questionText =
-        cobjectList[0].questions[questionIndex].pieces['1']['text'];
+    String questionText = cobjectList[0].questions[questionIndex].pieces['1']['text'];
 
     return Scaffold(
       body: TemplateSlider(
@@ -36,16 +35,14 @@ class TextQuestion extends ConsumerWidget {
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline2,
         ),
-        sound: soundButton(context, cobjectList[0].questions[questionIndex]),
-        linkImage: 'https://elesson.com.br/app/library/image/' +
-            cobjectList[0].questions[questionIndex].header["image"],
+        sound: cobjectList[0].questions[questionIndex].header["sound"],
+        linkImage: 'https://elesson.com.br/app/library/image/' + cobjectList[0].questions[questionIndex].header["image"],
         text: Text(headerText),
         activityScreen: Container(
           child: Wrap(
             children: [
               Text(questionText),
-              submitAnswer(context, cobjectList, 'TXT', ++questionIndex,
-                  listQuestionIndex),
+              submitAnswer(context, cobjectList, 'TXT', ++questionIndex, listQuestionIndex),
             ],
           ),
         ),
