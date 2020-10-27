@@ -23,10 +23,14 @@ class TextQuestion extends ConsumerWidget {
     String questionDescription = cobjectList[0].description;
     String headerText = cobjectList[0].questions[questionIndex].header["text"];
 
-    String questionText = cobjectList[0].questions[questionIndex].pieces['1']['text'];
+    String questionText =
+        cobjectList[0].questions[questionIndex].pieces['1']['text'];
 
     return Scaffold(
       body: TemplateSlider(
+        isTextTemplate: true,
+        listQuestionIndex: listQuestionIndex,
+        questionIndex: questionIndex,
         title: Text(
           questionDescription,
           textAlign: TextAlign.center,
@@ -40,7 +44,8 @@ class TextQuestion extends ConsumerWidget {
           child: Wrap(
             children: [
               Text(questionText),
-              submitAnswer(context, cobjectList, 'TXT', ++questionIndex, listQuestionIndex),
+              submitAnswer(context, cobjectList, 'TXT', ++questionIndex,
+                  listQuestionIndex),
             ],
           ),
         ),

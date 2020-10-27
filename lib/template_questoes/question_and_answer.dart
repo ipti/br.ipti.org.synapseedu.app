@@ -46,7 +46,8 @@ class SingleLineTextQuestion extends ConsumerWidget {
     listQuestionIndex = args.listQuestionIndex;
 
     String questionDescription = cobjectList[0].description;
-    String questionText = cobjectList[0].questions[questionIndex].header["text"];
+    String questionText =
+        cobjectList[0].questions[questionIndex].header["text"];
 
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height * 0.93;
@@ -58,15 +59,16 @@ class SingleLineTextQuestion extends ConsumerWidget {
         title: Text(
           questionDescription,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: fonteDaLetra,fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: fonteDaLetra, fontWeight: FontWeight.bold),
         ),
         text: Text(
           questionText,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: fonteDaLetra,fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: fonteDaLetra, fontWeight: FontWeight.bold),
         ),
         sound: soundButton(context, cobjectList[0].questions[questionIndex]),
-        linkImage: 'https://elesson.com.br/app/library/image/' + cobjectList[0].questions[0].header["image"],
+        linkImage: 'https://elesson.com.br/app/library/image/' +
+            cobjectList[0].questions[0].header["image"],
         activityScreen: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -76,7 +78,8 @@ class SingleLineTextQuestion extends ConsumerWidget {
                 Stack(
                   children: <Widget>[
                     Container(
-                      margin: EdgeInsets.only(right: 16, left: 16, top: heightScreen*0.2),
+                      margin: EdgeInsets.only(
+                          right: 16, left: 16, top: heightScreen * 0.2),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
@@ -127,7 +130,14 @@ class SingleLineTextQuestion extends ConsumerWidget {
                     ),
                     Container(
                       //padding: EdgeInsets.only(left: 16, right: 16, bottom: 0),
-                      margin: EdgeInsets.only(bottom: _textController.text.isNotEmpty ? (heightScreen * 0.93) -18 - (48>heightScreen * 0.0656 ? 48 : heightScreen * 0.0656):  heightScreen * 0.92),
+                      margin: EdgeInsets.only(
+                          bottom: _textController.text.isNotEmpty
+                              ? (heightScreen * 0.93) -
+                                  18 -
+                                  (48 > heightScreen * 0.0656
+                                      ? 48
+                                      : heightScreen * 0.0656)
+                              : heightScreen * 0.92),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         boxShadow: [
@@ -142,7 +152,9 @@ class SingleLineTextQuestion extends ConsumerWidget {
                       child: Center(
                         child: Text(
                           questionText,
-                          style: TextStyle(fontSize: fonteDaLetra,fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: fonteDaLetra,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -152,7 +164,14 @@ class SingleLineTextQuestion extends ConsumerWidget {
                 if (_textController.text.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 12.0),
-                    child: submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex),
+                    child: submitAnswer(context, cobjectList, 'PRE',
+                        ++questionIndex, listQuestionIndex),
+                    // SizedBox(height: 15),
+                    // if (_textController.text.isNotEmpty)
+                    //   Padding(
+                    //     padding: const EdgeInsets.only(bottom: 4.0),
+                    //     child: submitAnswer(context, cobjectList, 'PRE',
+                    //         ++questionIndex, listQuestionIndex),
                   ),
               ],
             ),

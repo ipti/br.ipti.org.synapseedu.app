@@ -102,6 +102,49 @@ Widget soundButton(BuildContext context, Question question) {
       : null;
 }
 
+void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
+    String questionType) {
+  if (questionIndex < cobjectList[0].questions.length) {
+    switch (questionType) {
+      case 'PRE':
+        Navigator.of(context).pushReplacementNamed(
+            SingleLineTextQuestion.routeName,
+            arguments: ScreenArguments(
+                cobjectList, questionIndex, 'PRE', listQuestionIndex));
+        break;
+      case 'DDROP':
+        Navigator.of(context).pushReplacementNamed(DragAndDrop.routeName,
+            arguments: ScreenArguments(
+                cobjectList, questionIndex, 'DDROP', listQuestionIndex));
+        break;
+      case 'MTE':
+        Navigator.of(context).pushReplacementNamed(
+            MultipleChoiceQuestion.routeName,
+            arguments: ScreenArguments(
+                cobjectList, questionIndex, 'MTE', listQuestionIndex));
+        break;
+      case 'TXT':
+        questionIndex == 0
+            ? Navigator.of(context).pushReplacementNamed(TextQuestion.routeName,
+                arguments: ScreenArguments(
+                    cobjectList, questionIndex, 'TXT', listQuestionIndex))
+            : Navigator.of(context).pushNamed(TextQuestion.routeName,
+                arguments: ScreenArguments(
+                    cobjectList, questionIndex, 'TXT', listQuestionIndex));
+        break;
+    }
+  } else {
+    if (++listQuestionIndex < questionList.length) {
+      getCobject(listQuestionIndex, context);
+    } else {
+      if (questionType != 'TXT')
+        Navigator.of(context).pop();
+      else
+        Navigator.of(context).popAndPushNamed("/");
+    }
+  }
+}
+
 Widget submitAnswer(BuildContext context, List<Cobject> cobjectList,
     String questionType, int questionIndex, int listQuestionIndex) {
   double screenHeight = MediaQuery.of(context).size.height;
@@ -129,42 +172,8 @@ Widget submitAnswer(BuildContext context, List<Cobject> cobjectList,
             fontSize: fonteDaLetra,
           ),
         ),
-        onPressed: () {
-          if (questionIndex < cobjectList[0].questions.length) {
-            switch (questionType) {
-              case 'PRE':
-                Navigator.of(context).pushReplacementNamed(
-                    SingleLineTextQuestion.routeName,
-                    arguments: ScreenArguments(
-                        cobjectList, questionIndex, 'PRE', listQuestionIndex));
-                break;
-              case 'DDROP':
-                Navigator.of(context).pushReplacementNamed(
-                    DragAndDrop.routeName,
-                    arguments: ScreenArguments(cobjectList, questionIndex,
-                        'DDROP', listQuestionIndex));
-                break;
-              case 'MTE':
-                Navigator.of(context).pushReplacementNamed(
-                    MultipleChoiceQuestion.routeName,
-                    arguments: ScreenArguments(
-                        cobjectList, questionIndex, 'MTE', listQuestionIndex));
-                break;
-              case 'TXT':
-                Navigator.of(context).pushReplacementNamed(
-                    TextQuestion.routeName,
-                    arguments: ScreenArguments(
-                        cobjectList, questionIndex, 'TXT', listQuestionIndex));
-                break;
-            }
-          } else {
-            if (++listQuestionIndex < questionList.length) {
-              getCobject(listQuestionIndex, context);
-            } else {
-              Navigator.of(context).pop();
-            }
-          }
-        },
+        onPressed: () => submitLogic(
+            context, questionIndex, listQuestionIndex, questionType),
       ),
     ),
   );

@@ -1,6 +1,9 @@
 // import 'package:elesson/template_questoes/share/button_widgets.dart';
+import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
+
+import '../text.dart';
 
 class TemplateSlider extends StatefulWidget {
   final Widget title;
@@ -8,6 +11,9 @@ class TemplateSlider extends StatefulWidget {
   final String linkImage;
   final Widget sound;
   bool showConfirmButton;
+  final bool isTextTemplate;
+  int questionIndex;
+  int listQuestionIndex;
   final Widget activityScreen;
 
   TemplateSlider(
@@ -17,6 +23,9 @@ class TemplateSlider extends StatefulWidget {
       this.sound,
       this.showConfirmButton,
       this.activityScreen,
+      this.isTextTemplate = false,
+      this.questionIndex,
+      this.listQuestionIndex,
       this.linkImage})
       : super(key: key);
 
@@ -29,21 +38,55 @@ class _TemplateSliderState extends State<TemplateSlider> {
 
   // bool showConfirmButton = false;
 
+  Widget backButton(double buttonHeight) {
+    return ButtonTheme(
+      minWidth: buttonHeight,
+      height: buttonHeight,
+      child: MaterialButton(
+        padding: EdgeInsets.all(0),
+        color: Colors.white,
+        textColor: Color(0xFF0000FF),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.0),
+          side: BorderSide(
+            color: Color.fromRGBO(0, 0, 255, 0.2),
+          ),
+        ),
+        child: Icon(
+          Icons.keyboard_arrow_up,
+          color: Color(0xFF0000FF),
+          size: 40,
+        ),
+        onPressed: () => {
+          widget.isTextTemplate
+              // ? Navigator.of(context).popAndPushNamed(TextQuestion.routeName,
+              //     arguments: ScreenArguments(cobjectList,
+              //         --widget.questionIndex, 'TXT', widget.listQuestionIndex))
+              ? Navigator.of(context).pop()
+              : setState(() {
+                  showSecondScreen = !showSecondScreen;
+                }),
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double buttonHeight =
         48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+    // double buttonWidth =
+    //     259 > screenWidth * 0.63017 ? 259 : screenWidth * 0.63017;
     double buttonWidth =
-        259 > screenWidth * 0.63017 ? 259 : screenWidth * 0.63017;
+        150 > 0.3649 * screenWidth ? 150 : 0.3649 * screenWidth;
+
+    print('${widget.questionIndex} and ${widget.listQuestionIndex}');
 
     return Scaffold(
-      floatingActionButton: Container(
+      floatingActionButton: Padding(
         padding: EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: showSecondScreen == false ? Colors.white : Colors.transparent,
-        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -55,7 +98,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                 color: Colors.white,
                 textColor: Color(0xFF0000FF),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(18.0),
                   side: BorderSide(
                     color: Color.fromRGBO(0, 0, 255, 0.2),
                   ),
@@ -70,95 +113,60 @@ class _TemplateSliderState extends State<TemplateSlider> {
                 },
               ),
             ),
-            // if (widget.showConfirmButton == true && showSecondScreen == true)
-            //   ButtonTheme(
-            //     minWidth: 259,
-            //     height: buttonHeight,
-            //     child: MaterialButton(
-            //       padding: EdgeInsets.all(8),
-            //       color: Colors.white,
-            //       textColor: Color(0xFF00DC8C),
-            //       shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(12.0),
-            //         side: BorderSide(
-            //           color: Color(0xFF00DC8C),
-            //         ),
-            //       ),
-            //       child: Text(
-            //         'CONFIRMAR',
-            //         style: TextStyle(
-            //           fontWeight: FontWeight.w900,
-            //           fontSize: 18,
-            //         ),
-            //       ),
-            //       onPressed: () => {
-            //         Navigator.of(context).pop(),
-            //       },
-            //     ),
-            //   ),
-            showSecondScreen != true
-                ? ButtonTheme(
-                    minWidth:
-                        150 > 0.3649 * screenWidth ? 150 : 0.3649 * screenWidth,
-                    height: buttonHeight,
-                    child: MaterialButton(
-                      padding: EdgeInsets.all(0),
-                      color: Colors.white,
-                      textColor: Color(0xFF0000FF),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        side: BorderSide(
-                          color: Color.fromRGBO(0, 0, 255, 0.2),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            'VER MAIS',
-                            style: TextStyle(
-                              fontSize: fonteDaLetra,
-                              fontWeight: FontWeight.w900,
+            Row(
+              children: [
+                if (widget.isTextTemplate && widget.questionIndex > 0)
+                  backButton(buttonHeight),
+                if (widget.isTextTemplate)
+                  SizedBox(
+                    width: 6,
+                  ),
+                showSecondScreen != true
+                    ? ButtonTheme(
+                        minWidth: buttonWidth,
+                        height: buttonHeight,
+                        child: MaterialButton(
+                          padding: EdgeInsets.zero,
+                          color: Colors.white,
+                          textColor: Color(0xFF0000FF),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(
+                              color: Color.fromRGBO(0, 0, 255, 0.2),
                             ),
                           ),
-                          Icon(
-                            Icons.keyboard_arrow_down,
-                            size: 40,
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                widget.isTextTemplate
+                                    ? 'VER MAIS   '
+                                    : 'RESPONDER',
+                                style: TextStyle(
+                                  fontSize: fonteDaLetra,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                              Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 40,
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      onPressed: () => {
-                        setState(() {
-                          showSecondScreen = !showSecondScreen;
-                        }),
-                        print('mudou'),
-                      },
-                    ),
-                  )
-                : ButtonTheme(
-                    minWidth: buttonHeight,
-                    height: buttonHeight,
-                    child: MaterialButton(
-                      padding: EdgeInsets.all(0),
-                      color: Colors.white,
-                      textColor: Color(0xFF0000FF),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        side: BorderSide(
-                          color: Color.fromRGBO(0, 0, 255, 1),
+                          onPressed: () => {
+                            widget.isTextTemplate
+                                ? submitLogic(context, ++widget.questionIndex,
+                                    widget.listQuestionIndex, 'TXT')
+                                : setState(() {
+                                    showSecondScreen = !showSecondScreen;
+                                  }),
+                            print('mudou'),
+                          },
                         ),
-                      ),
-                      child: Icon(
-                        Icons.keyboard_arrow_up,
-                        color: Color(0xFF0000FF),
-                        size: 40,
-                      ),
-                      onPressed: () => {
-                        setState(() {
-                          showSecondScreen = !showSecondScreen;
-                        }),
-                      },
-                    ),
-                  ),
+                      )
+                    : backButton(buttonHeight)
+              ],
+            ),
           ],
         ),
       ),
@@ -169,7 +177,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
       body: Stack(
         children: [
           topScreen(screenWidth, screenHeight - buttonHeight - 24),
-          bottomScreen(screenWidth, screenHeight),
+          if (!widget.isTextTemplate) bottomScreen(screenWidth, screenHeight),
           // navBarTest(context),
         ],
       ),
