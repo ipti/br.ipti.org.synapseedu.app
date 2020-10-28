@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import './model.dart';
 
 import 'package:dio/dio.dart';

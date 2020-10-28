@@ -1,9 +1,5 @@
-// import 'package:elesson/template_questoes/share/button_widgets.dart';
-import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
-
-import '../text.dart';
 
 class TemplateSlider extends StatefulWidget {
   final Widget title;

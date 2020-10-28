@@ -16,8 +16,6 @@ import './template_questoes/text.dart';
 import './template_questoes/multichoice.dart';
 import './template_questoes/drag_and_drop.dart';
 import './template_questoes/question_and_answer.dart';
-import './login/login_view.dart';
-import 'share/question_widgets.dart';
 
 void main() async {
   //usando pra iniciar em outra tela
@@ -72,7 +70,6 @@ class Home extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Elesson',
       theme: ThemeData(
-        // brightness: Brightness.light,
         backgroundColor: Color(0xFFFFFFFF),
         primarySwatch: Colors.lightGreen,
         accentColor: Color(0xFF0000FF),
@@ -80,26 +77,16 @@ class Home extends StatelessWidget {
         buttonTheme: ButtonThemeData(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18),
-            // side: BorderSide(color: Color(0x3300004C), width: 1),
             side: BorderSide(color: Color(0xFF00004C), width: 1),
           ),
           splashColor: Colors.amber[900],
-          // minWidth: 120,
           minWidth: 0,
           hoverColor: Colors.red,
         ),
-        // primaryTextTheme: GoogleFonts.muliTextTheme(),
-        // primaryTextTheme: GoogleFonts.robotoCondensedTextTheme(),
-        // textTheme: ThemeData.light().textTheme.copyWith(
-        //       headline2: TextStyle(
-        //         fontWeight: FontWeight.bold,
-        //         fontSize: 36,
-        //       ),
-        //     ),
         fontFamily: 'Mulish',
         textTheme: GoogleFonts.muliTextTheme(),
       ),
-      //home: ActivitySelectionForm(),
+
       initialRoute: '/',
       routes: {
         '/': (context) => ActivitySelectionForm(),

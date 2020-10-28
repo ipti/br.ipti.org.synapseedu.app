@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 // Cobject userFromJson(String str) => Cobject.fromJson(json.decode(str));
 
 // String userToJson(Cobject data) => json.encode(data.toJson());

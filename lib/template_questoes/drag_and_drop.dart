@@ -64,18 +64,27 @@ class _DragAndDropState extends State<DragAndDrop> {
         title: Text(
           cobjectList[0].description,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: fonteDaLetra, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: fonteDaLetra,
+            fontFamily: 'Mulish',
+          ),
         ),
         text: Text(
           cobjectList[0].questions[questionIndex].header["text"],
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: fonteDaLetra, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: fonteDaLetra,
+            fontFamily: 'Mulish',
+          ),
         ),
         activityScreen: DAD(heightScreen - 12, widthScreen, cobjectList[0].questions[questionIndex], questionText),
       ),
     );
   }
 
+  // ignore: non_constant_identifier_names
   Widget DAD(double heightScreen, double widthScreen, Question question, String questionText) {
     return Container(
       margin: EdgeInsets.only(bottom: 12),
@@ -103,7 +112,11 @@ class _DragAndDropState extends State<DragAndDrop> {
                 child: Text(
                   questionText,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: fonteDaLetra),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: fonteDaLetra,
+                    fontFamily: 'Mulish',
+                  ),
                 ),
               ),
             ),

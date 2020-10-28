@@ -197,7 +197,9 @@ class MultipleChoiceQuestion extends ConsumerWidget {
           textAlign: TextAlign.justify,
           maxLines: 3,
           style: TextStyle(
-            fontSize: 26,
+            fontWeight: FontWeight.bold,
+            fontSize: fonteDaLetra,
+            fontFamily: 'Mulish',
           ),
         ),
         linkImage: imageLink.isNotEmpty
@@ -222,8 +224,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                         // textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: headerFontSize,
-                          // fontFamily: 'Mulish',
+                          fontSize: fonteDaLetra,
+                          fontFamily: 'Mulish',
                         ),
                       ),
                     ),

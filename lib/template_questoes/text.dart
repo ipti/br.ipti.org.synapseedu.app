@@ -33,15 +33,33 @@ class TextQuestion extends ConsumerWidget {
         title: Text(
           questionDescription,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headline2,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: fonteDaLetra,
+            fontFamily: 'Mulish',
+          ),
         ),
         sound: cobjectList[0].questions[questionIndex].header["sound"],
         linkImage: 'https://elesson.com.br/app/library/image/' + cobjectList[0].questions[questionIndex].header["image"],
-        text: Text(headerText),
+        text: Text(
+          headerText,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: fonteDaLetra,
+            fontFamily: 'Mulish',
+          ),
+        ),
         activityScreen: Container(
           child: Wrap(
             children: [
-              Text(questionText),
+              Text(
+                questionText,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: fonteDaLetra,
+                  fontFamily: 'Mulish',
+                ),
+              ),
               submitAnswer(context, cobjectList, 'TXT', ++questionIndex, listQuestionIndex),
             ],
           ),

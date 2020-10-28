@@ -83,11 +83,12 @@ class _LoginBoxState extends State<LoginBox> {
     return GestureDetector(
       onTap: () {
         validateUser()
+            // ignore: unnecessary_statements
             ? null
             : setState(() {
                 showError = true;
               });
-      }, // adicionar função ao tocar no botão
+      }, //adicionar função ao tocar no botão
       child: Container(
         padding: EdgeInsets.only(left: 20, right: 20),
         decoration: BoxDecoration(
@@ -108,6 +109,7 @@ class _LoginBoxState extends State<LoginBox> {
 
   bool validateUser() {
     // enquanto não estamos comunicando com o servidor
+    // ignore: unrelated_type_equality_checks
     return user == 'admin' && password == '123456' ? true : false;
   }
 }

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
 Widget bottomNavigationBar(BuildContext context) {
-  double screenWidth = MediaQuery.of(context).size.width;
   double screenHeight = MediaQuery.of(context).size.height;
   double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
-  double buttonWidth =
-      259 > screenWidth * 0.63017 ? 259 : screenWidth * 0.63017;
+
   return BottomAppBar(
     // color: Color.fromRGBO(255, 255, 255, 0),
     child: Padding(

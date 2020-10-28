@@ -1,14 +1,8 @@
 // import 'package:elesson/share/turmas.dart';
 import 'package:elesson/share/question_widgets.dart';
-import 'package:elesson/template_questoes/drag_and_drop.dart';
 import 'package:elesson/template_questoes/model.dart';
-import 'package:elesson/template_questoes/multichoice.dart';
-import 'package:elesson/template_questoes/question_provider.dart';
-import 'package:elesson/template_questoes/text.dart';
-import 'package:elesson/template_questoes/question_and_answer.dart';
 import 'package:flutter/material.dart';
 import 'package:elesson/share/api.dart';
-import 'package:flutter_riverpod/all.dart';
 
 // Form de seleção das atividades. A primeira tela após o usuário logar.
 // No momento, só temos a tela básica com dados falsos. Os próximos passos

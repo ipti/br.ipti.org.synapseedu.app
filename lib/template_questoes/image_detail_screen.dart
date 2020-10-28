@@ -1,7 +1,5 @@
 import '../share/question_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import 'model.dart';
 
 class ImageDetailScreen extends StatefulWidget {
@@ -54,7 +52,7 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
                 clipBehavior: Clip.antiAliasWithSaveLayer,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
-                  side: BorderSide(color: Color(0x3300004C)),
+                  side: BorderSide(color: Color(0x3300004C), width: 2),
                 ),
                 child: Hero(
                   tag: grouping,
@@ -62,16 +60,18 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
                       ? Image.network(
                           BASE_URL + '/image/' + question.pieces[grouping]["image"],
                           fit: BoxFit.fill,
+                          width: screenWidth,
                         )
-                      : Text(question.pieces[grouping]["text"]),
+                      : Text(
+                          question.pieces[grouping]["text"],
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: fonteDaLetra,
+                            fontFamily: 'Mulish',
+                          ),
+                        ),
                 ),
               ),
-              // Card(
-              //   child: Text(
-              //     'Id mollit occaecat mollit dolore cupidatat aliquip sunt est. Ut id elit nisi incididunt in. Nisi nostrud ut in esse voluptate.',
-              //     style: TextStyle(fontSize: 18),
-              //   ),
-              // ),
               SafeArea(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
