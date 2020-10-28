@@ -331,7 +331,6 @@ class _DragAndDropState extends State<DragAndDrop> {
     return Container(
       margin: EdgeInsets.only(right: 0, left: widthScreen * 0.039),
       decoration: BoxDecoration(
-        color: Colors.grey,
         borderRadius: BorderRadius.circular(12),
         image: DecorationImage(
           image: NetworkImage(BASE_URL + '/image/' + question.pieces['$index' + '_1']["image"]),
