@@ -63,7 +63,7 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
                           width: screenWidth,
                         )
                       : Text(
-                          question.pieces[grouping]["text"],
+                          question.pieces[grouping]["text"].toUpperCase(),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: fonteDaLetra,

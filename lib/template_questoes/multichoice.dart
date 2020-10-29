@@ -113,7 +113,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                     : Container(
                         height: cardHeight,
                         child: Text(
-                          question.pieces[grouping]["text"],
+                          question.pieces[grouping]["text"].toUpperCase(),
                           style: TextStyle(
                               fontWeight: FontWeight.w800,
                               fontSize: fonteDaLetra),
@@ -193,7 +193,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
       body: TemplateSlider(
         showConfirmButton: showConfirmButton,
         title: Text(
-          questionDescription,
+          questionDescription.toUpperCase(),
           textAlign: TextAlign.justify,
           maxLines: 3,
           style: TextStyle(
@@ -219,7 +219,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                           EdgeInsets.symmetric(vertical: 6, horizontal: 16),
                       height: textCardHeight,
                       child: Text(
-                        cobjectList[0].questions[questionIndex].header["text"],
+                        cobjectList[0].questions[questionIndex].header["text"].toUpperCase(),
                         textAlign: TextAlign.justify,
                         // textAlign: TextAlign.center,
                         style: TextStyle(

@@ -62,7 +62,7 @@ class _DragAndDropState extends State<DragAndDrop> {
         linkImage: cobjectList[0].questions[0].header['image'] != '' ? BASE_URL + '/image/' + cobjectList[0].questions[0].header['image'] : "",
         sound: cobjectList[0].questions[0].header["sound"],
         title: Text(
-          cobjectList[0].description,
+          cobjectList[0].description.toUpperCase(),
           textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -71,7 +71,7 @@ class _DragAndDropState extends State<DragAndDrop> {
           ),
         ),
         text: Text(
-          cobjectList[0].questions[questionIndex].header["text"],
+          cobjectList[0].questions[questionIndex].header["text"].toUpperCase(),
           textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -110,7 +110,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                   playSound(cobjectList[0].questions[questionIndex].header["sound"]);
                 },
                 child: Text(
-                  questionText,
+                  questionText.toUpperCase(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,

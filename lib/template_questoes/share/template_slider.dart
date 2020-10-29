@@ -31,6 +31,8 @@ class TemplateSlider extends StatefulWidget {
 
 class _TemplateSliderState extends State<TemplateSlider> {
   bool showSecondScreen = false;
+  Color colorResponder = Color(0xFF0000FF);
+  Color boxResponder = Colors.white;
 
   // bool showConfirmButton = false;
 
@@ -128,7 +130,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                         height: buttonHeight,
                         child: MaterialButton(
                           padding: EdgeInsets.zero,
-                          color: Colors.white,
+                          color: boxResponder,
                           textColor: Color(0xFF0000FF),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
@@ -142,6 +144,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                               Text(
                                 widget.isTextTemplate ? 'VER MAIS   ' : 'RESPONDER',
                                 style: TextStyle(
+                                  color: colorResponder,
                                   fontSize: fonteDaLetra,
                                   fontWeight: FontWeight.w900,
                                 ),
@@ -149,6 +152,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                               Icon(
                                 Icons.keyboard_arrow_down,
                                 size: 40,
+                                color: colorResponder,
                               ),
                             ],
                           ),
@@ -158,6 +162,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
                             else
                               {
                                 setState(() {
+                                  boxResponder = Color(0xFF0000FF);
+                                  colorResponder = Colors.white;
                                   showSecondScreen = !showSecondScreen;
                                 }),
                               }
@@ -190,8 +196,18 @@ class _TemplateSliderState extends State<TemplateSlider> {
         if (!widget.isTextTemplate) {
           if (details.delta.dy < 0) {
             setState(() {
+              boxResponder = Color(0xFF0000FF);
+              colorResponder = Colors.white;
               showSecondScreen = true;
             });
+          }
+        } else {
+          if (details.delta.dy < 0) {
+            indexTextQuestion++;
+            submitLogic(context, ++widget.questionIndex, widget.listQuestionIndex, 'TXT');
+          } else if (details.delta.dy > 0) {
+            if(indexTextQuestion > 0) indexTextQuestion--;
+            Navigator.of(context).pop();
           }
         }
       },
@@ -253,12 +269,14 @@ class _TemplateSliderState extends State<TemplateSlider> {
       onPanUpdate: (details) {
         if (details.delta.dy > 0) {
           setState(() {
+            boxResponder = Colors.white;
+            colorResponder = Color(0xFF0000FF);
             showSecondScreen = false;
           });
         }
       },
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 500),
+        duration: Duration(milliseconds: 250),
         margin: showSecondScreen == true ? EdgeInsets.only(bottom: 0) : EdgeInsets.only(top: screenHeight),
         decoration: BoxDecoration(color: Colors.white),
         width: screenWidth,

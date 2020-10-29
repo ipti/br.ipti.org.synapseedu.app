@@ -56,7 +56,7 @@ class SingleLineTextQuestion extends ConsumerWidget {
     return Scaffold(
       body: TemplateSlider(
         title: Text(
-          questionDescription,
+          questionDescription.toUpperCase(),
           textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -65,7 +65,7 @@ class SingleLineTextQuestion extends ConsumerWidget {
           ),
         ),
         text: Text(
-          questionText,
+          questionText.toUpperCase(),
           textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -95,6 +95,8 @@ class SingleLineTextQuestion extends ConsumerWidget {
                       height: heightScreen / 3,
                       child: Center(
                         child: TextFormField(
+                          textCapitalization: TextCapitalization.characters,
+                          autocorrect: false,
                           maxLines: 5,
                           minLines: 1,
                           keyboardType: TextInputType.multiline,
@@ -156,7 +158,7 @@ class SingleLineTextQuestion extends ConsumerWidget {
                             playSound(cobjectList[0].questions[questionIndex].header["sound"]);
                           },
                           child: Text(
-                            questionText,
+                            questionText.toUpperCase(),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: fonteDaLetra,
