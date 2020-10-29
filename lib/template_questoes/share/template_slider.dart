@@ -86,6 +86,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
     print('${widget.questionIndex} and ${widget.listQuestionIndex}');
 
     return Scaffold(
+      backgroundColor: Colors.white,
       floatingActionButton: Padding(
         padding: EdgeInsets.all(12),
         child: Row(
