@@ -46,10 +46,11 @@ class SingleLineTextQuestion extends ConsumerWidget {
     listQuestionIndex = args.listQuestionIndex;
 
     String questionDescription = cobjectList[0].description;
-    String questionText = cobjectList[0].questions[questionIndex].header["text"];
+    String questionText =
+        cobjectList[0].questions[questionIndex].header["text"];
 
     double widthScreen = MediaQuery.of(context).size.width;
-    double heightScreen = MediaQuery.of(context).size.height * 0.93;
+    double screenHeight = MediaQuery.of(context).size.height * 0.93;
 
     SystemChrome.setEnabledSystemUIOverlays([]);
 
@@ -74,7 +75,8 @@ class SingleLineTextQuestion extends ConsumerWidget {
           ),
         ),
         sound: cobjectList[0].questions[questionIndex].header["sound"],
-        linkImage: 'https://elesson.com.br/app/library/image/' + cobjectList[0].questions[0].header["image"],
+        linkImage: 'https://elesson.com.br/app/library/image/' +
+            cobjectList[0].questions[0].header["image"],
         activityScreen: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -84,7 +86,8 @@ class SingleLineTextQuestion extends ConsumerWidget {
                 Stack(
                   children: <Widget>[
                     Container(
-                      margin: EdgeInsets.only(right: 16, left: 16, top: heightScreen * 0.2),
+                      margin: EdgeInsets.only(
+                          right: 16, left: 16, top: screenHeight * 0.2),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
@@ -92,12 +95,12 @@ class SingleLineTextQuestion extends ConsumerWidget {
                           width: 2,
                         ),
                       ),
-                      height: heightScreen / 3,
+                      height: screenHeight / 3,
                       child: Center(
                         child: TextFormField(
                           textCapitalization: TextCapitalization.characters,
                           autocorrect: false,
-                          maxLines: 5,
+                          maxLines: 1,
                           minLines: 1,
                           keyboardType: TextInputType.multiline,
                           controller: _textController,
@@ -139,8 +142,12 @@ class SingleLineTextQuestion extends ConsumerWidget {
                       //padding: EdgeInsets.only(left: 16, right: 16, bottom: 0),
                       margin: EdgeInsets.only(
                           bottom: _textController.text.isNotEmpty
-                              ? (heightScreen * 0.93) - 18 - (48 > heightScreen * 0.0656 ? 48 : heightScreen * 0.0656)
-                              : heightScreen * 0.92),
+                              ? (screenHeight * 0.93) -
+                                  18 -
+                                  (48 > screenHeight * 0.0656
+                                      ? 48
+                                      : screenHeight * 0.0656)
+                              : screenHeight * 0.92),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         boxShadow: [
@@ -150,12 +157,14 @@ class SingleLineTextQuestion extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      height: heightScreen * 0.15,
+                      height: screenHeight * 0.15,
                       width: widthScreen,
                       child: Center(
                         child: GestureDetector(
                           onTap: () {
-                            playSound(cobjectList[0].questions[questionIndex].header["sound"]);
+                            playSound(cobjectList[0]
+                                .questions[questionIndex]
+                                .header["sound"]);
                           },
                           child: Text(
                             questionText.toUpperCase(),
@@ -174,7 +183,8 @@ class SingleLineTextQuestion extends ConsumerWidget {
                 if (_textController.text.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 12.0),
-                    child: submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex),
+                    child: submitAnswer(context, cobjectList, 'PRE',
+                        ++questionIndex, listQuestionIndex),
                     // SizedBox(height: 15),
                     // if (_textController.text.isNotEmpty)
                     //   Padding(

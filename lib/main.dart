@@ -79,14 +79,13 @@ class Home extends StatelessWidget {
             borderRadius: BorderRadius.circular(18),
             side: BorderSide(color: Color(0xFF00004C), width: 1),
           ),
-          splashColor: Colors.amber[900],
+          // splashColor: Colors.amber[900],
           minWidth: 0,
-          hoverColor: Colors.red,
+          // hoverColor: Colors.red,
         ),
         fontFamily: 'Mulish',
         textTheme: GoogleFonts.muliTextTheme(),
       ),
-
       initialRoute: '/',
       routes: {
         '/': (context) => ActivitySelectionForm(),

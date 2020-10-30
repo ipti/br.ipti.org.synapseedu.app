@@ -126,12 +126,12 @@ class MultipleChoiceQuestion extends ConsumerWidget {
               highlightColor: Color(0xFF00DC8C),
               splashColor: Color(0xFF00DC8C),
               onLongPress: () {
-                if (question.pieces[grouping]["image"].isNotEmpty)
-                  Navigator.of(context).pushNamed(
-                    ImageDetailScreen.routeName,
-                    arguments: DetailScreenArguments(
-                        grouping: grouping, question: question),
-                  );
+                // if (question.pieces[grouping]["image"].isNotEmpty)
+                Navigator.of(context).pushNamed(
+                  ImageDetailScreen.routeName,
+                  arguments: DetailScreenArguments(
+                      grouping: grouping, question: question),
+                );
               },
               onPressed: () {
                 changeButtonColor(context, index);
@@ -219,7 +219,10 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                           EdgeInsets.symmetric(vertical: 6, horizontal: 16),
                       height: textCardHeight,
                       child: Text(
-                        cobjectList[0].questions[questionIndex].header["text"].toUpperCase(),
+                        cobjectList[0]
+                            .questions[questionIndex]
+                            .header["text"]
+                            .toUpperCase(),
                         textAlign: TextAlign.justify,
                         // textAlign: TextAlign.center,
                         style: TextStyle(

@@ -16,16 +16,20 @@ class ImageDetailScreen extends StatefulWidget {
 class _ImageDetailScreenState extends State<ImageDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    final arguments = ModalRoute.of(context).settings.arguments as DetailScreenArguments;
+    final arguments =
+        ModalRoute.of(context).settings.arguments as DetailScreenArguments;
     final grouping = arguments.grouping;
     Question question = arguments.question;
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
-    double buttonWidth = 133 > screenWidth * 0.3236 ? 133 : screenWidth * 0.3236;
+    double buttonHeight =
+        48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+    double buttonWidth =
+        133 > screenWidth * 0.3236 ? 133 : screenWidth * 0.3236;
 
-    if (question.pieces[grouping]["image"].isEmpty) print('IMAGEM É VAZIA:${question.pieces[grouping]["image"]}');
+    if (question.pieces[grouping]["image"].isEmpty)
+      print('IMAGEM É VAZIA:${question.pieces[grouping]["image"]}');
     // final loadedProduct = Provider.of<Products>(
     //   context,
     //   listen: false,
@@ -58,16 +62,21 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
                   tag: grouping,
                   child: question.pieces[grouping]["image"].isNotEmpty
                       ? Image.network(
-                          BASE_URL + '/image/' + question.pieces[grouping]["image"],
+                          BASE_URL +
+                              '/image/' +
+                              question.pieces[grouping]["image"],
                           fit: BoxFit.fill,
                           width: screenWidth,
                         )
-                      : Text(
-                          question.pieces[grouping]["text"].toUpperCase(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: fonteDaLetra,
-                            fontFamily: 'Mulish',
+                      : Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            question.pieces[grouping]["text"].toUpperCase(),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: fonteDaLetra,
+                              fontFamily: 'Mulish',
+                            ),
                           ),
                         ),
                 ),
@@ -76,32 +85,39 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    if (soundButton(context, question) != null)
-                      Container(
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(18), color: backgroudButtom),
-                        child: OutlineButton(
-                          padding: EdgeInsets.all(6),
-                          borderSide: BorderSide(
-                            color: Color.fromRGBO(0, 0, 255, 1),
-                          ),
-                          color: backgroudButtom,
-                          textColor: Color(0xFF0000FF),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          child: Icon(
-                            Icons.volume_up,
-                            size: 40,
-                            color: Color(0xFF0000FF),
-                          ),
-                          onPressed: () {
+                    // if (soundButton(context, question) != null)
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(18),
+                          color: buttonBackground),
+                      child: OutlineButton(
+                        padding: EdgeInsets.all(6),
+                        borderSide: BorderSide(
+                          color: Color.fromRGBO(0, 0, 255, 1),
+                        ),
+                        color: buttonBackground,
+                        textColor: Color(0xFF0000FF),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        child: Icon(
+                          soundButton(context, question) != null
+                              ? Icons.volume_up
+                              : Icons.volume_off,
+                          size: 40,
+                          color: Color(0xFF0000FF),
+                        ),
+                        onPressed: () {
+                          if (soundButton(context, question) != null) {
                             setState(() {
-                              backgroudButtom = Color(0xFF0000FF).withOpacity(0.2);
+                              buttonBackground =
+                                  Color(0xFF0000FF).withOpacity(0.2);
                             });
                             playSoundDetailScreen(question.header["sound"]);
-                          },
-                        ),
+                          }
+                        },
                       ),
+                    ),
                     ButtonTheme(
                       minWidth: buttonWidth,
                       height: buttonHeight,
@@ -134,6 +150,7 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
                           ],
                         ),
                         onPressed: () => {
+                          player.stop(),
                           Navigator.of(context).pop(),
                         },
                       ),
@@ -152,7 +169,7 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
     await player.play(BASE_URL + '/sound/' + sound);
     player.onPlayerCompletion.listen((event) {
       setState(() {
-        backgroudButtom = Colors.white;
+        buttonBackground = Colors.white;
       });
     });
   }
