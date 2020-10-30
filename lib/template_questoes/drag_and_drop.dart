@@ -45,6 +45,10 @@ class _DragAndDropState extends State<DragAndDrop> {
   String urlSecondBox = '';
   String urlThirdBox = '';
 
+  Color colorFirstReceiverAccepted;
+  Color colorSecondReceiverAccepted;
+  Color colorThirdReceiverAccepted;
+
   @override
   Widget build(BuildContext context) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
@@ -161,6 +165,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                           return true;
                         },
                         onAccept: (data) {
+                          colorFirstReceiverAccepted = data == 1 ? Color.fromRGBO(189, 0, 255, 0.4) : data == 2 ? Color.fromRGBO(255, 138, 0, 0.4) : Color.fromRGBO(0, 203, 255, 0.2);
                           updateSender(data);
                           tradeValue(1, data);
                           updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 1, question);
@@ -206,6 +211,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                           return true;
                         },
                         onAccept: (data) {
+                          colorSecondReceiverAccepted = data == 1 ? Color.fromRGBO(189, 0, 255, 0.4) : data == 2 ? Color.fromRGBO(255, 138, 0, 0.4) : Color.fromRGBO(0, 203, 255, 0.2);
                           updateSender(data);
                           tradeValue(2, data);
                           updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 2, question);
@@ -251,6 +257,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                           return true;
                         },
                         onAccept: (data) {
+                          colorThirdReceiverAccepted = data == 1 ? Color.fromRGBO(189, 0, 255, 0.4) : data == 2 ? Color.fromRGBO(255, 138, 0, 0.4) : Color.fromRGBO(0, 203, 255, 0.2);
                           updateSender(data);
                           tradeValue(3, data);
                           updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 3, question);
@@ -310,15 +317,15 @@ class _DragAndDropState extends State<DragAndDrop> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Icon(Icons.settings_backup_restore),
+                Image.asset("assets/img/undoIcon.png",color: index == 1 ? Color.fromRGBO(189, 0, 255, 0.4) : index == 2 ? Color.fromRGBO(255, 138, 0, 0.4) : Color.fromRGBO(0, 203, 255, 0.4),),
                 Text(
                   'DESFAZER',
-                  style: TextStyle(color: Color.fromRGBO(189, 0, 255, 0.4), fontWeight: FontWeight.bold, fontSize: fonteDaLetra),
+                  style: TextStyle(color: index == 1 ? Color.fromRGBO(189, 0, 255, 0.4) : index == 2 ? Color.fromRGBO(255, 138, 0, 0.4) : Color.fromRGBO(0, 203, 255, 0.4), fontWeight: FontWeight.bold, fontSize: fonteDaLetra),
                 ),
               ],
             ),
           ),
-          color: Color.fromRGBO(189, 0, 255, 0.2),
+          color: index == 1 ? Color.fromRGBO(189, 0, 255, 0.4) : index == 2 ? Color.fromRGBO(255, 138, 0, 0.4) : Color.fromRGBO(0, 203, 255, 0.4),
           strokeWidth: 4,
           corner: FDottedLineCorner.all(12),
           dottedLength: 6,
@@ -359,14 +366,13 @@ class _DragAndDropState extends State<DragAndDrop> {
         left: 16,
       ),
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         image: DecorationImage(
           image: NetworkImage(BASE_URL + '/image/' + question.pieces[index.toString()]["image"]),
           fit: BoxFit.cover,
         ),
         border: Border.all(
-          color: Color.fromRGBO(110, 114, 145, 0.2),
+          color: index == 1 ? Color.fromRGBO(189, 0, 255, 0.2): index == 2 ? Color.fromRGBO(255, 138, 0, 0.2): Color.fromRGBO(0, 203, 255, 0.2),
           width: 2,
         ),
       ),
@@ -409,7 +415,8 @@ class _DragAndDropState extends State<DragAndDrop> {
                 fit: BoxFit.cover,
               ),
               border: Border.all(
-                color: Color.fromRGBO(189, 0, 255, 0.4),
+                //ioleirru
+                color: index == 1 ? colorFirstReceiverAccepted : index == 2 ? colorSecondReceiverAccepted : colorThirdReceiverAccepted,
                 width: 2,
               ),
             ),
@@ -419,16 +426,16 @@ class _DragAndDropState extends State<DragAndDrop> {
         : dragSenderInvisible(widthScreen);
   }
 
-  void updateReceiver(String data, int index, Question question) {
+  void updateReceiver(String url, int index, Question question) {
     switch (index) {
       case 1:
-        urlFirstBox = data;
+        urlFirstBox = url;
         break;
       case 2:
-        urlSecondBox = data;
+        urlSecondBox = url;
         break;
       case 3:
-        urlThirdBox = data;
+        urlThirdBox = url;
         break;
     }
   }
