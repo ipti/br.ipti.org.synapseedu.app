@@ -1,10 +1,10 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/template_questoes/drag_and_drop.dart';
-import 'package:elesson/template_questoes/multichoice.dart';
+import 'package:elesson/template_questoes/multiple_choice.dart';
 import 'package:elesson/template_questoes/question_and_answer.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
-import 'package:elesson/template_questoes/text.dart';
+import 'package:elesson/template_questoes/text_question.dart';
 import 'package:flutter_riverpod/all.dart';
 import '../template_questoes/model.dart';
 import 'package:flutter/material.dart';

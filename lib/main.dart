@@ -1,4 +1,4 @@
-import 'package:elesson/template_questoes/image_detail_screen.dart';
+import 'package:elesson/template_questoes/share/image_detail_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,8 +12,8 @@ import 'activity_selection/activity_selection_view.dart';
 // import 'webview/base.dart';
 // import 'webview/models/webview_modelo.dart';
 
-import './template_questoes/text.dart';
-import './template_questoes/multichoice.dart';
+import 'template_questoes/text_question.dart';
+import 'template_questoes/multiple_choice.dart';
 import './template_questoes/drag_and_drop.dart';
 import './template_questoes/question_and_answer.dart';
 

@@ -180,6 +180,7 @@ class SingleLineTextQuestion extends ConsumerWidget {
                   ],
                 ),
                 SizedBox(height: 15),
+                // Aciona o botão de confirmar apenas quando algum texto é digitado na tela.
                 if (_textController.text.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 12.0),

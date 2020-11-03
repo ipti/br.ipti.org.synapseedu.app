@@ -62,66 +62,7 @@
 //       };
 // }
 
-class Pieceset {
-  String piecesetId;
-  Groups groups;
-
-  Pieceset({
-    this.piecesetId,
-    this.groups,
-  });
-
-  factory Pieceset.fromJson(Map<String, dynamic> json) => Pieceset(
-        piecesetId: json["id"],
-        groups: Groups.fromJson(json["groups"]),
-      );
-  // Pode usar o .length em groups para saber o número de chaves.
-  // Assim é possível criar a lista de elementos
-
-  Map<String, dynamic> toJson() => {
-        "id": piecesetId,
-        // "groups": groups,
-      };
-}
-
-class Groups {
-  // List<Elements> elements;
-
-  Groups({
-    // this.elements,
-    String mock,
-  });
-
-  factory Groups.fromJson(Map<String, dynamic> json) => Groups(
-      // json.forEach((key, value) {
-      //   elements.add(Elements(
-      //     name: json["cobjects"][0]["template_code"],
-      //   ));
-      // })
-      // elements: elements.re,
-      );
-
-  Map<String, dynamic> toJson() => {};
-}
-
-// class Elements {
-//   String name;
-
-//   Elements({
-//     this.name,
-//   });
-
-//   factory Elements.addFromList()
-
-//   factory Elements.fromJson(Map<String, dynamic> json) => Elements(
-//         name: json["name"],
-//       );
-
-//   Map<String, dynamic> toJson() => {
-//         "name": name,
-//       };
-// }
-
+// Modelo para os cobjects e questões, além dos métodos para serialização do json recebido do servidor.
 class Cobject {
   String description;
   List<Question> questions;

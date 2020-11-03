@@ -1,6 +1,6 @@
-import '../share/question_widgets.dart';
+import '../../share/question_widgets.dart';
 import 'package:flutter/material.dart';
-import 'model.dart';
+import '../model.dart';
 
 class ImageDetailScreen extends StatefulWidget {
   // final String title;
@@ -12,6 +12,8 @@ class ImageDetailScreen extends StatefulWidget {
   @override
   _ImageDetailScreenState createState() => _ImageDetailScreenState();
 }
+
+// Tela de detalhes da imagem/texto.
 
 class _ImageDetailScreenState extends State<ImageDetailScreen> {
   @override

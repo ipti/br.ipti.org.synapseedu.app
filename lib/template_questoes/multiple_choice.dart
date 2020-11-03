@@ -1,15 +1,15 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/share/question_widgets.dart';
-import '../template_questoes/share/button_widgets.dart';
+import 'share/button_widgets.dart';
 import 'package:flutter/services.dart';
 
-import './share/template_slider.dart';
+import 'share/template_slider.dart';
 import 'package:flutter/material.dart';
-import './question_provider.dart';
+import 'question_provider.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import './model.dart';
-import './image_detail_screen.dart';
+import 'model.dart';
+import 'share/image_detail_screen.dart';
 
 // const String BASE_URL = 'https://elesson.com.br/app/library';
 
@@ -31,6 +31,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   var cobjectList = new List<Cobject>();
   int questionIndex;
   String questionType;
+  bool isCorrect = false;
 
   List<bool> _buttonPressed = [false, false, false];
   int _selectedButton = 3;
@@ -53,6 +54,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     _selectedButton = index;
   }
 
+  // Widget que retorna o quadro que representa o piece, seja ele uma imagem ou texto.
   Widget piece(
       int index,
       BuildContext context,
@@ -65,6 +67,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
 
     String grouping = (index + 1).toString();
     // double cardHeight = 158.29;
+
+    // Define o tamanho do card com base nas dimensões do dispositivo, seguindo as proporções presentes no Figma.
     double availableSpaceForCards =
         screenHeight - textCardHeight - buttonHeight - 12 - 32;
     double marginBetweenCards = 0.0147 * availableSpaceForCards;
@@ -94,6 +98,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                   side: BorderSide(
+                      // Define a cor das bordas do card dependendo se ele está selecionado ou não.
                       color: _buttonPressed[index]
                           ? Color(0xFF00DC8C)
                           : Color(0x6E729166),
@@ -136,8 +141,11 @@ class MultipleChoiceQuestion extends ConsumerWidget {
               onPressed: () {
                 changeButtonColor(context, index);
                 if (showConfirmButton == false) showConfirmButton = true;
-                // if (question.pieces["correctAnswer"] == index + 1)
-                //   print("Acertou");
+                // Muda a flag isCorrect com base na resposta correta fornecida pela questão. Se a resposta atual selecionada for a certa,
+                // a flag receberá true. Ao pressionar o botão de confirmar, ela será enviada como parâmetro.
+                question.pieces["correctAnswer"] == index + 1
+                    ? isCorrect = true
+                    : isCorrect = false;
                 // setState(() {
                 //   for (int i = 0; i < 3; i++) {
                 //     if (_buttonPressed[i] == true && i != index)
@@ -168,10 +176,12 @@ class MultipleChoiceQuestion extends ConsumerWidget {
 
   bool fetch = false;
   bool showConfirmButton = false;
+  // Stopwatch elapsedTimer = Stopwatch();
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    // elapsedTimer.start();
     cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
     var listQuestionIndex = args.listQuestionIndex;
@@ -188,6 +198,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     SystemChrome.setEnabledSystemUIOverlays([]);
     String questionDescription = cobjectList[0].description;
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
+    // print(elapsedTimer.elapsed);
     return Scaffold(
       // bottomNavigationBar: bottomNavBar(context),
       body: TemplateSlider(
@@ -237,6 +248,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                           horizontal: 0, vertical: 12),
                       child: Column(
                         children: [
+                          // Monta as escolhas em uma coluna, com base na função que retorna um Widget de piece unitário.
                           piece(
                               0,
                               context,
@@ -264,7 +276,10 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                         ],
                       ),
                     ),
+                    // Caso nenhuma opção esteja selecionada, _selectedButton = 3. Conforme uma resposta é selecionada, ele mudará para
+                    // 0, 1 ou 2, fazendo o botão aparecer.
                     if (_selectedButton < 3)
+                      // Enviar isCorrect
                       submitAnswer(context, cobjectList, 'MTE', ++questionIndex,
                           listQuestionIndex),
                   ],
