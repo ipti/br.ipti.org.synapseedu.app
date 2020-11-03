@@ -58,6 +58,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
           size: 40,
         ),
         onPressed: () => {
+
           // ? Navigator.of(context).popAndPushNamed(TextQuestion.routeName,
           //     arguments: ScreenArguments(cobjectList,
           //         --widget.questionIndex, 'TXT', widget.listQuestionIndex))
@@ -74,6 +75,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
           else
             {
               setState(() {
+                boxResponder = Colors.white;
+                colorResponder = Color(0xFF0000FF);
                 showSecondScreen = !showSecondScreen;
               }),
             }

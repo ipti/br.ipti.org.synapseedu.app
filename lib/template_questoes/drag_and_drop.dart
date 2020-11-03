@@ -28,7 +28,7 @@ class _DragAndDropState extends State<DragAndDrop> {
 
   bool accepted = false;
 
-  //<=======RECEIVER VALUES========>
+  //<=======RECEIVER VALUES=======>
   int valueFirstReceiver = 0;
   int valueSecondReceiver = 0;
   int valueThirdReceiver = 0;
@@ -557,7 +557,6 @@ class _DragAndDropState extends State<DragAndDrop> {
           updateSender(3);
         } else {
           valueSecondReceiver = data;
-          print('value2: $valueSecondReceiver');
         }
         break;
       case 3:
@@ -574,7 +573,6 @@ class _DragAndDropState extends State<DragAndDrop> {
           updateSender(2);
         } else {
           valueThirdReceiver = data;
-          print('value3: $valueThirdReceiver');
         }
         break;
     }
