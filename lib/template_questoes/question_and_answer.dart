@@ -48,14 +48,17 @@ class SingleLineTextQuestion extends ConsumerWidget {
     String questionDescription = cobjectList[0].description;
     String questionText =
         cobjectList[0].questions[questionIndex].header["text"];
+    String pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
     double widthScreen = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height * 0.93;
 
     SystemChrome.setEnabledSystemUIOverlays([]);
+    Stopwatch chronometer = Stopwatch();
 
     return Scaffold(
       body: TemplateSlider(
+        chronometer: chronometer,
         title: Text(
           questionDescription.toUpperCase(),
           textAlign: TextAlign.center,
@@ -184,8 +187,15 @@ class SingleLineTextQuestion extends ConsumerWidget {
                 if (_textController.text.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 12.0),
-                    child: submitAnswer(context, cobjectList, 'PRE',
-                        ++questionIndex, listQuestionIndex),
+                    child: submitAnswer(
+                        context,
+                        cobjectList,
+                        'PRE',
+                        ++questionIndex,
+                        listQuestionIndex,
+                        pieceId,
+                        true,
+                        chronometer),
                     // SizedBox(height: 15),
                     // if (_textController.text.isNotEmpty)
                     //   Padding(

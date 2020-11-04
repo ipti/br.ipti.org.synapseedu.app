@@ -425,7 +425,6 @@ class ScreenArguments {
   final int questionIndex;
   final String questionType;
   final int listQuestionIndex;
-
   ScreenArguments(this.cobjectList, this.questionIndex, this.questionType,
       this.listQuestionIndex);
 }

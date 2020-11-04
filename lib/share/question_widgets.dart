@@ -154,12 +154,23 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
   }
 }
 
-Widget submitAnswer(BuildContext context, List<Cobject> cobjectList,
-    String questionType, int questionIndex, int listQuestionIndex) {
+Widget submitAnswer(
+    BuildContext context,
+    List<Cobject> cobjectList,
+    String questionType,
+    int questionIndex,
+    int listQuestionIndex,
+    String pieceId,
+    bool isCorrect,
+    Stopwatch chronometer,
+    {String groupId}) {
   double screenHeight = MediaQuery.of(context).size.height;
   double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
   double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
-  print(minButtonWidth);
+
+  int finalTime = DateTime.now().millisecondsSinceEpoch;
+  print(finalTime);
+
   return Align(
     child: ButtonTheme(
       minWidth: minButtonWidth,
@@ -181,8 +192,12 @@ Widget submitAnswer(BuildContext context, List<Cobject> cobjectList,
             fontSize: fonteDaLetra,
           ),
         ),
-        onPressed: () => submitLogic(
-            context, questionIndex, listQuestionIndex, questionType),
+        onPressed: () => {
+          print('Elapsed time: ${chronometer.elapsedMilliseconds}'),
+          chronometer.stop(),
+          Answer().sendAnswer(pieceId, isCorrect, finalTime),
+          submitLogic(context, questionIndex, listQuestionIndex, questionType)
+        },
       ),
     ),
   );

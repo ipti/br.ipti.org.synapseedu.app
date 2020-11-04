@@ -194,11 +194,16 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     if (imageLink.isEmpty) print('O link tá vazio: "$imageLink"');
     if (imageLink == null) print('O link tá null: $imageLink');
 
+    String pieceId = cobjectList[0].questions[questionIndex].pieceId;
+
+    print('ID: $pieceId');
+
     // final cobjectProvidersState = watch(cobjectProvider.state);
     SystemChrome.setEnabledSystemUIOverlays([]);
     String questionDescription = cobjectList[0].description;
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
     // print(elapsedTimer.elapsed);
+    Stopwatch chronometer = Stopwatch();
     return Scaffold(
       // bottomNavigationBar: bottomNavBar(context),
       body: TemplateSlider(
@@ -281,7 +286,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                     if (_selectedButton < 3)
                       // Enviar isCorrect
                       submitAnswer(context, cobjectList, 'MTE', ++questionIndex,
-                          listQuestionIndex),
+                          listQuestionIndex, pieceId, isCorrect, chronometer,
+                          groupId: '$_selectedButton'),
                   ],
                 ),
               ),

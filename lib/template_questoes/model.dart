@@ -62,7 +62,37 @@
 //       };
 // }
 
+import 'package:dio/dio.dart';
+import 'package:elesson/share/question_widgets.dart';
+
 // Modelo para os cobjects e questões, além dos métodos para serialização do json recebido do servidor.
+var dio = Dio();
+
+class Answer {
+  Future<dynamic> sendAnswer(String pieceId, bool isCorrect, int finalTime,
+      {String groupId, String value}) async {
+    Response response;
+    try {
+      response = await dio.post(
+        'http://app.elesson.com.br/api-synapse/synapse/performance/actor/save',
+        data: {
+          "mode": "proficiency",
+          "piece_id": pieceId,
+          "group_id": groupId,
+          "actor_id": 5,
+          "final_time": finalTime,
+          "interval_resolution": 187230,
+          // "value": "",
+          "iscorrect": isCorrect,
+        },
+      );
+    } catch (e) {
+      print(e.toString());
+    }
+    // print("STATUS_CODE: ${response.statusCode}");
+  }
+}
+
 class Cobject {
   String description;
   List<Question> questions;
@@ -74,12 +104,12 @@ class Cobject {
 }
 
 class Question {
-  String questionImage;
+  String pieceId;
   Map<String, String> header;
   Map<String, dynamic> pieces;
 
   Question({
-    this.questionImage,
+    this.pieceId,
     this.header = const {},
     this.pieces = const {},
   });
@@ -218,6 +248,7 @@ class Question {
 
     cobject["screens"].forEach((screens) {
       questionList.add(Question(
+        pieceId: screens["id"],
         header: Question().questionMultimediaSearch(screens),
         pieces: Question()
             .questionItemSearch(screens["piecesets"][0]["pieces"][0]["groups"]),

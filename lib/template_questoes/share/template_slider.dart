@@ -13,6 +13,7 @@ class TemplateSlider extends StatefulWidget {
   int questionIndex;
   int listQuestionIndex;
   final Widget activityScreen;
+  Stopwatch chronometer;
 
   TemplateSlider(
       {Key key,
@@ -24,7 +25,8 @@ class TemplateSlider extends StatefulWidget {
       this.isTextTemplate = false,
       this.questionIndex,
       this.listQuestionIndex,
-      this.linkImage})
+      this.linkImage,
+      this.chronometer})
       : super(key: key);
 
   @override
@@ -58,7 +60,6 @@ class _TemplateSliderState extends State<TemplateSlider> {
           size: 40,
         ),
         onPressed: () => {
-
           // ? Navigator.of(context).popAndPushNamed(TextQuestion.routeName,
           //     arguments: ScreenArguments(cobjectList,
           //         --widget.questionIndex, 'TXT', widget.listQuestionIndex))
@@ -220,6 +221,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
               boxResponder = Color(0xFF0000FF);
               colorResponder = Colors.white;
               showSecondScreen = true;
+              widget.chronometer.start();
+              // timer vem aqui?
             });
           }
         } else {
