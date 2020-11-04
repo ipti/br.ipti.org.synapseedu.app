@@ -69,26 +69,23 @@ import 'package:elesson/share/question_widgets.dart';
 var dio = Dio();
 
 class Answer {
-  Future<dynamic> sendAnswer(String pieceId, bool isCorrect, int finalTime,
-      {String groupId, String value}) async {
+  Future<dynamic> sendAnswer(String pieceId, bool isCorrect, int finalTime, int intervalResolution, String value, {String groupId}) async {
     Response response;
     try {
-      response = await dio.post(
-        'http://app.elesson.com.br/api-synapse/synapse/performance/actor/save',
-        data: {
-          "mode": "proficiency",
-          "piece_id": pieceId,
-          "group_id": groupId,
-          "actor_id": 5,
-          "final_time": finalTime,
-          "interval_resolution": 187230,
-          // "value": "",
-          "iscorrect": isCorrect,
-        },
-      );
+      response = await dio.post("http://app.elesson.com.br/api-synapse/synapse/performance/actor/save", data: {
+        "mode": "proficiency",
+        "piece_id": 2325,
+        "group_id": null,
+        "actor_id": 5,
+        "final_time": 1600718031765,
+        "interval_resolution": 187230,
+        "value": "OLÁ MUNDO",
+        "iscorrect": false
+      }, );
     } catch (e) {
       print(e.toString());
     }
+    print("response: $response");
     // print("STATUS_CODE: ${response.statusCode}");
   }
 }
@@ -113,6 +110,7 @@ class Question {
     this.header = const {},
     this.pieces = const {},
   });
+
   List<String> questionItems = [];
   List<String> questionImages = [];
 
@@ -128,14 +126,14 @@ class Question {
     //A implementação mudará quando tiver um exemplo sem bugs do json
     json.forEach((key, value) {
       if (value["elements"][0]["generalProperties"].length > 2) {
-        questionImages
-            .add(value["elements"][0]["generalProperties"][7]["value"]);
+        questionImages.add(value["elements"][0]["generalProperties"][7]["value"]);
       }
     });
     return questionImages;
   }
 
   String src;
+
   Map<String, String> questionMultimediaSearch(Map<String, dynamic> json) {
     Map<String, String> srcMap = {
       "image": "",
@@ -160,8 +158,7 @@ class Question {
         });
         // break;
       } else if (elements["type"] == "text") {
-        srcMap.update(
-            "text", (value) => elements["generalProperties"][1]["value"]);
+        srcMap.update("text", (value) => elements["generalProperties"][1]["value"]);
         // src = "Não funcionou";
       }
     }
@@ -205,30 +202,25 @@ class Question {
       elements.forEach((element, elementProperty) {
         for (var value in elementProperty) {
           if (value["pieceElement_Properties"]["layertype"] == "Acerto") {
-            itemsMap["correctAnswer"] =
-                int.parse(value["pieceElement_Properties"]["grouping"]);
+            itemsMap["correctAnswer"] = int.parse(value["pieceElement_Properties"]["grouping"]);
           }
           // A parte abaixo começa a testar o tipo do item presente em elements para atribuir o caminho do item
           // na respectiva chave. Assim que encontrar determinado tipo de elemento, ele também atualiza a
           // chave que indica a composição da questão para verdadeiro.
 
           if (value["type"] == "text") {
-            item[index].update(
-                "text", (val) => value["generalProperties"][1]["value"]);
-            if (itemsMap["composition"]["text"] == false)
-              itemsMap["composition"]["text"] = true;
+            item[index].update("text", (val) => value["generalProperties"][1]["value"]);
+            if (itemsMap["composition"]["text"] == false) itemsMap["composition"]["text"] = true;
           } else if (value["type"] == "multimidia") {
             // O pair abaixo representa o par com chaves 'name' e 'value' característicos do generalProperties.
             for (var pair in value["generalProperties"]) {
               if (pair["name"] == "src") {
                 if (pair["value"].endsWith(".mp3")) {
                   item[index].update("sound", (val) => pair["value"]);
-                  if (itemsMap["composition"]["sound"] == false)
-                    itemsMap["composition"]["sound"] = true;
+                  if (itemsMap["composition"]["sound"] == false) itemsMap["composition"]["sound"] = true;
                 } else {
                   item[index].update("image", (val) => pair["value"]);
-                  if (itemsMap["composition"]["image"] == false)
-                    itemsMap["composition"]["image"] = true;
+                  if (itemsMap["composition"]["image"] == false) itemsMap["composition"]["image"] = true;
                 }
               }
             }
@@ -250,8 +242,7 @@ class Question {
       questionList.add(Question(
         pieceId: screens["id"],
         header: Question().questionMultimediaSearch(screens),
-        pieces: Question()
-            .questionItemSearch(screens["piecesets"][0]["pieces"][0]["groups"]),
+        pieces: Question().questionItemSearch(screens["piecesets"][0]["pieces"][0]["groups"]),
       ));
     });
     return questionList;

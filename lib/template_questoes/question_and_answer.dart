@@ -5,6 +5,7 @@ import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:flutter_riverpod/all.dart';
 
 final cobjectProvider = Provider<Cobjects>((ref) {
@@ -46,19 +47,16 @@ class SingleLineTextQuestion extends ConsumerWidget {
     listQuestionIndex = args.listQuestionIndex;
 
     String questionDescription = cobjectList[0].description;
-    String questionText =
-        cobjectList[0].questions[questionIndex].header["text"];
+    String questionText = cobjectList[0].questions[questionIndex].header["text"];
     String pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
     double widthScreen = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height * 0.93;
 
     SystemChrome.setEnabledSystemUIOverlays([]);
-    Stopwatch chronometer = Stopwatch();
 
     return Scaffold(
       body: TemplateSlider(
-        chronometer: chronometer,
         title: Text(
           questionDescription.toUpperCase(),
           textAlign: TextAlign.center,
@@ -78,8 +76,8 @@ class SingleLineTextQuestion extends ConsumerWidget {
           ),
         ),
         sound: cobjectList[0].questions[questionIndex].header["sound"],
-        linkImage: 'https://elesson.com.br/app/library/image/' +
-            cobjectList[0].questions[0].header["image"],
+        linkImage: 'https://elesson.com.br/app/library/image/' + cobjectList[0].questions[0].header["image"],
+        isPreTemplate: true,
         activityScreen: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -89,8 +87,7 @@ class SingleLineTextQuestion extends ConsumerWidget {
                 Stack(
                   children: <Widget>[
                     Container(
-                      margin: EdgeInsets.only(
-                          right: 16, left: 16, top: screenHeight * 0.2),
+                      margin: EdgeInsets.only(right: 16, left: 16, top: screenHeight * 0.2),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
@@ -145,11 +142,7 @@ class SingleLineTextQuestion extends ConsumerWidget {
                       //padding: EdgeInsets.only(left: 16, right: 16, bottom: 0),
                       margin: EdgeInsets.only(
                           bottom: _textController.text.isNotEmpty
-                              ? (screenHeight * 0.93) -
-                                  18 -
-                                  (48 > screenHeight * 0.0656
-                                      ? 48
-                                      : screenHeight * 0.0656)
+                              ? (screenHeight * 0.93) - 18 - (48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656)
                               : screenHeight * 0.92),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -165,9 +158,7 @@ class SingleLineTextQuestion extends ConsumerWidget {
                       child: Center(
                         child: GestureDetector(
                           onTap: () {
-                            playSound(cobjectList[0]
-                                .questions[questionIndex]
-                                .header["sound"]);
+                            playSound(cobjectList[0].questions[questionIndex].header["sound"]);
                           },
                           child: Text(
                             questionText.toUpperCase(),
@@ -180,6 +171,21 @@ class SingleLineTextQuestion extends ConsumerWidget {
                         ),
                       ),
                     ),
+                    GestureDetector(
+                      onLongPressStart: (details) {
+                        print('pressionado');
+                      },
+                      onLongPressEnd: (details) {
+                        print("Solto");
+                      },
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(25),color: Colors.blue),
+                        margin: EdgeInsets.only(top: screenHeight * 0.75,left: widthScreen*0.45),
+                        child: Center(child: Icon(Icons.mic)),
+                      ),
+                    )
                   ],
                 ),
                 SizedBox(height: 15),
@@ -187,15 +193,7 @@ class SingleLineTextQuestion extends ConsumerWidget {
                 if (_textController.text.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 12.0),
-                    child: submitAnswer(
-                        context,
-                        cobjectList,
-                        'PRE',
-                        ++questionIndex,
-                        listQuestionIndex,
-                        pieceId,
-                        true,
-                        chronometer),
+                    child: submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex, pieceId, true, _textController.text),
                     // SizedBox(height: 15),
                     // if (_textController.text.isNotEmpty)
                     //   Padding(
