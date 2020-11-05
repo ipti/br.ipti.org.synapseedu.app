@@ -1,4 +1,5 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
+import 'package:elesson/share/api.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/model.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
@@ -76,6 +77,18 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
   // _initializeRecorder() async {
   //   recorder = FlutterAudioRecorder("file_path.wav"); // .wav .aac .m4a
   //   await recorder.initialized;
+  // }
+
+  // Future<String> VoiceToText() async {
+  //   var response = await dio.post(
+  //     "https://brazilsouth.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR",
+  //     headers: {'Ocp-Apim-Subscription-Key': 'b21db0729fc14cc7b6de72e1f44322dd',
+  //       'Content-Type':'audio/wav'},
+  //     body: {
+  //       'query': 'chicken soup',
+  //       'brand': 'acme',
+  //     },
+  //   );
   // }
 
   @override
@@ -235,6 +248,8 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                         if (_currentStatus == RecordingStatus.Recording) {
                           print("parou");
                           _stop();
+
+                          ConversorVoiceToText().conversorVoice(_current?.path);
                         }
                       },
                       // onLongPressStart: (details) {

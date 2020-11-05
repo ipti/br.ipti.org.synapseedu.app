@@ -62,6 +62,8 @@
 //       };
 // }
 
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:elesson/share/question_widgets.dart';
 
@@ -69,9 +71,7 @@ import 'package:elesson/share/question_widgets.dart';
 var dio = Dio();
 
 class Answer {
-  Future<dynamic> sendAnswer(String pieceId, bool isCorrect, int finalTime,
-      int intervalResolution, String value,
-      {String groupId}) async {
+  Future<dynamic> sendAnswer(String pieceId, bool isCorrect, int finalTime, int intervalResolution, String value, {String groupId}) async {
     Response response;
     try {
       response = await dio.post(
@@ -91,6 +91,36 @@ class Answer {
       print(e.toString());
     }
     print("response: $response");
+    // print("STATUS_CODE: ${response.statusCode}");
+  }
+}
+
+class ConversorVoiceToText {
+  Future<dynamic> conversorVoice(String audioPath) async {
+    //Response response;
+    String retorno;
+    try {
+      var response = await http.post(
+        "https://brazilsouth.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR",
+        headers: {HttpHeaders.authorizationHeader: "b21db0729fc14cc7b6de72e1f44322dd", "Content-Type": "audio/wav"},
+        body: {
+          "data-binary": audioPath,
+        },
+      );
+      print(response.statusCode);
+      // response = await dio.post(
+      //   "https://brazilsouth.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR",
+      //   data: {
+      //     "data-binary": audioPath,
+      //   },
+      //   options: Options(headers: {"Ocp-Apim-Subscription-Key": "b21db0729fc14cc7b6de72e1f44322dd"},
+      //   //{HttpHeaders.authorizationHeader: {"Ocp-Apim-Subscription-Key": "b21db0729fc14cc7b6de72e1f44322dd"}},
+      //   contentType: "audio/wav"),
+      // );
+    } catch (e) {
+      print(e.toString());
+    }
+    //print("TEXTO DO AUDIO: $");
     // print("STATUS_CODE: ${response.statusCode}");
   }
 }
@@ -131,8 +161,7 @@ class Question {
     //A implementação mudará quando tiver um exemplo sem bugs do json
     json.forEach((key, value) {
       if (value["elements"][0]["generalProperties"].length > 2) {
-        questionImages
-            .add(value["elements"][0]["generalProperties"][7]["value"]);
+        questionImages.add(value["elements"][0]["generalProperties"][7]["value"]);
       }
     });
     return questionImages;
@@ -164,8 +193,7 @@ class Question {
         });
         // break;
       } else if (elements["type"] == "text") {
-        srcMap.update(
-            "text", (value) => elements["generalProperties"][1]["value"]);
+        srcMap.update("text", (value) => elements["generalProperties"][1]["value"]);
         // src = "Não funcionou";
       }
     }
@@ -209,30 +237,25 @@ class Question {
       elements.forEach((element, elementProperty) {
         for (var value in elementProperty) {
           if (value["pieceElement_Properties"]["layertype"] == "Acerto") {
-            itemsMap["correctAnswer"] =
-                int.parse(value["pieceElement_Properties"]["grouping"]);
+            itemsMap["correctAnswer"] = int.parse(value["pieceElement_Properties"]["grouping"]);
           }
           // A parte abaixo começa a testar o tipo do item presente em elements para atribuir o caminho do item
           // na respectiva chave. Assim que encontrar determinado tipo de elemento, ele também atualiza a
           // chave que indica a composição da questão para verdadeiro.
 
           if (value["type"] == "text") {
-            item[index].update(
-                "text", (val) => value["generalProperties"][1]["value"]);
-            if (itemsMap["composition"]["text"] == false)
-              itemsMap["composition"]["text"] = true;
+            item[index].update("text", (val) => value["generalProperties"][1]["value"]);
+            if (itemsMap["composition"]["text"] == false) itemsMap["composition"]["text"] = true;
           } else if (value["type"] == "multimidia") {
             // O pair abaixo representa o par com chaves 'name' e 'value' característicos do generalProperties.
             for (var pair in value["generalProperties"]) {
               if (pair["name"] == "src") {
                 if (pair["value"].endsWith(".mp3")) {
                   item[index].update("sound", (val) => pair["value"]);
-                  if (itemsMap["composition"]["sound"] == false)
-                    itemsMap["composition"]["sound"] = true;
+                  if (itemsMap["composition"]["sound"] == false) itemsMap["composition"]["sound"] = true;
                 } else {
                   item[index].update("image", (val) => pair["value"]);
-                  if (itemsMap["composition"]["image"] == false)
-                    itemsMap["composition"]["image"] = true;
+                  if (itemsMap["composition"]["image"] == false) itemsMap["composition"]["image"] = true;
                 }
               }
             }
@@ -254,8 +277,7 @@ class Question {
       questionList.add(Question(
         pieceId: screens["id"],
         header: Question().questionMultimediaSearch(screens),
-        pieces: Question()
-            .questionItemSearch(screens["piecesets"][0]["pieces"][0]["groups"]),
+        pieces: Question().questionItemSearch(screens["piecesets"][0]["pieces"][0]["groups"]),
       ));
     });
     return questionList;
