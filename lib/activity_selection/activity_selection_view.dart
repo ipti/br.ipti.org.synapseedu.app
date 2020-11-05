@@ -315,7 +315,6 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
     double heightScreen = MediaQuery.of(context).size.height;
     double widthScreen = MediaQuery.of(context).size.width;
 
-    print(heightScreen);
     if (heightScreen > 990) {
       fonteDaLetra = 28;
       headerFontSize = 24;
