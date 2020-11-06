@@ -165,7 +165,8 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                           autocorrect: false,
                           maxLines: 1,
                           minLines: 1,
-                          keyboardType: TextInputType.multiline,
+                          enableSuggestions: false,
+                          keyboardType: TextInputType.visiblePassword,
                           controller: _textController,
                           autofocus: false,
                           textAlign: TextAlign.center,
@@ -286,14 +287,14 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                         child: Center(child: Icon(Icons.mic)),
                       ),
                     ),
-                    SingleChildScrollView(
-                      reverse: true,
-                      child: Container(
-                        padding:
-                            const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 150.0),
-                        child: Text(_text),
-                      ),
-                    ),
+                    // SingleChildScrollView(
+                    //   reverse: true,
+                    //   child: Container(
+                    //     padding:
+                    //         const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 150.0),
+                    //     child: Text(_text),
+                    //   ),
+                    // ),
                     OutlineButton(
                       padding: EdgeInsets.all(6),
                       borderSide: BorderSide(
@@ -360,6 +361,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
         _speech.listen(
           onResult: (val) => setState(() {
             _text = val.recognizedWords;
+            _textController.text = _text;
             if (val.hasConfidenceRating && val.confidence > 0) {
               _confidence = val.confidence;
             }
