@@ -25,6 +25,7 @@ int timeStart;
 int timeEnd;
 
 Color buttonBackground = Colors.white;
+Color iconBackground = Color(0xFF0000FF);
 
 double fonteDaLetra;
 double headerFontSize;
