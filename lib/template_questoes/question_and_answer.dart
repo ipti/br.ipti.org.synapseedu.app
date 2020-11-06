@@ -14,6 +14,8 @@ import 'package:file/file.dart';
 import 'package:file/local.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+
 import 'dart:async';
 import 'dart:io' as io;
 
@@ -60,6 +62,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
   @override
   void initState() {
     super.initState();
+    _speech = stt.SpeechToText();
     _init();
   }
 
@@ -238,20 +241,24 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
-                        if (_currentStatus == RecordingStatus.Initialized) {
-                          print("File path of the record: ${_current?.path}");
-                          print("Format: ${_current?.audioFormat}");
-                          print("começou");
-                          _start();
-                        }
-                        if (_currentStatus == RecordingStatus.Recording) {
-                          print("parou");
-                          _stop();
-
-                          ConversorVoiceToText().conversorVoice(_current?.path);
-                        }
+                      onDoubleTap: () {
+                        _init();
                       },
+                      onTap: _listen,
+                      // onTap: () {
+                      //   if (_currentStatus == RecordingStatus.Initialized) {
+                      //     print("File path of the record: ${_current?.path}");
+                      //     print("Format: ${_current?.audioFormat}");
+                      //     print("começou");
+                      //     _start();
+                      //   }
+                      //   if (_currentStatus == RecordingStatus.Recording) {
+                      //     print("parou");
+                      //     _stop();
+
+                      //     // ConversorVoiceToText().conversorVoice(_current?.path);
+                      //   }
+                      // },
                       // onLongPressStart: (details) {
                       //   if (_currentStatus == RecordingStatus.Initialized) {
                       //     print("File path of the record: ${_current?.path}");
@@ -271,10 +278,20 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                         height: 50,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25),
-                            color: Colors.blue),
+                            color: _currentStatus == RecordingStatus.Recording
+                                ? Colors.red
+                                : Colors.blue),
                         margin: EdgeInsets.only(
                             top: screenHeight * 0.75, left: widthScreen * 0.45),
                         child: Center(child: Icon(Icons.mic)),
+                      ),
+                    ),
+                    SingleChildScrollView(
+                      reverse: true,
+                      child: Container(
+                        padding:
+                            const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 150.0),
+                        child: Text(_text),
                       ),
                     ),
                     OutlineButton(
@@ -325,6 +342,34 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
         ),
       ),
     );
+  }
+
+  stt.SpeechToText _speech;
+  bool _isListening = false;
+  String _text = 'Press the button and start speaking';
+  double _confidence = 1.0;
+
+  void _listen() async {
+    if (!_isListening) {
+      bool available = await _speech.initialize(
+        onStatus: (val) => print('onStatus: $val'),
+        onError: (val) => print('onError: $val'),
+      );
+      if (available) {
+        setState(() => _isListening = true);
+        _speech.listen(
+          onResult: (val) => setState(() {
+            _text = val.recognizedWords;
+            if (val.hasConfidenceRating && val.confidence > 0) {
+              _confidence = val.confidence;
+            }
+          }),
+        );
+      }
+    } else {
+      setState(() => _isListening = false);
+      _speech.stop();
+    }
   }
 
   _init() async {
@@ -410,6 +455,9 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
     setState(() {
       _current = result;
       _currentStatus = _current.status;
+    });
+    Future.delayed(Duration(seconds: 2), () {
+      ConversorVoiceToText().conversorVoice(_current?.path);
     });
   }
 
