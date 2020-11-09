@@ -42,6 +42,8 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
   int questionIndex;
   int listQuestionIndex;
 
+  double opacityFaleAgora = 0;
+
   final _formKey = GlobalKey<FormState>();
   final _textController = TextEditingController();
 
@@ -64,6 +66,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
   void initState() {
     super.initState();
     _speech = stt.SpeechToText();
+    _textController.text = "";
     _init();
   }
 
@@ -73,6 +76,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
   }
 
   bool hasPermission;
+
   _getPermission() async {
     hasPermission = await FlutterAudioRecorder.hasPermissions;
   }
@@ -164,7 +168,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                         child: TextFormField(
                           textCapitalization: TextCapitalization.characters,
                           autocorrect: false,
-                          maxLines: 1,
+                          maxLines: 3,
                           minLines: 1,
                           enableSuggestions: false,
                           keyboardType: TextInputType.visiblePassword,
@@ -172,7 +176,12 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                           controller: _textController,
                           autofocus: false,
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 18),
+                          style: TextStyle(
+                            color: Color(0xFF0000FF),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Mulish',
+                          ),
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
@@ -243,9 +252,34 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                         ),
                       ),
                     ),
+                    Container(
+                      width: widthScreen,
+                      margin: EdgeInsets.only(top: screenHeight * 0.65),
+                      child: Center(
+                        child: Text(
+                          "FALE AGORA...",
+                          style: TextStyle(
+                            fontSize: widthScreen * 0.05,
+                            fontWeight: FontWeight.bold,
+                            color:
+                                Color(0xFF0000FF).withOpacity(opacityFaleAgora),
+                          ),
+                        ),
+                      ),
+                    ),
                     GestureDetector(
-                      onDoubleTap: () {
-                        _init();
+                      onLongPressStart: (details) {
+                        _listen();
+                        buttonBackground = Color(0xFF0000FF).withOpacity(0.6);
+                        iconBackground = Colors.white;
+                        opacityFaleAgora = 1;
+                      },
+                      onLongPressEnd: (details) {
+                        setState(() {
+                          buttonBackground = Colors.white;
+                          iconBackground = Color(0xFF0000FF);
+                          opacityFaleAgora = 0;
+                        });
                       },
                       // onTap: _listen,
                       onTap: () {
@@ -277,44 +311,21 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                       //   }
                       // },
                       child: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            color: _currentStatus == RecordingStatus.Recording
-                                ? Colors.red
-                                : Colors.blue),
                         margin: EdgeInsets.only(
-                            top: screenHeight * 0.75, left: widthScreen * 0.45),
-                        child: Center(child: Icon(Icons.mic)),
+                            top: screenHeight * 0.80, left: widthScreen * 0.45),
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          border:
+                              Border.all(color: Color.fromRGBO(0, 0, 255, 1)),
+                          color: buttonBackground,
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        child: Icon(
+                          Icons.mic,
+                          size: 40,
+                          color: iconBackground,
+                        ),
                       ),
-                    ),
-                    // SingleChildScrollView(
-                    //   reverse: true,
-                    //   child: Container(
-                    //     padding:
-                    //         const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 150.0),
-                    //     child: Text(_text),
-                    //   ),
-                    // ),
-                    OutlineButton(
-                      padding: EdgeInsets.all(6),
-                      borderSide: BorderSide(
-                        color: Color.fromRGBO(0, 0, 255, 1),
-                      ),
-                      color: buttonBackground,
-                      textColor: Color(0xFF0000FF),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      child: Icon(
-                        Icons.volume_up,
-                        size: 40,
-                        color: Color(0xFF0000FF),
-                      ),
-                      onPressed: () {
-                        onPlayAudio();
-                      },
                     ),
                   ],
                 ),
@@ -357,7 +368,8 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
         _speech.listen(
           onResult: (val) => setState(() {
             _text = val.recognizedWords;
-            _textController.text = _text;
+            _textController.text = _text
+                .toUpperCase(); // se quiser acrescentar no lugar de substituir é só usar um += no lugar do =
             if (val.hasConfidenceRating && val.confidence > 0) {
               _confidence = val.confidence;
             }
