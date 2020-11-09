@@ -68,31 +68,49 @@ import 'package:dio/dio.dart';
 import 'package:elesson/share/question_widgets.dart';
 
 // Modelo para os cobjects e questões, além dos métodos para serialização do json recebido do servidor.
-var dio = Dio();
 
 class Answer {
   Future<dynamic> sendAnswer(String pieceId, bool isCorrect, int finalTime,
-      int intervalResolution, String value,
-      {String groupId}) async {
-    Response response;
-    try {
-      response = await dio.post(
+      {int intervalResolution, String groupId, String value}) async {
+    // Response response;
+    // BaseOptions options =
+    //     BaseOptions(baseUrl: "http://app.elesson.com.br/api-synapse");
+    // var dio = Dio(options);
+    // FormData form = FormData.fromMap({
+    //   "mode": "proficiency",
+    //   "piece_id": "2325",
+    //   "group_id": "null",
+    //   "actor_id": "5",
+    //   "final_time": "1600718031765",
+    //   "interval_resolution": "187230",
+    //   "value": "Testando",
+    //   "iscorrect": "false"
+    // });
+    // try {
+    //   response = await dio.post(
+    //     "/synapse/performance/actor/save",
+    //     data: form,
+    //   );
+    // } catch (e) {
+    //   print(e.toString());
+    // }
+    var response = await http.post(
         "http://app.elesson.com.br/api-synapse/synapse/performance/actor/save",
-        data: {
+        body: {
           "mode": "proficiency",
-          "piece_id": "2325",
+          "piece_id": pieceId,
           "group_id": groupId,
           "actor_id": "5",
           "final_time": "1600718031765",
           "interval_resolution": "187230",
-          "value": "OLÁ MUNDO",
-          "iscorrect": false,
+          "value": value != null ? value : "",
+          "iscorrect": "false"
         },
-      );
-    } catch (e) {
-      print(e.toString());
-    }
-    print("response: $response");
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
+        });
+    // print("response: ${response.statusCode}");
+    print("Enviado: $value and $groupId");
     // print("STATUS_CODE: ${response.statusCode}");
   }
 }
@@ -100,31 +118,53 @@ class Answer {
 class ConversorVoiceToText {
   Future<dynamic> conversorVoice(String audioPath) async {
     //Response response;
+
+    print("CAMINHO ENVIADO: $audioPath");
+
+    Map<String, String> _headers = {
+      'Ocp-Apim-Subscription-Key': 'b21db0729fc14cc7b6de72e1f44322dd',
+      // HttpHeaders.wwwAuthenticateHeader: 'b21db0729fc14cc7b6de72e1f44322dd',
+      // HttpHeaders.contentTypeHeader: 'audio/wav'
+    };
     String retorno;
     try {
-      var response = await http.post(
-        "https://brazilsouth.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR",
-        body: {
-          "data-binary": audioPath,
-        },
-        headers: {
-          HttpHeaders.authorizationHeader: "b21db0729fc14cc7b6de72e1f44322dd",
-          HttpHeaders.contentTypeHeader: "audio/wav",
-        },
-      );
-      print('Olha: ${response.statusCode}');
-      // response = await dio.post(
+      // var response = await http.post(
       //   "https://brazilsouth.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR",
-      //   data: {
+      //   body: {
       //     "data-binary": audioPath,
       //   },
-      //   options: Options(headers: {"Ocp-Apim-Subscription-Key": "b21db0729fc14cc7b6de72e1f44322dd"},
-      //   //{HttpHeaders.authorizationHeader: {"Ocp-Apim-Subscription-Key": "b21db0729fc14cc7b6de72e1f44322dd"}},
-      //   contentType: "audio/wav"),
+      //   // headers: {
+      //   //   HttpHeaders.authorizationHeader: "b21db0729fc14cc7b6de72e1f44322dd",
+      //   //   HttpHeaders.contentTypeHeader: "audio/wav",
+      //   // },
+      //   headers: _headers,
       // );
+      // print('Olha: ${response.statusCode}');
+      // // response = await dio.post(
+      // //   "https://brazilsouth.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR",
+      // //   data: {
+      // //     "data-binary": audioPath,
+      // //   },
+      // //   options: Options(headers: {"Ocp-Apim-Subscription-Key": "b21db0729fc14cc7b6de72e1f44322dd"},
+      // //   //{HttpHeaders.authorizationHeader: {"Ocp-Apim-Subscription-Key": "b21db0729fc14cc7b6de72e1f44322dd"}},
+      // //   contentType: "audio/wav"),
+      // // );
+
+      var request = http.MultipartRequest(
+          'POST',
+          Uri.parse(
+              "https://brazilsouth.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR"));
+      request.headers.addAll(_headers);
+      request.files
+          .add(await http.MultipartFile.fromPath('picture', audioPath));
+      print("enviar");
+      print(request.headers);
+      var res = await request.send();
+      print("FOI? ${res.statusCode}");
     } catch (e) {
       print('Erro: ${e.toString()}');
     }
+    // print(re)
     //print("TEXTO DO AUDIO: $");
     // print("STATUS_CODE: ${response.statusCode}");
   }

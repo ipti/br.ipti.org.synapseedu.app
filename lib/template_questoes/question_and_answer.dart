@@ -52,6 +52,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
   @override
   // ignore: override_on_non_overriding_member
   void dispose() {
+    super.dispose();
     _textController.dispose();
   }
 
@@ -167,6 +168,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                           minLines: 1,
                           enableSuggestions: false,
                           keyboardType: TextInputType.visiblePassword,
+
                           controller: _textController,
                           autofocus: false,
                           textAlign: TextAlign.center,
@@ -245,21 +247,21 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                       onDoubleTap: () {
                         _init();
                       },
-                      onTap: _listen,
-                      // onTap: () {
-                      //   if (_currentStatus == RecordingStatus.Initialized) {
-                      //     print("File path of the record: ${_current?.path}");
-                      //     print("Format: ${_current?.audioFormat}");
-                      //     print("começou");
-                      //     _start();
-                      //   }
-                      //   if (_currentStatus == RecordingStatus.Recording) {
-                      //     print("parou");
-                      //     _stop();
+                      // onTap: _listen,
+                      onTap: () {
+                        if (_currentStatus == RecordingStatus.Initialized) {
+                          print("File path of the record: ${_current?.path}");
+                          print("Format: ${_current?.audioFormat}");
+                          print("começou");
+                          _start();
+                        }
+                        if (_currentStatus == RecordingStatus.Recording) {
+                          print("parou");
+                          _stop();
 
-                      //     // ConversorVoiceToText().conversorVoice(_current?.path);
-                      //   }
-                      // },
+                          // ConversorVoiceToText().conversorVoice(_current?.path);
+                        }
+                      },
                       // onLongPressStart: (details) {
                       //   if (_currentStatus == RecordingStatus.Initialized) {
                       //     print("File path of the record: ${_current?.path}");
@@ -321,15 +323,9 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                 if (_textController.text.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 12.0),
-                    child: submitAnswer(
-                        context,
-                        cobjectList,
-                        'PRE',
-                        ++questionIndex,
-                        listQuestionIndex,
-                        pieceId,
-                        true,
-                        _textController.text),
+                    child: submitAnswer(context, cobjectList, 'PRE',
+                        ++questionIndex, listQuestionIndex, pieceId, true,
+                        value: _textController.text),
                     // SizedBox(height: 15),
                     // if (_textController.text.isNotEmpty)
                     //   Padding(

@@ -165,8 +165,8 @@ Widget submitAnswer(
     int listQuestionIndex,
     String pieceId,
     bool isCorrect,
-    String value,
-    {String groupId}) {
+    {String groupId,
+    String value}) {
   double screenHeight = MediaQuery.of(context).size.height;
   double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
   double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
@@ -195,7 +195,10 @@ Widget submitAnswer(
           ),
         ),
         onPressed: () {
-          // Answer().sendAnswer(pieceId, isCorrect, timeEnd,timeEnd-timeStart,value);
+          Answer().sendAnswer(pieceId, isCorrect, timeEnd,
+              intervalResolution: 1600718031765,
+              groupId: groupId != null ? groupId : "",
+              value: value);
           submitLogic(context, questionIndex, listQuestionIndex, questionType);
         },
       ),
