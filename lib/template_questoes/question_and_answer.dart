@@ -27,13 +27,11 @@ final cobjectProvider = Provider<Cobjects>((ref) {
 class SingleLineTextQuestion extends StatefulWidget {
   final LocalFileSystem localFileSystem;
 
-  SingleLineTextQuestion({localFileSystem})
-      : this.localFileSystem = localFileSystem ?? LocalFileSystem();
+  SingleLineTextQuestion({localFileSystem}) : this.localFileSystem = localFileSystem ?? LocalFileSystem();
   @override
   static const routeName = '/PRE';
 
-  _SingleLineTextQuestionState createState() =>
-      new _SingleLineTextQuestionState();
+  _SingleLineTextQuestionState createState() => new _SingleLineTextQuestionState();
 }
 
 class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
@@ -43,6 +41,9 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
   int listQuestionIndex;
 
   double opacityFaleAgora = 0;
+  bool isCorrect = false;
+
+  String correctAnswer;
 
   final _formKey = GlobalKey<FormState>();
   final _textController = TextEditingController();
@@ -99,6 +100,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
   //   );
   // }
 
+  //isCorrect
   @override
   Widget build(BuildContext context) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
@@ -112,9 +114,10 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
     listQuestionIndex = args.listQuestionIndex;
 
     String questionDescription = cobjectList[0].description;
-    String questionText =
-        cobjectList[0].questions[questionIndex].header["text"];
+    String questionText = cobjectList[0].questions[questionIndex].header["text"];
     String pieceId = cobjectList[0].questions[questionIndex].pieceId;
+
+    correctAnswer = cobjectList[0].questions[0].pieces["1"]["text"];
 
     double widthScreen = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height * 0.93;
@@ -142,8 +145,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
           ),
         ),
         sound: cobjectList[0].questions[questionIndex].header["sound"],
-        linkImage: 'https://elesson.com.br/app/library/image/' +
-            cobjectList[0].questions[0].header["image"],
+        linkImage: 'https://elesson.com.br/app/library/image/' + cobjectList[0].questions[0].header["image"],
         isPreTemplate: true,
         activityScreen: Form(
           key: _formKey,
@@ -154,8 +156,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                 Stack(
                   children: <Widget>[
                     Container(
-                      margin: EdgeInsets.only(
-                          right: 16, left: 16, top: screenHeight * 0.2),
+                      margin: EdgeInsets.only(right: 16, left: 16, top: screenHeight * 0.2),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
@@ -200,6 +201,9 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                           // receber um texto, acionando o botão. O condicional faz com que a UI seja renderizada
                           // apenas uma vez enquanto o texto estiver sendo digitado.
                           onChanged: (val) {
+                            correctAnswer == _textController.text.toString() ? isCorrect = true : isCorrect = false;
+
+                            print("CORRETA: $correctAnswer , DIGITADA: ${_textController.text.toString()} ");
                             if (_textController.text.length == 1) {
                               submitButton(context);
                             }
@@ -217,11 +221,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                       //padding: EdgeInsets.only(left: 16, right: 16, bottom: 0),
                       margin: EdgeInsets.only(
                           bottom: _textController.text.isNotEmpty
-                              ? (screenHeight * 0.93) -
-                                  18 -
-                                  (48 > screenHeight * 0.0656
-                                      ? 48
-                                      : screenHeight * 0.0656)
+                              ? (screenHeight * 0.93) - 18 - (48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656)
                               : screenHeight * 0.92),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -237,9 +237,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                       child: Center(
                         child: GestureDetector(
                           onTap: () {
-                            playSound(cobjectList[0]
-                                .questions[questionIndex]
-                                .header["sound"]);
+                            playSound(cobjectList[0].questions[questionIndex].header["sound"]);
                           },
                           child: Text(
                             questionText.toUpperCase(),
@@ -261,8 +259,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                           style: TextStyle(
                             fontSize: widthScreen * 0.05,
                             fontWeight: FontWeight.bold,
-                            color:
-                                Color(0xFF0000FF).withOpacity(opacityFaleAgora),
+                            color: Color(0xFF0000FF).withOpacity(opacityFaleAgora),
                           ),
                         ),
                       ),
@@ -282,20 +279,20 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                         });
                       },
                       // onTap: _listen,
-                      onTap: () {
-                        if (_currentStatus == RecordingStatus.Initialized) {
-                          print("File path of the record: ${_current?.path}");
-                          print("Format: ${_current?.audioFormat}");
-                          print("começou");
-                          _start();
-                        }
-                        if (_currentStatus == RecordingStatus.Recording) {
-                          print("parou");
-                          _stop();
-
-                          // ConversorVoiceToText().conversorVoice(_current?.path);
-                        }
-                      },
+                      // onTap: () {
+                      //   if (_currentStatus == RecordingStatus.Initialized) {
+                      //     print("File path of the record: ${_current?.path}");
+                      //     print("Format: ${_current?.audioFormat}");
+                      //     print("começou");
+                      //     _start();
+                      //   }
+                      //   if (_currentStatus == RecordingStatus.Recording) {
+                      //     print("parou");
+                      //     _stop();
+                      //
+                      //     // ConversorVoiceToText().conversorVoice(_current?.path);
+                      //   }
+                      // },
                       // onLongPressStart: (details) {
                       //   if (_currentStatus == RecordingStatus.Initialized) {
                       //     print("File path of the record: ${_current?.path}");
@@ -311,12 +308,10 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                       //   }
                       // },
                       child: Container(
-                        margin: EdgeInsets.only(
-                            top: screenHeight * 0.80, left: widthScreen * 0.45),
+                        margin: EdgeInsets.only(top: screenHeight * 0.80, left: widthScreen * 0.45),
                         padding: EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          border:
-                              Border.all(color: Color.fromRGBO(0, 0, 255, 1)),
+                          border: Border.all(color: Color.fromRGBO(0, 0, 255, 1)),
                           color: buttonBackground,
                           borderRadius: BorderRadius.circular(18.0),
                         ),
@@ -334,9 +329,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                 if (_textController.text.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 12.0),
-                    child: submitAnswer(context, cobjectList, 'PRE',
-                        ++questionIndex, listQuestionIndex, pieceId, true,
-                        value: _textController.text),
+                    child: submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex, pieceId, isCorrect, value: _textController.text),
                     // SizedBox(height: 15),
                     // if (_textController.text.isNotEmpty)
                     //   Padding(
@@ -368,8 +361,9 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
         _speech.listen(
           onResult: (val) => setState(() {
             _text = val.recognizedWords;
-            _textController.text = _text
-                .toUpperCase(); // se quiser acrescentar no lugar de substituir é só usar um += no lugar do =
+            _textController.text = _text.toUpperCase(); // se quiser acrescentar no lugar de substituir é só usar um += no lugar do =
+            //aquikevenny
+            correctAnswer == _textController.text.toString() ? isCorrect = true : isCorrect = false;
             if (val.hasConfidenceRating && val.confidence > 0) {
               _confidence = val.confidence;
             }
@@ -396,15 +390,12 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
         }
 
         // can add extension like ".mp4" ".wav" ".m4a" ".aac"
-        customPath = appDocDirectory.path +
-            customPath +
-            DateTime.now().millisecondsSinceEpoch.toString();
+        customPath = appDocDirectory.path + customPath + DateTime.now().millisecondsSinceEpoch.toString();
 
         // .wav <---> AudioFormat.WAV
         // .mp4 .m4a .aac <---> AudioFormat.AAC
         // AudioFormat is optional, if given value, will overwrite path extension when there is conflicts.
-        _recorder =
-            FlutterAudioRecorder(customPath, audioFormat: AudioFormat.WAV);
+        _recorder = FlutterAudioRecorder(customPath, audioFormat: AudioFormat.WAV);
 
         await _recorder.initialized;
         // after initialization
@@ -416,8 +407,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
           print(_currentStatus);
         });
       } else {
-        Scaffold.of(context).showSnackBar(
-            new SnackBar(content: new Text("You must accept permissions")));
+        Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("You must accept permissions")));
       }
     } catch (e) {
       print(e);
