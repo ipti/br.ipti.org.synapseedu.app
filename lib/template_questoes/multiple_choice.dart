@@ -178,7 +178,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   bool showConfirmButton = false;
 
   // Stopwatch elapsedTimer = Stopwatch();
-
+  bool cond = true;
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
@@ -192,12 +192,17 @@ class MultipleChoiceQuestion extends ConsumerWidget {
         48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
 
     String imageLink = cobjectList[0].questions[questionIndex].header["image"];
-    if (imageLink.isEmpty) print('O link tá vazio: "$imageLink"');
-    if (imageLink == null) print('O link tá null: $imageLink');
+    // if (imageLink.isEmpty) print('O link tá vazio: "$imageLink"');
+    // if (imageLink == null) print('O link tá null: $imageLink');
 
     String pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
-    print('ID: $pieceId');
+    if (cond == true) {
+      // List<String> cobjectIdList = getCobjectList("1");
+      // print(cobjectIdList);
+      // print(cobjectIdList.length);
+    }
+    cond = false;
 
     // final cobjectProvidersState = watch(cobjectProvider.state);
     SystemChrome.setEnabledSystemUIOverlays([]);

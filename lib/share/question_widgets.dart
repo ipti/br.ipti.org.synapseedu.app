@@ -37,6 +37,18 @@ void playSound(String sound) async {
 var cobjectList = new List<Cobject>();
 var cobject = new List<dynamic>();
 
+List<String> cobjectIdList = [];
+getCobjectList(String blockId) async {
+  ApiBlock.getBlock(blockId).then((response) {
+    response.data[0]["cobject"].forEach((cobject) {
+      // print(cobject["id"]);
+      cobjectIdList.add(cobject["id"]);
+    });
+  });
+  // print('Lista: $cobjectIdList');
+  return cobjectIdList;
+}
+
 getCobject(int listQuestionIndex, BuildContext context) async {
   cobjectList.clear();
   //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>

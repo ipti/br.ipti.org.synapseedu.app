@@ -414,6 +414,10 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   // FUNÇÃO PARA RECEBER OS DADOS DO COBJECT QUANDO A TURMA E O ALUNO FOR SELECIONADO
   void redirectToQuestion(int cobjectIdIndex) {
     if (checkStudent == true && checkDiscipline == true) {
+      getCobjectList("1").then((response) {
+        print(response);
+      });
+      // print(cobjectList);
       getCobject(cobjectIdIndex, context);
     }
   }
