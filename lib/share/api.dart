@@ -40,9 +40,7 @@ class ApiCobject {
 
 class ApiBlock {
   static Future getBlock(String blockId) async {
-    var url =
-        'http://app.elesson.com.br/api-synapse/synapse/cobjectblock/cobjects/' +
-            blockId;
+    var url = 'http://app.elesson.com.br/api-synapse/synapse/cobjectblock/cobjects/' + blockId;
     try {
       return await dio.get(url);
     } catch (e) {

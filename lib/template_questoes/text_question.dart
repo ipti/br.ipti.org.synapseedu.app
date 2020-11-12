@@ -23,8 +23,7 @@ class TextQuestion extends ConsumerWidget {
     String questionDescription = cobjectList[0].description;
     String headerText = cobjectList[0].questions[questionIndex].header["text"];
 
-    String questionText =
-        cobjectList[0].questions[questionIndex].pieces['1']['text'];
+    String questionText = cobjectList[0].questions[questionIndex].pieces['1']['text'];
     String pieceId = cobjectList[0].questions[questionIndex].pieceId;
     Stopwatch chronometer = Stopwatch();
     return Scaffold(
@@ -42,8 +41,7 @@ class TextQuestion extends ConsumerWidget {
           ),
         ),
         sound: cobjectList[0].questions[questionIndex].header["sound"],
-        linkImage: 'https://elesson.com.br/app/library/image/' +
-            cobjectList[0].questions[questionIndex].header["image"],
+        linkImage: 'https://elesson.com.br/app/library/image/' + cobjectList[0].questions[questionIndex].header["image"],
         text: Text(
           headerText,
           style: TextStyle(
@@ -63,8 +61,7 @@ class TextQuestion extends ConsumerWidget {
                   fontFamily: 'Mulish',
                 ),
               ),
-              submitAnswer(context, cobjectList, 'TXT', ++questionIndex,
-                  listQuestionIndex, pieceId, true),
+              submitAnswer(context, cobjectList, 'TXT', ++questionIndex, listQuestionIndex, pieceId, true),
             ],
           ),
         ),

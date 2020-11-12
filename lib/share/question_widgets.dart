@@ -16,6 +16,7 @@ import 'api.dart';
 const String BASE_URL = 'https://elesson.com.br/app/library';
 
 List<String> questionList = ['3988', '3987', '3977', '3976'];
+List<String> questionListTest = []; // esse aqui será a lista que já está recebendo a lista de CObject
 
 AudioPlayer player = new AudioPlayer();
 
@@ -38,6 +39,7 @@ var cobjectList = new List<Cobject>();
 var cobject = new List<dynamic>();
 
 List<String> cobjectIdList = [];
+
 getCobjectList(String blockId) async {
   ApiBlock.getBlock(blockId).then((response) {
     response.data[0]["cobject"].forEach((cobject) {
@@ -46,6 +48,7 @@ getCobjectList(String blockId) async {
     });
   });
   // print('Lista: $cobjectIdList');
+
   return cobjectIdList;
 }
 
@@ -59,28 +62,20 @@ getCobject(int listQuestionIndex, BuildContext context) async {
     cobjectList = context.read(cobjectProvider).items;
     switch (questionType) {
       case 'PRE':
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            SingleLineTextQuestion.routeName, ModalRoute.withName('/'),
-            arguments:
-                ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName('/'),
+            arguments: ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
         break;
       case 'DDROP':
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            DragAndDrop.routeName, ModalRoute.withName('/'),
-            arguments:
-                ScreenArguments(cobjectList, 0, 'DDROP', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, ModalRoute.withName('/'),
+            arguments: ScreenArguments(cobjectList, 0, 'DDROP', listQuestionIndex));
         break;
       case 'MTE':
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            MultipleChoiceQuestion.routeName, ModalRoute.withName('/'),
-            arguments:
-                ScreenArguments(cobjectList, 0, 'MTE', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(MultipleChoiceQuestion.routeName, ModalRoute.withName('/'),
+            arguments: ScreenArguments(cobjectList, 0, 'MTE', listQuestionIndex));
         break;
       case 'TXT':
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            TextQuestion.routeName, ModalRoute.withName('/'),
-            arguments:
-                ScreenArguments(cobjectList, 0, 'TXT', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(TextQuestion.routeName, ModalRoute.withName('/'),
+            arguments: ScreenArguments(cobjectList, 0, 'TXT', listQuestionIndex));
         break;
     }
   });
@@ -122,43 +117,38 @@ Widget soundButton(BuildContext context, Question question) {
       : null;
 }
 
-void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
-    String questionType) {
-  if (questionIndex < cobjectList[0].questions.length &&
-      questionType != 'TXT') {
+void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex, String questionType,[String pieceId, bool isCorrect, int finalTime,
+int intervalResolution]) {
+  if (questionIndex < cobjectList[0].questions.length && questionType != 'TXT') {
     switch (questionType) {
       case 'PRE':
-        Navigator.of(context).pushReplacementNamed(
-            SingleLineTextQuestion.routeName,
-            arguments: ScreenArguments(
-                cobjectList, questionIndex, 'PRE', listQuestionIndex));
+        Navigator.of(context)
+            .pushReplacementNamed(SingleLineTextQuestion.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'PRE', listQuestionIndex));
         break;
       case 'DDROP':
-        Navigator.of(context).pushReplacementNamed(DragAndDrop.routeName,
-            arguments: ScreenArguments(
-                cobjectList, questionIndex, 'DDROP', listQuestionIndex));
+        Navigator.of(context)
+            .pushReplacementNamed(DragAndDrop.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'DDROP', listQuestionIndex));
         break;
       case 'MTE':
-        Navigator.of(context).pushReplacementNamed(
-            MultipleChoiceQuestion.routeName,
-            arguments: ScreenArguments(
-                cobjectList, questionIndex, 'MTE', listQuestionIndex));
+        Navigator.of(context)
+            .pushReplacementNamed(MultipleChoiceQuestion.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'MTE', listQuestionIndex));
         break;
     }
-  } else if (questionType == 'TXT' &&
-      indexTextQuestion < cobjectList[0].questions.length) {
+  } else if (questionType == 'TXT' && indexTextQuestion < cobjectList[0].questions.length) {
     if (questionIndex == 0) {
       indexTextQuestion = 0;
-      Navigator.of(context).pushReplacementNamed(TextQuestion.routeName,
-          arguments: ScreenArguments(
-              cobjectList, questionIndex, 'TXT', listQuestionIndex));
+      Navigator.of(context)
+          .pushReplacementNamed(TextQuestion.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'TXT', listQuestionIndex));
     } else {
       print(indexTextQuestion);
-      Navigator.of(context).pushNamed(TextQuestion.routeName,
-          arguments: ScreenArguments(
-              cobjectList, indexTextQuestion, 'TXT', listQuestionIndex));
+      Navigator.of(context).pushNamed(TextQuestion.routeName, arguments: ScreenArguments(cobjectList, indexTextQuestion, 'TXT', listQuestionIndex));
     }
   } else {
+    if(questionType == 'TXT'){
+      //todo enviar como correto
+      Answer().sendAnswer(pieceId, isCorrect, timeEnd, intervalResolution: intervalResolution, groupId: "", value: "");
+      print("enviada rewsposta do txt");
+    }
     if (++listQuestionIndex < questionList.length) {
       getCobject(listQuestionIndex, context);
     } else {
@@ -171,15 +161,8 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
 }
 
 Widget submitAnswer(
-    BuildContext context,
-    List<Cobject> cobjectList,
-    String questionType,
-    int questionIndex,
-    int listQuestionIndex,
-    String pieceId,
-    bool isCorrect,
-    {String groupId,
-    String value}) {
+    BuildContext context, List<Cobject> cobjectList, String questionType, int questionIndex, int listQuestionIndex, String pieceId, bool isCorrect,
+    {String groupId, String value}) {
   double screenHeight = MediaQuery.of(context).size.height;
   double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
   double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
@@ -208,11 +191,8 @@ Widget submitAnswer(
           ),
         ),
         onPressed: () {
-          Answer().sendAnswer(pieceId, isCorrect, timeEnd,
-              intervalResolution: 1600718031765,
-              groupId: groupId != null ? groupId : "",
-              value: value);
-          submitLogic(context, questionIndex, listQuestionIndex, questionType);
+          Answer().sendAnswer(pieceId, isCorrect, timeEnd, intervalResolution: 1600718031765, groupId: groupId != null ? groupId : "", value: value);
+          submitLogic(context, questionIndex, listQuestionIndex, questionType,pieceId,true,timeEnd,timeEnd-timeStart);
         },
       ),
     ),

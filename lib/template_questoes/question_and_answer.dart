@@ -278,21 +278,20 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                           opacityFaleAgora = 0;
                         });
                       },
-                      // onTap: _listen,
-                      // onTap: () {
-                      //   if (_currentStatus == RecordingStatus.Initialized) {
-                      //     print("File path of the record: ${_current?.path}");
-                      //     print("Format: ${_current?.audioFormat}");
-                      //     print("começou");
-                      //     _start();
-                      //   }
-                      //   if (_currentStatus == RecordingStatus.Recording) {
-                      //     print("parou");
-                      //     _stop();
-                      //
-                      //     // ConversorVoiceToText().conversorVoice(_current?.path);
-                      //   }
-                      // },
+                      //onTap: _listen,
+                      onTap: () {
+                        if (_currentStatus == RecordingStatus.Initialized) {
+                          print("File path of the record: ${_current?.path}");
+                          print("Format: ${_current?.audioFormat}");
+                          print("começou");
+                          _start();
+                        }
+                        if (_currentStatus == RecordingStatus.Recording) {
+                          print("parou");
+                          _stop();
+                          // ConversorVoiceToText().conversorVoice(_current?.path);
+                        }
+                      },
                       // onLongPressStart: (details) {
                       //   if (_currentStatus == RecordingStatus.Initialized) {
                       //     print("File path of the record: ${_current?.path}");
