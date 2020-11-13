@@ -16,7 +16,9 @@ import 'api.dart';
 const String BASE_URL = 'https://elesson.com.br/app/library';
 
 List<String> questionList = ['3988', '3987', '3977', '3976'];
-List<String> questionListTest = []; // esse aqui será a lista que já está recebendo a lista de CObject
+List<String> questionListTest = [];
+// esse aqui será a lista que já está recebendo a lista de CObject
+//todo substituir o question list anterior por essa variavel
 
 AudioPlayer player = new AudioPlayer();
 

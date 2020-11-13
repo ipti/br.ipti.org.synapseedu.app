@@ -76,11 +76,11 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
     context.read(buttonStateProvider).state = true;
   }
 
-  bool hasPermission;
+  //bool hasPermission;
 
-  _getPermission() async {
-    hasPermission = await FlutterAudioRecorder.hasPermissions;
-  }
+  // _getPermission() async {
+  //   hasPermission = await FlutterAudioRecorder.hasPermissions;
+  // }
 
   // // var recorder;
   // _initializeRecorder() async {
@@ -104,7 +104,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
   @override
   Widget build(BuildContext context) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
-    _getPermission();
+    //_getPermission(); não precisa disso, se pedir ele buga e crasha
     // _initializeRecorder();
 
     // final path = _localPath;
