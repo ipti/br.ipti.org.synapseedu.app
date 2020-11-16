@@ -155,7 +155,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       showFirstSender == true ? sender(1, 1, widthScreen, question) : undo(1, widthScreen),
-                      receiver(1,widthScreen,question),
+                      receiver(1, widthScreen, question),
                     ],
                   ),
                   //<=================SEGUNDA=====================>
@@ -163,7 +163,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       showSecondSender == true ? sender(2, 2, widthScreen, question) : undo(2, widthScreen),
-                      receiver(2,widthScreen,question),
+                      receiver(2, widthScreen, question),
                     ],
                   ),
                   //<=================TERCEIRA=====================>
@@ -171,7 +171,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       showThirdSender == true ? sender(3, 3, widthScreen, question) : undo(3, widthScreen),
-                      receiver(3,widthScreen,question),
+                      receiver(3, widthScreen, question),
                     ],
                   ),
                 ],
@@ -186,12 +186,11 @@ class _DragAndDropState extends State<DragAndDrop> {
     );
   }
 
-  Widget receiver(int posicao,double widthScreen, Question question) {
-
-    int wret = randomNumber[posicao-1];
+  Widget receiver(int posicao, double widthScreen, Question question) {
+    int wret = randomNumber[posicao - 1];
     switch (wret) {
       case 1:
-        return  DragTarget(
+        return DragTarget(
           builder: (context, List<int> candidateData, rejectedData) {
             return Container(
               margin: EdgeInsets.only(right: 16),
@@ -221,8 +220,8 @@ class _DragAndDropState extends State<DragAndDrop> {
             colorFirstReceiverAccepted = data == 1
                 ? Color.fromRGBO(189, 0, 255, 0.4)
                 : data == 2
-                ? Color.fromRGBO(255, 138, 0, 0.4)
-                : Color.fromRGBO(0, 203, 255, 0.2);
+                    ? Color.fromRGBO(255, 138, 0, 0.4)
+                    : Color.fromRGBO(0, 203, 255, 0.2);
             updateSender(data);
             tradeValue(1, data);
             updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 1, question);
@@ -266,8 +265,8 @@ class _DragAndDropState extends State<DragAndDrop> {
             colorSecondReceiverAccepted = data == 1
                 ? Color.fromRGBO(189, 0, 255, 0.4)
                 : data == 2
-                ? Color.fromRGBO(255, 138, 0, 0.4)
-                : Color.fromRGBO(0, 203, 255, 0.2);
+                    ? Color.fromRGBO(255, 138, 0, 0.4)
+                    : Color.fromRGBO(0, 203, 255, 0.2);
             updateSender(data);
             tradeValue(2, data);
             updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 2, question);
@@ -311,8 +310,8 @@ class _DragAndDropState extends State<DragAndDrop> {
             colorThirdReceiverAccepted = data == 1
                 ? Color.fromRGBO(189, 0, 255, 0.4)
                 : data == 2
-                ? Color.fromRGBO(255, 138, 0, 0.4)
-                : Color.fromRGBO(0, 203, 255, 0.2);
+                    ? Color.fromRGBO(255, 138, 0, 0.4)
+                    : Color.fromRGBO(0, 203, 255, 0.2);
             updateSender(data);
             tradeValue(3, data);
             updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 3, question);
