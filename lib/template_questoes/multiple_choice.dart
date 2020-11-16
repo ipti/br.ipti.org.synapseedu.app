@@ -32,6 +32,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   int questionIndex;
   String questionType;
   bool isCorrect = false;
+  DateTime startTime;
 
   List<bool> _buttonPressed = [false, false, false];
   int _selectedButton = 3;
@@ -56,22 +57,33 @@ class MultipleChoiceQuestion extends ConsumerWidget {
 
   // Widget que retorna o quadro que representa o piece, seja ele uma imagem ou texto.
   Widget piece(
-      int index, BuildContext context, ScopedReader watch, Question question, double buttonHeight, double screenHeight, double textCardHeight) {
+      int index,
+      BuildContext context,
+      ScopedReader watch,
+      Question question,
+      double buttonHeight,
+      double screenHeight,
+      double textCardHeight) {
     final buttonState = watch(buttonStateProvider).state;
 
     String grouping = (index + 1).toString();
     // double cardHeight = 158.29;
 
     // Define o tamanho do card com base nas dimensões do dispositivo, seguindo as proporções presentes no Figma.
-    double availableSpaceForCards = screenHeight - textCardHeight - buttonHeight - 12 - 32;
+    double availableSpaceForCards =
+        screenHeight - textCardHeight - buttonHeight - 12 - 32;
     double marginBetweenCards = 0.0147 * availableSpaceForCards;
-    double cardHeight = (availableSpaceForCards - 24 - 2 * marginBetweenCards) / 3;
-    double cardWidth = question.pieces[grouping]["image"].isNotEmpty ? cardHeight : double.infinity;
+    double cardHeight =
+        (availableSpaceForCards - 24 - 2 * marginBetweenCards) / 3;
+    double cardWidth = question.pieces[grouping]["image"].isNotEmpty
+        ? cardHeight
+        : double.infinity;
 
     bool audio = false;
 
     return Card(
-      margin: EdgeInsets.only(bottom: index < 2 ? marginBetweenCards : 0, left: 12, right: 12),
+      margin: EdgeInsets.only(
+          bottom: index < 2 ? marginBetweenCards : 0, left: 12, right: 12),
       clipBehavior: Clip.hardEdge,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -81,13 +93,16 @@ class MultipleChoiceQuestion extends ConsumerWidget {
         alignment: Alignment.bottomLeft,
         children: [
           ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: cardHeight, maxWidth: cardWidth),
+            constraints:
+                BoxConstraints(maxHeight: cardHeight, maxWidth: cardWidth),
             child: MaterialButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
                 side: BorderSide(
-                  // Define a cor das bordas do card dependendo se ele está selecionado ou não.
-                  color: _buttonPressed[index] ? Color(0xFF00DC8C) : Color(0x6E729166),
+                  // Define a cor das bordas do card dependendo se ele estiver selecionado ou não.
+                  color: _buttonPressed[index]
+                      ? Color(0xFF00DC8C)
+                      : Color(0x6E729166),
                   width: 3,
                 ),
               ),
@@ -98,14 +113,18 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                 tag: grouping,
                 child: question.pieces[grouping]["image"].isNotEmpty
                     ? Image.network(
-                        BASE_URL + '/image/' + question.pieces[grouping]["image"],
+                        BASE_URL +
+                            '/image/' +
+                            question.pieces[grouping]["image"],
                       )
                     // ? Image.asset('assets/img/placeholder.jpg')
                     : Container(
                         height: cardHeight,
                         child: Text(
                           question.pieces[grouping]["text"].toUpperCase(),
-                          style: TextStyle(fontWeight: FontWeight.w800, fontSize: fonteDaLetra),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: fonteDaLetra),
                         ),
                         margin: const EdgeInsets.all(20),
                       ),
@@ -118,7 +137,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                 // if (question.pieces[grouping]["image"].isNotEmpty)
                 Navigator.of(context).pushNamed(
                   ImageDetailScreen.routeName,
-                  arguments: DetailScreenArguments(grouping: grouping, question: question),
+                  arguments: DetailScreenArguments(
+                      grouping: grouping, question: question),
                 );
               },
               onPressed: () {
@@ -126,7 +146,9 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                 if (showConfirmButton == false) showConfirmButton = true;
                 // Muda a flag isCorrect com base na resposta correta fornecida pela questão. Se a resposta atual selecionada for a certa,
                 // a flag receberá true. Ao pressionar o botão de confirmar, ela será enviada como parâmetro.
-                question.pieces["correctAnswer"] == index + 1 ? isCorrect = true : isCorrect = false;
+                question.pieces["correctAnswer"] == index + 1
+                    ? isCorrect = true
+                    : isCorrect = false;
                 // setState(() {
                 //   for (int i = 0; i < 3; i++) {
                 //     if (_buttonPressed[i] == true && i != index)
@@ -158,8 +180,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   bool fetch = false;
   bool showConfirmButton = false;
 
-  // Stopwatch elapsedTimer = Stopwatch();
-  bool cond = true;
+  Stopwatch elapsedTimer = Stopwatch();
+  bool timer = false;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -170,7 +192,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     var listQuestionIndex = args.listQuestionIndex;
     double screenHeight = MediaQuery.of(context).size.height;
     double textCardHeight = 0.0985 * screenHeight;
-    double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+    double buttonHeight =
+        48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
 
     String imageLink = cobjectList[0].questions[questionIndex].header["image"];
     // if (imageLink.isEmpty) print('O link tá vazio: "$imageLink"');
@@ -178,19 +201,13 @@ class MultipleChoiceQuestion extends ConsumerWidget {
 
     String pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
-    if (cond == true) {
-      // List<String> cobjectIdList = getCobjectList("1");
-      // print(cobjectIdList);
-      // print(cobjectIdList.length);
-    }
-    cond = false;
-
     // final cobjectProvidersState = watch(cobjectProvider.state);
     SystemChrome.setEnabledSystemUIOverlays([]);
     String questionDescription = cobjectList[0].description;
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
     // print(elapsedTimer.elapsed);
     Stopwatch chronometer = Stopwatch();
+
     return Scaffold(
       // bottomNavigationBar: bottomNavBar(context),
       body: TemplateSlider(
@@ -205,7 +222,9 @@ class MultipleChoiceQuestion extends ConsumerWidget {
             fontFamily: 'Mulish',
           ),
         ),
-        linkImage: imageLink.isNotEmpty ? 'https://elesson.com.br/app/library/image/' + imageLink : null,
+        linkImage: imageLink.isNotEmpty
+            ? 'https://elesson.com.br/app/library/image/' + imageLink
+            : null,
         activityScreen: Container(
           child: Wrap(
             alignment: WrapAlignment.center,
@@ -216,10 +235,14 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 6, horizontal: 16),
                       height: textCardHeight,
                       child: Text(
-                        cobjectList[0].questions[questionIndex].header["text"].toUpperCase(),
+                        cobjectList[0]
+                            .questions[questionIndex]
+                            .header["text"]
+                            .toUpperCase(),
                         textAlign: TextAlign.justify,
                         // textAlign: TextAlign.center,
                         style: TextStyle(
@@ -230,13 +253,35 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 0, vertical: 12),
                       child: Column(
                         children: [
                           // Monta as escolhas em uma coluna, com base na função que retorna um Widget de piece unitário.
-                          piece(0, context, watch, cobjectList[0].questions[questionIndex], buttonHeight, screenHeight, textCardHeight),
-                          piece(1, context, watch, cobjectList[0].questions[questionIndex], buttonHeight, screenHeight, textCardHeight),
-                          piece(2, context, watch, cobjectList[0].questions[questionIndex], buttonHeight, screenHeight, textCardHeight),
+                          piece(
+                              0,
+                              context,
+                              watch,
+                              cobjectList[0].questions[questionIndex],
+                              buttonHeight,
+                              screenHeight,
+                              textCardHeight),
+                          piece(
+                              1,
+                              context,
+                              watch,
+                              cobjectList[0].questions[questionIndex],
+                              buttonHeight,
+                              screenHeight,
+                              textCardHeight),
+                          piece(
+                              2,
+                              context,
+                              watch,
+                              cobjectList[0].questions[questionIndex],
+                              buttonHeight,
+                              screenHeight,
+                              textCardHeight),
                         ],
                       ),
                     ),
@@ -244,7 +289,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                     // 0, 1 ou 2, fazendo o botão aparecer.
                     if (_selectedButton < 3)
                       // Enviar isCorrect
-                      submitAnswer(context, cobjectList, 'MTE', ++questionIndex, listQuestionIndex, pieceId, isCorrect,
+                      submitAnswer(context, cobjectList, 'MTE', ++questionIndex,
+                          listQuestionIndex, pieceId, isCorrect,
                           groupId: (_selectedButton + 1).toString()),
                   ],
                 ),

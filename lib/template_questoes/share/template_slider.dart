@@ -14,10 +14,12 @@ class TemplateSlider extends StatefulWidget {
   final bool isPreTemplate;
   int questionIndex;
   int listQuestionIndex;
+  DateTime startTime;
   final Widget activityScreen;
 
   TemplateSlider(
       {Key key,
+      this.startTime,
       this.title,
       this.text,
       this.sound,
