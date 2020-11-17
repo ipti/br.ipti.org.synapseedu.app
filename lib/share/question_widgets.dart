@@ -55,7 +55,8 @@ getCobjectList(String blockId) async {
   return cobjectIdList;
 }
 
-getCobject(int listQuestionIndex, BuildContext context) async {
+getCobject(int listQuestionIndex, BuildContext context,
+    List<String> questionListTest) async {
   cobjectList.clear();
   //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
   ApiCobject.getQuestao(questionList[listQuestionIndex]).then((response) {
@@ -174,7 +175,7 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
       print("enviada rewsposta do txt");
     }
     if (++listQuestionIndex < questionList.length) {
-      getCobject(listQuestionIndex, context);
+      getCobject(listQuestionIndex, context, questionListTest);
     } else {
       if (questionType != 'TXT')
         Navigator.of(context).pop();
@@ -230,8 +231,8 @@ Widget submitAnswer(
 
           // ! O erro está vindo daqui, quando tenta subtrair timeStart do timeEnd. Motivo: timeStart vem null
 
-          // submitLogic(context, questionIndex, listQuestionIndex, questionType,
-          //     pieceId, true, timeEnd, timeEnd - timeStart);
+          submitLogic(context, questionIndex, listQuestionIndex, questionType,
+              pieceId, true, timeEnd);
         },
       ),
     ),

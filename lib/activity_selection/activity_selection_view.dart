@@ -11,7 +11,8 @@ import 'package:elesson/share/api.dart';
 
 class ActivitySelectionForm extends StatefulWidget {
   @override
-  _ActivitySelectionFormState createState() => new _ActivitySelectionFormState();
+  _ActivitySelectionFormState createState() =>
+      new _ActivitySelectionFormState();
 }
 
 class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
@@ -119,7 +120,9 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
           child: Container(
             width: widthScreen,
             height: heightScreen * 0.08,
-            decoration: BoxDecoration(border: Border.all(color: Colors.green, width: 3), borderRadius: BorderRadius.circular(20)),
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.green, width: 3),
+                borderRadius: BorderRadius.circular(20)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -146,7 +149,9 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
             margin: EdgeInsets.only(top: 20),
             width: widthScreen,
             height: heightScreen * 0.08,
-            decoration: BoxDecoration(border: Border.all(color: Colors.green, width: 3), borderRadius: BorderRadius.circular(20)),
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.green, width: 3),
+                borderRadius: BorderRadius.circular(20)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -419,7 +424,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
       });
       print('a');
       // print(cobjectList);
-      getCobject(cobjectIdIndex, context);
+      getCobject(cobjectIdIndex, context, questionListTest);
     }
   }
 }
@@ -430,5 +435,6 @@ class ScreenArguments {
   final String questionType;
   final int listQuestionIndex;
 
-  ScreenArguments(this.cobjectList, this.questionIndex, this.questionType, this.listQuestionIndex);
+  ScreenArguments(this.cobjectList, this.questionIndex, this.questionType,
+      this.listQuestionIndex);
 }
