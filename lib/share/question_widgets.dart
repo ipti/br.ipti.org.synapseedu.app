@@ -9,6 +9,8 @@ import 'package:flutter_riverpod/all.dart';
 import '../template_questoes/model.dart';
 import 'package:flutter/material.dart';
 
+import 'package:qrscan/qrscan.dart' as scanner; // usado para ler codigos qr
+
 import 'api.dart';
 
 // Contém alguns métodos e variáveis globais necessárias para as questões.
@@ -206,4 +208,11 @@ Widget submitAnswer(
       ),
     ),
   );
+}
+
+
+TextEditingController outputController = new TextEditingController();
+Future scan() async {
+  String barcode = await scanner.scan();
+  outputController.text = barcode;
 }
