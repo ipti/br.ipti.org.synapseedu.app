@@ -25,6 +25,7 @@ AudioPlayer player = new AudioPlayer();
 int indexTextQuestion = 0;
 
 int timeStart;
+bool timeStartIscaptured = false;
 int timeEnd;
 
 Color buttonBackground = Colors.white;
@@ -130,6 +131,7 @@ Widget soundButton(BuildContext context, Question question) {
 void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
     String questionType,
     [String pieceId, bool isCorrect, int finalTime, int intervalResolution]) {
+  timeStartIscaptured = false; // resetando
   if (questionIndex < cobjectList[0].questions.length &&
       questionType != 'TXT') {
     switch (questionType) {
@@ -167,8 +169,8 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
   } else {
     if (questionType == 'TXT') {
       //todo enviar como correto
-      Answer().sendAnswer(pieceId, isCorrect, timeEnd,
-          intervalResolution: intervalResolution, groupId: "", value: "");
+      Answer().sendAnswer(pieceId, true, 0,
+          intervalResolution: 0, groupId: "", value: "");
       print("enviada rewsposta do txt");
     }
     if (++listQuestionIndex < questionList.length) {
