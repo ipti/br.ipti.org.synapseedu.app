@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:twilio_flutter/twilio_flutter.dart';
+import 'package:twilio_phone_verify/twilio_phone_verify.dart';
 
 class SmsRegisterView extends StatefulWidget {
   static const routeName = '/sms-register';
@@ -14,22 +14,51 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
 
   String colegioValue;
   String serieValue;
-  TwilioFlutter twilioFlutter;
+
+  TwilioPhoneVerify _twilioPhoneVerify;
+  //TwilioFlutter twilioFlutter;
 
   @override
   void initState() {
     // TODO: implement initState
-    twilioFlutter = TwilioFlutter(
-        accountSid: 'AC7ad4a260cd8163d9ca9d957ff0dfebb7',
-        authToken: '3389bb9152e13b4383cfc79538923c52',
-        twilioNumber: '+1**********');
+    _twilioPhoneVerify = new TwilioPhoneVerify( // meu
+        accountSid: 'ACadd1dd994d143f635b442de15481e1f7', // replace with Account SID
+        authToken: 'fe9c3fa3784cd48017ca39f454bbc5bc', // replace with Auth Token
+        serviceSid: 'VA7686722166b582b1a7ab42770b104097' // replace with Service SID
+    );
+
+    // _twilioPhoneVerify = new TwilioPhoneVerify( //elesson
+    //     accountSid: 'AC7ad4a260cd8163d9ca9d957ff0dfebb7', // replace with Account SID
+    //     authToken: '3389bb9152e13b4383cfc79538923c52', // replace with Auth Token
+    //     serviceSid: 'A0041644482dcb11b671a45f2777da1ce' // replace with Service SID
+    // );
     super.initState();
   }
 
-  void sendSms() async {
-    twilioFlutter.sendSMS(
-        toNumber: _phoneNumberController.toString(),
-        messageBody: 'Enviando sms.');
+  Future<void> sendCode(String phoneNumber) async {
+    var result = await _twilioPhoneVerify.sendSmsCode(phoneNumber);
+
+    if (result['message'] == 'success') {
+      // code sent
+      print("Código enviado");
+    } else {
+      // error
+      print("ERROR:");
+      print('${result['statusCode']} : ${result['message']}');
+    }
+  }
+
+  Future<void> verifyCode(String phoneNumber, String code) async {
+    var result = await _twilioPhoneVerify.verifySmsCode(phoneNumber, code);
+
+    if (result['message'] == 'approved') {
+      // phone number verified
+      print("Verificado com sucesso");
+    } else {
+      // error
+      print("ERROR:");
+      print('${result['statusCode']} : ${result['message']}');
+    }
   }
 
   @override

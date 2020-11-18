@@ -44,7 +44,7 @@ dependencies:
   qrscan: ^0.2.17 #usado para ler QRCODE
   #TESTE
   http: ^0.12.2
-  twilio_flutter: ^0.0.5
+  twilio_phone_verify: ^0.0.2
   #
 
 dev_dependencies:
