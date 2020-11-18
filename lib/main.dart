@@ -1,9 +1,12 @@
+import 'package:elesson/register/sms_register.dart';
 import 'package:elesson/template_questoes/share/image_detail_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import './register/sms_register.dart';
 
 import 'activity_selection/activity_selection_view.dart';
 // import 'login/login_view.dart';
@@ -89,6 +92,7 @@ class Home extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => ActivitySelectionForm(),
+        SmsRegisterView.routeName: (context) => SmsRegisterView(),
         SingleLineTextQuestion.routeName: (context) => SingleLineTextQuestion(),
         DragAndDrop.routeName: (context) => DragAndDrop(),
         MultipleChoiceQuestion.routeName: (context) => MultipleChoiceQuestion(),

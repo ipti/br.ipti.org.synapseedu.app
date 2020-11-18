@@ -44,7 +44,6 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   _ActivitySelectionFormState() {
     _getClasses(schoolId);
     getCobjectList("1");
-
   }
 
   //<===================================PARA OS TESTES =======================================================>
@@ -408,21 +407,24 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                   child: Text('Relatórios'),
                 ),
                 SizedBox(
-                  height: heightScreen/7,
+                  height: heightScreen / 7,
                 ),
                 Column(
                   children: [
                     Text(outputController.text),
-                    Card(margin: EdgeInsets.only(left: widthScreen/4,right: widthScreen/4),
+                    Card(
+                      margin: EdgeInsets.only(
+                          left: widthScreen / 4, right: widthScreen / 4),
                       child: Container(
                         color: Colors.green,
-                        height: widthScreen/3,
-                        width: widthScreen/3,
+                        height: widthScreen / 3,
+                        width: widthScreen / 3,
                         child: GestureDetector(
                           onTap: scan,
-                          child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Icon(Icons.qr_code),
+                              Icon(Icons.scanner),
                               Text("Scan"),
                             ],
                           ),
