@@ -45,6 +45,8 @@ dependencies:
   #TESTE
   http: ^0.12.2
   twilio_phone_verify: ^0.0.2
+  # sms_autofill: ^1.2.6
+  pin_code_fields: ^6.0.1
   #
 
 dev_dependencies:
