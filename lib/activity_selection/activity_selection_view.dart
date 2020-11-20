@@ -412,22 +412,21 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                 Column(
                   children: [
                     Text(outputController.text),
-                    Card(
-                      margin: EdgeInsets.only(
-                          left: widthScreen / 4, right: widthScreen / 4),
-                      child: Container(
-                        color: Colors.green,
-                        height: widthScreen / 3,
-                        width: widthScreen / 3,
-                        child: GestureDetector(
-                          onTap: scan,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.scanner),
-                              Text("Scan"),
-                            ],
-                          ),
+                    Container(
+                      color: Colors.white,
+                      height: widthScreen / 3,
+                      width: widthScreen / 3,
+                      child: GestureDetector(
+                        onTap: scan,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.qr_code_scanner,
+                              size: widthScreen / 3,
+                            ),
+                            // Text("Scan"),
+                          ],
                         ),
                       ),
                     ),

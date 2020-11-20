@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:twilio_phone_verify/twilio_phone_verify.dart';
+import '../share/question_widgets.dart';
 
 TwilioPhoneVerify _twilioPhoneVerify;
 
@@ -87,9 +88,27 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             logo(),
-            inputWidget(_phoneNumberController, 'Exemplo: 79987651234'),
+            inputWidget(_phoneNumberController, 'Ex: 79987651234'),
             if (_phoneNumberController.text.length == 11)
               registerButton(widthScreen, heightScreen),
+            Container(
+              color: Colors.white,
+              height: widthScreen / 3,
+              width: widthScreen / 3,
+              child: GestureDetector(
+                onTap: scan,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.qr_code_scanner,
+                      size: widthScreen / 3,
+                    ),
+                    // Text("Scan"),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -117,18 +136,32 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
         borderRadius: BorderRadius.circular(20),
         // border: Border.all(width: 4),
       ),
-      child: MaterialButton(
-        onPressed: () {
-          //função de envio do sms e checagem
-          sendCode(_phoneNumberController.text);
-          Navigator.popAndPushNamed(context, '/code-verify',
-              arguments: _phoneNumberController.text);
-        },
-        child: Center(
-          child: Text(
-            'CADASTRAR!',
-            style: TextStyle(fontSize: 20),
+      child: ButtonTheme(
+        // minWidth: minButtonWidth,
+        // height: buttonHeight,
+        child: MaterialButton(
+          padding: EdgeInsets.all(8),
+          color: Colors.white,
+          textColor: Color(0xFF00DC8C),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+            side: BorderSide(
+              color: Color(0xFF00DC8C),
+            ),
           ),
+          child: Text(
+            'CONFIRMAR',
+            style: TextStyle(
+              fontWeight: FontWeight.w900,
+              fontSize: 22,
+            ),
+          ),
+          onPressed: () {
+            //função de envio do sms e checagem
+            sendCode(_phoneNumberController.text);
+            Navigator.popAndPushNamed(context, '/code-verify',
+                arguments: _phoneNumberController.text);
+          },
         ),
       ),
     );
@@ -155,7 +188,7 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
           ),
           prefixIcon: Icon(Icons.phone),
           labelText: "Número de celular",
-          labelStyle: TextStyle(fontSize: 20, color: Colors.black),
+          labelStyle: TextStyle(fontSize: 24, color: Colors.black),
           // border: InputBorder,
           hintText: hintText,
           hintStyle: TextStyle(fontSize: 20),
@@ -182,7 +215,7 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
         },
       ),
       margin: EdgeInsets.all(10),
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(50),
       // decoration: BoxDecoration(
       //   color: Colors.grey.withOpacity(0.1),
       //   borderRadius: BorderRadius.circular(20),
@@ -235,6 +268,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView> {
     if (result['message'] == 'approved') {
       // phone number verified
       print("Verificado com sucesso");
+      Navigator.of(context).popAndPushNamed('/');
     } else {
       // error
       print("ERROR:");
@@ -247,6 +281,11 @@ class _CodeVerifyViewState extends State<CodeVerifyView> {
   @override
   Widget build(BuildContext context) {
     String _phoneNumber = ModalRoute.of(context).settings.arguments;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double buttonHeight =
+        48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+    double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
+
     print(_phoneNumber);
     return Scaffold(
       body: Center(
@@ -317,10 +356,29 @@ class _CodeVerifyViewState extends State<CodeVerifyView> {
                     },
                   )),
             ),
-            MaterialButton(
-              child: Text('Confirmar'),
-              onPressed: () =>
-                  verifyCode(_phoneNumber, textEditingController.text),
+            ButtonTheme(
+              minWidth: minButtonWidth,
+              height: buttonHeight,
+              child: MaterialButton(
+                padding: EdgeInsets.all(8),
+                color: Colors.white,
+                textColor: Color(0xFF00DC8C),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  side: BorderSide(
+                    color: Color(0xFF00DC8C),
+                  ),
+                ),
+                child: Text(
+                  'CONFIRMAR',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 22,
+                  ),
+                ),
+                onPressed: () => verifyCode(
+                    "+55" + _phoneNumber, textEditingController.text),
+              ),
             ),
           ],
         ),

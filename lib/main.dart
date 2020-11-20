@@ -90,7 +90,7 @@ class Home extends StatelessWidget {
         textTheme: GoogleFonts.muliTextTheme(),
       ),
       // initialRoute: '/',
-      initialRoute: CodeVerifyView.routeName,
+      initialRoute: '/',
       routes: {
         '/': (context) => ActivitySelectionForm(),
         SmsRegisterView.routeName: (context) => SmsRegisterView(),
