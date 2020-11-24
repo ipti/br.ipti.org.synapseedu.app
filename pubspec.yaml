@@ -42,6 +42,7 @@ dependencies:
   avatar_glow: ^1.2.0
   speech_to_text: ^2.7.0
   qrscan: ^0.2.17 #usado para ler QRCODE
+  lottie: ^0.7.0+1 #usado para animação
   #TESTE
   http: ^0.12.2
   twilio_phone_verify: ^0.0.2
@@ -69,6 +70,7 @@ flutter:
       - assets/img/
       - assets/fonts/
       - assets/icons/
+      - assets/animations/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -83,6 +85,10 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
+    - family: ElessonIconLib
+      fonts:
+        - asset: assets/fonts/ElessonIconLib.ttf
+
     - family: Mulish
       fonts:
         - asset: assets/fonts/Mulish-Black.ttf

@@ -4,6 +4,7 @@ import '../activity_selection/activity_selection_view.dart';
 import 'bloc.dart';
 
 class RootPage extends StatelessWidget {
+  static const routeName = '/root';
   @override
   Widget build(BuildContext context) {
     DeepLinkBloc _bloc = DeepLinkBloc();
