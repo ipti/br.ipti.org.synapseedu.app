@@ -1,4 +1,4 @@
-import 'file:///C:/Users/Keveny/Documents/Projetos/elesson-app/lib/root/poc.dart';
+import './root/poc.dart';
 import 'package:elesson/register/sms_register.dart';
 import 'package:elesson/template_questoes/share/image_detail_screen.dart';
 import 'package:flutter/foundation.dart';
@@ -91,9 +91,10 @@ class Home extends StatelessWidget {
         textTheme: GoogleFonts.muliTextTheme(),
       ),
       // initialRoute: '/',
-      initialRoute: 'root', // faz a verificação de metodo de inicialização
+      initialRoute: SmsRegisterView
+          .routeName, // faz a verificação de metodo de inicialização
       routes: {
-        'root':(context) => RootPage(),
+        'root': (context) => RootPage(),
         '/': (context) => ActivitySelectionForm(),
         SmsRegisterView.routeName: (context) => SmsRegisterView(),
         CodeVerifyView.routeName: (context) => CodeVerifyView(),

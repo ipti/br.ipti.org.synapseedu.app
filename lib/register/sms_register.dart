@@ -1,20 +1,31 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:twilio_phone_verify/twilio_phone_verify.dart';
 import '../share/question_widgets.dart';
 
 TwilioPhoneVerify _twilioPhoneVerify;
 
-Widget logo() {
+Widget header(double screenHeight) {
+  double headerHeight = (88 / 731) * screenHeight;
   return Container(
-    margin: EdgeInsets.all(20),
-    child: Image(
-      image: NetworkImage(
-          'https://avatars2.githubusercontent.com/u/64334312?s=200&v=4',
-          scale: 0.7),
+    decoration: BoxDecoration(
+      border: Border(
+        bottom: BorderSide(
+          color: Color.fromRGBO(0, 0, 76, 0.1),
+        ),
+      ),
     ),
+    height: headerHeight,
+    // margin: EdgeInsets.all(20),
+    // child: Image(
+    //   image: NetworkImage(
+    //       'https://avatars2.githubusercontent.com/u/64334312?s=200&v=4',
+    //       scale: 0.7),
+    // ),
   );
 }
 
@@ -80,21 +91,66 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    double heightScreen = MediaQuery.of(context).size.height;
-    double widthScreen = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            logo(),
-            inputWidget(_phoneNumberController, 'Ex: 79987651234'),
+            header(screenHeight),
+            // SizedBox(
+            //   height: 42,
+            // ),
+            Container(
+              margin: EdgeInsets.only(top: 42, bottom: 24),
+              child: Text(
+                'Insira o número de celular do responsável',
+                // textScaleFactor: 1.2,
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                inputWidget(
+                    _phoneNumberController, 'Ex: 79987651234', screenWidth),
+                ButtonTheme(
+                  minWidth: (48 / 411) * screenWidth,
+                  height: (48 / 411) * screenWidth,
+                  child: OutlineButton(
+                    padding: EdgeInsets.all(0),
+                    borderSide: BorderSide(
+                      color: Color.fromRGBO(0, 0, 255, 0.2),
+                    ),
+                    color: Colors.white,
+                    textColor: Color(0xFF0000FF),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                    child: ImageIcon(
+                      AssetImage("assets/icons/chevron_right.png"),
+                    ),
+                    //     Icon(
+                    //   Icons.chevron_right,
+                    //   size: 48,
+                    //   color: Color(0xFF0000FF),
+                    // ),
+                    onPressed: () => {
+                      Navigator.of(context).pop(),
+                    },
+                  ),
+                ),
+              ],
+            ),
             if (_phoneNumberController.text.length == 11)
-              registerButton(widthScreen, heightScreen),
+              registerButton(screenWidth, screenHeight),
             Container(
               color: Colors.white,
-              height: widthScreen / 3,
-              width: widthScreen / 3,
+              height: screenWidth / 3,
+              width: screenWidth / 3,
               child: GestureDetector(
                 onTap: scan,
                 child: Column(
@@ -102,7 +158,7 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                   children: <Widget>[
                     Icon(
                       Icons.qr_code_scanner,
-                      size: widthScreen / 3,
+                      size: screenWidth / 3,
                     ),
                     // Text("Scan"),
                   ],
@@ -126,11 +182,11 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
   //   );
   // }
 
-  Widget registerButton(double widthScreen, double heightScreen) {
+  Widget registerButton(double screenWidth, double screenHeight) {
     return Container(
       margin: EdgeInsets.only(top: 20, bottom: 20),
-      width: widthScreen * 0.5,
-      height: heightScreen * 0.08,
+      width: screenWidth * 0.5,
+      height: screenHeight * 0.08,
       decoration: BoxDecoration(
         color: Colors.greenAccent[400],
         borderRadius: BorderRadius.circular(20),
@@ -168,9 +224,11 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
   }
 
   //<====parametros(controller , texto inicial)====>
-  Widget inputWidget(
-      TextEditingController phoneNumberController, String hintText) {
+  Widget inputWidget(TextEditingController phoneNumberController,
+      String hintText, double screenWidth) {
     return Container(
+      height: 48,
+      width: (303 / 411) * screenWidth,
       // color: Colors.greenAccent[400],
       child: TextFormField(
         maxLength: 11,
@@ -178,31 +236,32 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
         textAlign: TextAlign.center,
         keyboardType: TextInputType.phone,
         decoration: InputDecoration(
+          counterText: "",
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.0),
             borderSide: BorderSide(
-              // color: Color.fromRGBO(0, 220, 140, 1),
-              color: Colors.greenAccent[400],
-              width: 5.0,
+              color: Color.fromRGBO(0, 0, 255, 0.4),
+              // color: Colors.greenAccent[400],
+              // width: 5.0,
             ),
           ),
-          prefixIcon: Icon(Icons.phone),
-          labelText: "Número de celular",
+          // prefixIcon: Icon(Icons.phone),
+          // labelText: "Número de celular",
           labelStyle: TextStyle(fontSize: 24, color: Colors.black),
           // border: InputBorder,
-          hintText: hintText,
+          // hintText: hintText,
           hintStyle: TextStyle(fontSize: 20),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.0),
             borderSide: BorderSide(
-              color: Colors.greenAccent[400],
+              // color: Colors.greenAccent[400],
               width: 5.0,
             ),
           ),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20.0),
+            borderRadius: BorderRadius.circular(18.0),
             borderSide: BorderSide(
-              color: Colors.greenAccent[400],
+              // color: Colors.greenAccent[400],
               width: 5.0,
             ),
           ),
@@ -214,8 +273,8 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
           return null;
         },
       ),
-      margin: EdgeInsets.all(10),
-      padding: EdgeInsets.all(50),
+      margin: EdgeInsets.all(0),
+      padding: EdgeInsets.all(0),
       // decoration: BoxDecoration(
       //   color: Colors.grey.withOpacity(0.1),
       //   borderRadius: BorderRadius.circular(20),
@@ -292,7 +351,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            logo(),
+            header(screenHeight),
             Form(
               key: formKey,
               child: Padding(
@@ -366,7 +425,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0),
                   side: BorderSide(
-                    color: Color(0xFF00DC8C),
+                    color: Color.fromRGBO(0, 0, 255, 0.4),
                   ),
                 ),
                 child: Text(
