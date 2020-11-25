@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'elesson_icon_lib_icons.dart';
 
-Widget elessonCard({String backgroundImage, String text, double screenWidth, Function onTap}) {
+Widget elessonCard({String backgroundImage, String text, double screenWidth, Function onTap,BuildContext context}) {
   return GestureDetector(
-    onTap: () => onTap,
+    onTap: () {
+      String retorno = onTap(context);
+    },
     child: Container(
       height: 166,
       child: Card(

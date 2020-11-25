@@ -359,13 +359,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.4"
-  qrscan:
+  qr_code_scanner:
     dependency: "direct main"
     description:
-      name: qrscan
+      name: qr_code_scanner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.17"
+    version: "0.0.13"
   riverpod:
     dependency: transitive
     description:

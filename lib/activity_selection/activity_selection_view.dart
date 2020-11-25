@@ -1,4 +1,5 @@
 // import 'package:elesson/share/turmas.dart';
+import 'package:elesson/share/qrCodeReader.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/model.dart';
 import 'package:flutter/material.dart';
@@ -310,12 +311,11 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   }
 
   //<===============================================================================>
-
+  String retorno = "Esperando Scanner...";
   @override
   Widget build(BuildContext context) {
     double heightScreen = MediaQuery.of(context).size.height;
     double widthScreen = MediaQuery.of(context).size.width;
-
     if (heightScreen > 990) {
       fonteDaLetra = 28;
       headerFontSize = 24;
@@ -411,13 +411,17 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                 ),
                 Column(
                   children: [
-                    Text(outputController.text),
+                    Text(retorno),
                     Container(
                       color: Colors.white,
                       height: widthScreen / 3,
                       width: widthScreen / 3,
                       child: GestureDetector(
-                        onTap: scan,
+                        onTap: () async {
+                          //precisa de hot reload
+                          retorno = await Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => new QrCodeReader()));
+                          print("---------------------------------------------------$retorno-----------------------------------------------------------");
+                        },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[

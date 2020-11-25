@@ -94,10 +94,11 @@ class Home extends StatelessWidget {
         fontFamily: 'Mulish',
         textTheme: GoogleFonts.muliTextTheme(),
       ),
-      // initialRoute: '/',
-      initialRoute: StartAndSendTest.routeName,
+      initialRoute: '/',
+      //initialRoute: StartAndSendTest.routeName,
       routes: {
         '/': (context) => SpaceSelection(),
+        //'/': (context) => ActivitySelectionForm(),
         RootPage.routeName: (context) => RootPage(),
         StartAndSendTest.routeName:(context) => StartAndSendTest(),
         SmsRegisterView.routeName: (context) => SmsRegisterView(),

@@ -152,7 +152,7 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
               height: screenWidth / 3,
               width: screenWidth / 3,
               child: GestureDetector(
-                onTap: scan,
+                onTap: () => scan(context),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
