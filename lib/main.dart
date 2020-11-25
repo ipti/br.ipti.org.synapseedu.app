@@ -1,4 +1,4 @@
-import 'file:///C:/Users/Keveny/Documents/Projetos/elesson-app/lib/init_pages/spaceSelection.dart';
+import './init_pages/spaceSelection.dart';
 
 import 'package:elesson/root/start_and_send_test.dart';
 
@@ -95,11 +95,11 @@ class Home extends StatelessWidget {
         textTheme: GoogleFonts.muliTextTheme(),
       ),
       // initialRoute: '/',
-      initialRoute: StartAndSendTest.routeName,
+      initialRoute: CodeVerifyView.routeName,
       routes: {
         '/': (context) => SpaceSelection(),
         RootPage.routeName: (context) => RootPage(),
-        StartAndSendTest.routeName:(context) => StartAndSendTest(),
+        StartAndSendTest.routeName: (context) => StartAndSendTest(),
         SmsRegisterView.routeName: (context) => SmsRegisterView(),
         CodeVerifyView.routeName: (context) => CodeVerifyView(),
         SingleLineTextQuestion.routeName: (context) => SingleLineTextQuestion(),

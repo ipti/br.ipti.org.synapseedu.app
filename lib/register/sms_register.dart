@@ -6,28 +6,76 @@ import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:twilio_phone_verify/twilio_phone_verify.dart';
 import '../share/question_widgets.dart';
+import 'package:pinput/pin_put/pin_put.dart';
+import 'package:pinput/pin_put/pin_put_state.dart';
 
 TwilioPhoneVerify _twilioPhoneVerify;
+final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-Widget header(double screenHeight) {
+Widget header(double screenHeight, String headerText) {
   double headerHeight = (88 / 731) * screenHeight;
   return Container(
+    width: double.infinity,
     decoration: BoxDecoration(
       border: Border(
         bottom: BorderSide(
           color: Color.fromRGBO(0, 0, 76, 0.1),
+          width: 1,
         ),
       ),
     ),
     height: headerHeight,
-    // margin: EdgeInsets.all(20),
-    // child: Image(
-    //   image: NetworkImage(
-    //       'https://avatars2.githubusercontent.com/u/64334312?s=200&v=4',
-    //       scale: 0.7),
-    // ),
+    child: Container(
+      alignment: Alignment.bottomCenter,
+      padding: EdgeInsets.only(bottom: 12),
+      child: Text(
+        headerText,
+        style: TextStyle(
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
+          color: Color.fromRGBO(
+            0,
+            0,
+            76,
+            1,
+          ),
+        ),
+      ),
+    ),
   );
 }
+
+// Widget header(double screenHeight) {
+//   double headerHeight = (88 / 731) * screenHeight;
+//   return Container(
+
+//     height: headerHeight,
+//     child: Column(
+//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//       children: [
+//         Text(
+//           "Autenticar",
+//           style: TextStyle(
+//             fontSize: 22,
+//             color: Color.fromRGBO(
+//               0,
+//               0,
+//               76,
+//               1,
+//             ),
+//           ),
+//         ),
+//         const Divider(
+//           color: Color.fromRGBO(0, 0, 76, 1),
+//           height: 1,
+//           thickness: 1,
+//           indent: 0,
+//           endIndent: 0,
+//         ),
+//       ],
+//     ),
+//   );
+// }
 
 class SmsRegisterView extends StatefulWidget {
   static const routeName = '/sms-register';
@@ -37,6 +85,7 @@ class SmsRegisterView extends StatefulWidget {
 
 class _SmsRegisterViewState extends State<SmsRegisterView> {
   final _phoneNumberController = TextEditingController();
+  String phoneNumber;
 
   //CRIAR TEXTCONTROLLERS PARA CADA ENTRADA
 
@@ -96,11 +145,11 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
 
     return Scaffold(
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 24),
+        // padding: EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            header(screenHeight),
+            header(screenHeight, "Autenticar"),
             // SizedBox(
             //   height: 42,
             // ),
@@ -112,59 +161,48 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                 style: TextStyle(fontSize: 16),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                inputWidget(
-                    _phoneNumberController, 'Ex: 79987651234', screenWidth),
-                ButtonTheme(
-                  minWidth: (48 / 411) * screenWidth,
-                  height: (48 / 411) * screenWidth,
-                  child: OutlineButton(
-                    padding: EdgeInsets.all(0),
-                    borderSide: BorderSide(
-                      color: Color.fromRGBO(0, 0, 255, 0.2),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  inputWidget(
+                      _phoneNumberController, 'Ex: 79987651234', screenWidth),
+                  ButtonTheme(
+                    minWidth: (48 / 411) * screenWidth,
+                    height: (48 / 411) * screenWidth,
+                    child: OutlineButton(
+                      padding: EdgeInsets.all(0),
+                      borderSide: BorderSide(
+                        color: Color.fromRGBO(0, 0, 255, 0.2),
+                      ),
+                      color: Colors.white,
+                      textColor: Color(0xFF0000FF),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      child: ImageIcon(
+                        AssetImage("assets/icons/chevron_right.png"),
+                      ),
+                      //     Icon(
+                      //   Icons.chevron_right,
+                      //   size: 48,
+                      //   color: Color(0xFF0000FF),
+                      // ),
+                      onPressed: () => {
+                        if (_phoneNumberController.text.length == 11)
+                          {
+                            sendCode(_phoneNumberController.text),
+                            Navigator.popAndPushNamed(context, '/code-verify',
+                                arguments: _phoneNumberController.text),
+                          }
+                      },
                     ),
-                    color: Colors.white,
-                    textColor: Color(0xFF0000FF),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    ),
-                    child: ImageIcon(
-                      AssetImage("assets/icons/chevron_right.png"),
-                    ),
-                    //     Icon(
-                    //   Icons.chevron_right,
-                    //   size: 48,
-                    //   color: Color(0xFF0000FF),
-                    // ),
-                    onPressed: () => {
-                      Navigator.of(context).pop(),
-                    },
                   ),
-                ),
-              ],
-            ),
-            if (_phoneNumberController.text.length == 11)
-              registerButton(screenWidth, screenHeight),
-            Container(
-              color: Colors.white,
-              height: screenWidth / 3,
-              width: screenWidth / 3,
-              child: GestureDetector(
-                onTap: scan,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      Icons.qr_code_scanner,
-                      size: screenWidth / 3,
-                    ),
-                    // Text("Scan"),
-                  ],
-                ),
+                ],
               ),
             ),
+            // registerButton(screenWidth, screenHeight),
           ],
         ),
       ),
@@ -230,48 +268,59 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
       height: 48,
       width: (303 / 411) * screenWidth,
       // color: Colors.greenAccent[400],
-      child: TextFormField(
-        maxLength: 11,
-        controller: phoneNumberController,
-        textAlign: TextAlign.center,
-        keyboardType: TextInputType.phone,
-        decoration: InputDecoration(
-          counterText: "",
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20.0),
-            borderSide: BorderSide(
-              color: Color.fromRGBO(0, 0, 255, 0.4),
-              // color: Colors.greenAccent[400],
-              // width: 5.0,
-            ),
+      child: Form(
+        key: _formKey,
+        child: TextFormField(
+          style: TextStyle(
+            color: Color.fromRGBO(0, 0, 76, 1),
+            height: 1,
+            fontWeight: FontWeight.w700,
           ),
-          // prefixIcon: Icon(Icons.phone),
-          // labelText: "Número de celular",
-          labelStyle: TextStyle(fontSize: 24, color: Colors.black),
-          // border: InputBorder,
-          // hintText: hintText,
-          hintStyle: TextStyle(fontSize: 20),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20.0),
-            borderSide: BorderSide(
-              // color: Colors.greenAccent[400],
-              width: 5.0,
+          validator: (value) =>
+              value.length < 11 ? "Entre um número válido" : null,
+          onChanged: (value) {
+            setState(() {
+              phoneNumber = value;
+            });
+          },
+          onSaved: (value) => phoneNumber = value,
+          maxLengthEnforced: true,
+          maxLength: 11,
+          controller: phoneNumberController,
+          textAlign: TextAlign.center,
+          keyboardType: TextInputType.phone,
+          decoration: InputDecoration(
+            counterText: "",
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: BorderSide(
+                color: Color.fromRGBO(0, 0, 255, 0.4),
+                // color: Colors.greenAccent[400],
+                // width: 5.0,
+              ),
             ),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(18.0),
-            borderSide: BorderSide(
-              // color: Colors.greenAccent[400],
-              width: 5.0,
+            // prefixIcon: Icon(Icons.phone),
+            // labelText: "Número de celular",
+            labelStyle: TextStyle(fontSize: 24, color: Colors.black),
+            // border: InputBorder,
+            // hintText: hintText,
+            hintStyle: TextStyle(fontSize: 20),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: BorderSide(
+                color: Color.fromRGBO(0, 0, 255, 0.4),
+                // color: Colors.greenAccent[400],
+              ),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18.0),
+              borderSide: BorderSide(
+                // color: Colors.greenAccent[400],
+                width: 1.0,
+              ),
             ),
           ),
         ),
-        validator: (value) {
-          if (value.length < 11) {
-            return "Entre um número válido";
-          }
-          return null;
-        },
       ),
       margin: EdgeInsets.all(0),
       padding: EdgeInsets.all(0),
@@ -296,7 +345,8 @@ class CodeVerifyView extends StatefulWidget {
 class _CodeVerifyViewState extends State<CodeVerifyView> {
   String _code;
   StreamController<ErrorAnimationType> errorController;
-  TextEditingController textEditingController = TextEditingController();
+  TextEditingController _pinCodeController = TextEditingController();
+  final FocusNode _pinPutFocusNode = FocusNode();
 
   bool hasError = false;
 
@@ -335,6 +385,34 @@ class _CodeVerifyViewState extends State<CodeVerifyView> {
     }
   }
 
+  Widget animatingBorders() {
+    final BoxDecoration pinPutDecoration = BoxDecoration(
+      border: Border.all(color: Colors.deepPurpleAccent, width: 2),
+      borderRadius: BorderRadius.circular(18.0),
+    );
+    return PinPut(
+      fieldsCount: 4,
+      eachFieldHeight: 48.0,
+      eachFieldWidth: 48.0,
+      // onSubmit: (String pin) => _showSnackBar(pin),
+      focusNode: _pinPutFocusNode,
+      controller: _pinCodeController,
+      submittedFieldDecoration: pinPutDecoration.copyWith(
+          borderRadius: BorderRadius.circular(20.0),
+          border: Border.all(
+            width: 2,
+          )),
+      selectedFieldDecoration: pinPutDecoration,
+      followingFieldDecoration: pinPutDecoration.copyWith(
+        borderRadius: BorderRadius.circular(18.0),
+        border: Border.all(
+          color: Colors.deepPurpleAccent.withOpacity(.5),
+          width: 2,
+        ),
+      ),
+    );
+  }
+
   String currentText = "";
   GlobalKey<FormState> formKey;
   @override
@@ -349,96 +427,102 @@ class _CodeVerifyViewState extends State<CodeVerifyView> {
     return Scaffold(
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          // mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            header(screenHeight),
+            header(screenHeight, "Código verificador"),
+            SizedBox(height: 42),
+            Text('hello'),
             Form(
               key: formKey,
               child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
-                  child: PinCodeTextField(
-                    appContext: context,
-                    pastedTextStyle: TextStyle(
-                      color: Colors.green.shade600,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    length: 4,
-                    obscureText: false,
-                    obscuringCharacter: '*',
-                    animationType: AnimationType.fade,
-                    // validator: (v) {
-                    //   if (v.length < 3) {
-                    //     return "I'm from validator";
-                    //   } else {
-                    //     return null;
-                    //   }
-                    // },
-                    pinTheme: PinTheme(
-                      shape: PinCodeFieldShape.underline,
-                      fieldHeight: 60,
-                      fieldWidth: 50,
-                      // activeFillColor: hasError ? Colors.orange : Colors.white,
-                    ),
-                    cursorColor: Colors.black,
-                    animationDuration: Duration(milliseconds: 300),
-                    textStyle: TextStyle(fontSize: 20, height: 1.6),
-                    // backgroundColor: Colors.greenAccent[100],
-                    // enableActiveFill: true,
-                    errorAnimationController: errorController,
-                    controller: textEditingController,
-                    keyboardType: TextInputType.number,
-                    // boxShadows: [
-                    //   BoxShadow(
-                    //     offset: Offset(0, 1),
-                    //     color: Colors.black12,
-                    //     blurRadius: 10,
-                    //   )
-                    // ],
-                    onCompleted: (v) {
-                      print("Completed");
-                    },
-                    // onTap: () {
-                    //   print("Pressed");
-                    // },
-                    onChanged: (value) {
-                      print(value);
-                      setState(() {
-                        currentText = value;
-                      });
-                    },
-                    beforeTextPaste: (text) {
-                      print("Allowing to paste $text");
-                      //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                      //but you can show anything you want here, like your pop up saying wrong paste format or etc
-                      return true;
-                    },
-                  )),
-            ),
-            ButtonTheme(
-              minWidth: minButtonWidth,
-              height: buttonHeight,
-              child: MaterialButton(
-                padding: EdgeInsets.all(8),
-                color: Colors.white,
-                textColor: Color(0xFF00DC8C),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                  side: BorderSide(
-                    color: Color.fromRGBO(0, 0, 255, 0.4),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+                child: PinCodeTextField(
+                  appContext: context,
+                  pastedTextStyle: TextStyle(
+                    color: Colors.green.shade600,
+                    fontWeight: FontWeight.bold,
                   ),
-                ),
-                child: Text(
-                  'CONFIRMAR',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 22,
+                  length: 4,
+                  obscureText: false,
+                  obscuringCharacter: '*',
+                  animationType: AnimationType.fade,
+                  // validator: (v) {
+                  //   if (v.length < 3) {
+                  //     return "I'm from validator";
+                  //   } else {
+                  //     return null;
+                  //   }
+                  // },
+                  pinTheme: PinTheme(
+                    shape: PinCodeFieldShape.box,
+                    fieldHeight: 60,
+                    fieldWidth: 50,
+                    borderRadius: BorderRadius.circular(18.0),
+                    // activeFillColor: hasError ? Colors.orange : Colors.white,
                   ),
+                  cursorColor: Colors.black,
+                  animationDuration: Duration(milliseconds: 300),
+                  textStyle: TextStyle(fontSize: 20, height: 1.6),
+                  backgroundColor: Colors.grey[50],
+                  // enableActiveFill: true,
+                  errorAnimationController: errorController,
+                  controller: _pinCodeController,
+                  keyboardType: TextInputType.number,
+                  // boxShadows: [
+                  //   BoxShadow(
+                  //     offset: Offset(0, 1),
+                  //     color: Colors.black12,
+                  //     blurRadius: 10,
+                  //   )
+                  // ],
+                  onCompleted: (v) {
+                    print("Completed");
+                  },
+                  // onTap: () {
+                  //   print("Pressed");
+                  // },
+                  onChanged: (value) {
+                    print(value);
+                    setState(() {
+                      currentText = value;
+                    });
+                  },
+                  beforeTextPaste: (text) {
+                    print("Allowing to paste $text");
+                    //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+                    //but you can show anything you want here, like your pop up saying wrong paste format or etc
+                    return true;
+                  },
                 ),
-                onPressed: () => verifyCode(
-                    "+55" + _phoneNumber, textEditingController.text),
               ),
             ),
+            SizedBox(height: 24),
+            Text("Reenviar código 30s"),
+            // ButtonTheme(
+            //   minWidth: minButtonWidth,
+            //   height: buttonHeight,
+            //   child: MaterialButton(
+            //     padding: EdgeInsets.all(8),
+            //     color: Colors.white,
+            //     textColor: Color(0xFF00DC8C),
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(12.0),
+            //       side: BorderSide(
+            //         color: Color.fromRGBO(0, 0, 255, 0.4),
+            //       ),
+            //     ),
+            //     child: Text(
+            //       'CONFIRMAR',
+            //       style: TextStyle(
+            //         fontWeight: FontWeight.w900,
+            //         fontSize: 22,
+            //       ),
+            //     ),
+            //     onPressed: () => verifyCode(
+            //         "+55" + _phoneNumber, textEditingController.text),
+            //   ),
+            // ),
           ],
         ),
       ),
