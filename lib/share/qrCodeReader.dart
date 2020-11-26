@@ -1,9 +1,7 @@
-import 'package:elesson/activity_selection/activity_selection_view.dart';
-import 'package:elesson/root/start_and_send_test.dart';
+import 'dart:async';
 import 'package:elesson/share/general_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-
 import 'elesson_icon_lib_icons.dart';
 
 class QrCodeReader extends StatefulWidget {
@@ -18,6 +16,23 @@ class _QrCodeReaderState extends State<QrCodeReader> {
   var qrText = '';
   QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+
+  Color colorToTimerOut = Colors.white;
+  String textToTimeout = "APONTE PARA O CÓDIGO \nQR PRESENTE NO SEU KIT";
+
+  void timerOut(){
+    setState(() {
+      colorToTimerOut = Colors.red;
+      textToTimeout = "NÃO FOI POSSÍVEL \nVALIDAR O CÓGIGO QR";
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    Timer(Duration(seconds: 15),timerOut);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +63,8 @@ class _QrCodeReaderState extends State<QrCodeReader> {
                 child: Container(
                   margin: EdgeInsets.only(top: 24),
                   child: Text(
-                    'APONTE PARA O CÓDIGO \nQR PRESENTE NO SEU KIT',
-                    style: TextStyle(color: Colors.white),
+                    textToTimeout,
+                    style: TextStyle(color: colorToTimerOut,fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                 ),
