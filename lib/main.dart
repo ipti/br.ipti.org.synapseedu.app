@@ -97,12 +97,13 @@ class Home extends StatelessWidget {
       initialRoute: '/',
       //initialRoute: StartAndSendTest.routeName,
       routes: {
-        '/': (context) => SpaceSelection(),
-        //'/': (context) => ActivitySelectionForm(),
         RootPage.routeName: (context) => RootPage(),
-        StartAndSendTest.routeName:(context) => StartAndSendTest(),
+        '/': (context) => SpaceSelection(),
         SmsRegisterView.routeName: (context) => SmsRegisterView(),
         CodeVerifyView.routeName: (context) => CodeVerifyView(),
+        StartAndSendTest.routeName:(context) => StartAndSendTest(),
+        //----------------------------rotas fora de fluxo---------------------------
+        ActivitySelectionForm.routeName: (context) => ActivitySelectionForm(),
         SingleLineTextQuestion.routeName: (context) => SingleLineTextQuestion(),
         DragAndDrop.routeName: (context) => DragAndDrop(),
         MultipleChoiceQuestion.routeName: (context) => MultipleChoiceQuestion(),

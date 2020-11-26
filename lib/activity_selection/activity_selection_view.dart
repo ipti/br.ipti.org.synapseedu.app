@@ -11,6 +11,7 @@ import 'package:elesson/share/api.dart';
 // com os designers do projeto.
 
 class ActivitySelectionForm extends StatefulWidget {
+  static const routeName = '/activityselectionform';
   @override
   _ActivitySelectionFormState createState() =>
       new _ActivitySelectionFormState();
@@ -443,11 +444,9 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   }
 
   // FUNÇÃO PARA RECEBER OS DADOS DO COBJECT QUANDO A TURMA E O ALUNO FOR SELECIONADO
-  //todo corrigir isso
   void redirectToQuestion(int cobjectIdIndex) {
     if (checkStudent == true && checkDiscipline == true) {
       print(questionListTest == null);
-      print("hm");
       getCobjectList("1").then((response) {
         questionListTest = response;
         print(questionListTest);

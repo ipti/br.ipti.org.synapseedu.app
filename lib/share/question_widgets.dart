@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:elesson/activity_selection/activity_selection_view.dart';
+import 'package:elesson/root/start_and_send_test.dart';
 import 'package:elesson/share/qrCodeReader.dart';
 import 'package:elesson/template_questoes/drag_and_drop.dart';
 import 'package:elesson/template_questoes/multiple_choice.dart';
@@ -42,6 +43,7 @@ void playSound(String sound) async {
 var cobjectList = new List<Cobject>();
 var cobject = new List<dynamic>();
 
+// todo: essa é a lista que vai receber a lista de cobjects vindo da api
 List<String> cobjectIdList = [];
 
 getCobjectList(String blockId) async {
@@ -66,19 +68,19 @@ getCobject(int listQuestionIndex, BuildContext context, List<String> questionLis
     cobjectList = context.read(cobjectProvider).items;
     switch (questionType) {
       case 'PRE':
-        Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName('/'),
+        Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
             arguments: ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
         break;
       case 'DDROP':
-        Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, ModalRoute.withName('/'),
+        Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, ModalRoute.withName(StartAndSendTest.routeName),
             arguments: ScreenArguments(cobjectList, 0, 'DDROP', listQuestionIndex));
         break;
       case 'MTE':
-        Navigator.of(context).pushNamedAndRemoveUntil(MultipleChoiceQuestion.routeName, ModalRoute.withName('/'),
+        Navigator.of(context).pushNamedAndRemoveUntil(MultipleChoiceQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
             arguments: ScreenArguments(cobjectList, 0, 'MTE', listQuestionIndex));
         break;
       case 'TXT':
-        Navigator.of(context).pushNamedAndRemoveUntil(TextQuestion.routeName, ModalRoute.withName('/'),
+        Navigator.of(context).pushNamedAndRemoveUntil(TextQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
             arguments: ScreenArguments(cobjectList, 0, 'TXT', listQuestionIndex));
         break;
     }
@@ -209,10 +211,9 @@ Widget submitAnswer(
   );
 }
 
-TextEditingController outputController = new TextEditingController();
-
-Future<dynamic> scan(BuildContext context) async {
+Future<String> scan(BuildContext context) async {
   print("aqui");
-  String retornado = await Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => new QrCodeReader()));
-  outputController.text = retornado;
+  String returnedValue = await Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => new QrCodeReader()));
+  //todo implementar aqui direcionamento pra aluma pagina se for preciso (OBS: Tem que ser antes do retorno pra não bugar)
+  return returnedValue;
 }

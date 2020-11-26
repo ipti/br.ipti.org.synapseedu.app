@@ -1,3 +1,6 @@
+import 'package:elesson/activity_selection/activity_selection_view.dart';
+import 'package:elesson/root/start_and_send_test.dart';
+import 'package:elesson/share/general_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -11,19 +14,22 @@ class QrCodeReader extends StatefulWidget {
 }
 
 class _QrCodeReaderState extends State<QrCodeReader> {
+  bool showLoading = false;
   var qrText = '';
   QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
   @override
   Widget build(BuildContext context) {
+    double heightScreen = MediaQuery.of(context).size.height;
+    double widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Stack(
         children: [
           Column(
             children: <Widget>[
-              Expanded(
-                flex: 4,
+              Container(
+                height: heightScreen*0.77,
                 child: QRView(
                   key: qrKey,
                   onQRViewCreated: _onQRViewCreated,
@@ -63,6 +69,12 @@ class _QrCodeReaderState extends State<QrCodeReader> {
               ),
             ),
           ),
+          Container(
+            height: 100,
+            width: 100,
+            margin: EdgeInsets.only(top: heightScreen * 0.77 -100,left: widthScreen/2 -50),
+            child: showLoading == true ? loadingAnimation() : null,
+          ),
         ],
       ),
     );
@@ -72,9 +84,15 @@ class _QrCodeReaderState extends State<QrCodeReader> {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
+        print("exibindo loading");
+        showLoading = !showLoading;
+      });
+      setState(() {
         qrText = scanData;
         controller.dispose();
-        Navigator.pop(context,qrText);
+        //todo implementar aqui o que vai acontecer depois de receber os dados do qrcode
+        //Navigator.pop(context, qrText);
+        //Navigator.of(context).pushReplacementNamed(StartAndSendTest.routeName);
       });
     });
   }
