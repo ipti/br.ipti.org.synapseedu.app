@@ -324,6 +324,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
       fonteDaLetra = 22;
       headerFontSize = 18;
     } else if (heightScreen < 639) {
+      //Acho que tá trocado
       fonteDaLetra = 14;
       headerFontSize = 16;
     } else {
@@ -420,8 +421,13 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                       child: GestureDetector(
                         onTap: () async {
                           //precisa de hot reload
-                          retorno = await Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => new QrCodeReader()));
-                          print("---------------------------------------------------$retorno-----------------------------------------------------------");
+                          retorno = await Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      new QrCodeReader()));
+                          print(
+                              "---------------------------------------------------$retorno-----------------------------------------------------------");
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,

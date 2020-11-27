@@ -1,3 +1,5 @@
+import 'package:elesson/register/code_verify_view.dart';
+
 import './register/countdown.dart';
 
 import './init_pages/spaceSelection.dart';
@@ -26,6 +28,8 @@ import 'template_questoes/text_question.dart';
 import 'template_questoes/multiple_choice.dart';
 import './template_questoes/drag_and_drop.dart';
 import './template_questoes/question_and_answer.dart';
+
+import './login/auto_login.dart';
 
 void main() async {
   //usando pra iniciar em outra tela
@@ -69,6 +73,8 @@ void main() async {
   // });
 }
 
+// bool isLogged = await isUserConfirmed();
+
 class Home extends StatelessWidget {
   var questionType;
   var cobject = new List<dynamic>();
@@ -96,8 +102,8 @@ class Home extends StatelessWidget {
         fontFamily: 'Mulish',
         textTheme: GoogleFonts.muliTextTheme(),
       ),
-      // initialRoute: '/',
-      initialRoute: CodeVerifyView.routeName,
+      initialRoute: '/',
+      // initialRoute: !isLogged ? '/' : CodeVerifyView.routeName,
       routes: {
         '/': (context) => SpaceSelection(),
         //'/': (context) => ActivitySelectionForm(),
