@@ -41,7 +41,7 @@ dependencies:
   flutter_audio_recorder: ^0.5.5
   avatar_glow: ^1.2.0
   speech_to_text: ^2.7.0
-  qrscan: ^0.2.17 #usado para ler QRCODE
+  qr_code_scanner: ^0.0.13 #usado para ler QRCODE
   lottie: ^0.7.0+1 #usado para animação
   #TESTE
   http: ^0.12.2

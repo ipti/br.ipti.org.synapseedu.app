@@ -1,3 +1,5 @@
+import './register/countdown.dart';
+
 import './init_pages/spaceSelection.dart';
 
 import 'package:elesson/root/start_and_send_test.dart';
@@ -98,6 +100,8 @@ class Home extends StatelessWidget {
       initialRoute: CodeVerifyView.routeName,
       routes: {
         '/': (context) => SpaceSelection(),
+        //'/': (context) => ActivitySelectionForm(),
+        CountDownTimer.routeName: (context) => CountDownTimer(),
         RootPage.routeName: (context) => RootPage(),
         StartAndSendTest.routeName: (context) => StartAndSendTest(),
         SmsRegisterView.routeName: (context) => SmsRegisterView(),

@@ -1,13 +1,14 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:twilio_phone_verify/twilio_phone_verify.dart';
 import '../share/question_widgets.dart';
-import 'package:pinput/pin_put/pin_put.dart';
-import 'package:pinput/pin_put/pin_put_state.dart';
+// import 'package:pinput/pin_put/pin_put.dart';
+// import 'package:pinput/pin_put/pin_put_state.dart';
 
 TwilioPhoneVerify _twilioPhoneVerify;
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -45,37 +46,18 @@ Widget header(double screenHeight, String headerText) {
   );
 }
 
-// Widget header(double screenHeight) {
-//   double headerHeight = (88 / 731) * screenHeight;
-//   return Container(
+Future<void> sendCode(String phoneNumber) async {
+  var result = await _twilioPhoneVerify.sendSmsCode('+55' + phoneNumber);
 
-//     height: headerHeight,
-//     child: Column(
-//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//       children: [
-//         Text(
-//           "Autenticar",
-//           style: TextStyle(
-//             fontSize: 22,
-//             color: Color.fromRGBO(
-//               0,
-//               0,
-//               76,
-//               1,
-//             ),
-//           ),
-//         ),
-//         const Divider(
-//           color: Color.fromRGBO(0, 0, 76, 1),
-//           height: 1,
-//           thickness: 1,
-//           indent: 0,
-//           endIndent: 0,
-//         ),
-//       ],
-//     ),
-//   );
-// }
+  if (result['message'] == 'success') {
+    // code sent
+    print("Código enviado");
+  } else {
+    // error
+    print("ERROR:");
+    print('${result['statusCode']} : ${result['message']}');
+  }
+}
 
 class SmsRegisterView extends StatefulWidget {
   static const routeName = '/sms-register';
@@ -112,18 +94,18 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
     super.initState();
   }
 
-  Future<void> sendCode(String phoneNumber) async {
-    var result = await _twilioPhoneVerify.sendSmsCode('+55' + phoneNumber);
+  // Future<void> sendCode(String phoneNumber) async {
+  //   var result = await _twilioPhoneVerify.sendSmsCode('+55' + phoneNumber);
 
-    if (result['message'] == 'success') {
-      // code sent
-      print("Código enviado");
-    } else {
-      // error
-      print("ERROR:");
-      print('${result['statusCode']} : ${result['message']}');
-    }
-  }
+  //   if (result['message'] == 'success') {
+  //     // code sent
+  //     print("Código enviado");
+  //   } else {
+  //     // error
+  //     print("ERROR:");
+  //     print('${result['statusCode']} : ${result['message']}');
+  //   }
+  // }
 
   // Future<void> verifyCode(String phoneNumber, String code) async {
   //   var result = await _twilioPhoneVerify.verifySmsCode(phoneNumber, code);
@@ -324,14 +306,6 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
       ),
       margin: EdgeInsets.all(0),
       padding: EdgeInsets.all(0),
-      // decoration: BoxDecoration(
-      //   color: Colors.grey.withOpacity(0.1),
-      //   borderRadius: BorderRadius.circular(20),
-      //   border: Border.all(
-      //     color: Colors.green,
-      //     width: 5,
-      //   ),
-      // ),
     );
   }
 }
@@ -342,13 +316,25 @@ class CodeVerifyView extends StatefulWidget {
   _CodeVerifyViewState createState() => _CodeVerifyViewState();
 }
 
-class _CodeVerifyViewState extends State<CodeVerifyView> {
+class _CodeVerifyViewState extends State<CodeVerifyView>
+    with TickerProviderStateMixin {
   String _code;
   StreamController<ErrorAnimationType> errorController;
   TextEditingController _pinCodeController = TextEditingController();
   final FocusNode _pinPutFocusNode = FocusNode();
 
   bool hasError = false;
+  bool resendCode = false;
+
+  AnimationController countdownAnimationController;
+
+  String get timerString {
+    Duration duration = countdownAnimationController.duration *
+        countdownAnimationController.value;
+    return duration.inSeconds < 10
+        ? '${((duration.inSeconds % 60) + 1).toString().padLeft(1, '0')}'
+        : '${((duration.inSeconds % 60) + 1).toString().padLeft(2, '0')}';
+  }
 
   void initState() {
     // TODO: implement initState
@@ -362,6 +348,11 @@ class _CodeVerifyViewState extends State<CodeVerifyView> {
             'VA7686722166b582b1a7ab42770b104097' // replace with Service SID
         );
 
+    countdownAnimationController = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 4),
+    );
+    countdownLogic();
     // _twilioPhoneVerify = new TwilioPhoneVerify( //elesson
     //     accountSid: 'AC7ad4a260cd8163d9ca9d957ff0dfebb7', // replace with Account SID
     //     authToken: '3389bb9152e13b4383cfc79538923c52', // replace with Auth Token
@@ -371,8 +362,20 @@ class _CodeVerifyViewState extends State<CodeVerifyView> {
     super.initState();
   }
 
+  void countdownLogic() {
+    countdownAnimationController
+        .reverse(
+            from: countdownAnimationController.value == 0.0
+                ? 1.0
+                : countdownAnimationController.value)
+        .whenComplete(() => setState(() {
+              resendCode = true;
+            }));
+  }
+
   Future<void> verifyCode(String phoneNumber, String code) async {
     var result = await _twilioPhoneVerify.verifySmsCode(phoneNumber, code);
+    print("Enviado $code");
 
     if (result['message'] == 'approved') {
       // phone number verified
@@ -385,39 +388,12 @@ class _CodeVerifyViewState extends State<CodeVerifyView> {
     }
   }
 
-  Widget animatingBorders() {
-    final BoxDecoration pinPutDecoration = BoxDecoration(
-      border: Border.all(color: Colors.deepPurpleAccent, width: 2),
-      borderRadius: BorderRadius.circular(18.0),
-    );
-    return PinPut(
-      fieldsCount: 4,
-      eachFieldHeight: 48.0,
-      eachFieldWidth: 48.0,
-      // onSubmit: (String pin) => _showSnackBar(pin),
-      focusNode: _pinPutFocusNode,
-      controller: _pinCodeController,
-      submittedFieldDecoration: pinPutDecoration.copyWith(
-          borderRadius: BorderRadius.circular(20.0),
-          border: Border.all(
-            width: 2,
-          )),
-      selectedFieldDecoration: pinPutDecoration,
-      followingFieldDecoration: pinPutDecoration.copyWith(
-        borderRadius: BorderRadius.circular(18.0),
-        border: Border.all(
-          color: Colors.deepPurpleAccent.withOpacity(.5),
-          width: 2,
-        ),
-      ),
-    );
-  }
-
   String currentText = "";
   GlobalKey<FormState> formKey;
   @override
   Widget build(BuildContext context) {
-    String _phoneNumber = ModalRoute.of(context).settings.arguments;
+    // String _phoneNumber = ModalRoute.of(context).settings.arguments;
+    String _phoneNumber = '79991210650';
     double screenHeight = MediaQuery.of(context).size.height;
     double buttonHeight =
         48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
@@ -431,19 +407,19 @@ class _CodeVerifyViewState extends State<CodeVerifyView> {
           children: [
             header(screenHeight, "Código verificador"),
             SizedBox(height: 42),
-            Text('hello'),
+            Text('Insira o código enviado por SMS'),
+            SizedBox(height: 24),
             Form(
               key: formKey,
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+                padding: const EdgeInsets.only(top: 8.0, left: 30, right: 30),
                 child: PinCodeTextField(
                   appContext: context,
                   pastedTextStyle: TextStyle(
                     color: Colors.green.shade600,
                     fontWeight: FontWeight.bold,
                   ),
-                  length: 4,
+                  length: 6,
                   obscureText: false,
                   obscuringCharacter: '*',
                   animationType: AnimationType.fade,
@@ -455,11 +431,15 @@ class _CodeVerifyViewState extends State<CodeVerifyView> {
                   //   }
                   // },
                   pinTheme: PinTheme(
+                    activeColor: hasError
+                        ? Colors.redAccent
+                        : Color.fromRGBO(0, 0, 255, 0.4),
+                    inactiveColor: Color.fromRGBO(0, 0, 255, 0.4),
                     shape: PinCodeFieldShape.box,
                     fieldHeight: 60,
                     fieldWidth: 50,
                     borderRadius: BorderRadius.circular(18.0),
-                    // activeFillColor: hasError ? Colors.orange : Colors.white,
+                    activeFillColor: hasError ? Colors.orange : Colors.white,
                   ),
                   cursorColor: Colors.black,
                   animationDuration: Duration(milliseconds: 300),
@@ -477,7 +457,11 @@ class _CodeVerifyViewState extends State<CodeVerifyView> {
                   //   )
                   // ],
                   onCompleted: (v) {
-                    print("Completed");
+                    print("Completed. Code: ${_pinCodeController.text}");
+                    verifyCode("+55" + _phoneNumber, _pinCodeController.text);
+                    setState(() {
+                      hasError = true;
+                    });
                   },
                   // onTap: () {
                   //   print("Pressed");
@@ -485,6 +469,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView> {
                   onChanged: (value) {
                     print(value);
                     setState(() {
+                      hasError = false;
                       currentText = value;
                     });
                   },
@@ -497,32 +482,42 @@ class _CodeVerifyViewState extends State<CodeVerifyView> {
                 ),
               ),
             ),
-            SizedBox(height: 24),
-            Text("Reenviar código 30s"),
-            // ButtonTheme(
-            //   minWidth: minButtonWidth,
-            //   height: buttonHeight,
-            //   child: MaterialButton(
-            //     padding: EdgeInsets.all(8),
-            //     color: Colors.white,
-            //     textColor: Color(0xFF00DC8C),
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(12.0),
-            //       side: BorderSide(
-            //         color: Color.fromRGBO(0, 0, 255, 0.4),
-            //       ),
-            //     ),
-            //     child: Text(
-            //       'CONFIRMAR',
-            //       style: TextStyle(
-            //         fontWeight: FontWeight.w900,
-            //         fontSize: 22,
-            //       ),
-            //     ),
-            //     onPressed: () => verifyCode(
-            //         "+55" + _phoneNumber, textEditingController.text),
-            //   ),
-            // ),
+            resendCode == true
+                ? RichText(
+                    text: TextSpan(
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          sendCode(_phoneNumber);
+                          setState(() {
+                            resendCode = false;
+                          });
+                          countdownLogic();
+                        },
+                      text: "Reenviar código",
+                      style: TextStyle(
+                          color: Color.fromRGBO(0, 0, 255, 1),
+                          fontWeight: FontWeight.w800),
+                    ),
+                  )
+                : AnimatedBuilder(
+                    animation: countdownAnimationController,
+                    builder: (context, child) {
+                      return RichText(
+                        text: TextSpan(
+                            text: "Reenviar código ",
+                            style: TextStyle(
+                              color: Color.fromRGBO(110, 114, 145, 0.4),
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: timerString,
+                                style: TextStyle(
+                                  color: Color.fromRGBO(110, 114, 145, 0.4),
+                                ),
+                              ),
+                            ]),
+                      );
+                    }),
           ],
         ),
       ),

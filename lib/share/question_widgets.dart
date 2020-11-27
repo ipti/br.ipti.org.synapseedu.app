@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:elesson/activity_selection/activity_selection_view.dart';
+import 'package:elesson/share/qrCodeReader.dart';
 import 'package:elesson/template_questoes/drag_and_drop.dart';
 import 'package:elesson/template_questoes/multiple_choice.dart';
 import 'package:elesson/template_questoes/question_and_answer.dart';
@@ -8,8 +9,6 @@ import 'package:elesson/template_questoes/text_question.dart';
 import 'package:flutter_riverpod/all.dart';
 import '../template_questoes/model.dart';
 import 'package:flutter/material.dart';
-
-import 'package:qrscan/qrscan.dart' as scanner; // usado para ler codigos qr
 
 import 'api.dart';
 
@@ -57,8 +56,7 @@ getCobjectList(String blockId) async {
   return cobjectIdList;
 }
 
-getCobject(int listQuestionIndex, BuildContext context,
-    List<String> questionListTest) async {
+getCobject(int listQuestionIndex, BuildContext context, List<String> questionListTest) async {
   cobjectList.clear();
   //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
   ApiCobject.getQuestao(questionList[listQuestionIndex]).then((response) {
@@ -68,28 +66,20 @@ getCobject(int listQuestionIndex, BuildContext context,
     cobjectList = context.read(cobjectProvider).items;
     switch (questionType) {
       case 'PRE':
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            SingleLineTextQuestion.routeName, ModalRoute.withName('/'),
-            arguments:
-                ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName('/'),
+            arguments: ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
         break;
       case 'DDROP':
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            DragAndDrop.routeName, ModalRoute.withName('/'),
-            arguments:
-                ScreenArguments(cobjectList, 0, 'DDROP', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, ModalRoute.withName('/'),
+            arguments: ScreenArguments(cobjectList, 0, 'DDROP', listQuestionIndex));
         break;
       case 'MTE':
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            MultipleChoiceQuestion.routeName, ModalRoute.withName('/'),
-            arguments:
-                ScreenArguments(cobjectList, 0, 'MTE', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(MultipleChoiceQuestion.routeName, ModalRoute.withName('/'),
+            arguments: ScreenArguments(cobjectList, 0, 'MTE', listQuestionIndex));
         break;
       case 'TXT':
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            TextQuestion.routeName, ModalRoute.withName('/'),
-            arguments:
-                ScreenArguments(cobjectList, 0, 'TXT', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(TextQuestion.routeName, ModalRoute.withName('/'),
+            arguments: ScreenArguments(cobjectList, 0, 'TXT', listQuestionIndex));
         break;
     }
   });
@@ -131,49 +121,37 @@ Widget soundButton(BuildContext context, Question question) {
       : null;
 }
 
-void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
-    String questionType,
+void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex, String questionType,
     [String pieceId, bool isCorrect, int finalTime, int intervalResolution]) {
   timeStartIscaptured = false; // resetando
-  if (questionIndex < cobjectList[0].questions.length &&
-      questionType != 'TXT') {
+  if (questionIndex < cobjectList[0].questions.length && questionType != 'TXT') {
     switch (questionType) {
       case 'PRE':
-        Navigator.of(context).pushReplacementNamed(
-            SingleLineTextQuestion.routeName,
-            arguments: ScreenArguments(
-                cobjectList, questionIndex, 'PRE', listQuestionIndex));
+        Navigator.of(context)
+            .pushReplacementNamed(SingleLineTextQuestion.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'PRE', listQuestionIndex));
         break;
       case 'DDROP':
-        Navigator.of(context).pushReplacementNamed(DragAndDrop.routeName,
-            arguments: ScreenArguments(
-                cobjectList, questionIndex, 'DDROP', listQuestionIndex));
+        Navigator.of(context)
+            .pushReplacementNamed(DragAndDrop.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'DDROP', listQuestionIndex));
         break;
       case 'MTE':
-        Navigator.of(context).pushReplacementNamed(
-            MultipleChoiceQuestion.routeName,
-            arguments: ScreenArguments(
-                cobjectList, questionIndex, 'MTE', listQuestionIndex));
+        Navigator.of(context)
+            .pushReplacementNamed(MultipleChoiceQuestion.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'MTE', listQuestionIndex));
         break;
     }
-  } else if (questionType == 'TXT' &&
-      indexTextQuestion < cobjectList[0].questions.length) {
+  } else if (questionType == 'TXT' && indexTextQuestion < cobjectList[0].questions.length) {
     if (questionIndex == 0) {
       indexTextQuestion = 0;
-      Navigator.of(context).pushReplacementNamed(TextQuestion.routeName,
-          arguments: ScreenArguments(
-              cobjectList, questionIndex, 'TXT', listQuestionIndex));
+      Navigator.of(context)
+          .pushReplacementNamed(TextQuestion.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'TXT', listQuestionIndex));
     } else {
       print(indexTextQuestion);
-      Navigator.of(context).pushNamed(TextQuestion.routeName,
-          arguments: ScreenArguments(
-              cobjectList, indexTextQuestion, 'TXT', listQuestionIndex));
+      Navigator.of(context).pushNamed(TextQuestion.routeName, arguments: ScreenArguments(cobjectList, indexTextQuestion, 'TXT', listQuestionIndex));
     }
   } else {
     if (questionType == 'TXT') {
       //todo enviar como correto
-      Answer().sendAnswer(pieceId, true, 0,
-          intervalResolution: 0, groupId: "", value: "");
+      Answer().sendAnswer(pieceId, true, 0, intervalResolution: 0, groupId: "", value: "");
       print("enviada rewsposta do txt");
     }
     if (++listQuestionIndex < questionList.length) {
@@ -188,15 +166,8 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
 }
 
 Widget submitAnswer(
-    BuildContext context,
-    List<Cobject> cobjectList,
-    String questionType,
-    int questionIndex,
-    int listQuestionIndex,
-    String pieceId,
-    bool isCorrect,
-    {String groupId,
-    String value}) {
+    BuildContext context, List<Cobject> cobjectList, String questionType, int questionIndex, int listQuestionIndex, String pieceId, bool isCorrect,
+    {String groupId, String value}) {
   double screenHeight = MediaQuery.of(context).size.height;
   double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
   double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
@@ -227,14 +198,11 @@ Widget submitAnswer(
         ),
         onPressed: () {
           Answer().sendAnswer(pieceId, isCorrect, timeEnd,
-              intervalResolution: 1600718031765,
-              groupId: groupId != null ? groupId : "",
-              value: value != null ? value : "");
+              intervalResolution: timeEnd-timeStart, groupId: groupId != null ? groupId : "", value: value != null ? value : "");
 
           // ! O erro está vindo daqui, quando tenta subtrair timeStart do timeEnd. Motivo: timeStart vem null
 
-          submitLogic(context, questionIndex, listQuestionIndex, questionType,
-              pieceId, isCorrect, timeEnd);
+          submitLogic(context, questionIndex, listQuestionIndex, questionType, pieceId, isCorrect, timeEnd);
         },
       ),
     ),
@@ -242,7 +210,9 @@ Widget submitAnswer(
 }
 
 TextEditingController outputController = new TextEditingController();
-Future scan() async {
-  String barcode = await scanner.scan();
-  outputController.text = barcode;
+
+Future<dynamic> scan(BuildContext context) async {
+  print("aqui");
+  String retornado = await Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => new QrCodeReader()));
+  outputController.text = retornado;
 }
