@@ -1,6 +1,7 @@
+import 'dart:async';
+import 'package:elesson/share/general_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-
 import 'elesson_icon_lib_icons.dart';
 
 class QrCodeReader extends StatefulWidget {
@@ -11,19 +12,39 @@ class QrCodeReader extends StatefulWidget {
 }
 
 class _QrCodeReaderState extends State<QrCodeReader> {
+  bool showLoading = false;
   var qrText = '';
   QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
+  Color colorToTimerOut = Colors.white;
+  String textToTimeout = "APONTE PARA O CÓDIGO \nQR PRESENTE NO SEU KIT";
+
+  void timerOut(){
+    setState(() {
+      colorToTimerOut = Colors.red;
+      textToTimeout = "NÃO FOI POSSÍVEL \nVALIDAR O CÓGIGO QR";
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    Timer(Duration(seconds: 15),timerOut);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    double heightScreen = MediaQuery.of(context).size.height;
+    double widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Stack(
         children: [
           Column(
             children: <Widget>[
-              Expanded(
-                flex: 4,
+              Container(
+                height: heightScreen*0.77,
                 child: QRView(
                   key: qrKey,
                   onQRViewCreated: _onQRViewCreated,
@@ -42,8 +63,8 @@ class _QrCodeReaderState extends State<QrCodeReader> {
                 child: Container(
                   margin: EdgeInsets.only(top: 24),
                   child: Text(
-                    'APONTE PARA O CÓDIGO \nQR PRESENTE NO SEU KIT',
-                    style: TextStyle(color: Colors.white),
+                    textToTimeout,
+                    style: TextStyle(color: colorToTimerOut,fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -63,6 +84,12 @@ class _QrCodeReaderState extends State<QrCodeReader> {
               ),
             ),
           ),
+          Container(
+            height: 100,
+            width: 100,
+            margin: EdgeInsets.only(top: heightScreen * 0.77 -100,left: widthScreen/2 -50),
+            child: showLoading == true ? loadingAnimation() : null,
+          ),
         ],
       ),
     );
@@ -72,9 +99,15 @@ class _QrCodeReaderState extends State<QrCodeReader> {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
+        print("exibindo loading");
+        showLoading = !showLoading;
+      });
+      setState(() {
         qrText = scanData;
         controller.dispose();
-        Navigator.pop(context,qrText);
+        //todo implementar aqui o que vai acontecer depois de receber os dados do qrcode
+        //Navigator.pop(context, qrText);
+        //Navigator.of(context).pushReplacementNamed(StartAndSendTest.routeName);
       });
     });
   }

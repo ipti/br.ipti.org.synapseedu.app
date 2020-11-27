@@ -5,7 +5,7 @@ import 'elesson_icon_lib_icons.dart';
 Widget elessonCard({String backgroundImage, String text, double screenWidth, Function onTap,BuildContext context}) {
   return GestureDetector(
     onTap: () {
-      String retorno = onTap(context);
+      Future<String> retorno = onTap(context);
     },
     child: Container(
       height: 166,
@@ -63,6 +63,8 @@ Widget elessonCard({String backgroundImage, String text, double screenWidth, Fun
 
 Widget loadingAnimation() {
   return Container(
+    height: 100,
+    width: 100,
     child: Lottie.asset(
       'assets/animations/loading.json',
       width: 100,
