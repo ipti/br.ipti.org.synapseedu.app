@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 import './sms_register.dart';
 import '../share/question_widgets.dart';
 
@@ -83,10 +85,13 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
 
   Future<void> verifyCode(String phoneNumber, String code) async {
     var result = await _twilioPhoneVerify.verifySmsCode(phoneNumber, code);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     print("Enviado $code");
 
     if (result['message'] == 'approved') {
       // phone number verified
+      prefs.setBool('isConfirmed', true);
       print("Verificado com sucesso");
       Navigator.of(context).popAndPushNamed('/');
     } else {

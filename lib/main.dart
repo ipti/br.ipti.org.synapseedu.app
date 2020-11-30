@@ -1,4 +1,5 @@
 import 'package:elesson/register/code_verify_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import './register/countdown.dart';
 
@@ -73,15 +74,33 @@ void main() async {
   // });
 }
 
-// bool isLogged = await isUserConfirmed();
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
 
-class Home extends StatelessWidget {
+class _HomeState extends State<Home> {
+  bool isLogged = false;
   var questionType;
+
   var cobject = new List<dynamic>();
 
+  Future<bool> isUserConfirmed() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isLogged = prefs.getBool('isConfirmed') ?? false;
+    });
+  }
+
   @override
+  // isUserConfirmed();
+  bool isChecked = false;
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIOverlays([]);
+    if (isChecked == false) {
+      isUserConfirmed();
+      isChecked = true;
+    }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Elesson',
@@ -102,8 +121,8 @@ class Home extends StatelessWidget {
         fontFamily: 'Mulish',
         textTheme: GoogleFonts.muliTextTheme(),
       ),
-      initialRoute: '/',
-      // initialRoute: !isLogged ? '/' : CodeVerifyView.routeName,
+      // initialRoute: '/',
+      initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
       routes: {
         '/': (context) => SpaceSelection(),
         //'/': (context) => ActivitySelectionForm(),
