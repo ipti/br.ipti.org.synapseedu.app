@@ -270,10 +270,10 @@ class _TemplateSliderState extends State<TemplateSlider> {
             Container(
               child: Center(
                 child: GestureDetector(
-                  child: widget.text,
                   onTap: () {
                     playSound(widget.sound);
                   },
+                  child: Container(padding: EdgeInsets.all(20), child: widget.text),
                 ),
               ),
               height: (screenHeight * 0.145) - 12,

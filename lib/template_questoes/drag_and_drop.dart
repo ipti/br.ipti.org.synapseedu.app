@@ -131,13 +131,16 @@ class _DragAndDropState extends State<DragAndDrop> {
                 onTap: () {
                   playSound(cobjectList[0].questions[questionIndex].header["sound"]);
                 },
-                child: Text(
-                  questionText.toUpperCase(),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: fonteDaLetra,
-                    fontFamily: 'Mulish',
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  child: Text(
+                    questionText.toUpperCase(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: fonteDaLetra,
+                      fontFamily: 'Mulish',
+                    ),
                   ),
                 ),
               ),
