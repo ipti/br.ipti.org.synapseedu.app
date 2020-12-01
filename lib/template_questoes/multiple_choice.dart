@@ -133,6 +133,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
               // minWidth: cardHeight,
               highlightColor: Color(0xFF00DC8C),
               splashColor: Color(0xFF00DC8C),
+
               onLongPress: () {
                 // if (question.pieces[grouping]["image"].isNotEmpty)
                 Navigator.of(context).pushNamed(
