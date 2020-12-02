@@ -132,7 +132,6 @@ class _HomeState extends State<Home> {
         StartAndSendTest.routeName: (context) => StartAndSendTest(),
         SmsRegisterView.routeName: (context) => SmsRegisterView(),
         CodeVerifyView.routeName: (context) => CodeVerifyView(),
-        StartAndSendTest.routeName: (context) => StartAndSendTest(),
         //----------------------------rotas fora de fluxo---------------------------
         ActivitySelectionForm.routeName: (context) => ActivitySelectionForm(),
         SingleLineTextQuestion.routeName: (context) => SingleLineTextQuestion(),

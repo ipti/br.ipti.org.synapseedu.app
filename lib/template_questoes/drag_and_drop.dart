@@ -67,7 +67,9 @@ class _DragAndDropState extends State<DragAndDrop> {
     }
     print("lista de sorteados: $randomNumber");
   }
+
   String pieceId = "";
+
   @override
   Widget build(BuildContext context) {
     //pieceId = cobjectList[0].questions[questionIndex].pieceId;
@@ -104,13 +106,13 @@ class _DragAndDropState extends State<DragAndDrop> {
             fontFamily: 'Mulish',
           ),
         ),
-        activityScreen: DAD(heightScreen - 12, widthScreen, cobjectList[0].questions[questionIndex], questionText, chronometer),
+        activityScreen: activityScreen(heightScreen - 12, widthScreen, cobjectList[0].questions[questionIndex], questionText, chronometer),
       ),
     );
   }
 
   // ignore: non_constant_identifier_names
-  Widget DAD(double heightScreen, double widthScreen, Question question, String questionText, Stopwatch chronometer) {
+  Widget activityScreen(double heightScreen, double widthScreen, Question question, String questionText, Stopwatch chronometer) {
     String pieceId = cobjectList[0].questions[questionIndex].pieceId;
     return Container(
       margin: EdgeInsets.only(bottom: 12),
@@ -159,16 +161,55 @@ class _DragAndDropState extends State<DragAndDrop> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      showFirstSender == true ? sender(1, 1, widthScreen, question) : undo(1, widthScreen),
-                      receiver(1, widthScreen, question),
+                      showFirstSender == true
+                          ? Padding(
+                              padding: const EdgeInsets.only(left: 16),
+                              child: sender(1, 1, widthScreen, question),
+                            )
+                          : undo(1, widthScreen),
+                      LoadingGestureDetector(
+                        definedPosition: 4,
+                        setState: setState,
+                        onLongPress: () {
+                          if (question.pieces["${randomNumber[0]}_1"]["image"].isNotEmpty)
+                            Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
+                                arguments: DetailScreenArguments(grouping: "${randomNumber[0]}_1", question: question));
+                        },
+                        child: receiver(1, widthScreen, question),
+                      ),
                     ],
                   ),
                   //<=================SEGUNDA=====================>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      showSecondSender == true ? sender(2, 2, widthScreen, question) : undo(2, widthScreen),
-                      receiver(2, widthScreen, question),
+                      showSecondSender == true
+                          ? Padding(
+                              padding: const EdgeInsets.only(left: 16),
+                              child: LoadingGestureDetector(
+                                definedPosition: 2,
+                                setState: setState,
+                                onLongPress: () {
+                                  if (question.pieces["2"]["image"].isNotEmpty)
+                                    Navigator.of(context).pushNamed(
+                                      ImageDetailScreen.routeName,
+                                      arguments: DetailScreenArguments(grouping: "2", question: question),
+                                    );
+                                },
+                                child: sender(2, 2, widthScreen, question),
+                              ),
+                            )
+                          : undo(2, widthScreen),
+                      LoadingGestureDetector(
+                        definedPosition: 5,
+                        setState: setState,
+                        onLongPress: () {
+                          if (question.pieces["${randomNumber[1]}_1"]["image"].isNotEmpty)
+                            Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
+                                arguments: DetailScreenArguments(grouping: "${randomNumber[1]}_1", question: question));
+                        },
+                        child: receiver(2, widthScreen, question),
+                      ),
                     ],
                   ),
                   //<=================TERCEIRA=====================>
@@ -176,7 +217,16 @@ class _DragAndDropState extends State<DragAndDrop> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       showThirdSender == true ? sender(3, 3, widthScreen, question) : undo(3, widthScreen),
-                      receiver(3, widthScreen, question),
+                      LoadingGestureDetector(
+                        definedPosition: 6,
+                        setState: setState,
+                        onLongPress: () {
+                          if (question.pieces["${randomNumber[2]}_1"]["image"].isNotEmpty)
+                            Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
+                                arguments: DetailScreenArguments(grouping: "${randomNumber[2]}_1", question: question));
+                        },
+                        child: receiver(3, widthScreen, question),
+                      ),
                     ],
                   ),
                 ],
@@ -200,22 +250,31 @@ class _DragAndDropState extends State<DragAndDrop> {
       case 1:
         return DragTarget(
           builder: (context, List<int> candidateData, rejectedData) {
-            return Container(
-              margin: EdgeInsets.only(right: 16),
-              width: widthScreen / 2.35,
-              height: widthScreen / 2.6,
-              child: Stack(
-                children: [
-                  GestureDetector(
-                    child: box(1, widthScreen, question),
-                    onLongPress: () {
-                      if (question.pieces["1_1"]["image"].isNotEmpty)
-                        Navigator.of(context)
-                            .pushNamed(ImageDetailScreen.routeName, arguments: DetailScreenArguments(grouping: "1_1", question: question));
-                    },
-                  ),
-                  dragReceiverTemplate(1, widthScreen, question),
-                ],
+            return LoadingGestureDetector(
+              definedPosition: 6,
+              setState: setState,
+              onLongPress: () {
+                if (question.pieces["${randomNumber[2]}_1"]["image"].isNotEmpty)
+                  Navigator.of(context)
+                      .pushNamed(ImageDetailScreen.routeName, arguments: DetailScreenArguments(grouping: "${randomNumber[2]}_1", question: question));
+              },
+              child: Container(
+                margin: EdgeInsets.only(right: 16),
+                width: widthScreen / 2.35,
+                height: widthScreen / 2.6,
+                child: Stack(
+                  children: [
+                    GestureDetector(
+                      child: box(1, widthScreen, question),
+                      onLongPress: () {
+                        if (question.pieces["1_1"]["image"].isNotEmpty)
+                          Navigator.of(context)
+                              .pushNamed(ImageDetailScreen.routeName, arguments: DetailScreenArguments(grouping: "1_1", question: question));
+                      },
+                    ),
+                    dragReceiverTemplate(1, widthScreen, question),
+                  ],
+                ),
               ),
             );
           },
@@ -232,7 +291,13 @@ class _DragAndDropState extends State<DragAndDrop> {
             tradeValue(1, data);
             updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 1, question);
 
-            sendMetaData(isCorrect: data == 1 ? true : false,finalTime: 0,groupId: "1",intervalResolution: DateTime.now().millisecondsSinceEpoch - timeStart,value: "",pieceId: pieceId.toString());
+            sendMetaData(
+                isCorrect: data == 1 ? true : false,
+                finalTime: 0,
+                groupId: "1",
+                intervalResolution: DateTime.now().millisecondsSinceEpoch - timeStart,
+                value: "",
+                pieceId: pieceId.toString());
 
             verifyIsCorrect();
             print("""
@@ -340,20 +405,22 @@ class _DragAndDropState extends State<DragAndDrop> {
   }
 
   Widget sender(int data, int index, double widthScreen, Question question) {
-    return GestureDetector(
-      onLongPress: () {
-        if (question.pieces[index.toString()]["image"].isNotEmpty)
-          Navigator.of(context).pushNamed(
-            ImageDetailScreen.routeName,
-            arguments: DetailScreenArguments(grouping: index.toString(), question: question),
-          );
-      },
-      child: Draggable(
-        data: data,
+    return Draggable(
+      data: data,
+      child: LoadingGestureDetector(
+        definedPosition: 1,
+        setState: setState,
+        onLongPress: () {
+          if (question.pieces["1"]["image"].isNotEmpty)
+            Navigator.of(context).pushNamed(
+              ImageDetailScreen.routeName,
+              arguments: DetailScreenArguments(grouping: "1", question: question),
+            );
+        },
         child: dragSenderTemplate(index, widthScreen, question),
-        feedback: dragSenderTemplate(index, widthScreen, question),
-        childWhenDragging: dragSenderInvisible(widthScreen),
       ),
+      feedback: dragSenderTemplate(index, widthScreen, question),
+      childWhenDragging: dragSenderInvisible(widthScreen),
     );
   }
 
@@ -436,9 +503,9 @@ class _DragAndDropState extends State<DragAndDrop> {
 
   Widget dragSenderTemplate(int index, double widthScreen, Question question) {
     return Container(
-      margin: EdgeInsets.only(
-        left: 16,
-      ),
+      // margin: EdgeInsets.only(
+      //   left: 16,
+      // ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         image: DecorationImage(

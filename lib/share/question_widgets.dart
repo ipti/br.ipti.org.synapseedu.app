@@ -10,6 +10,7 @@ import 'package:elesson/template_questoes/question_and_answer.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/text_question.dart';
 import 'package:flutter_riverpod/all.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import '../template_questoes/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -232,7 +233,7 @@ Future<String> scan(BuildContext context) async {
 Future<void> sendMetaData({String pieceId, String groupId, int finalTime, int intervalResolution, String value, bool isCorrect}) async {
   print("tentando enviar metadata");
   print(isCorrect);
-  try{
+  try {
     var response = await http.post("http://app.elesson.com.br/api-synapse/synapse/performance/actor/save", body: {
       "mode": "proficiency", //ok
       "piece_id": pieceId, //ok
@@ -246,7 +247,7 @@ Future<void> sendMetaData({String pieceId, String groupId, int finalTime, int in
     }, headers: {
       HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
     });
-  }catch(e){
+  } catch (e) {
     print("ERROR:");
     print(e.message);
   }
@@ -265,10 +266,41 @@ Future<void> sendMetaData({String pieceId, String groupId, int finalTime, int in
   print("Enviado metadata");
 }
 
+double double1LoadingPercent = 0;
+double double2LoadingPercent = 0;
+double double3LoadingPercent = 0;
+double double4LoadingPercent = 0;
+double double5LoadingPercent = 0;
+double double6LoadingPercent = 0;
+
 // ignore: non_constant_identifier_names, missing_return
-Widget LoadingGestureDetector({Widget child,void Function()}){
+Widget LoadingGestureDetector({Widget child, Function onLongPress, Function setState, int definedPosition}) {
   return GestureDetector(
-    child: child,
-    onTap: Function,
+    child: Stack(
+      alignment: Alignment.center,
+      children: [
+        child,
+        CircularPercentIndicator(
+          radius: 120.0,
+          animation: true,
+          animationDuration: 450,
+          lineWidth: 15.0,
+          percent: definedPosition == 1 ? double1LoadingPercent : definedPosition == 2 ? double2LoadingPercent : definedPosition == 3 ? double3LoadingPercent : definedPosition == 4 ? double4LoadingPercent : definedPosition == 5 ? double5LoadingPercent : double6LoadingPercent,
+          circularStrokeCap: CircularStrokeCap.round,
+          backgroundColor: Colors.transparent,
+          progressColor: Colors.green,
+        ),
+      ],
+    ),
+    onPanDown: (details) => setState(() {
+      definedPosition == 1 ? double1LoadingPercent = 1 : definedPosition == 2 ? double2LoadingPercent = 1 : definedPosition == 3 ? double3LoadingPercent = 1 : definedPosition == 4 ? double4LoadingPercent = 1 : definedPosition == 5 ? double5LoadingPercent = 1 : double6LoadingPercent = 1;
+    }),
+    //en: () {definedPosition == 1 ? double1LoadingPercent = 0 : definedPosition == 2 ? double2LoadingPercent = 0 : definedPosition == 3 ? double3LoadingPercent = 0 : definedPosition == 4 ? double4LoadingPercent = 0 : definedPosition == 5 ? double5LoadingPercent = 0 : double6LoadingPercent = 0;},
+    onLongPress: () {
+      onLongPress();
+      setState(() {
+        definedPosition == 1 ? double1LoadingPercent = 0 : definedPosition == 2 ? double2LoadingPercent = 0 : definedPosition == 3 ? double3LoadingPercent = 0 : definedPosition == 4 ? double4LoadingPercent = 0 : definedPosition == 5 ? double5LoadingPercent = 0 : double6LoadingPercent = 0;
+      });
+    },
   );
 }
