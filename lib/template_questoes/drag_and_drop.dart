@@ -67,9 +67,10 @@ class _DragAndDropState extends State<DragAndDrop> {
     }
     print("lista de sorteados: $randomNumber");
   }
-
+  String pieceId = "";
   @override
   Widget build(BuildContext context) {
+    //pieceId = cobjectList[0].questions[questionIndex].pieceId;
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
@@ -209,10 +210,8 @@ class _DragAndDropState extends State<DragAndDrop> {
                     child: box(1, widthScreen, question),
                     onLongPress: () {
                       if (question.pieces["1_1"]["image"].isNotEmpty)
-                        Navigator.of(context).pushNamed(
-                          ImageDetailScreen.routeName,
-                          arguments: DetailScreenArguments(grouping: "1_1", question: question),
-                        );
+                        Navigator.of(context)
+                            .pushNamed(ImageDetailScreen.routeName, arguments: DetailScreenArguments(grouping: "1_1", question: question));
                     },
                   ),
                   dragReceiverTemplate(1, widthScreen, question),
@@ -232,6 +231,9 @@ class _DragAndDropState extends State<DragAndDrop> {
             updateSender(data);
             tradeValue(1, data);
             updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 1, question);
+
+            sendMetaData(isCorrect: data == 1 ? true : false,finalTime: 0,groupId: "1",intervalResolution: DateTime.now().millisecondsSinceEpoch - timeStart,value: "",pieceId: pieceId.toString());
+
             verifyIsCorrect();
             print("""
                             1_1: $valueFirstReceiver

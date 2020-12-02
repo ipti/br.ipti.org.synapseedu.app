@@ -14,17 +14,17 @@ enum AuthStatus {
   LOGGED_IN,
 }
 
-class RootPage extends StatefulWidget {
-  RootPage({this.auth});
+class LoggedOrNot extends StatefulWidget {
+  LoggedOrNot({this.auth});
 
   //final BaseAuth auth; // aqui entra a instancia onde ficam as classes de autenticação do usuário
   final auth; // essa linha está aqui só pra não dar erro enquanto a gente não está usando, mas está ERRADA
 
   @override
-  State<StatefulWidget> createState() => new _RootPageState();
+  State<StatefulWidget> createState() => new _LoggedOrNotState();
 }
 
-class _RootPageState extends State<RootPage> {
+class _LoggedOrNotState extends State<LoggedOrNot> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String _userId = "";
 
