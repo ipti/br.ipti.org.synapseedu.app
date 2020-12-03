@@ -167,16 +167,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                               child: sender(1, 1, widthScreen, question),
                             )
                           : undo(1, widthScreen),
-                      LoadingGestureDetector(
-                        definedPosition: 4,
-                        setState: setState,
-                        onLongPress: () {
-                          if (question.pieces["${randomNumber[0]}_1"]["image"].isNotEmpty)
-                            Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
-                                arguments: DetailScreenArguments(grouping: "${randomNumber[0]}_1", question: question));
-                        },
-                        child: receiver(1, widthScreen, question),
-                      ),
+                      receiver(4, widthScreen, question),
                     ],
                   ),
                   //<=================SEGUNDA=====================>
@@ -186,47 +177,23 @@ class _DragAndDropState extends State<DragAndDrop> {
                       showSecondSender == true
                           ? Padding(
                               padding: const EdgeInsets.only(left: 16),
-                              child: LoadingGestureDetector(
-                                definedPosition: 2,
-                                setState: setState,
-                                onLongPress: () {
-                                  if (question.pieces["2"]["image"].isNotEmpty)
-                                    Navigator.of(context).pushNamed(
-                                      ImageDetailScreen.routeName,
-                                      arguments: DetailScreenArguments(grouping: "2", question: question),
-                                    );
-                                },
-                                child: sender(2, 2, widthScreen, question),
-                              ),
+                              child: sender(2, 2, widthScreen, question),
                             )
                           : undo(2, widthScreen),
-                      LoadingGestureDetector(
-                        definedPosition: 5,
-                        setState: setState,
-                        onLongPress: () {
-                          if (question.pieces["${randomNumber[1]}_1"]["image"].isNotEmpty)
-                            Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
-                                arguments: DetailScreenArguments(grouping: "${randomNumber[1]}_1", question: question));
-                        },
-                        child: receiver(2, widthScreen, question),
-                      ),
+                      receiver(5, widthScreen, question),
                     ],
                   ),
                   //<=================TERCEIRA=====================>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      showThirdSender == true ? sender(3, 3, widthScreen, question) : undo(3, widthScreen),
-                      LoadingGestureDetector(
-                        definedPosition: 6,
-                        setState: setState,
-                        onLongPress: () {
-                          if (question.pieces["${randomNumber[2]}_1"]["image"].isNotEmpty)
-                            Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
-                                arguments: DetailScreenArguments(grouping: "${randomNumber[2]}_1", question: question));
-                        },
-                        child: receiver(3, widthScreen, question),
-                      ),
+                      showThirdSender == true
+                          ? Padding(
+                              padding: const EdgeInsets.only(left: 16),
+                              child: sender(3, 3, widthScreen, question),
+                            )
+                          : undo(3, widthScreen),
+                      receiver(6, widthScreen, question),
                     ],
                   ),
                 ],
@@ -245,36 +212,36 @@ class _DragAndDropState extends State<DragAndDrop> {
   }
 
   Widget receiver(int posicao, double widthScreen, Question question) {
-    int wret = randomNumber[posicao - 1];
+    int wret = randomNumber[posicao - 4];
     switch (wret) {
       case 1:
         return DragTarget(
           builder: (context, List<int> candidateData, rejectedData) {
-            return LoadingGestureDetector(
-              definedPosition: 6,
-              setState: setState,
-              onLongPress: () {
-                if (question.pieces["${randomNumber[2]}_1"]["image"].isNotEmpty)
-                  Navigator.of(context)
-                      .pushNamed(ImageDetailScreen.routeName, arguments: DetailScreenArguments(grouping: "${randomNumber[2]}_1", question: question));
-              },
-              child: Container(
-                margin: EdgeInsets.only(right: 16),
-                width: widthScreen / 2.35,
-                height: widthScreen / 2.6,
-                child: Stack(
-                  children: [
-                    GestureDetector(
-                      child: box(1, widthScreen, question),
-                      onLongPress: () {
-                        if (question.pieces["1_1"]["image"].isNotEmpty)
-                          Navigator.of(context)
-                              .pushNamed(ImageDetailScreen.routeName, arguments: DetailScreenArguments(grouping: "1_1", question: question));
-                      },
-                    ),
-                    dragReceiverTemplate(1, widthScreen, question),
-                  ],
-                ),
+            return Container(
+              margin: EdgeInsets.only(right: 16),
+              width: widthScreen / 2.35,
+              height: widthScreen / 2.6,
+              child: Stack(
+                children: [
+                  GestureDetector(
+                    child: box(1, widthScreen, question),
+                    // onLongPress: () {
+                    //   if (question.pieces["1_1"]["image"].isNotEmpty)
+                    //     Navigator.of(context)
+                    //         .pushNamed(ImageDetailScreen.routeName, arguments: DetailScreenArguments(grouping: "1_1", question: question));
+                    // },
+                  ),
+                  LoadingGestureDetector(
+                    definedPosition: posicao,
+                    setState: setState,
+                    onLongPress: () {
+                      if (question.pieces["${randomNumber[posicao - 4]}_1"]["image"].isNotEmpty)
+                        Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
+                            arguments: DetailScreenArguments(grouping: "${randomNumber[posicao - 4]}_1", question: question));
+                    },
+                    child: dragReceiverTemplate(1, widthScreen, question),
+                  ),
+                ],
               ),
             );
           },
@@ -320,15 +287,22 @@ class _DragAndDropState extends State<DragAndDrop> {
                 children: [
                   GestureDetector(
                     child: box(2, widthScreen, question),
-                    onLongPress: () {
-                      if (question.pieces["2_1"]["image"].isNotEmpty)
-                        Navigator.of(context).pushNamed(
-                          ImageDetailScreen.routeName,
-                          arguments: DetailScreenArguments(grouping: "2_1", question: question),
-                        );
-                    },
+                    // onLongPress: () {
+                    //   if (question.pieces["${randomNumber[posicao - 4]}_1"]["image"].isNotEmpty)
+                    //     Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
+                    //         arguments: DetailScreenArguments(grouping: "${randomNumber[posicao - 4]}_1", question: question));
+                    // },
                   ),
-                  dragReceiverTemplate(2, widthScreen, question),
+                  LoadingGestureDetector(
+                    definedPosition: posicao,
+                    setState: setState,
+                    onLongPress: () {
+                      if (question.pieces["${randomNumber[posicao - 4]}_1"]["image"].isNotEmpty)
+                        Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
+                            arguments: DetailScreenArguments(grouping: "${randomNumber[posicao - 4]}_1", question: question));
+                    },
+                    child: dragReceiverTemplate(2, widthScreen, question),
+                  ),
                 ],
               ),
             );
@@ -367,14 +341,21 @@ class _DragAndDropState extends State<DragAndDrop> {
                   GestureDetector(
                     child: box(3, widthScreen, question),
                     onLongPress: () {
-                      if (question.pieces["3_1"]["image"].isNotEmpty)
-                        Navigator.of(context).pushNamed(
-                          ImageDetailScreen.routeName,
-                          arguments: DetailScreenArguments(grouping: "3_1", question: question),
-                        );
+                      if (question.pieces["${randomNumber[posicao - 4]}_1"]["image"].isNotEmpty)
+                        Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
+                            arguments: DetailScreenArguments(grouping: "${randomNumber[posicao - 4]}_1", question: question));
                     },
                   ),
-                  dragReceiverTemplate(3, widthScreen, question),
+                  LoadingGestureDetector(
+                    definedPosition: posicao,
+                    setState: setState,
+                    onLongPress: () {
+                      if (question.pieces["${randomNumber[posicao - 4]}_1"]["image"].isNotEmpty)
+                        Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
+                            arguments: DetailScreenArguments(grouping: "${randomNumber[posicao - 4]}_1", question: question));
+                    },
+                    child: dragReceiverTemplate(3, widthScreen, question),
+                  ),
                 ],
               ),
             );
@@ -411,11 +392,8 @@ class _DragAndDropState extends State<DragAndDrop> {
         definedPosition: 1,
         setState: setState,
         onLongPress: () {
-          if (question.pieces["1"]["image"].isNotEmpty)
-            Navigator.of(context).pushNamed(
-              ImageDetailScreen.routeName,
-              arguments: DetailScreenArguments(grouping: "1", question: question),
-            );
+          if (question.pieces["${index}"]["image"].isNotEmpty)
+            Navigator.of(context).pushNamed(ImageDetailScreen.routeName, arguments: DetailScreenArguments(grouping: "${index}", question: question));
         },
         child: dragSenderTemplate(index, widthScreen, question),
       ),

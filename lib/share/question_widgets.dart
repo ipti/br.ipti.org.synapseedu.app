@@ -269,12 +269,42 @@ Future<void> sendMetaData({String pieceId, String groupId, int finalTime, int in
 double double1LoadingPercent = 0;
 double double2LoadingPercent = 0;
 double double3LoadingPercent = 0;
+
 double double4LoadingPercent = 0;
 double double5LoadingPercent = 0;
 double double6LoadingPercent = 0;
 
 // ignore: non_constant_identifier_names, missing_return
 Widget LoadingGestureDetector({Widget child, Function onLongPress, Function setState, int definedPosition}) {
+  double current = 0;
+  print("==============START================");
+  switch (definedPosition) {
+    case 1:
+      print(1);
+      current = double1LoadingPercent;
+      break;
+    case 2:
+      print(2);
+      current = double2LoadingPercent;
+      break;
+    case 3:
+      print(3);
+      current = double3LoadingPercent;
+      break;
+    case 4:
+      print(4);
+      current = double4LoadingPercent;
+      break;
+    case 5:
+      print(5);
+      current = double5LoadingPercent;
+      break;
+    case 6:
+      print(6);
+      current = double6LoadingPercent;
+      break;
+  }
+  print("==============================");
   return GestureDetector(
     child: Stack(
       alignment: Alignment.center,
@@ -285,21 +315,52 @@ Widget LoadingGestureDetector({Widget child, Function onLongPress, Function setS
           animation: true,
           animationDuration: 450,
           lineWidth: 15.0,
-          percent: definedPosition == 1 ? double1LoadingPercent : definedPosition == 2 ? double2LoadingPercent : definedPosition == 3 ? double3LoadingPercent : definedPosition == 4 ? double4LoadingPercent : definedPosition == 5 ? double5LoadingPercent : double6LoadingPercent,
+          percent: current,
           circularStrokeCap: CircularStrokeCap.round,
           backgroundColor: Colors.transparent,
           progressColor: Colors.green,
         ),
       ],
     ),
-    onPanDown: (details) => setState(() {
-      definedPosition == 1 ? double1LoadingPercent = 1 : definedPosition == 2 ? double2LoadingPercent = 1 : definedPosition == 3 ? double3LoadingPercent = 1 : definedPosition == 4 ? double4LoadingPercent = 1 : definedPosition == 5 ? double5LoadingPercent = 1 : double6LoadingPercent = 1;
-    }),
-    //en: () {definedPosition == 1 ? double1LoadingPercent = 0 : definedPosition == 2 ? double2LoadingPercent = 0 : definedPosition == 3 ? double3LoadingPercent = 0 : definedPosition == 4 ? double4LoadingPercent = 0 : definedPosition == 5 ? double5LoadingPercent = 0 : double6LoadingPercent = 0;},
+    onPanDown: (details) {
+      print("=============PAN=================");
+      switch (definedPosition) {
+        case 1:
+          print(1);
+          break;
+        case 2:
+          print(2);
+          break;
+        case 3:
+          print(3);
+          break;
+        case 4:
+          print(4);
+          break;
+        case 5:
+          print(5);
+          break;
+        case 6:
+          print(6);
+          break;
+      }
+      print("==============================");
+      //definedPosition == 1 ? double1LoadingPercent = 1 : definedPosition == 2 ? double2LoadingPercent = 1 : definedPosition == 3 ? double3LoadingPercent = 1 : definedPosition == 4 ? double4LoadingPercent = 1 : definedPosition == 5 ? double5LoadingPercent = 1 : double6LoadingPercent = 1;
+    },
     onLongPress: () {
       onLongPress();
       setState(() {
-        definedPosition == 1 ? double1LoadingPercent = 0 : definedPosition == 2 ? double2LoadingPercent = 0 : definedPosition == 3 ? double3LoadingPercent = 0 : definedPosition == 4 ? double4LoadingPercent = 0 : definedPosition == 5 ? double5LoadingPercent = 0 : double6LoadingPercent = 0;
+        // definedPosition == 1
+        //     ? double1LoadingPercent = 0
+        //     : definedPosition == 2
+        //         ? double2LoadingPercent = 0
+        //         : definedPosition == 3
+        //             ? double3LoadingPercent = 0
+        //             : definedPosition == 4
+        //                 ? double4LoadingPercent = 0
+        //                 : definedPosition == 5
+        //                     ? double5LoadingPercent = 0
+        //                     : double6LoadingPercent = 0;
       });
     },
   );
