@@ -225,21 +225,20 @@ class _DragAndDropState extends State<DragAndDrop> {
                 children: [
                   GestureDetector(
                     child: box(1, widthScreen, question),
-                    // onLongPress: () {
-                    //   if (question.pieces["1_1"]["image"].isNotEmpty)
-                    //     Navigator.of(context)
-                    //         .pushNamed(ImageDetailScreen.routeName, arguments: DetailScreenArguments(grouping: "1_1", question: question));
-                    // },
                   ),
-                  LoadingGestureDetector(
-                    definedPosition: posicao,
-                    setState: setState,
-                    onLongPress: () {
-                      if (question.pieces["${randomNumber[posicao - 4]}_1"]["image"].isNotEmpty)
-                        Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
-                            arguments: DetailScreenArguments(grouping: "${randomNumber[posicao - 4]}_1", question: question));
-                    },
-                    child: dragReceiverTemplate(1, widthScreen, question),
+                  Padding(
+                    padding: const EdgeInsets.only(left : 14),
+                    child: LoadingGestureDetector(
+                      widthScreen: widthScreen,
+                      definedPosition: posicao,
+                      setState: setState,
+                      onLongPress: () {
+                        if (question.pieces["${randomNumber[posicao - 4]}_1"]["image"].isNotEmpty)
+                          Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
+                              arguments: DetailScreenArguments(grouping: "${randomNumber[posicao - 4]}_1", question: question));
+                      },
+                      child: dragReceiverTemplate(1, widthScreen, question),
+                    ),
                   ),
                 ],
               ),
@@ -293,15 +292,19 @@ class _DragAndDropState extends State<DragAndDrop> {
                     //         arguments: DetailScreenArguments(grouping: "${randomNumber[posicao - 4]}_1", question: question));
                     // },
                   ),
-                  LoadingGestureDetector(
-                    definedPosition: posicao,
-                    setState: setState,
-                    onLongPress: () {
-                      if (question.pieces["${randomNumber[posicao - 4]}_1"]["image"].isNotEmpty)
-                        Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
-                            arguments: DetailScreenArguments(grouping: "${randomNumber[posicao - 4]}_1", question: question));
-                    },
-                    child: dragReceiverTemplate(2, widthScreen, question),
+                  Padding(
+                    padding: const EdgeInsets.only(left : 14),
+                    child: LoadingGestureDetector(
+                      widthScreen: widthScreen,
+                      definedPosition: posicao,
+                      setState: setState,
+                      onLongPress: () {
+                        if (question.pieces["${randomNumber[posicao - 4]}_1"]["image"].isNotEmpty)
+                          Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
+                              arguments: DetailScreenArguments(grouping: "${randomNumber[posicao - 4]}_1", question: question));
+                      },
+                      child: dragReceiverTemplate(2, widthScreen, question),
+                    ),
                   ),
                 ],
               ),
@@ -346,15 +349,19 @@ class _DragAndDropState extends State<DragAndDrop> {
                             arguments: DetailScreenArguments(grouping: "${randomNumber[posicao - 4]}_1", question: question));
                     },
                   ),
-                  LoadingGestureDetector(
-                    definedPosition: posicao,
-                    setState: setState,
-                    onLongPress: () {
-                      if (question.pieces["${randomNumber[posicao - 4]}_1"]["image"].isNotEmpty)
-                        Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
-                            arguments: DetailScreenArguments(grouping: "${randomNumber[posicao - 4]}_1", question: question));
-                    },
-                    child: dragReceiverTemplate(3, widthScreen, question),
+                  Padding(
+                    padding: const EdgeInsets.only(left : 14),
+                    child: LoadingGestureDetector(
+                      widthScreen: widthScreen,
+                      definedPosition: posicao,
+                      setState: setState,
+                      onLongPress: () {
+                        if (question.pieces["${randomNumber[posicao - 4]}_1"]["image"].isNotEmpty)
+                          Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
+                              arguments: DetailScreenArguments(grouping: "${randomNumber[posicao - 4]}_1", question: question));
+                      },
+                      child: dragReceiverTemplate(3, widthScreen, question),
+                    ),
                   ),
                 ],
               ),
@@ -389,7 +396,8 @@ class _DragAndDropState extends State<DragAndDrop> {
     return Draggable(
       data: data,
       child: LoadingGestureDetector(
-        definedPosition: 1,
+        widthScreen: widthScreen,
+        definedPosition: index,
         setState: setState,
         onLongPress: () {
           if (question.pieces["${index}"]["image"].isNotEmpty)
@@ -403,6 +411,19 @@ class _DragAndDropState extends State<DragAndDrop> {
   }
 
   Widget undo(int index, double widthScreen) {
+    setState(() {
+      switch (index) {
+        case 1:
+          setState((){double1LoadingPercent = 0;});
+          break;
+        case 2:
+          setState((){double2LoadingPercent = 0;});
+          break;
+        case 3:
+          setState((){double3LoadingPercent = 0;});
+          break;
+      }
+    });
     return GestureDetector(
       onTap: () {
         updateSender(index);
