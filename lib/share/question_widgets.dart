@@ -276,7 +276,7 @@ double double5LoadingPercent = 0;
 double double6LoadingPercent = 0;
 double current = 0;
 // ignore: non_constant_identifier_names, missing_return
-Widget LoadingGestureDetector({Widget child, Function onLongPress, Function setState, int definedPosition,double widthScreen}) {
+Widget LoadingGestureDetector({Widget child, Function onLongPress, Function setState, int definedPosition,double widthScreen, bool enableMargin}) {
   switch (definedPosition) {
     case 1:
       current = double1LoadingPercent;
@@ -305,21 +305,24 @@ Widget LoadingGestureDetector({Widget child, Function onLongPress, Function setS
         alignment: Alignment.center,
         children: [
           child,
-          CircularPercentIndicator(
-            radius: 120.0,
-            animation: true,
-            animationDuration: 450,
-            lineWidth: 15.0,
-            percent: current,
-            circularStrokeCap: CircularStrokeCap.round,
-            backgroundColor: Colors.transparent,
-            progressColor: Colors.green,
+          Container(
+            margin: EdgeInsets.only(left: enableMargin == true ? 32 : 0),
+            child: CircularPercentIndicator(
+              radius: 120.0,
+              animation: true,
+              animationDuration: 450,
+              lineWidth: 15.0,
+              percent: current,
+              circularStrokeCap: CircularStrokeCap.round,
+              backgroundColor: Colors.transparent,
+              progressColor: Colors.green,
+            ),
           ),
         ],
       ),
     ),
     onPanCancel: () {
-      setState(() {r
+      setState(() {
         switch (definedPosition) {
           case 1:
             setState((){double1LoadingPercent = 0;});
