@@ -61,7 +61,7 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
                   side: BorderSide(color: Color(0x3300004C), width: 2),
                 ),
                 child: Hero(
-                  tag: grouping,
+                  tag: arguments.heroString != null ? arguments.heroString : grouping,
                   child: question.pieces[grouping]["image"].isNotEmpty
                       ? Image.network(
                           BASE_URL +
@@ -180,6 +180,7 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
 class DetailScreenArguments {
   Question question;
   String grouping;
+  String heroString;
 
-  DetailScreenArguments({this.question, this.grouping});
+  DetailScreenArguments({this.question, this.grouping, this.heroString});
 }

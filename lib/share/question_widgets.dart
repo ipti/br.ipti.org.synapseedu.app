@@ -224,7 +224,6 @@ Widget submitAnswer(
 }
 
 Future<String> scan(BuildContext context) async {
-  print("aqui");
   String returnedValue = await Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => new QrCodeReader()));
   //todo implementar aqui direcionamento pra aluma pagina se for preciso (OBS: Tem que ser antes do retorno pra não bugar)
   return returnedValue;
@@ -320,8 +319,7 @@ Widget LoadingGestureDetector({Widget child, Function onLongPress, Function setS
       ),
     ),
     onPanCancel: () {
-      print("a");
-      setState(() {
+      setState(() {r
         switch (definedPosition) {
           case 1:
             setState((){double1LoadingPercent = 0;});
