@@ -27,7 +27,7 @@ import 'activity_selection/activity_selection_view.dart';
 
 import 'template_questoes/text_question.dart';
 import 'template_questoes/multiple_choice.dart';
-import './template_questoes/drag_and_drop.dart';
+import 'template_questoes/ddrop/ddrop.dart';
 import './template_questoes/question_and_answer.dart';
 
 import './login/auto_login.dart';

@@ -4,7 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/root/start_and_send_test.dart';
 import 'package:elesson/share/qrCodeReader.dart';
-import 'package:elesson/template_questoes/drag_and_drop.dart';
+import 'package:elesson/template_questoes/ddrop/ddrop.dart';
 import 'package:elesson/template_questoes/multiple_choice.dart';
 import 'package:elesson/template_questoes/question_and_answer.dart';
 import 'package:elesson/template_questoes/question_provider.dart';

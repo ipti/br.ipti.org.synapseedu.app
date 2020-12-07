@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'dart:math';
-import 'share/image_detail_screen.dart';
-import 'model.dart';
+import '../share/image_detail_screen.dart';
+import '../model.dart';
+import 'ddrop_function.dart';
 
 final cobjectProvider = Provider<Cobjects>((ref) {
   return Cobjects();
@@ -22,34 +23,6 @@ class DragAndDrop extends StatefulWidget {
 
 class _DragAndDropState extends State<DragAndDrop> {
   var cobjectList = new List<Cobject>();
-  int questionIndex;
-  int listQuestionIndex;
-
-  bool isCorrect = false;
-  bool accepted = false;
-
-  //<=======RECEIVER VALUES=======>
-  int valueFirstReceiver = 0;
-  int valueSecondReceiver = 0;
-  int valueThirdReceiver = 0;
-
-  //<==========showSender=========>
-  bool showFirstSender = true;
-  bool showSecondSender = true;
-  bool showThirdSender = true;
-
-  //<========linkreceiver=========>
-  String urlFirstBox = '';
-  String urlSecondBox = '';
-  String urlThirdBox = '';
-
-  //<========colorReceiver========>
-  Color colorFirstReceiverAccepted;
-  Color colorSecondReceiverAccepted;
-  Color colorThirdReceiverAccepted;
-
-  Random random = new Random();
-  var randomNumber = [0, 0, 0];
 
   @override
   void initState() {
