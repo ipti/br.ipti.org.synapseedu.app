@@ -5,7 +5,6 @@ import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:fdottedline/fdottedline.dart';
-import 'dart:math';
 import '../share/image_detail_screen.dart';
 import '../model.dart';
 import 'ddrop_function.dart';
@@ -84,7 +83,6 @@ class _DragAndDropState extends State<DragAndDrop> {
     );
   }
 
-  // ignore: non_constant_identifier_names
   Widget activityScreen(double heightScreen, double widthScreen, Question question, String questionText, Stopwatch chronometer) {
     String pieceId = cobjectList[0].questions[questionIndex].pieceId;
     return Container(
@@ -222,8 +220,8 @@ class _DragAndDropState extends State<DragAndDrop> {
                 : data == 2
                     ? Color.fromRGBO(255, 138, 0, 0.4)
                     : Color.fromRGBO(0, 203, 255, 0.2);
-            updateSender(data);
-            tradeValue(1, data);
+            updateSender(data, setState);
+            tradeValue(1, data, setState);
             updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 1, question);
 
             sendMetaData(
@@ -279,8 +277,8 @@ class _DragAndDropState extends State<DragAndDrop> {
                 : data == 2
                     ? Color.fromRGBO(255, 138, 0, 0.4)
                     : Color.fromRGBO(0, 203, 255, 0.2);
-            updateSender(data);
-            tradeValue(2, data);
+            updateSender(data, setState);
+            tradeValue(2, data, setState);
             updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 2, question);
             verifyIsCorrect();
             print("""
@@ -327,8 +325,8 @@ class _DragAndDropState extends State<DragAndDrop> {
                 : data == 2
                     ? Color.fromRGBO(255, 138, 0, 0.4)
                     : Color.fromRGBO(0, 203, 255, 0.2);
-            updateSender(data);
-            tradeValue(3, data);
+            updateSender(data, setState);
+            tradeValue(3, data, setState);
             updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 3, question);
             verifyIsCorrect();
             print("""
@@ -398,7 +396,7 @@ class _DragAndDropState extends State<DragAndDrop> {
     });
     return GestureDetector(
       onTap: () {
-        updateSender(index);
+        updateSender(index, setState);
         clearReceiver(index);
       },
       child: Container(
@@ -481,9 +479,6 @@ class _DragAndDropState extends State<DragAndDrop> {
 
   Widget dragSenderTemplate(int index, double widthScreen, Question question) {
     return Container(
-      // margin: EdgeInsets.only(
-      //   left: 16,
-      // ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         image: DecorationImage(
@@ -538,7 +533,6 @@ class _DragAndDropState extends State<DragAndDrop> {
                 fit: BoxFit.cover,
               ),
               border: Border.all(
-                //ioleirru
                 color: index == 1
                     ? colorFirstReceiverAccepted
                     : index == 2
@@ -551,107 +545,5 @@ class _DragAndDropState extends State<DragAndDrop> {
             height: widthScreen / 2.6,
           )
         : dragSenderInvisible(widthScreen);
-  }
-
-  void updateReceiver(String url, int index, Question question) {
-    switch (index) {
-      case 1:
-        urlFirstBox = url;
-        break;
-      case 2:
-        urlSecondBox = url;
-        break;
-      case 3:
-        urlThirdBox = url;
-        break;
-    }
-  }
-
-  void tradeValue(int receiverIndex, int data) {
-    switch (receiverIndex) {
-      case 1:
-        if (valueFirstReceiver != 0) {
-          updateSender(valueFirstReceiver);
-          valueFirstReceiver = data;
-        } else if (valueSecondReceiver == data) {
-          valueSecondReceiver = 0;
-          valueFirstReceiver = data;
-          updateSender(2);
-        } else if (valueThirdReceiver == data) {
-          valueThirdReceiver = 0;
-          valueFirstReceiver = data;
-          updateSender(3);
-        } else {
-          valueFirstReceiver = data;
-        }
-        break;
-      case 2:
-        if (valueSecondReceiver != 0) {
-          updateSender(valueSecondReceiver);
-          valueSecondReceiver = data;
-        } else if (valueFirstReceiver == data) {
-          valueFirstReceiver = 0;
-          valueSecondReceiver = data;
-          updateSender(1);
-        } else if (valueThirdReceiver == data) {
-          valueThirdReceiver = 0;
-          valueSecondReceiver = data;
-          updateSender(3);
-        } else {
-          valueSecondReceiver = data;
-        }
-        break;
-      case 3:
-        if (valueThirdReceiver != 0) {
-          updateSender(valueThirdReceiver);
-          valueThirdReceiver = data;
-        } else if (valueFirstReceiver == data) {
-          valueFirstReceiver = 0;
-          valueThirdReceiver = data;
-          updateSender(1);
-        } else if (valueSecondReceiver == data) {
-          valueSecondReceiver = 0;
-          valueThirdReceiver = data;
-          updateSender(2);
-        } else {
-          valueThirdReceiver = data;
-        }
-        break;
-    }
-  }
-
-  void updateSender(int index) {
-    setState(() {
-      switch (index) {
-        case 1:
-          showFirstSender = !showFirstSender;
-          break;
-        case 2:
-          showSecondSender = !showSecondSender;
-          break;
-        case 3:
-          showThirdSender = !showThirdSender;
-          break;
-      }
-    });
-  }
-
-  void verifyIsCorrect() {
-    if (valueFirstReceiver == 1 && valueSecondReceiver == 2 && valueThirdReceiver == 3) {
-      isCorrect = true;
-    }
-  }
-
-  void clearReceiver(int index) {
-    if (valueFirstReceiver == index) {
-      valueFirstReceiver = 0;
-      urlFirstBox = '';
-    } else if (valueSecondReceiver == index) {
-      valueSecondReceiver = 0;
-      urlSecondBox = '';
-    } else {
-      valueThirdReceiver = 0;
-      urlThirdBox = '';
-    }
   }
 }
