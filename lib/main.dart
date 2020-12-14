@@ -24,6 +24,7 @@ import 'activity_selection/activity_selection_view.dart';
 // import 'register/register_view.dart';
 // import 'webview/base.dart';
 // import 'webview/models/webview_modelo.dart';
+import 'webview/headless_webview.dart';
 
 import 'template_questoes/text_question.dart';
 import 'template_questoes/multiple_choice.dart';
@@ -132,6 +133,7 @@ class _HomeState extends State<Home> {
         StartAndSendTest.routeName: (context) => StartAndSendTest(),
         SmsRegisterView.routeName: (context) => SmsRegisterView(),
         CodeVerifyView.routeName: (context) => CodeVerifyView(),
+        HeadlessWebView.routeName: (context) => HeadlessWebView(),
         //----------------------------rotas fora de fluxo---------------------------
         ActivitySelectionForm.routeName: (context) => ActivitySelectionForm(),
         SingleLineTextQuestion.routeName: (context) => SingleLineTextQuestion(),

@@ -2,6 +2,7 @@
 import 'package:elesson/share/qrCodeReader.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/model.dart';
+import 'package:elesson/webview/headless_webview.dart';
 import 'package:flutter/material.dart';
 import 'package:elesson/share/api.dart';
 
@@ -405,8 +406,11 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5.0),
                   ),
-                  onPressed: () => {},
-                  child: Text('Relatórios'),
+                  onPressed: () => {
+                    Navigator.of(context).pushNamed(HeadlessWebView.routeName),
+                  },
+                  // child: Text('Relatórios'),
+                  child: Text('WebView'),
                 ),
                 SizedBox(
                   height: heightScreen / 7,
