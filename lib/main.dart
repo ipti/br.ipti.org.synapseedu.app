@@ -123,11 +123,10 @@ class _HomeState extends State<Home> {
         textTheme: GoogleFonts.muliTextTheme(),
       ),
       // initialRoute: '/',
-      initialRoute: ActivitySelectionForm.routeName,
-      // initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
+      //initialRoute: ActivitySelectionForm.routeName,
+      initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
       routes: {
         '/': (context) => SpaceSelection(),
-        //'/': (context) => ActivitySelectionForm(),
         CountDownTimer.routeName: (context) => CountDownTimer(),
         RootPage.routeName: (context) => RootPage(),
         StartAndSendTest.routeName: (context) => StartAndSendTest(),
