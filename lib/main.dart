@@ -115,7 +115,7 @@ class _HomeState extends State<Home> {
             borderRadius: BorderRadius.circular(18),
             side: BorderSide(color: Color(0xFF00004C), width: 1),
           ),
-          // splashColor: Colors.amber[900],
+          // splashColor: Colors.amber[900],  
           minWidth: 0,
           // hoverColor: Colors.red,
         ),
@@ -124,7 +124,8 @@ class _HomeState extends State<Home> {
       ),
       // initialRoute: '/',
       //initialRoute: ActivitySelectionForm.routeName,
-      initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
+      // initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
+      initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName, // alterado para apresentação
       routes: {
         '/': (context) => SpaceSelection(),
         CountDownTimer.routeName: (context) => CountDownTimer(),
