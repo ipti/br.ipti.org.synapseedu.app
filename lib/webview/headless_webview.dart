@@ -92,7 +92,7 @@ class _HeadlessWebViewState extends State<HeadlessWebView> {
                       await headlessWebView.webViewController
                           .evaluateJavascript(
                               source:
-                                  """console.log('Here is the message!');""");
+                                  """console.log('Mensagem do console!');""");
                     } on MissingPluginException catch (e) {
                       print(
                           "HeadlessInAppWebView is not running. Click on \"Run HeadlessInAppWebView\"!");
