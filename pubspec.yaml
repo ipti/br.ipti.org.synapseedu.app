@@ -28,6 +28,29 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
+  flutter_inappwebview: ^4.0.0+4
+  url_launcher: ^5.4.11
+  provider: ^4.1.3
+  permission_handler: ^5.0.0+hotfix.6
+  flutter_riverpod: ^0.11.0
+  vertical_tabs: ^0.2.0
+  audioplayers: ^0.16.2
+  dio: ^3.0.10
+  google_fonts: ^1.1.1
+  fdottedline: ^1.0.1
+  flutter_audio_recorder: ^0.5.5
+  avatar_glow: ^1.2.0
+  speech_to_text: ^2.7.0
+  qr_code_scanner: ^0.0.13 #usado para ler QRCODE
+  lottie: ^0.7.0+1 #usado para animação
+  #TESTE
+  http: ^0.12.2
+  twilio_phone_verify: ^0.0.2
+  # sms_autofill: ^1.2.6
+  pin_code_fields: ^6.0.1
+  shared_preferences: ^0.5.12+4
+  percent_indicator: ^2.1.8
+  #
 
 dev_dependencies:
   flutter_test:
@@ -45,8 +68,11 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+      - assets/img/
+      - assets/fonts/
+      - assets/icons/
+      - assets/animations/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -60,6 +86,16 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: ElessonIconLib
+      fonts:
+        - asset: assets/fonts/ElessonIconLib.ttf
+
+    - family: Mulish
+      fonts:
+        - asset: assets/fonts/Mulish-Black.ttf
+          weight: 900
+        - asset: assets/fonts/Mulish-Regular.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:
