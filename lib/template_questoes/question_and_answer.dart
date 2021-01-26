@@ -323,21 +323,21 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                     // ------------ GRAVAÇÃO DA VOZ ----------------
 
                     GestureDetector(
-                      // onPanDown: (details) {
-                      //   setState(() {
-                      //     opacityNaoEntendivel = 0;
-                      //   });
-                      //   _listenNative();
-                      // },
-                      // onPanCancel: () {
-                      //   setState(() => _isListening = false);
-                      // _speech.stop();
-                      //   setState(() {
-                      //     buttonBackground = Colors.white;
-                      //     iconBackground = Color(0xFF0000FF);
-                      //     opacityFaleAgora = 0;
-                      //   });
-                      // },
+                      onPanDown: (details) {
+                        setState(() {
+                          opacityNaoEntendivel = 0;
+                        });
+                        _listenNative();
+                      },
+                      onPanCancel: () {
+                        setState(() => _isListening = false);
+                        _speech.stop();
+                        setState(() {
+                          buttonBackground = Colors.white;
+                          iconBackground = Color(0xFF0000FF);
+                          opacityFaleAgora = 0;
+                        });
+                      },
                       //onTap: _listen,
                       // onTap: () {
                       //   if (_currentStatus == RecordingStatus.Initialized) {
@@ -354,32 +354,32 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                       //     // ConversorVoiceToText().conversorVoice(_current?.path);
                       //   }
                       // },
-                      onLongPressStart: (details) {
-                        if (_currentStatus == RecordingStatus.Stopped) {
-                          print('Tá parado no long start');
-                        }
-                        if (_currentStatus == RecordingStatus.Initialized) {
-                          print("File path of the record: ${_current?.path}");
-                          print("Format: ${_current?.audioFormat}");
-                          print("começou");
-                          _startAzure();
-                        }
-                        print('Gravou');
-                      },
-                      onLongPressEnd: (details) {
-                        print("parou");
-                        if (_currentStatus == RecordingStatus.Recording) {
-                          _stopAzure();
-                          _initAzure();
-                        }
-                        // initar();
-                        if (_currentStatus == RecordingStatus.Stopped) {
-                          print('Tá parado no long end');
-                        }
-                        print("passou após gravar");
-                        if (_currentStatus == RecordingStatus.Initialized)
-                          print("Inicializou no long end");
-                      },
+                      // onLongPressStart: (details) {
+                      //   if (_currentStatus == RecordingStatus.Stopped) {
+                      //     print('Tá parado no long start');
+                      //   }
+                      //   if (_currentStatus == RecordingStatus.Initialized) {
+                      //     print("File path of the record: ${_current?.path}");
+                      //     print("Format: ${_current?.audioFormat}");
+                      //     print("começou");
+                      //     _startAzure();
+                      //   }
+                      //   print('Gravou');
+                      // },
+                      // onLongPressEnd: (details) {
+                      //   print("parou");
+                      //   if (_currentStatus == RecordingStatus.Recording) {
+                      //     _stopAzure();
+                      //     _initAzure();
+                      //   }
+                      //   // initar();
+                      //   if (_currentStatus == RecordingStatus.Stopped) {
+                      //     print('Tá parado no long end');
+                      //   }
+                      //   print("passou após gravar");
+                      //   if (_currentStatus == RecordingStatus.Initialized)
+                      //     print("Inicializou no long end");
+                      // },
                       child: Container(
                         margin: EdgeInsets.only(
                           top: screenHeight * 0.80,
