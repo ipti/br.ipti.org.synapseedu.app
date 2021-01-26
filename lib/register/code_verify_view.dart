@@ -48,14 +48,24 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
 
   void initState() {
     // TODO: implement initState
+    // _twilioPhoneVerify = new TwilioPhoneVerify(
+    //     // meu
+    //     accountSid:
+    //         'ACadd1dd994d143f635b442de15481e1f7', // replace with Account SID
+    //     authToken:
+    //         'fe9c3fa3784cd48017ca39f454bbc5bc', // replace with Auth Token
+    //     serviceSid:
+    //         'VA7686722166b582b1a7ab42770b104097' // replace with Service SID
+    //     );
+
     _twilioPhoneVerify = new TwilioPhoneVerify(
-        // meu
+        //elesson
         accountSid:
-            'ACadd1dd994d143f635b442de15481e1f7', // replace with Account SID
+            'AC7ad4a260cd8163d9ca9d957ff0dfebb7', // replace with Account SID
         authToken:
-            'fe9c3fa3784cd48017ca39f454bbc5bc', // replace with Auth Token
+            '3389bb9152e13b4383cfc79538923c52', // replace with Auth Token
         serviceSid:
-            'VA7686722166b582b1a7ab42770b104097' // replace with Service SID
+            'A0041644482dcb11b671a45f2777da1ce' // replace with Service SID
         );
 
     countdownAnimationController = AnimationController(

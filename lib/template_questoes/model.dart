@@ -1,72 +1,12 @@
-// Cobject userFromJson(String str) => Cobject.fromJson(json.decode(str));
-
-// String userToJson(Cobject data) => json.encode(data.toJson());
-
-// class Cobject {
-//   String templateCode;
-//   String discipline;
-//   String modality;
-//   int totalPieces;
-//   Screen screen;
-
-//   Cobject({
-//     this.templateCode,
-//     this.discipline,
-//     this.modality,
-//     this.totalPieces,
-//     this.screen,
-//   });
-
-//   factory Cobject.fromJson(Map<String, dynamic> json) => Cobject(
-//         templateCode: json["template_code"],
-//         discipline: json["discipline"],
-//         modality: json["modality"],
-//         totalPieces: int.parse(json["total_pieces"]),
-//         screen: Screen.fromJson(json["screen"]),
-//       );
-
-//   Map<String, dynamic> toJson() => {
-//         "template_code": templateCode,
-//         "discipline": discipline,
-//         "modality": modality,
-//         "total_pieces": totalPieces.toString(),
-//         "screen": screen.toJson(),
-//       };
-// }
-
-// class Screen {
-//   String id;
-//   String cbojectId;
-//   String position;
-//   Pieceset piecesets;
-
-//   Screen({
-//     this.id,
-//     this.cbojectId,
-//     this.position,
-//     this.piecesets,
-//   });
-
-//   factory Screen.fromJson(Map<String, dynamic> json) => Screen(
-//         id: json["id"],
-//         cbojectId: json["cobject_id"],
-//         position: json["position"],
-//         piecesets: Pieceset.fromJson(json["piecesets"][0]),
-//       );
-
-//   Map<String, dynamic> toJson() => {
-//         "id": id,
-//         "cboject_id": cbojectId,
-//         "position": position,
-//         // "piecesets": piecesets.toJson(),
-//       };
-// }
-
+import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:dio/dio.dart';
 import 'package:elesson/share/question_widgets.dart';
+
+import 'package:flutter/services.dart' show ByteData, rootBundle;
 
 // Modelo para os cobjects e questões, além dos métodos para serialização do json recebido do servidor.
 
@@ -117,51 +57,115 @@ class Answer {
 }
 
 class ConversorVoiceToText {
-  Future<dynamic> conversorVoice(String audioPath) async {
+  Future<dynamic> speechToTextAzure(File file) async {
+    print("solicitação");
+    final bytes = file.readAsBytesSync();
+
+    var headers = {
+      'Ocp-Apim-Subscription-Key': 'b21db0729fc14cc7b6de72e1f44322dd',
+      'Content-Type': 'audio/wav'
+    };
+
+    var response;
+    Map<String, dynamic> responseBody;
+    var recognizedVoiceText;
+
+    try {
+      response = await http.post(
+        "https://brazilsouth.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR",
+        body: bytes,
+        headers: headers,
+      );
+
+      // The response body is a string that needs to be decoded as a json in order to get the extract the text.
+      responseBody = jsonDecode(response.body);
+      recognizedVoiceText = responseBody["DisplayText"];
+      print(recognizedVoiceText);
+    } catch (e) {
+      print('Error: ${e.toString()}');
+      recognizedVoiceText = "Something went wrong";
+    }
+
+    return recognizedVoiceText;
+  }
+
+  Future<dynamic> conversorVoice(String audioPath, context) async {
     //Response response;
 
-    print("CAMINHO ENVIADO: $audioPath");
+    ByteData audioBytes =
+        await DefaultAssetBundle.of(context).load('assets/audio/audio.wav');
 
-    Map<String, String> _headers = {
+    print("CAMINHO ENVIADO: $audioPath ${audioBytes.toString()}");
+
+    // Map<String, String> _headers = {
+    //   'Ocp-Apim-Subscription-Key': 'b21db0729fc14cc7b6de72e1f44322dd',
+    //   // HttpHeaders.wwwAuthenticateHeader: 'b21db0729fc14cc7b6de72e1f44322dd',
+    //   // HttpHeaders.contentTypeHeader: 'audio/wav'
+    // };
+    var headers = {
       'Ocp-Apim-Subscription-Key': 'b21db0729fc14cc7b6de72e1f44322dd',
-      // HttpHeaders.wwwAuthenticateHeader: 'b21db0729fc14cc7b6de72e1f44322dd',
-      // HttpHeaders.contentTypeHeader: 'audio/wav'
+      'Content-Type': 'audio/wav'
     };
     String retorno;
     try {
       // var response = await http.post(
       //   "https://brazilsouth.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR",
       //   body: {
-      //     "data-binary": audioPath,
+      //     "data-binary": audioBytes,
       //   },
       //   // headers: {
       //   //   HttpHeaders.authorizationHeader: "b21db0729fc14cc7b6de72e1f44322dd",
-      //   //   HttpHeaders.contentTypeHeader: "audio/wav",
+      //   //   'Content-type': "audio/wav",
       //   // },
-      //   headers: _headers,
+      //   headers: headers,
       // );
       // print('Olha: ${response.statusCode}');
-      // // response = await dio.post(
-      // //   "https://brazilsouth.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR",
-      // //   data: {
-      // //     "data-binary": audioPath,
-      // //   },
-      // //   options: Options(headers: {"Ocp-Apim-Subscription-Key": "b21db0729fc14cc7b6de72e1f44322dd"},
-      // //   //{HttpHeaders.authorizationHeader: {"Ocp-Apim-Subscription-Key": "b21db0729fc14cc7b6de72e1f44322dd"}},
-      // //   contentType: "audio/wav"),
-      // // );
 
-      var request = http.MultipartRequest(
-          'POST',
-          Uri.parse(
-              "https://brazilsouth.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR"));
-      request.files.add(await http.MultipartFile.fromPath('audio[]', audioPath,
-          contentType: MediaType.parse('audio/wav')));
-      request.headers.addAll(_headers);
-      print("enviar");
-      print(request.headers);
-      var res = await request.send();
-      print("FOI? ${res.statusCode}");
+      // var headers = {
+      //   'Ocp-Apim-Subscription-Key': 'b21db0729fc14cc7b6de72e1f44322dd',
+      //   'Content-Type': 'audio/wav'
+      // };
+      // var request = http.Request(
+      //     'POST',
+      //     Uri.parse(
+      //         'https://brazilsouth.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR'));
+      // request.body = audioBytes.toString();
+
+      // request.headers.addAll(headers);
+
+      // http.StreamedResponse response = await request.send();
+
+      // if (response.statusCode == 200) {
+      //   print(await response.stream.bytesToString());
+      // } else {
+      //   print(response.reasonPhrase);
+      // }
+
+      var response = await Dio().post(
+        "https://brazilsouth.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR",
+        data: {
+          "data-binary": audioBytes,
+        },
+        options: Options(
+            headers: {
+              "Ocp-Apim-Subscription-Key": "b21db0729fc14cc7b6de72e1f44322dd"
+            },
+            //{HttpHeaders.authorizationHeader: {"Ocp-Apim-Subscription-Key": "b21db0729fc14cc7b6de72e1f44322dd"}},
+            contentType: "audio/wav"),
+      );
+      print(response.statusCode);
+
+      // var request = http.MultipartRequest(
+      //     'POST',
+      //     Uri.parse(
+      //         "https://brazilsouth.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR"));
+      // request.files.add(await http.MultipartFile.fromPath('audio[]', audioPath,
+      //     contentType: MediaType.parse('audio/wav')));
+      // request.headers.addAll(headers);
+      // print("enviar");
+      // print(request.headers);
+      // var res = await request.send();
+      // print("FOI? ${res.statusCode}");
     } catch (e) {
       print('Erro: ${e.toString()}');
     }

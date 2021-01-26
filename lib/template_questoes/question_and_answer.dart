@@ -55,6 +55,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
   bool isCorrect = false;
 
   String correctAnswer;
+  bool firstRecording = true;
 
   final _formKey = GlobalKey<FormState>();
   final _textController = TextEditingController();
@@ -79,7 +80,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
     super.initState();
     _speech = stt.SpeechToText();
     _textController.text = "";
-    _init();
+    _initAzure();
   }
 
   void submitButton(BuildContext context) {
@@ -104,14 +105,24 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
   //     "https://brazilsouth.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR",
   //     headers: {'Ocp-Apim-Subscription-Key': 'b21db0729fc14cc7b6de72e1f44322dd',
   //       'Content-Type':'audio/wav'},
-  //     body: {
-  //       'query': 'chicken soup',
-  //       'brand': 'acme',
-  //     },
+  //     body: {},
   //   );
   // }
 
   //isCorrect
+
+  void initar() async {
+    await _recorder.initialized;
+    // after initialization
+    var current = await _recorder.current(channel: 0);
+    setState(() {
+      _current = current;
+      _currentStatus = current.status;
+      print(_currentStatus);
+      print("hey hou");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
@@ -316,7 +327,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                         setState(() {
                           opacityNaoEntendivel = 0;
                         });
-                        _listen();
+                        _listenNative();
                       },
                       onPanCancel: () {
                         setState(() => _isListening = false);
@@ -344,18 +355,30 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                       //   }
                       // },
                       // onLongPressStart: (details) {
+                      //   if (_currentStatus == RecordingStatus.Stopped) {
+                      //     print('Tá parado no long start');
+                      //   }
                       //   if (_currentStatus == RecordingStatus.Initialized) {
                       //     print("File path of the record: ${_current?.path}");
                       //     print("Format: ${_current?.audioFormat}");
                       //     print("começou");
-                      //     _start();
+                      //     _startAzure();
                       //   }
+                      //   print('Gravou');
                       // },
                       // onLongPressEnd: (details) {
                       //   print("parou");
                       //   if (_currentStatus == RecordingStatus.Recording) {
-                      //     _stop();
+                      //     _stopAzure();
+                      //     _initAzure();
                       //   }
+                      //   // initar();
+                      //   if (_currentStatus == RecordingStatus.Stopped) {
+                      //     print('Tá parado no long end');
+                      //   }
+                      //   print("passou após gravar");
+                      //   if (_currentStatus == RecordingStatus.Initialized)
+                      //     print("Inicializou no long end");
                       // },
                       child: Container(
                         margin: EdgeInsets.only(
@@ -406,7 +429,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
   String _text = 'Press the button and start speaking';
   double _confidence = 1.0;
 
-  void _listen() async {
+  void _listenNative() async {
     //if (!_isListening) {
     bool available = await _speech.initialize(
       onStatus: (val) => print('onStatus: $val'),
@@ -431,7 +454,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
           }
         }),
       );
-      _speech.errorListener = ulala;
+      _speech.errorListener = errorNotification;
     }
     // }
     // else {
@@ -441,7 +464,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
     // }
   }
 
-  void ulala(SpeechRecognitionError a) {
+  void errorNotification(SpeechRecognitionError a) {
     opacityNaoEntendivel = 1;
     setState(() {
       opacityFaleAgora = 0;
@@ -449,7 +472,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
     colorAlertMessage = Colors.red;
   }
 
-  _init() async {
+  _initAzure() async {
     try {
       if (await FlutterAudioRecorder.hasPermissions) {
         print("INITOU");
@@ -462,14 +485,10 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
           appDocDirectory = await getExternalStorageDirectory();
         }
 
-        // can add extension like ".mp4" ".wav" ".m4a" ".aac"
         customPath = appDocDirectory.path +
             customPath +
             DateTime.now().millisecondsSinceEpoch.toString();
 
-        // .wav <---> AudioFormat.WAV
-        // .mp4 .m4a .aac <---> AudioFormat.AAC
-        // AudioFormat is optional, if given value, will overwrite path extension when there is conflicts.
         _recorder =
             FlutterAudioRecorder(customPath, audioFormat: AudioFormat.WAV);
 
@@ -491,7 +510,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
     }
   }
 
-  _start() async {
+  _startAzure() async {
     try {
       await _recorder.start();
       var recording = await _recorder.current(channel: 0);
@@ -523,7 +542,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
     return directory.path;
   }
 
-  _stop() async {
+  _stopAzure() async {
     var result = await _recorder.stop();
     print("Stop recording: ${result.path}");
     print("Stop recording: ${result.duration}");
@@ -533,9 +552,13 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
       _current = result;
       _currentStatus = _current.status;
     });
-    Future.delayed(Duration(seconds: 2), () {
-      ConversorVoiceToText().conversorVoice(_current?.path);
-    });
+    _textController.text = await ConversorVoiceToText().speechToTextAzure(file);
+    // Future.delayed(Duration(seconds: 2), () async {
+    //   // ConversorVoiceToText().conversorVoice(_current?.path, context);
+    //   _textController.text =
+    //       await ConversorVoiceToText().speechToTextAzure(file);
+    //   // _textController.text = _text;
+    // });
   }
 
   void onPlayAudio() async {
