@@ -16,7 +16,7 @@ TwilioPhoneVerify _twilioPhoneVerify;
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 Future<void> sendCode(String phoneNumber) async {
-  var result = await _twilioPhoneVerify.sendSmsCode('+55' + phoneNumber);
+    var result = await _twilioPhoneVerify.sendSmsCode('+55' + phoneNumber);
 
   if (result['message'] == 'success') {
     // code sent

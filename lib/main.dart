@@ -125,7 +125,7 @@ class _HomeState extends State<Home> {
       // initialRoute: '/',
       //initialRoute: ActivitySelectionForm.routeName,
       // initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
-      initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName, // alterado para apresentação
+      initialRoute: isLogged ? '/' : SmsRegisterView.routeName, // alterado para apresentação
       routes: {
         '/': (context) => SpaceSelection(),
         CountDownTimer.routeName: (context) => CountDownTimer(),
