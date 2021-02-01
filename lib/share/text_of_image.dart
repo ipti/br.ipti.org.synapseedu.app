@@ -116,7 +116,7 @@ class _TextOfImageState extends State<TextOfImage> {
 
   // função para tirar foto
   Future pickImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    final pickedFile = await picker.getImage(source: ImageSource.camera, preferredCameraDevice: CameraDevice.front,);
 
     setState(() {
       imageFile = File(pickedFile.path);
