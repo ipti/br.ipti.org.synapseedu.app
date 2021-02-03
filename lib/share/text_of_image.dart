@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 
-
 class TextOfImage extends StatefulWidget {
   @override
   _TextOfImageState createState() => _TextOfImageState();
@@ -39,12 +38,12 @@ class _TextOfImageState extends State<TextOfImage> {
               child: imageFile != null
                   ? Image.file(imageFile)
                   : FlatButton(
-                child: Icon(
-                  Icons.add_a_photo,
-                  size: 50,
-                ),
-                onPressed: pickImage,
-              ),
+                      child: Icon(
+                        Icons.add_a_photo,
+                        size: 50,
+                      ),
+                      onPressed: pickImage,
+                    ),
             ),
           ),
           Text(
@@ -59,7 +58,8 @@ class _TextOfImageState extends State<TextOfImage> {
               onPressed: () async {
                 await extractText();
                 setState(() {
-                  resultado = retorno.data["responses"][0]['textAnnotations'][0]['description'];
+                  resultado = retorno.data["responses"][0]['textAnnotations'][0]
+                      ['description'];
                 });
               },
             ),
@@ -76,12 +76,16 @@ class _TextOfImageState extends State<TextOfImage> {
     try {
       Response response = await Dio().post(
         "https://oauth2.googleapis.com/token",
-        options: Options(headers: {'user-agent': "google-oauth-playground"}, contentType: "application/x-www-form-urlencoded"),
+        options: Options(
+            headers: {'user-agent': "google-oauth-playground"},
+            contentType: "application/x-www-form-urlencoded"),
         data: {
           "client_secret": "lbdHDSJaTT_E5DIWyBmHbNUY",
           "grant_type": "refresh_token",
-          "refresh_token": "1//04bEr7OGoasT0CgYIARAAGAQSNwF-L9Ir3Ybq33sET3MqvVJHDz_bHtCMTU7HiVzQqzVJdrJ6dMx14qWZJs316-bRC3NQ3sLWlIA",
-          "client_id": "552897848894-flkhs2oqtf7oofdqisusdgbbari82i2n.apps.googleusercontent.com"
+          "refresh_token":
+              "1//04bEr7OGoasT0CgYIARAAGAQSNwF-L9Ir3Ybq33sET3MqvVJHDz_bHtCMTU7HiVzQqzVJdrJ6dMx14qWZJs316-bRC3NQ3sLWlIA",
+          "client_id":
+              "552897848894-flkhs2oqtf7oofdqisusdgbbari82i2n.apps.googleusercontent.com"
         },
       );
       privateKey = "Bearer ${response.data['access_token']}";
@@ -95,7 +99,9 @@ class _TextOfImageState extends State<TextOfImage> {
     try {
       retorno = await Dio().post(
         "https://vision.googleapis.com/v1/images:annotate",
-        options: Options(headers: {'Authorization': privateKey}, contentType: "application/json"),
+        options: Options(
+            headers: {'Authorization': privateKey},
+            contentType: "application/json"),
         data: {
           "requests": [
             {
@@ -116,7 +122,10 @@ class _TextOfImageState extends State<TextOfImage> {
 
   // função para tirar foto
   Future pickImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera, preferredCameraDevice: CameraDevice.front,);
+    final pickedFile = await picker.getImage(
+      source: ImageSource.camera,
+      preferredCameraDevice: CameraDevice.front,
+    );
 
     setState(() {
       imageFile = File(pickedFile.path);
