@@ -1,4 +1,5 @@
 import 'package:elesson/register/code_verify_view.dart';
+import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import './register/countdown.dart';
@@ -123,8 +124,8 @@ class _HomeState extends State<Home> {
         textTheme: GoogleFonts.muliTextTheme(),
       ),
       // initialRoute: '/',
-      // initialRoute: ActivitySelectionForm.routeName,
-      initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
+      initialRoute: PreImgIa.routeName,
+      // initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
       // initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName, // alterado para apresentação
       // initialRoute: HeadlessWebView.routeName,
       routes: {
@@ -135,6 +136,7 @@ class _HomeState extends State<Home> {
         SmsRegisterView.routeName: (context) => SmsRegisterView(),
         CodeVerifyView.routeName: (context) => CodeVerifyView(),
         HeadlessWebView.routeName: (context) => HeadlessWebView(),
+        PreImgIa.routeName: (context) => PreImgIa(),
         //----------------------------rotas fora de fluxo---------------------------
         ActivitySelectionForm.routeName: (context) => ActivitySelectionForm(),
         SingleLineTextQuestion.routeName: (context) => SingleLineTextQuestion(),

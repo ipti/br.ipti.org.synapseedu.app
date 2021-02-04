@@ -1,21 +1,22 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:elesson/activity_selection/activity_selection_view.dart';
-import 'package:elesson/share/api.dart';
+import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/model.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/share/template_slider.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:flutter_riverpod/all.dart';
 
-import 'package:audioplayers/audioplayers.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:file/file.dart';
 import 'package:file/local.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
-
-// O pacote que está em testes. O Dart/Flutter está com problemas de integração com a API da Azure.
 
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
@@ -27,26 +28,24 @@ final cobjectProvider = Provider<Cobjects>((ref) {
 });
 
 // ignore: must_be_immutable
-class SingleLineTextQuestion extends StatefulWidget {
-  static const routeName = '/PRE';
+class PreImgIa extends StatefulWidget {
+  static const routeName = '/PRE_IMG_IA';
   final LocalFileSystem localFileSystem;
 
-  SingleLineTextQuestion({localFileSystem})
-      : this.localFileSystem = localFileSystem ?? LocalFileSystem();
+  PreImgIa({localFileSystem}) : this.localFileSystem = localFileSystem ?? LocalFileSystem();
+
   @override
-  _SingleLineTextQuestionState createState() =>
-      new _SingleLineTextQuestionState();
+  _PreImgIaState createState() => new _PreImgIaState();
 }
 
-class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
+class _PreImgIaState extends State<PreImgIa> {
+  String base64Image;
+  Response retorno;
+
   // ignore: non_constant_identifier_names
   var cobjectList = new List<Cobject>();
   int questionIndex;
   int listQuestionIndex;
-
-  String alertMessage = "FALE AGORA...";
-  String naoEndendivel =
-      "Não entendemos o que você quis dizer...\nTente Novamente!";
 
   double opacityFaleAgora = 0;
   double opacityNaoEntendivel = 0;
@@ -88,29 +87,6 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
     context.read(buttonStateProvider).state = true;
   }
 
-  //bool hasPermission;
-
-  // _getPermission() async {
-  //   hasPermission = await FlutterAudioRecorder.hasPermissions;
-  // }
-
-  // // var recorder;
-  // _initializeRecorder() async {
-  //   recorder = FlutterAudioRecorder("file_path.wav"); // .wav .aac .m4a
-  //   await recorder.initialized;
-  // }
-
-  // Future<String> VoiceToText() async {
-  //   var response = await dio.post(
-  //     "https://brazilsouth.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR",
-  //     headers: {'Ocp-Apim-Subscription-Key': 'b21db0729fc14cc7b6de72e1f44322dd',
-  //       'Content-Type':'audio/wav'},
-  //     body: {},
-  //   );
-  // }
-
-  //isCorrect
-
   void initar() async {
     await _recorder.initialized;
     // after initialization
@@ -126,18 +102,13 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
   @override
   Widget build(BuildContext context) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
-    //_getPermission(); não precisa disso, se pedir ele buga e crasha
-    // _initializeRecorder();
-
-    // final path = _localPath;
 
     cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
     listQuestionIndex = args.listQuestionIndex;
 
     String questionDescription = cobjectList[0].description;
-    String questionText =
-    cobjectList[0].questions[questionIndex].header["text"];
+    String questionText = cobjectList[0].questions[questionIndex].header["text"];
     String pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
     correctAnswer = cobjectList[0].questions[0].pieces["1"]["text"];
@@ -168,8 +139,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
           ),
         ),
         sound: cobjectList[0].questions[questionIndex].header["sound"],
-        linkImage: 'https://elesson.com.br/app/library/image/' +
-            cobjectList[0].questions[0].header["image"],
+        linkImage: 'https://elesson.com.br/app/library/image/' + cobjectList[0].questions[0].header["image"],
         isPreTemplate: true,
         activityScreen: Form(
           key: _formKey,
@@ -229,12 +199,9 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                           // receber um texto, acionando o botão. O condicional faz com que a UI seja renderizada
                           // apenas uma vez enquanto o texto estiver sendo digitado.
                           onChanged: (val) {
-                            correctAnswer == _textController.text.toString()
-                                ? isCorrect = true
-                                : isCorrect = false;
+                            correctAnswer == _textController.text.toString() ? isCorrect = true : isCorrect = false;
 
-                            print(
-                                "CORRETA: $correctAnswer , DIGITADA: ${_textController.text.toString()} ");
+                            print("CORRETA: $correctAnswer , DIGITADA: ${_textController.text.toString()} ");
                             if (_textController.text.length == 1) {
                               submitButton(context);
                             }
@@ -251,13 +218,8 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                     Container(
                       //padding: EdgeInsets.only(left: 16, right: 16, bottom: 0),
                       margin: EdgeInsets.only(
-                          bottom: _textController.text.isNotEmpty
-                              ? (screenHeight * 0.93) -
-                              18 -
-                              (48 > screenHeight * 0.0656
-                                  ? 48
-                                  : screenHeight * 0.0656)
-                              : screenHeight * 0.92),
+                          bottom:
+                          _textController.text.isNotEmpty ? (screenHeight * 0.93) - 18 - (48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656) : screenHeight * 0.92),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         boxShadow: [
@@ -272,9 +234,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                       child: Center(
                         child: GestureDetector(
                           onTap: () {
-                            playSound(cobjectList[0]
-                                .questions[questionIndex]
-                                .header["sound"]);
+                            playSound(cobjectList[0].questions[questionIndex].header["sound"]);
                           },
                           child: Container(
                             padding: EdgeInsets.all(20),
@@ -297,22 +257,20 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                         child: Column(
                           children: [
                             Text(
-                              naoEndendivel,
+                              "naoEndendivel",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: widthScreen * 0.05,
                                 fontWeight: FontWeight.bold,
-                                color: colorAlertMessage
-                                    .withOpacity(opacityNaoEntendivel),
+                                color: colorAlertMessage.withOpacity(opacityNaoEntendivel),
                               ),
                             ),
                             Text(
-                              alertMessage,
+                              "alertMessage",
                               style: TextStyle(
                                 fontSize: widthScreen * 0.05,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF0000FF)
-                                    .withOpacity(opacityFaleAgora),
+                                color: Color(0xFF0000FF).withOpacity(opacityFaleAgora),
                               ),
                             ),
                           ],
@@ -324,62 +282,8 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
 
                     GestureDetector(
                       onPanDown: (details) {
-                        setState(() {
-                          opacityNaoEntendivel = 0;
-                        });
-                        _listenNative();
+                        //todo chamar função pra tirar foto
                       },
-                      onPanCancel: () {
-                        setState(() => _isListening = false);
-                        _speech.stop();
-                        setState(() {
-                          buttonBackground = Colors.white;
-                          iconBackground = Color(0xFF0000FF);
-                          opacityFaleAgora = 0;
-                        });
-                      },
-                      //onTap: _listen,
-                      // onTap: () {
-                      //   if (_currentStatus == RecordingStatus.Initialized) {
-                      //     print("File path of the record: ${_current?.path}");
-                      //     print("Format: ${_current?.audioFormat}");
-                      //     print("começou");
-                      //
-                      //     // * _start e _stop são métodos da gravação pela api do Azure.
-                      //     // _start();
-                      //   }
-                      //   if (_currentStatus == RecordingStatus.Recording) {
-                      //     print("parou");
-                      //     // _stop();
-                      //     // ConversorVoiceToText().conversorVoice(_current?.path);
-                      //   }
-                      // },
-                      // onLongPressStart: (details) {
-                      //   if (_currentStatus == RecordingStatus.Stopped) {
-                      //     print('Tá parado no long start');
-                      //   }
-                      //   if (_currentStatus == RecordingStatus.Initialized) {
-                      //     print("File path of the record: ${_current?.path}");
-                      //     print("Format: ${_current?.audioFormat}");
-                      //     print("começou");
-                      //     _startAzure();
-                      //   }
-                      //   print('Gravou');
-                      // },
-                      // onLongPressEnd: (details) {
-                      //   print("parou");
-                      //   if (_currentStatus == RecordingStatus.Recording) {
-                      //     _stopAzure();
-                      //     _initAzure();
-                      //   }
-                      //   // initar();
-                      //   if (_currentStatus == RecordingStatus.Stopped) {
-                      //     print('Tá parado no long end');
-                      //   }
-                      //   print("passou após gravar");
-                      //   if (_currentStatus == RecordingStatus.Initialized)
-                      //     print("Inicializou no long end");
-                      // },
                       child: Container(
                         margin: EdgeInsets.only(
                           top: screenHeight * 0.80,
@@ -387,13 +291,12 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                         ),
                         padding: EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          border:
-                          Border.all(color: Color.fromRGBO(0, 0, 255, 1)),
+                          border: Border.all(color: Color.fromRGBO(0, 0, 255, 1)),
                           color: buttonBackground,
                           borderRadius: BorderRadius.circular(18.0),
                         ),
                         child: Icon(
-                          Icons.mic,
+                          Icons.camera,
                           size: 40,
                           color: iconBackground,
                         ),
@@ -402,19 +305,10 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                   ],
                 ),
                 SizedBox(height: 15),
-                // Aciona o botão de confirmar apenas quando algum texto é digitado na tela.
                 if (_textController.text.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 3.0),
-                    child: submitAnswer(context, cobjectList, 'PRE',
-                        ++questionIndex, listQuestionIndex, pieceId, isCorrect,
-                        value: _textController.text),
-                    // SizedBox(height: 15),
-                    // if (_textController.text.isNotEmpty)
-                    //   Padding(
-                    //     padding: const EdgeInsets.only(bottom: 4.0),
-                    //     child: submitAnswer(context, cobjectList, 'PRE',
-                    //         ++questionIndex, listQuestionIndex),
+                    child: submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex, pieceId, isCorrect, value: _textController.text),
                   ),
               ],
             ),
@@ -430,7 +324,6 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
   double _confidence = 1.0;
 
   void _listenNative() async {
-    //if (!_isListening) {
     bool available = await _speech.initialize(
       onStatus: (val) => print('onStatus: $val'),
       onError: (val) => print('onError: $val'),
@@ -444,11 +337,8 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
       _speech.listen(
         onResult: (val) => setState(() {
           _text = val.recognizedWords;
-          _textController.text = _text
-              .toUpperCase(); // se quiser acrescentar no lugar de substituir é só usar um += no lugar do =
-          correctAnswer == _textController.text.toString()
-              ? isCorrect = true
-              : isCorrect = false;
+          _textController.text = _text.toUpperCase(); // se quiser acrescentar no lugar de substituir é só usar um += no lugar do =
+          correctAnswer == _textController.text.toString() ? isCorrect = true : isCorrect = false;
           if (val.hasConfidenceRating && val.confidence > 0) {
             _confidence = val.confidence;
           }
@@ -456,12 +346,6 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
       );
       _speech.errorListener = errorNotification;
     }
-    // }
-    // else {
-    //   setState(() => _isListening = false);
-    //   _speech.stop();
-    //   //_speech.initialize();
-    // }
   }
 
   void errorNotification(SpeechRecognitionError a) {
@@ -478,19 +362,15 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
         print("INITOU");
         String customPath = '/flutter_audio_recorder_';
         io.Directory appDocDirectory;
-//        io.Directory appDocDirectory = await getApplicationDocumentsDirectory();
         if (io.Platform.isIOS) {
           appDocDirectory = await getApplicationDocumentsDirectory();
         } else {
           appDocDirectory = await getExternalStorageDirectory();
         }
 
-        customPath = appDocDirectory.path +
-            customPath +
-            DateTime.now().millisecondsSinceEpoch.toString();
+        customPath = appDocDirectory.path + customPath + DateTime.now().millisecondsSinceEpoch.toString();
 
-        _recorder =
-            FlutterAudioRecorder(customPath, audioFormat: AudioFormat.WAV);
+        _recorder = FlutterAudioRecorder(customPath, audioFormat: AudioFormat.WAV);
 
         await _recorder.initialized;
         // after initialization
@@ -502,8 +382,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
           print(_currentStatus);
         });
       } else {
-        Scaffold.of(context).showSnackBar(
-            new SnackBar(content: new Text("You must accept permissions")));
+        Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("You must accept permissions")));
       }
     } catch (e) {
       print(e);
@@ -542,27 +421,71 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
     return directory.path;
   }
 
-  _stopAzure() async {
-    var result = await _recorder.stop();
-    print("Stop recording: ${result.path}");
-    print("Stop recording: ${result.duration}");
-    File file = widget.localFileSystem.file(result.path);
-    print("File length: ${await file.length()}");
-    setState(() {
-      _current = result;
-      _currentStatus = _current.status;
-    });
-    _textController.text = await ConversorVoiceToText().speechToTextAzure(file);
-    // Future.delayed(Duration(seconds: 2), () async {
-    //   // ConversorVoiceToText().conversorVoice(_current?.path, context);
-    //   _textController.text =
-    //       await ConversorVoiceToText().speechToTextAzure(file);
-    //   // _textController.text = _text;
-    // });
+  //=======================================
+
+  String privateKey;
+
+  // função para receber token do google vision
+  Future<void> getToken() async {
+    try {
+      Response response = await Dio().post(
+        "https://oauth2.googleapis.com/token",
+        options: Options(headers: {'user-agent': "google-oauth-playground"}, contentType: "application/x-www-form-urlencoded"),
+        data: {
+          "client_secret": "lbdHDSJaTT_E5DIWyBmHbNUY",
+          "grant_type": "refresh_token",
+          "refresh_token": "1//04bEr7OGoasT0CgYIARAAGAQSNwF-L9Ir3Ybq33sET3MqvVJHDz_bHtCMTU7HiVzQqzVJdrJ6dMx14qWZJs316-bRC3NQ3sLWlIA",
+          "client_id": "552897848894-flkhs2oqtf7oofdqisusdgbbari82i2n.apps.googleusercontent.com"
+        },
+      );
+      privateKey = "Bearer ${response.data['access_token']}";
+    } catch (e) {
+      print(e);
+    }
   }
 
-  void onPlayAudio() async {
-    AudioPlayer audioPlayer = AudioPlayer();
-    await audioPlayer.play(_current.path, isLocal: true);
+  // função para extrair texto da imagem enviando o base64 dela
+  Future<void> extractText() async {
+    try {
+      retorno = await Dio().post(
+        "https://vision.googleapis.com/v1/images:annotate",
+        options: Options(headers: {'Authorization': privateKey}, contentType: "application/json"),
+        data: {
+          "requests": [
+            {
+              "image": {
+                "content": base64Image,
+              },
+              "features": [
+                {"type": "DOCUMENT_TEXT_DETECTION"}
+              ]
+            }
+          ]
+        },
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // função para tirar foto
+  Future pickImage() async {
+    final pickedFile = await picker.getImage(
+      source: ImageSource.camera,
+      preferredCameraDevice: CameraDevice.front,
+    );
+
+    base64Image = await converter();
+  }
+
+  File imageFile;
+
+  final picker = ImagePicker();
+
+  // função para converter imagem para base64
+  Future<String> converter() async {
+    List<int> imageBytes = imageFile.readAsBytesSync();
+    String convertido = base64Encode(imageBytes);
+    return convertido;
   }
 }
