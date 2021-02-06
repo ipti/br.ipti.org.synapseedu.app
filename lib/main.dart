@@ -124,9 +124,9 @@ class _HomeState extends State<Home> {
         textTheme: GoogleFonts.muliTextTheme(),
       ),
       // initialRoute: '/',
-      initialRoute: PreImgIa.routeName,
+      // initialRoute: PreImgIa.routeName,
       // initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
-      // initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName, // alterado para apresentação
+      initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName, // alterado para apresentação
       // initialRoute: HeadlessWebView.routeName,
       routes: {
         '/': (context) => SpaceSelection(),
@@ -137,6 +137,7 @@ class _HomeState extends State<Home> {
         CodeVerifyView.routeName: (context) => CodeVerifyView(),
         HeadlessWebView.routeName: (context) => HeadlessWebView(),
         PreImgIa.routeName: (context) => PreImgIa(),
+        // PreSomIa.routeName: (context) => PreSomIa(),
         //----------------------------rotas fora de fluxo---------------------------
         ActivitySelectionForm.routeName: (context) => ActivitySelectionForm(),
         SingleLineTextQuestion.routeName: (context) => SingleLineTextQuestion(),

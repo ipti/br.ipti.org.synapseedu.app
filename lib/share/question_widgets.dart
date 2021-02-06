@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/root/start_and_send_test.dart';
 import 'package:elesson/share/qrCodeReader.dart';
+import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
 import 'package:elesson/template_questoes/ddrop/ddrop.dart';
 import 'package:elesson/template_questoes/multiple_choice.dart';
 import 'package:elesson/template_questoes/question_and_answer.dart';
@@ -72,7 +73,9 @@ getCobject(int listQuestionIndex, BuildContext context, List<String> questionLis
     cobjectList = context.read(cobjectProvider).items;
     switch (questionType) {
       case 'PRE':
-        Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+        // Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+        //     arguments: ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(PreImgIa.routeName, ModalRoute.withName(StartAndSendTest.routeName),
             arguments: ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
         break;
       case 'DDROP':

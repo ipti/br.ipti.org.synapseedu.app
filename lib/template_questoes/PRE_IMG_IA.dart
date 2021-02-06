@@ -1,9 +1,10 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
+import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/model.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
@@ -11,17 +12,10 @@ import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:flutter_riverpod/all.dart';
-
-import 'package:image_picker/image_picker.dart';
-import 'package:file/file.dart';
-import 'package:file/local.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:speech_to_text/speech_recognition_error.dart';
-
-import 'package:speech_to_text/speech_to_text.dart' as stt;
-
-import 'dart:async';
-import 'dart:io' as io;
+// import 'package:file/file.dart';
+// import 'package:file/local.dart';
+// import 'package:speech_to_text/speech_recognition_error.dart';
+// import 'dart:async';
 
 final cobjectProvider = Provider<Cobjects>((ref) {
   return Cobjects();
@@ -30,9 +24,9 @@ final cobjectProvider = Provider<Cobjects>((ref) {
 // ignore: must_be_immutable
 class PreImgIa extends StatefulWidget {
   static const routeName = '/PRE_IMG_IA';
-  final LocalFileSystem localFileSystem;
+  // final LocalFileSystem localFileSystem;
 
-  PreImgIa({localFileSystem}) : this.localFileSystem = localFileSystem ?? LocalFileSystem();
+  // PreImgIa({localFileSystem}) : this.localFileSystem = localFileSystem ?? LocalFileSystem();
 
   @override
   _PreImgIaState createState() => new _PreImgIaState();
@@ -77,26 +71,15 @@ class _PreImgIaState extends State<PreImgIa> {
   @override
   void initState() {
     super.initState();
-    _speech = stt.SpeechToText();
+    // _speech = stt.SpeechToText();
     _textController.text = "";
-    _initAzure();
+    // _initAzure();
+    print("entrou no initstate");
+    getToken();
   }
 
   void submitButton(BuildContext context) {
-    // print(context.read(buttonStateProvider).state);
     context.read(buttonStateProvider).state = true;
-  }
-
-  void initar() async {
-    await _recorder.initialized;
-    // after initialization
-    var current = await _recorder.current(channel: 0);
-    setState(() {
-      _current = current;
-      _currentStatus = current.status;
-      print(_currentStatus);
-      print("hey hou");
-    });
   }
 
   @override
@@ -171,7 +154,6 @@ class _PreImgIaState extends State<PreImgIa> {
                           minLines: 1,
                           enableSuggestions: false,
                           keyboardType: TextInputType.visiblePassword,
-
                           controller: _textController,
                           autofocus: false,
                           textAlign: TextAlign.center,
@@ -195,9 +177,6 @@ class _PreImgIaState extends State<PreImgIa> {
                               borderRadius: BorderRadius.circular(25.7),
                             ),
                           ),
-                          // Utiliza o onChanged em conjunto com o provider para renderizar a UI assim que o form
-                          // receber um texto, acionando o botão. O condicional faz com que a UI seja renderizada
-                          // apenas uma vez enquanto o texto estiver sendo digitado.
                           onChanged: (val) {
                             correctAnswer == _textController.text.toString() ? isCorrect = true : isCorrect = false;
 
@@ -216,10 +195,10 @@ class _PreImgIaState extends State<PreImgIa> {
                       ),
                     ),
                     Container(
-                      //padding: EdgeInsets.only(left: 16, right: 16, bottom: 0),
                       margin: EdgeInsets.only(
-                          bottom:
-                          _textController.text.isNotEmpty ? (screenHeight * 0.93) - 18 - (48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656) : screenHeight * 0.92),
+                          bottom: _textController.text.isNotEmpty
+                              ? (screenHeight * 0.93) - 18 - (48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656)
+                              : screenHeight * 0.92),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         boxShadow: [
@@ -281,8 +260,13 @@ class _PreImgIaState extends State<PreImgIa> {
                     // ------------ GRAVAÇÃO DA VOZ ----------------
 
                     GestureDetector(
-                      onPanDown: (details) {
-                        //todo chamar função pra tirar foto
+                      onTap: () async {
+                        await pickImage();
+                        await loadingLocalAlertDialog(context);
+
+                        setState(() {
+                          _textController.text = retorno.data["responses"][0]['textAnnotations'][0]['description'];
+                        });
                       },
                       child: Container(
                         margin: EdgeInsets.only(
@@ -318,109 +302,47 @@ class _PreImgIaState extends State<PreImgIa> {
     );
   }
 
-  stt.SpeechToText _speech;
-  bool _isListening = false;
-  String _text = 'Press the button and start speaking';
-  double _confidence = 1.0;
-
-  void _listenNative() async {
-    bool available = await _speech.initialize(
-      onStatus: (val) => print('onStatus: $val'),
-      onError: (val) => print('onError: $val'),
+  loadingLocalAlertDialog(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          child: AlertDialog(
+            insetPadding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.39),
+            content: CircularProgressIndicator(),
+          ),
+        );
+      },
     );
-    if (available) {
-      buttonBackground = Color(0xFF0000FF).withOpacity(0.6);
-      iconBackground = Colors.white;
-      opacityFaleAgora = 1;
-
-      setState(() => _isListening = true);
-      _speech.listen(
-        onResult: (val) => setState(() {
-          _text = val.recognizedWords;
-          _textController.text = _text.toUpperCase(); // se quiser acrescentar no lugar de substituir é só usar um += no lugar do =
-          correctAnswer == _textController.text.toString() ? isCorrect = true : isCorrect = false;
-          if (val.hasConfidenceRating && val.confidence > 0) {
-            _confidence = val.confidence;
-          }
-        }),
-      );
-      _speech.errorListener = errorNotification;
+    int retorno = await extractText();
+    if (retorno != 0) {
+      Navigator.pop(context);
+    } else {
+      Navigator.pop(context);
+      extractErrorAlertDialog(context);
     }
   }
 
-  void errorNotification(SpeechRecognitionError a) {
-    opacityNaoEntendivel = 1;
-    setState(() {
-      opacityFaleAgora = 0;
-    });
-    colorAlertMessage = Colors.red;
+  extractErrorAlertDialog(BuildContext context) {
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () => Navigator.pop(context),
+    );
+    // configura o  AlertDialog
+    AlertDialog alerta = AlertDialog(
+      title: Text("Erro"),
+      content: Text("Erro ao detectar texto!!"),
+      actions: [
+        okButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alerta;
+      },
+    );
   }
-
-  _initAzure() async {
-    try {
-      if (await FlutterAudioRecorder.hasPermissions) {
-        print("INITOU");
-        String customPath = '/flutter_audio_recorder_';
-        io.Directory appDocDirectory;
-        if (io.Platform.isIOS) {
-          appDocDirectory = await getApplicationDocumentsDirectory();
-        } else {
-          appDocDirectory = await getExternalStorageDirectory();
-        }
-
-        customPath = appDocDirectory.path + customPath + DateTime.now().millisecondsSinceEpoch.toString();
-
-        _recorder = FlutterAudioRecorder(customPath, audioFormat: AudioFormat.WAV);
-
-        await _recorder.initialized;
-        // after initialization
-        var current = await _recorder.current(channel: 0);
-        // should be "Initialized", if all working fine
-        setState(() {
-          _current = current;
-          _currentStatus = current.status;
-          print(_currentStatus);
-        });
-      } else {
-        Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("You must accept permissions")));
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  _startAzure() async {
-    try {
-      await _recorder.start();
-      var recording = await _recorder.current(channel: 0);
-      setState(() {
-        _current = recording;
-      });
-
-      const tick = const Duration(milliseconds: 50);
-      new Timer.periodic(tick, (Timer t) async {
-        if (_currentStatus == RecordingStatus.Stopped) {
-          t.cancel();
-        }
-
-        var current = await _recorder.current(channel: 0);
-        // print(current.status);
-        setState(() {
-          _current = current;
-          _currentStatus = _current.status;
-        });
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-
-    return directory.path;
-  }
-
   //=======================================
 
   String privateKey;
@@ -434,18 +356,19 @@ class _PreImgIaState extends State<PreImgIa> {
         data: {
           "client_secret": "lbdHDSJaTT_E5DIWyBmHbNUY",
           "grant_type": "refresh_token",
-          "refresh_token": "1//04bEr7OGoasT0CgYIARAAGAQSNwF-L9Ir3Ybq33sET3MqvVJHDz_bHtCMTU7HiVzQqzVJdrJ6dMx14qWZJs316-bRC3NQ3sLWlIA",
+          "refresh_token": "1//04E5Os5JBHJJnCgYIARAAGAQSNwF-L9IrfLDYrx7s2E9_bJzHSNjIwtEGCyMI7kcXCuD_qETB8P1cZBBjr_NCIgSUKmzT6H0aQy0",
           "client_id": "552897848894-flkhs2oqtf7oofdqisusdgbbari82i2n.apps.googleusercontent.com"
         },
       );
       privateKey = "Bearer ${response.data['access_token']}";
+      print(privateKey);
     } catch (e) {
       print(e);
     }
   }
 
   // função para extrair texto da imagem enviando o base64 dela
-  Future<void> extractText() async {
+  Future<int> extractText() async {
     try {
       retorno = await Dio().post(
         "https://vision.googleapis.com/v1/images:annotate",
@@ -463,9 +386,11 @@ class _PreImgIaState extends State<PreImgIa> {
           ]
         },
       );
+      return 1;
     } catch (e) {
       print(e);
     }
+    return 0;
   }
 
   // função para tirar foto
@@ -474,6 +399,8 @@ class _PreImgIaState extends State<PreImgIa> {
       source: ImageSource.camera,
       preferredCameraDevice: CameraDevice.front,
     );
+
+    imageFile = File(pickedFile.path);
 
     base64Image = await converter();
   }
