@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import './register/countdown.dart';
 
-import './init_pages/spaceSelection.dart';
+import 'init_pages/space_selection.dart';
 
 import 'package:elesson/root/start_and_send_test.dart';
 
@@ -124,11 +124,12 @@ class _HomeState extends State<Home> {
       ),
       // initialRoute: '/',
       // initialRoute: ActivitySelectionForm.routeName,
-      initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
+      initialRoute: SpaceSelection.routeName,
+      // initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
       // initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName, // alterado para apresentação
       // initialRoute: HeadlessWebView.routeName,
       routes: {
-        '/': (context) => SpaceSelection(),
+        SpaceSelection.routeName: (context) => SpaceSelection(),
         CountDownTimer.routeName: (context) => CountDownTimer(),
         RootPage.routeName: (context) => RootPage(),
         StartAndSendTest.routeName: (context) => StartAndSendTest(),

@@ -7,8 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:twilio_phone_verify/twilio_phone_verify.dart';
 import '../share/header_widget.dart';
 
-import 'package:url_launcher/url_launcher.dart';
-
 /**
  * * Tela de inserção do número de celular para o recebimento do pin de acesso ao aplicativo.
  * ? O envio do SMS é feito usando a API do Twilio.
@@ -17,7 +15,9 @@ import 'package:url_launcher/url_launcher.dart';
 TwilioPhoneVerify _twilioPhoneVerify;
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-Future<void> sendCode(String phoneNumber) async {
+Future<void> sendCode(
+    String phoneNumber, TwilioPhoneVerify _twilioPhoneVerify) async {
+  print("veio cá $phoneNumber");
   var result = await _twilioPhoneVerify.sendSmsCode('+55' + phoneNumber);
 
   if (result['message'] == 'success') {
@@ -39,7 +39,6 @@ class SmsRegisterView extends StatefulWidget {
 class _SmsRegisterViewState extends State<SmsRegisterView> {
   final _phoneNumberController = TextEditingController();
   String phoneNumber;
-  bool isPhoneRegistered = false;
 
   //CRIAR TEXTCONTROLLERS PARA CADA ENTRADA
 
@@ -58,15 +57,11 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
             'VA7686722166b582b1a7ab42770b104097' // replace with Service SID
         );
 
-    // _twilioPhoneVerify = new TwilioPhoneVerify(
-    //     //elesson
-    //     accountSid:
-    //         'AC7ad4a260cd8163d9ca9d957ff0dfebb7', // replace with Account SID
-    //     authToken:
-    //         '3389bb9152e13b4383cfc79538923c52', // replace with Auth Token
-    //     serviceSid:
-    //         'A0041644482dcb11b671a45f2777da1ce' // replace with Service SID
-    //     );
+    // _twilioPhoneVerify = new TwilioPhoneVerify( //elesson
+    //     accountSid: 'AC7ad4a260cd8163d9ca9d957ff0dfebb7', // replace with Account SID
+    //     authToken: '3389bb9152e13b4383cfc79538923c52', // replace with Auth Token
+    //     serviceSid: 'A0041644482dcb11b671a45f2777da1ce' // replace with Service SID
+    // );
     super.initState();
   }
 
@@ -118,16 +113,14 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                       child: ImageIcon(
                         AssetImage("assets/icons/chevron_right.png"),
                       ),
-                      onPressed: () {
-                        if (_phoneNumberController.text.length == 11) {
-                          if (isPhoneRegistered) {
+                      onPressed: () => {
+                        if (_phoneNumberController.text.length == 11)
+                          {
+                            sendCode(_phoneNumberController.text,
+                                _twilioPhoneVerify),
                             Navigator.popAndPushNamed(context, '/code-verify',
-                                arguments: _phoneNumberController.text);
-                            sendCode(_phoneNumberController.text);
-                          } else {
-                            _launchLandingPageURL();
+                                arguments: _phoneNumberController.text),
                           }
-                        }
                       },
                     ),
                   ),
@@ -170,14 +163,10 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
             ),
           ),
           onPressed: () {
-            //função de envio do sms e checagem. Aqui ficará a função que buscará o número na API.
-            if (isPhoneRegistered) {
-              Navigator.popAndPushNamed(context, '/code-verify',
-                  arguments: _phoneNumberController.text);
-              sendCode(_phoneNumberController.text);
-            } else {
-              _launchLandingPageURL();
-            }
+            //função de envio do sms e checagem
+            sendCode(_phoneNumberController.text, _twilioPhoneVerify);
+            Navigator.popAndPushNamed(context, '/code-verify',
+                arguments: _phoneNumberController.text);
           },
         ),
       ),
@@ -248,14 +237,5 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
       margin: EdgeInsets.all(0),
       padding: EdgeInsets.all(0),
     );
-  }
-
-  void _launchLandingPageURL() async {
-    const url = 'http://www.elesson.com.br';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Não foi possível acessar $url';
-    }
   }
 }

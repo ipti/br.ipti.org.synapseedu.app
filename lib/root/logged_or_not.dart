@@ -1,10 +1,9 @@
-import 'package:elesson/init_pages/spaceSelection.dart';
+import 'package:elesson/init_pages/space_selection.dart';
 import 'package:elesson/root/start_and_send_test.dart';
 import 'package:flutter/material.dart';
 
 // ESSA É UMA BASE DE UM PROJETO MEU QUE USA FIREBASE E FUNCIONA COM O PERSISTENTE, PODEMOS USAR ELA COMO BASE PARA FAZER A NOSSA,
 //É SÓ ADAPTAR O GETUSER PARA VERIFICAR SE ELE ESTÁ LOGADO
-
 
 //ORDEM DE INICIALIZAÇÃO DO APP NO TRELLO
 
@@ -37,7 +36,7 @@ class _LoggedOrNotState extends State<LoggedOrNot> {
           _userId = user?.uid;
         }
         authStatus =
-        user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
+            user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
       });
     });
   }
@@ -85,12 +84,12 @@ class _LoggedOrNotState extends State<LoggedOrNot> {
         // ); // aqui vai para a pagina onde o usuario ainda não está logado
         break;
       case AuthStatus.LOGGED_IN:
-          return new StartAndSendTest(); // aqui vai para a pagina onde o usuario já está logado
-          // return new homeView(
-          //   userId: _userId,
-          //   auth: widget.auth,
-          //   logoutCallback: logoutCallback,
-          // ); // aqui vai para a pagina onde o usuario já está logado
+        return new StartAndSendTest(); // aqui vai para a pagina onde o usuario já está logado
+        // return new homeView(
+        //   userId: _userId,
+        //   auth: widget.auth,
+        //   logoutCallback: logoutCallback,
+        // ); // aqui vai para a pagina onde o usuario já está logado
         break;
       default:
         return TelaDeEspera();
