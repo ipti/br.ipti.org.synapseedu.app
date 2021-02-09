@@ -1,3 +1,4 @@
+import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/register/code_verify_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -123,12 +124,12 @@ class _HomeState extends State<Home> {
         textTheme: GoogleFonts.muliTextTheme(),
       ),
       // initialRoute: '/',
-      // initialRoute: ActivitySelectionForm.routeName,
-      initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
+      initialRoute: BlockSelection.routeName,
+      // initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
       // initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName, // alterado para apresentação
-      // initialRoute: HeadlessWebView.routeName,
       routes: {
-        '/': (context) => SpaceSelection(),
+        '/': (context) => BlockSelection(),
+        BlockSelection.routeName: (context) => BlockSelection(),
         CountDownTimer.routeName: (context) => CountDownTimer(),
         RootPage.routeName: (context) => RootPage(),
         StartAndSendTest.routeName: (context) => StartAndSendTest(),

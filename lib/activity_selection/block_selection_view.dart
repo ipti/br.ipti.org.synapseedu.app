@@ -2,12 +2,13 @@ import 'package:elesson/share/general_widgets.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
 
-class SpaceSelection extends StatefulWidget {
+class BlockSelection extends StatefulWidget {
+  static const routeName = '/block-selection';
   @override
-  _SpaceSelectionState createState() => _SpaceSelectionState();
+  _BlockSelectionState createState() => _BlockSelectionState();
 }
 
-class _SpaceSelectionState extends State<SpaceSelection> {
+class _BlockSelectionState extends State<BlockSelection> {
   @override
   Widget build(BuildContext context) {
     double heightScreen = MediaQuery.of(context).size.height;
@@ -17,20 +18,30 @@ class _SpaceSelectionState extends State<SpaceSelection> {
       body: Column(
         children: [
           initTitle(
-              text: "Acesse seu espaço",
+              text: "Escolha o bloco de atividades",
               heightScreen: heightScreen,
               bottomMargin: 36),
           SizedBox(height: 36.0),
           elessonCard(
               backgroundImage: "assets/img/cover.png",
-              text: "USAR QR CODE",
+              text: "Linguagens",
               screenWidth: widthScreen,
-              onTap: scan,
+              onTap: () {
+                // getCobjectList(blockId)
+              },
               context: context),
           elessonCard(
               backgroundImage: "assets/img/cover.png",
-              text: "DIGITAR CÓDIGO",
-              screenWidth: widthScreen),
+              text: "Matemática",
+              screenWidth: widthScreen,
+              onTap: () {},
+              context: context),
+          elessonCard(
+              backgroundImage: "assets/img/cover.png",
+              text: "Ciências",
+              screenWidth: widthScreen,
+              onTap: () {},
+              context: context),
         ],
       ),
     );
