@@ -1,5 +1,5 @@
 // import 'package:elesson/share/turmas.dart';
-import 'package:elesson/share/qrCodeReader.dart';
+import 'package:elesson/share/qr_code_reader.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/model.dart';
 import 'package:elesson/webview/headless_webview.dart';
