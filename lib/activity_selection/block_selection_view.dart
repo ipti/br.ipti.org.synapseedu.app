@@ -22,14 +22,17 @@ class _BlockSelectionState extends State<BlockSelection> {
               heightScreen: heightScreen,
               bottomMargin: 36),
           SizedBox(height: 36.0),
-          elessonCard(
-              backgroundImage: "assets/img/cover.png",
-              text: "Linguagens",
-              screenWidth: widthScreen,
-              onTap: () {
-                // getCobjectList(blockId)
-              },
-              context: context),
+          Container(
+            margin: EdgeInsets.all(0),
+            child: elessonCard(
+                backgroundImage: "assets/img/cover.png",
+                text: "Linguagens",
+                screenWidth: widthScreen,
+                onTap: () {
+                  // getCobjectList(blockId)
+                },
+                context: context),
+          ),
           elessonCard(
               backgroundImage: "assets/img/cover.png",
               text: "Matemática",
