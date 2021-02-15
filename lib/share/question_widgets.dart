@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/root/start_and_send_test.dart';
+import 'package:elesson/share/block_conclusion.dart';
 import 'package:elesson/share/qrCodeReader.dart';
 import 'package:elesson/template_questoes/ddrop/ddrop.dart';
 import 'package:elesson/template_questoes/multiple_choice.dart';
@@ -198,7 +199,7 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
       if (questionType != 'TXT')
         Navigator.of(context).pop();
       else
-        Navigator.of(context).popAndPushNamed("/");
+        Navigator.of(context).popAndPushNamed(BlockConclusion.routeName);
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:elesson/register/code_verify_view.dart';
+import 'package:elesson/share/block_conclusion.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import './register/countdown.dart';
@@ -111,6 +112,7 @@ class _HomeState extends State<Home> {
         accentColor: Color(0xFF0000FF),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         buttonTheme: ButtonThemeData(
+          textTheme: ButtonTextTheme.accent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18),
             side: BorderSide(color: Color(0xFF00004C), width: 1),
@@ -123,10 +125,10 @@ class _HomeState extends State<Home> {
         textTheme: GoogleFonts.muliTextTheme(),
       ),
       // initialRoute: '/',
-      initialRoute: ActivitySelectionForm.routeName,
+      // initialRoute: ActivitySelectionForm.routeName,
+      initialRoute: BlockConclusion.routeName,
       // initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
       // initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName, // alterado para apresentação
-      // initialRoute: HeadlessWebView.routeName,
       routes: {
         '/': (context) => SpaceSelection(),
         CountDownTimer.routeName: (context) => CountDownTimer(),
@@ -142,6 +144,7 @@ class _HomeState extends State<Home> {
         MultipleChoiceQuestion.routeName: (context) => MultipleChoiceQuestion(),
         TextQuestion.routeName: (context) => TextQuestion(),
         ImageDetailScreen.routeName: (context) => ImageDetailScreen(),
+        BlockConclusion.routeName: (context) => BlockConclusion(),
       },
     );
   }
