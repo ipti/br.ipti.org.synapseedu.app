@@ -1,13 +1,32 @@
+import 'package:elesson/share/colors.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
 
 class BlockConclusion extends StatelessWidget {
   static const routeName = '/block_conclusion';
 
-  final String studentName = 'FULANO';
+  final String studentName = 'JOÃO';
   final String module = '1';
   final int year = 1;
-  final String subject = 'CIÊNCIAS';
+  final String subject = 'LINGUAGENS';
+
+  Widget subjectCharacter() {
+    Widget imageAsset;
+    switch (subject) {
+      case 'CIÊNCIAS':
+        imageAsset =
+            Image.asset('assets/img/personagem_comemorando_LILA_ling.png');
+        break;
+      case 'CIÊNCIAS':
+        imageAsset =
+            Image.asset('assets/img/personagem_comemorando_CELESTE_cie.png');
+        break;
+      default:
+        imageAsset =
+            Image.asset('assets/img/personagem_comemorando_MATEUS_mat.png');
+    }
+    return imageAsset;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,14 +35,20 @@ class BlockConclusion extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'PARABÉNS\n$studentName',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Color.fromRGBO(0, 0, 255, 1),
+            Padding(
+              padding: const EdgeInsets.only(top: 60),
+              child: Text(
+                'PARABÉNS\n$studentName',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromRGBO(0, 0, 255, 1),
+                  fontSize: 22,
+                ),
               ),
             ),
-            Image.asset('assets/img/personagem_comemorando_CELESTE_cie.png'),
+            // Image.asset('assets/img/personagem_comemorando_CELESTE_cie.png'),
+            subjectCharacter(),
             Column(
               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -31,11 +56,19 @@ class BlockConclusion extends StatelessWidget {
                   textAlign: TextAlign.center,
                   text: TextSpan(
                     style: TextStyle(
+                      fontFamily: 'Mulish',
+                      fontSize: 18,
                       color: Colors.black,
-                      fontSize: headerFontSize,
                     ),
-                    text:
-                        'VOCÊ COMPLETOU\nO MÓDULO $module DO\n$yearº ANO DE $subject',
+                    text: 'VOCÊ COMPLETOU\n',
+                    children: [
+                      TextSpan(
+                        text: 'O MÓDULO $module DO\n$yearº ANO DE $subject',
+                        style: TextStyle(
+                          color: Color.fromRGBO(0, 0, 255, 0.4),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(

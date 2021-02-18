@@ -121,6 +121,7 @@ class _HomeState extends State<Home> {
           minWidth: 0,
           // hoverColor: Colors.red,
         ),
+        primaryTextTheme: GoogleFonts.muliTextTheme(),
         fontFamily: 'Mulish',
         textTheme: GoogleFonts.muliTextTheme(),
       ),

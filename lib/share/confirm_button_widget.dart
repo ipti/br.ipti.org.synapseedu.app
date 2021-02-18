@@ -127,7 +127,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
             confirmButtonBackgroundOpacity = 0.2;
           });
           isCorrect = !isCorrect;
-          nextQuestionTimer = Timer(Duration(seconds: 4), () {
+          nextQuestionTimer = Timer(Duration(seconds: 2), () {
             setState(() {
               confirmButtonText = 'PRÓXIMA QUESTÃO';
             });
