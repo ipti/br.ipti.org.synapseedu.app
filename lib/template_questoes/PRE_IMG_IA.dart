@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:elesson/share/google_api.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,10 +13,6 @@ import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:flutter_riverpod/all.dart';
-// import 'package:file/file.dart';
-// import 'package:file/local.dart';
-// import 'package:speech_to_text/speech_recognition_error.dart';
-// import 'dart:async';
 
 final cobjectProvider = Provider<Cobjects>((ref) {
   return Cobjects();
@@ -24,9 +21,6 @@ final cobjectProvider = Provider<Cobjects>((ref) {
 // ignore: must_be_immutable
 class PreImgIa extends StatefulWidget {
   static const routeName = '/PRE_IMG_IA';
-  // final LocalFileSystem localFileSystem;
-
-  // PreImgIa({localFileSystem}) : this.localFileSystem = localFileSystem ?? LocalFileSystem();
 
   @override
   _PreImgIaState createState() => new _PreImgIaState();
@@ -36,7 +30,6 @@ class _PreImgIaState extends State<PreImgIa> {
   String base64Image;
   Response retorno;
 
-  // ignore: non_constant_identifier_names
   var cobjectList = new List<Cobject>();
   int questionIndex;
   int listQuestionIndex;
@@ -53,12 +46,7 @@ class _PreImgIaState extends State<PreImgIa> {
   final _formKey = GlobalKey<FormState>();
   final _textController = TextEditingController();
 
-  FlutterAudioRecorder _recorder;
-  Recording _current;
-  RecordingStatus _currentStatus = RecordingStatus.Unset;
-
   @override
-  // ignore: override_on_non_overriding_member
   void dispose() {
     super.dispose();
     _textController.dispose();
@@ -71,11 +59,7 @@ class _PreImgIaState extends State<PreImgIa> {
   @override
   void initState() {
     super.initState();
-    // _speech = stt.SpeechToText();
     _textController.text = "";
-    // _initAzure();
-    print("entrou no initstate");
-    getToken();
   }
 
   void submitButton(BuildContext context) {
@@ -261,12 +245,14 @@ class _PreImgIaState extends State<PreImgIa> {
 
                     GestureDetector(
                       onTap: () async {
+                        await getGoogleApiToken();
                         await pickImage();
                         await loadingLocalAlertDialog(context);
-
-                        setState(() {
-                          _textController.text = retorno.data["responses"][0]['textAnnotations'][0]['description'];
-                        });
+                        if (retorno != null) {
+                          setState(() {
+                            _textController.text = retorno.data["responses"][0]['textAnnotations'][0]['description'];
+                          });
+                        }
                       },
                       child: Container(
                         margin: EdgeInsets.only(
@@ -328,7 +314,6 @@ class _PreImgIaState extends State<PreImgIa> {
       child: Text("OK"),
       onPressed: () => Navigator.pop(context),
     );
-    // configura o  AlertDialog
     AlertDialog alerta = AlertDialog(
       title: Text("Erro"),
       content: Text("Erro ao detectar texto!!"),
@@ -343,36 +328,17 @@ class _PreImgIaState extends State<PreImgIa> {
       },
     );
   }
+
   //=======================================
-
-  String privateKey;
-
-  // função para receber token do google vision
-  Future<void> getToken() async {
-    try {
-      Response response = await Dio().post(
-        "https://oauth2.googleapis.com/token",
-        options: Options(headers: {'user-agent': "google-oauth-playground"}, contentType: "application/x-www-form-urlencoded"),
-        data: {
-          "client_secret": "lbdHDSJaTT_E5DIWyBmHbNUY",
-          "grant_type": "refresh_token",
-          "refresh_token": "1//04E5Os5JBHJJnCgYIARAAGAQSNwF-L9IrfLDYrx7s2E9_bJzHSNjIwtEGCyMI7kcXCuD_qETB8P1cZBBjr_NCIgSUKmzT6H0aQy0",
-          "client_id": "552897848894-flkhs2oqtf7oofdqisusdgbbari82i2n.apps.googleusercontent.com"
-        },
-      );
-      privateKey = "Bearer ${response.data['access_token']}";
-      print(privateKey);
-    } catch (e) {
-      print(e);
-    }
-  }
 
   // função para extrair texto da imagem enviando o base64 dela
   Future<int> extractText() async {
+    print(googleApiToken);
+    print(base64Image);
     try {
       retorno = await Dio().post(
         "https://vision.googleapis.com/v1/images:annotate",
-        options: Options(headers: {'Authorization': privateKey}, contentType: "application/json"),
+        options: Options(headers: {'Authorization': googleApiToken}, contentType: "application/json"),
         data: {
           "requests": [
             {

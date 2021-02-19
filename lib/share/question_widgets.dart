@@ -16,6 +16,8 @@ import '../template_questoes/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+
+
 import 'api.dart';
 
 // Contém alguns métodos e variáveis globais necessárias para as questões.
@@ -73,6 +75,7 @@ getCobject(int listQuestionIndex, BuildContext context, List<String> questionLis
     cobjectList = context.read(cobjectProvider).items;
     switch (questionType) {
       case 'PRE':
+        //todo voltar ao normal depois aqui
         // Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
         //     arguments: ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
         Navigator.of(context).pushNamedAndRemoveUntil(PreImgIa.routeName, ModalRoute.withName(StartAndSendTest.routeName),
@@ -140,8 +143,7 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
             .pushReplacementNamed(SingleLineTextQuestion.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'PRE', listQuestionIndex));
         break;
       case 'DDROP':
-        Navigator.of(context)
-            .pushReplacementNamed(DragAndDrop.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'DDROP', listQuestionIndex));
+        Navigator.of(context).pushReplacementNamed(DragAndDrop.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'DDROP', listQuestionIndex));
         break;
       case 'MTE':
         Navigator.of(context)
@@ -151,8 +153,7 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
   } else if (questionType == 'TXT' && indexTextQuestion < cobjectList[0].questions.length) {
     if (questionIndex == 0) {
       indexTextQuestion = 0;
-      Navigator.of(context)
-          .pushReplacementNamed(TextQuestion.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'TXT', listQuestionIndex));
+      Navigator.of(context).pushReplacementNamed(TextQuestion.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'TXT', listQuestionIndex));
     } else {
       print(indexTextQuestion);
       Navigator.of(context).pushNamed(TextQuestion.routeName, arguments: ScreenArguments(cobjectList, indexTextQuestion, 'TXT', listQuestionIndex));
@@ -268,7 +269,6 @@ Future<void> sendMetaData({String pieceId, String groupId, int finalTime, int in
   print("Enviado metadata");
 }
 
-
 // para drag and drop
 double double1LoadingPercent = 0;
 double double2LoadingPercent = 0;
@@ -279,7 +279,7 @@ double double5LoadingPercent = 0;
 double double6LoadingPercent = 0;
 double current = 0;
 // ignore: non_constant_identifier_names, missing_return
-Widget LoadingGestureDetector({Widget child, Function onLongPress, Function setState, int definedPosition,double widthScreen, bool enableMargin}) {
+Widget LoadingGestureDetector({Widget child, Function onLongPress, Function setState, int definedPosition, double widthScreen, bool enableMargin}) {
   switch (definedPosition) {
     case 1:
       current = double1LoadingPercent;
@@ -302,8 +302,8 @@ Widget LoadingGestureDetector({Widget child, Function onLongPress, Function setS
   }
   return GestureDetector(
     child: Container(
-      width: widthScreen/2.6,
-      height: widthScreen/2.6,
+      width: widthScreen / 2.6,
+      height: widthScreen / 2.6,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -328,22 +328,34 @@ Widget LoadingGestureDetector({Widget child, Function onLongPress, Function setS
       setState(() {
         switch (definedPosition) {
           case 1:
-            setState((){double1LoadingPercent = 0;});
+            setState(() {
+              double1LoadingPercent = 0;
+            });
             break;
           case 2:
-            setState((){double2LoadingPercent = 0;});
+            setState(() {
+              double2LoadingPercent = 0;
+            });
             break;
           case 3:
-            setState((){double3LoadingPercent = 0;});
+            setState(() {
+              double3LoadingPercent = 0;
+            });
             break;
           case 4:
-            setState((){double4LoadingPercent = 0;});
+            setState(() {
+              double4LoadingPercent = 0;
+            });
             break;
           case 5:
-            setState((){double5LoadingPercent = 0;});
+            setState(() {
+              double5LoadingPercent = 0;
+            });
             break;
           case 6:
-            setState((){double6LoadingPercent = 0;});
+            setState(() {
+              double6LoadingPercent = 0;
+            });
             break;
         }
       });
@@ -351,22 +363,34 @@ Widget LoadingGestureDetector({Widget child, Function onLongPress, Function setS
     onPanDown: (details) {
       switch (definedPosition) {
         case 1:
-          setState((){double1LoadingPercent = 1;});
+          setState(() {
+            double1LoadingPercent = 1;
+          });
           break;
         case 2:
-          setState((){double2LoadingPercent = 1;});
+          setState(() {
+            double2LoadingPercent = 1;
+          });
           break;
         case 3:
-          setState((){double3LoadingPercent = 1;});
+          setState(() {
+            double3LoadingPercent = 1;
+          });
           break;
         case 4:
-          setState((){double4LoadingPercent = 1;});
+          setState(() {
+            double4LoadingPercent = 1;
+          });
           break;
         case 5:
-          setState((){double5LoadingPercent = 1;});
+          setState(() {
+            double5LoadingPercent = 1;
+          });
           break;
         case 6:
-          setState((){double6LoadingPercent = 1;});
+          setState(() {
+            double6LoadingPercent = 1;
+          });
           break;
       }
     },
@@ -376,22 +400,34 @@ Widget LoadingGestureDetector({Widget child, Function onLongPress, Function setS
       setState(() {
         switch (definedPosition) {
           case 1:
-            setState((){double1LoadingPercent = 0;});
+            setState(() {
+              double1LoadingPercent = 0;
+            });
             break;
           case 2:
-            setState((){double2LoadingPercent = 0;});
+            setState(() {
+              double2LoadingPercent = 0;
+            });
             break;
           case 3:
-            setState((){double3LoadingPercent = 0;});
+            setState(() {
+              double3LoadingPercent = 0;
+            });
             break;
           case 4:
-            setState((){double4LoadingPercent = 0;});
+            setState(() {
+              double4LoadingPercent = 0;
+            });
             break;
           case 5:
-            setState((){double5LoadingPercent = 0;});
+            setState(() {
+              double5LoadingPercent = 0;
+            });
             break;
           case 6:
-            setState((){double6LoadingPercent = 0;});
+            setState(() {
+              double6LoadingPercent = 0;
+            });
             break;
         }
       });

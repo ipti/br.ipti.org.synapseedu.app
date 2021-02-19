@@ -27,18 +27,18 @@ final cobjectProvider = Provider<Cobjects>((ref) {
 });
 
 // ignore: must_be_immutable
-class SingleLineTextQuestion extends StatefulWidget {
-  static const routeName = '/PRE';
+class PreSomIa extends StatefulWidget {
+  static const routeName = '/PRE_SOM_IA';
   final LocalFileSystem localFileSystem;
 
-  SingleLineTextQuestion({localFileSystem})
+  PreSomIa({localFileSystem})
       : this.localFileSystem = localFileSystem ?? LocalFileSystem();
   @override
-  _SingleLineTextQuestionState createState() =>
-      new _SingleLineTextQuestionState();
+  _PreSomIaState createState() =>
+      new _PreSomIaState();
 }
 
-class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
+class _PreSomIaState extends State<PreSomIa> {
   // ignore: non_constant_identifier_names
   var cobjectList = new List<Cobject>();
   int questionIndex;

@@ -1,5 +1,6 @@
 import 'package:elesson/register/code_verify_view.dart';
 import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
+import 'package:elesson/template_questoes/PRE_SOM_IA.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import './register/countdown.dart';
@@ -137,6 +138,7 @@ class _HomeState extends State<Home> {
         CodeVerifyView.routeName: (context) => CodeVerifyView(),
         HeadlessWebView.routeName: (context) => HeadlessWebView(),
         PreImgIa.routeName: (context) => PreImgIa(),
+        PreSomIa.routeName: (context) => PreSomIa(),
         // PreSomIa.routeName: (context) => PreSomIa(),
         //----------------------------rotas fora de fluxo---------------------------
         ActivitySelectionForm.routeName: (context) => ActivitySelectionForm(),
