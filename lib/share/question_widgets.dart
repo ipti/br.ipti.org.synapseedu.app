@@ -181,7 +181,7 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
       //todo enviar como correto
       Answer().sendAnswer(pieceId, true, 0,
           intervalResolution: 0, groupId: "", value: "");
-      print("enviada rewsposta do txt");
+      print("enviada resposta do txt");
     }
     if (++listQuestionIndex < questionList.length) {
       getCobject(listQuestionIndex, context, questionListTest);
