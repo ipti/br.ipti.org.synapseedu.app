@@ -18,7 +18,7 @@ class _BlockSelectionState extends State<BlockSelection> {
   @override
   void didChangeDependencies() async {
     prefs = await SharedPreferences.getInstance();
-    langOk = prefs.getBool('linguagens') ?? true;
+    langOk = prefs.getBool('linguagens') ?? false;
     mathOk = prefs.getBool('matematica') ?? false;
     sciOk = prefs.getBool('ciencias') ?? false;
     super.didChangeDependencies();

@@ -124,7 +124,8 @@ class _HomeState extends State<Home> {
         textTheme: GoogleFonts.muliTextTheme(),
       ),
       // initialRoute: '/',
-      initialRoute: BlockSelection.routeName,
+      // initialRoute: BlockSelection.routeName,
+      initialRoute: ActivitySelectionForm.routeName,
       // initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
       // initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName, // alterado para apresentação
       routes: {

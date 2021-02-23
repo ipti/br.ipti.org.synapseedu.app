@@ -11,6 +11,7 @@ import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/text_question.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../template_questoes/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -140,7 +141,11 @@ Widget soundButton(BuildContext context, Question question) {
 
 void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
     String questionType,
-    [String pieceId, bool isCorrect, int finalTime, int intervalResolution]) {
+    [String pieceId,
+    bool isCorrect,
+    int finalTime,
+    int intervalResolution,
+    String subject]) async {
   timeStartIscaptured = false; // resetando
   if (questionIndex < cobjectList[0].questions.length &&
       questionType != 'TXT') {
@@ -188,8 +193,12 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
     } else {
       if (questionType != 'TXT')
         Navigator.of(context).pop();
-      else
+      else {
+        SharedPreferences prefs;
+        prefs = await SharedPreferences.getInstance();
+        prefs.setBool(subject, true);
         Navigator.of(context).popAndPushNamed("/");
+      }
     }
   }
 }
