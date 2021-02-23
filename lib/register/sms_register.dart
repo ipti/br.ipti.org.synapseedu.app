@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:elesson/register/student_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +15,8 @@ import '../share/header_widget.dart';
 
 TwilioPhoneVerify _twilioPhoneVerify;
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+Student student;
+StudentQuery studentQuery;
 
 Future<void> sendCode(
     String phoneNumber, TwilioPhoneVerify _twilioPhoneVerify) async {
@@ -113,14 +116,17 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                       child: ImageIcon(
                         AssetImage("assets/icons/chevron_right.png"),
                       ),
-                      onPressed: () => {
-                        if (_phoneNumberController.text.length == 11)
-                          {
-                            sendCode(_phoneNumberController.text,
-                                _twilioPhoneVerify),
-                            Navigator.popAndPushNamed(context, '/code-verify',
-                                arguments: _phoneNumberController.text),
-                          }
+                      onPressed: () async {
+                        // student = await Student().searchForStudent();
+                        studentQuery = await StudentQuery().searchStudent();
+                        if (studentQuery.valid == true) print("true");
+                        if (_phoneNumberController.text.length == 11 &&
+                            student != null) {
+                          sendCode(
+                              _phoneNumberController.text, _twilioPhoneVerify);
+                          Navigator.popAndPushNamed(context, '/code-verify',
+                              arguments: _phoneNumberController.text);
+                        }
                       },
                     ),
                   ),
@@ -164,9 +170,10 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
           ),
           onPressed: () {
             //função de envio do sms e checagem
-            sendCode(_phoneNumberController.text, _twilioPhoneVerify);
-            Navigator.popAndPushNamed(context, '/code-verify',
-                arguments: _phoneNumberController.text);
+
+            // sendCode(_phoneNumberController.text, _twilioPhoneVerify);
+            // Navigator.popAndPushNamed(context, '/code-verify',
+            //     arguments: _phoneNumberController.text);
           },
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:elesson/register/sms_register.dart';
 import 'package:elesson/share/general_widgets.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
@@ -30,9 +31,14 @@ class _SpaceSelectionState extends State<SpaceSelection> {
               onTap: scan,
               context: context),
           elessonCard(
-              backgroundImage: "assets/img/cover.png",
-              text: "DIGITAR CÓDIGO",
-              screenWidth: widthScreen),
+            backgroundImage: "assets/img/cover.png",
+            text: "DIGITAR CÓDIGO",
+            screenWidth: widthScreen,
+            onTap: (value) {
+              Navigator.of(context).pushNamed(SmsRegisterView.routeName);
+            },
+            context: context,
+          ),
         ],
       ),
     );

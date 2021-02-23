@@ -1,0 +1,13 @@
+[
+    {
+        "valid": true,
+        "error": null,
+        "student": {
+            "id": 10,
+            "name": "Fábio Nascimento",
+            "phone": "79999466220"
+        }
+    }
+]
+
+ 
