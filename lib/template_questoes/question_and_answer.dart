@@ -561,8 +561,8 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
     // });
   }
 
-  void onPlayAudio() async {
-    AudioPlayer audioPlayer = AudioPlayer();
-    await audioPlayer.play(_current.path, isLocal: true);
-  }
+  // void onPlayAudio() async {
+  //   AudioPlayer audioPlayer = AudioPlayer();
+  //   await audioPlayer.play(_current.path, isLocal: true);
+  // }
 }
