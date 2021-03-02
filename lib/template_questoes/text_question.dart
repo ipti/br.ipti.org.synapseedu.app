@@ -11,6 +11,9 @@ class TextQuestion extends ConsumerWidget {
   var cobjectList = new List<Cobject>();
   int questionIndex;
   int listQuestionIndex;
+  int cobjectIdListLength;
+  int cobjectQuestionsLength;
+  String disciplineId;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -18,16 +21,24 @@ class TextQuestion extends ConsumerWidget {
     cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
     listQuestionIndex = args.listQuestionIndex;
+    cobjectIdListLength = args.cobjectIdLength;
+    cobjectQuestionsLength = args.cobjectQuestionsLength;
+    disciplineId = args.disciplineId;
 
     // String questionHeaderDescription = cobjectList[0].questions[questionIndex].header["description"]; (IMPORTANTE)
     String questionDescription = cobjectList[0].description;
     String headerText = cobjectList[0].questions[questionIndex].header["text"];
 
-    String questionText = cobjectList[0].questions[questionIndex].pieces['1']['text'];
+    String questionText =
+        cobjectList[0].questions[questionIndex].pieces['1']['text'];
     String pieceId = cobjectList[0].questions[questionIndex].pieceId;
     Stopwatch chronometer = Stopwatch();
+
     return Scaffold(
       body: TemplateSlider(
+        disciplineId: disciplineId,
+        cobjectIdListLength: cobjectIdListLength,
+        cobjectQuestionsLength: cobjectQuestionsLength,
         isTextTemplate: true,
         listQuestionIndex: listQuestionIndex,
         questionIndex: questionIndex,
@@ -41,7 +52,8 @@ class TextQuestion extends ConsumerWidget {
           ),
         ),
         sound: cobjectList[0].questions[questionIndex].header["sound"],
-        linkImage: 'https://elesson.com.br/app/library/image/' + cobjectList[0].questions[questionIndex].header["image"],
+        linkImage: 'https://elesson.com.br/app/library/image/' +
+            cobjectList[0].questions[questionIndex].header["image"],
         text: Text(
           headerText,
           style: TextStyle(
@@ -61,7 +73,11 @@ class TextQuestion extends ConsumerWidget {
                   fontFamily: 'Mulish',
                 ),
               ),
-              submitAnswer(context, cobjectList, 'TXT', ++questionIndex, listQuestionIndex, pieceId, true),
+              submitAnswer(context, cobjectList, 'TXT', ++questionIndex,
+                  listQuestionIndex, pieceId, true,
+                  cobjectIdListLength: cobjectIdListLength,
+                  cobjectQuestionsLength: cobjectQuestionsLength,
+                  disciplineId: disciplineId),
             ],
           ),
         ),
