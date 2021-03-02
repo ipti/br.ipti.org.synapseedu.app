@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:elesson/register/student_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -14,8 +15,12 @@ import '../share/header_widget.dart';
 
 TwilioPhoneVerify _twilioPhoneVerify;
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+Student student;
+StudentQuery studentQuery;
 
-Future<void> sendCode(String phoneNumber) async {
+Future<void> sendCode(
+    String phoneNumber, TwilioPhoneVerify _twilioPhoneVerify) async {
+  print("veio cá $phoneNumber");
   var result = await _twilioPhoneVerify.sendSmsCode('+55' + phoneNumber);
 
   if (result['message'] == 'success') {
@@ -45,25 +50,21 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
   @override
   void initState() {
     // TODO: implement initState
-    // _twilioPhoneVerify = new TwilioPhoneVerify(
-    //     // meu
-    //     accountSid:
-    //         'ACadd1dd994d143f635b442de15481e1f7', // replace with Account SID
-    //     authToken:
-    //         'fe9c3fa3784cd48017ca39f454bbc5bc', // replace with Auth Token
-    //     serviceSid:
-    //         'VA7686722166b582b1a7ab42770b104097' // replace with Service SID
-    //     );
-
     _twilioPhoneVerify = new TwilioPhoneVerify(
-        //elesson
+        // meu
         accountSid:
-            'AC7ad4a260cd8163d9ca9d957ff0dfebb7', // replace with Account SID
+            'ACadd1dd994d143f635b442de15481e1f7', // replace with Account SID
         authToken:
-            '3389bb9152e13b4383cfc79538923c52', // replace with Auth Token
+            'fe9c3fa3784cd48017ca39f454bbc5bc', // replace with Auth Token
         serviceSid:
-            'A0041644482dcb11b671a45f2777da1ce' // replace with Service SID
+            'VA7686722166b582b1a7ab42770b104097' // replace with Service SID
         );
+
+    // _twilioPhoneVerify = new TwilioPhoneVerify( //elesson
+    //     accountSid: 'AC7ad4a260cd8163d9ca9d957ff0dfebb7', // replace with Account SID
+    //     authToken: '3389bb9152e13b4383cfc79538923c52', // replace with Auth Token
+    //     serviceSid: 'A0041644482dcb11b671a45f2777da1ce' // replace with Service SID
+    // );
     super.initState();
   }
 
@@ -115,13 +116,17 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                       child: ImageIcon(
                         AssetImage("assets/icons/chevron_right.png"),
                       ),
-                      onPressed: () => {
-                        if (_phoneNumberController.text.length == 11)
-                          {
-                            sendCode(_phoneNumberController.text),
-                            Navigator.popAndPushNamed(context, '/code-verify',
-                                arguments: _phoneNumberController.text),
-                          }
+                      onPressed: () async {
+                        // student = await Student().searchForStudent();
+                        studentQuery = await StudentQuery().searchStudent();
+                        if (studentQuery.valid == true) print("true");
+                        if (_phoneNumberController.text.length == 11 &&
+                            student != null) {
+                          sendCode(
+                              _phoneNumberController.text, _twilioPhoneVerify);
+                          Navigator.popAndPushNamed(context, '/code-verify',
+                              arguments: _phoneNumberController.text);
+                        }
                       },
                     ),
                   ),
@@ -165,9 +170,10 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
           ),
           onPressed: () {
             //função de envio do sms e checagem
-            sendCode(_phoneNumberController.text);
-            Navigator.popAndPushNamed(context, '/code-verify',
-                arguments: _phoneNumberController.text);
+
+            // sendCode(_phoneNumberController.text, _twilioPhoneVerify);
+            // Navigator.popAndPushNamed(context, '/code-verify',
+            //     arguments: _phoneNumberController.text);
           },
         ),
       ),

@@ -216,7 +216,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
                     text: TextSpan(
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          sendCode(_phoneNumber);
+                          sendCode(_phoneNumber, _twilioPhoneVerify);
                           setState(() {
                             resendCode = false;
                           });

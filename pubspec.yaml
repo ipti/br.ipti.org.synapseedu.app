@@ -50,6 +50,10 @@ dependencies:
   shared_preferences: ^0.5.12+4
   percent_indicator: ^2.1.8
   image_picker: ^0.6.7+22
+<<<<<<< HEAD
+=======
+  #
+>>>>>>> vs1/sprint9/9.3
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +76,7 @@ flutter:
     - assets/icons/
     - assets/animations/
     - assets/audio/
+    - assets/json/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
