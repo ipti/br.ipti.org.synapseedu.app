@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/root/start_and_send_test.dart';
-import 'package:elesson/share/qr_code_reader.dart';
+import 'package:elesson/share/qrCodeReader.dart';
+import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
 import 'package:elesson/template_questoes/ddrop/ddrop.dart';
 import 'package:elesson/template_questoes/multiple_choice.dart';
 import 'package:elesson/template_questoes/question_and_answer.dart';
@@ -14,6 +15,8 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import '../template_questoes/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+
 
 import 'api.dart';
 
@@ -82,11 +85,11 @@ getCobject(int listQuestionIndex, BuildContext context,
     cobjectList = context.read(cobjectProvider).items;
     switch (questionType) {
       case 'PRE':
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            SingleLineTextQuestion.routeName,
-            ModalRoute.withName(StartAndSendTest.routeName),
-            arguments:
-                ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
+        //todo voltar ao normal depois aqui
+        // Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+        //     arguments: ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(PreImgIa.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+            arguments: ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
         break;
       case 'DDROP':
         Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName,
@@ -161,9 +164,7 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
                 cobjectList, questionIndex, 'PRE', listQuestionIndex));
         break;
       case 'DDROP':
-        Navigator.of(context).pushReplacementNamed(DragAndDrop.routeName,
-            arguments: ScreenArguments(
-                cobjectList, questionIndex, 'DDROP', listQuestionIndex));
+        Navigator.of(context).pushReplacementNamed(DragAndDrop.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'DDROP', listQuestionIndex));
         break;
       case 'MTE':
         Navigator.of(context).pushReplacementNamed(
@@ -176,9 +177,7 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
       indexTextQuestion < cobjectList[0].questions.length) {
     if (questionIndex == 0) {
       indexTextQuestion = 0;
-      Navigator.of(context).pushReplacementNamed(TextQuestion.routeName,
-          arguments: ScreenArguments(
-              cobjectList, questionIndex, 'TXT', listQuestionIndex));
+      Navigator.of(context).pushReplacementNamed(TextQuestion.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'TXT', listQuestionIndex));
     } else {
       print(indexTextQuestion);
       Navigator.of(context).pushNamed(TextQuestion.routeName,
@@ -329,13 +328,7 @@ double double5LoadingPercent = 0;
 double double6LoadingPercent = 0;
 double current = 0;
 // ignore: non_constant_identifier_names, missing_return
-Widget LoadingGestureDetector(
-    {Widget child,
-    Function onLongPress,
-    Function setState,
-    int definedPosition,
-    double widthScreen,
-    bool enableMargin}) {
+Widget LoadingGestureDetector({Widget child, Function onLongPress, Function setState, int definedPosition, double widthScreen, bool enableMargin}) {
   switch (definedPosition) {
     case 1:
       current = double1LoadingPercent;

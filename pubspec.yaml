@@ -44,13 +44,15 @@ dependencies:
   lottie: ^0.7.0+1 #usado para animação
   #TESTE
   http: ^0.12.2
+  image_picker: ^0.6.7+22
   twilio_phone_verify: ^0.0.2
   # sms_autofill: ^1.2.6
   image_picker: ^0.6.7+22
   pin_code_fields: ^6.0.1
   shared_preferences: ^0.5.12+4
   percent_indicator: ^2.1.8
-  image_picker: ^0.6.7+22
+  googleapis_auth: any
+  googleapis: ^0.56.1
   #
 
 dev_dependencies:

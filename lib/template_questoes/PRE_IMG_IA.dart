@@ -1,50 +1,38 @@
+import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:elesson/share/google_api.dart';
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
 import 'package:elesson/activity_selection/activity_selection_view.dart';
-import 'package:elesson/share/api.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/model.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/share/template_slider.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:flutter_riverpod/all.dart';
-
-import 'package:audioplayers/audioplayers.dart';
-import 'package:file/file.dart';
-import 'package:file/local.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:speech_to_text/speech_recognition_error.dart';
-
-// O pacote que está em testes. O Dart/Flutter está com problemas de integração com a API da Azure.
-
-import 'package:speech_to_text/speech_to_text.dart' as stt;
-
-import 'dart:async';
-import 'dart:io' as io;
 
 final cobjectProvider = Provider<Cobjects>((ref) {
   return Cobjects();
 });
 
 // ignore: must_be_immutable
-class SingleLineTextQuestion extends StatefulWidget {
-  static const routeName = '/PRE';
-  final LocalFileSystem localFileSystem;
-
-  SingleLineTextQuestion({localFileSystem}) : this.localFileSystem = localFileSystem ?? LocalFileSystem();
+class PreImgIa extends StatefulWidget {
+  static const routeName = '/PRE_IMG_IA';
 
   @override
-  _SingleLineTextQuestionState createState() => new _SingleLineTextQuestionState();
+  _PreImgIaState createState() => new _PreImgIaState();
 }
 
-class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
-  // ignore: non_constant_identifier_names
+class _PreImgIaState extends State<PreImgIa> {
+  String base64Image;
+  Response retorno;
+
   var cobjectList = new List<Cobject>();
   int questionIndex;
   int listQuestionIndex;
-
-  String alertMessage = "FALE AGORA...";
-  String naoEndendivel = "Não entendemos o que você quis dizer...\nTente Novamente!";
 
   double opacityFaleAgora = 0;
   double opacityNaoEntendivel = 0;
@@ -150,7 +138,6 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                           minLines: 1,
                           enableSuggestions: false,
                           keyboardType: TextInputType.visiblePassword,
-
                           controller: _textController,
                           autofocus: false,
                           textAlign: TextAlign.center,
@@ -192,7 +179,6 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                       ),
                     ),
                     Container(
-                      //padding: EdgeInsets.only(left: 16, right: 16, bottom: 0),
                       margin: EdgeInsets.only(
                           bottom: _textController.text.isNotEmpty
                               ? (screenHeight * 0.93) - 18 - (48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656)
@@ -234,7 +220,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                         child: Column(
                           children: [
                             Text(
-                              naoEndendivel,
+                              "naoEndendivel",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: widthScreen * 0.05,
@@ -243,7 +229,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                               ),
                             ),
                             Text(
-                              alertMessage,
+                              "alertMessage",
                               style: TextStyle(
                                 fontSize: widthScreen * 0.05,
                                 fontWeight: FontWeight.bold,
@@ -254,23 +240,45 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                         ),
                       ),
                     ),
+
+                    // ------------ GRAVAÇÃO DA VOZ ----------------
+
+                    GestureDetector(
+                      onTap: () async {
+                        await getGoogleApiToken();
+                        await pickImage();
+                        await loadingLocalAlertDialog(context);
+                        if (retorno != null) {
+                          setState(() {
+                            _textController.text = retorno.data["responses"][0]['textAnnotations'][0]['description'];
+                          });
+                        }
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(
+                          top: screenHeight * 0.80,
+                          left: widthScreen * 0.45,
+                        ),
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Color.fromRGBO(0, 0, 255, 1)),
+                          color: buttonBackground,
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        child: Icon(
+                          Icons.camera,
+                          size: 40,
+                          color: iconBackground,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 SizedBox(height: 15),
-                // Aciona o botão de confirmar apenas quando algum texto é digitado na tela.
                 if (_textController.text.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 3.0),
-                    child: submitAnswer(
-                      context,
-                      cobjectList,
-                      'PRE',
-                      ++questionIndex,
-                      listQuestionIndex,
-                      pieceId,
-                      isCorrect,
-                      value: _textController.text,
-                    ),
+                    child: submitAnswer(context, cobjectList, 'PRE', ++questionIndex, listQuestionIndex, pieceId, isCorrect, value: _textController.text),
                   ),
               ],
             ),
@@ -280,12 +288,97 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
     );
   }
 
-  void errorNotification(SpeechRecognitionError a) {
-    opacityNaoEntendivel = 1;
-    setState(() {
-      opacityFaleAgora = 0;
-    });
-    colorAlertMessage = Colors.red;
+  loadingLocalAlertDialog(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          child: AlertDialog(
+            insetPadding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.39),
+            content: CircularProgressIndicator(),
+          ),
+        );
+      },
+    );
+    int retorno = await extractText();
+    if (retorno != 0) {
+      Navigator.pop(context);
+    } else {
+      Navigator.pop(context);
+      extractErrorAlertDialog(context);
+    }
   }
 
+  extractErrorAlertDialog(BuildContext context) {
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () => Navigator.pop(context),
+    );
+    AlertDialog alerta = AlertDialog(
+      title: Text("Erro"),
+      content: Text("Erro ao detectar texto!!"),
+      actions: [
+        okButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alerta;
+      },
+    );
+  }
+
+  //=======================================
+
+  // função para extrair texto da imagem enviando o base64 dela
+  Future<int> extractText() async {
+    print(googleApiToken);
+    print(base64Image);
+    try {
+      retorno = await Dio().post(
+        "https://vision.googleapis.com/v1/images:annotate",
+        options: Options(headers: {'Authorization': googleApiToken}, contentType: "application/json"),
+        data: {
+          "requests": [
+            {
+              "image": {
+                "content": base64Image,
+              },
+              "features": [
+                {"type": "DOCUMENT_TEXT_DETECTION"}
+              ]
+            }
+          ]
+        },
+      );
+      return 1;
+    } catch (e) {
+      print(e);
+    }
+    return 0;
+  }
+
+  // função para tirar foto
+  Future pickImage() async {
+    final pickedFile = await picker.getImage(
+      source: ImageSource.camera,
+      preferredCameraDevice: CameraDevice.front,
+    );
+
+    imageFile = File(pickedFile.path);
+
+    base64Image = await converter();
+  }
+
+  File imageFile;
+
+  final picker = ImagePicker();
+
+  // função para converter imagem para base64
+  Future<String> converter() async {
+    List<int> imageBytes = imageFile.readAsBytesSync();
+    String convertido = base64Encode(imageBytes);
+    return convertido;
+  }
 }
