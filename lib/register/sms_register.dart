@@ -18,10 +18,8 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 Student student;
 StudentQuery studentQuery;
 
-Future<void> sendCode(
-    String phoneNumber, TwilioPhoneVerify _twilioPhoneVerify) async {
-  print("veio cá $phoneNumber");
-  var result = await _twilioPhoneVerify.sendSmsCode('+55' + phoneNumber);
+Future<void> sendCode(String phoneNumber) async {
+    var result = await _twilioPhoneVerify.sendSmsCode('+55' + phoneNumber);
 
   if (result['message'] == 'success') {
     // code sent

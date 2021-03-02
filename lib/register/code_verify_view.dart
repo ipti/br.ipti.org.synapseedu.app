@@ -116,7 +116,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
   @override
   Widget build(BuildContext context) {
     // String _phoneNumber = ModalRoute.of(context).settings.arguments;
-    String _phoneNumber = '79991210650';
+    String _phoneNumber = '79998836127';
     double screenHeight = MediaQuery.of(context).size.height;
     double buttonHeight =
         48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
