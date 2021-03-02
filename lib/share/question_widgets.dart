@@ -16,8 +16,6 @@ import '../template_questoes/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-
-
 import 'api.dart';
 import 'block_conclusion.dart';
 
@@ -75,8 +73,7 @@ getCobjectList(String blockId) async {
   return cobjectIdList;
 }
 
-getCobject(int listQuestionIndex, BuildContext context,
-    List<String> questionListTest) async {
+getCobject(int listQuestionIndex, BuildContext context, List<String> questionListTest) async {
   cobjectList.clear();
   //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
   ApiCobject.getQuestao(questionList[listQuestionIndex]).then((response) {
@@ -87,29 +84,23 @@ getCobject(int listQuestionIndex, BuildContext context,
     switch (questionType) {
       case 'PRE':
         //todo voltar ao normal depois aqui
-        // Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
-        //     arguments: ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
-        Navigator.of(context).pushNamedAndRemoveUntil(PreImgIa.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+        Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
             arguments: ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
+        //todo aqui temos o novaigator levando para o PRE usando IA de imagem
+        // Navigator.of(context)
+        //     .pushNamedAndRemoveUntil(PreImgIa.routeName, ModalRoute.withName(StartAndSendTest.routeName), arguments: ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
         break;
       case 'DDROP':
-        Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName,
-            ModalRoute.withName(StartAndSendTest.routeName),
-            arguments:
-                ScreenArguments(cobjectList, 0, 'DDROP', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+            arguments: ScreenArguments(cobjectList, 0, 'DDROP', listQuestionIndex));
         break;
       case 'MTE':
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            MultipleChoiceQuestion.routeName,
-            ModalRoute.withName(StartAndSendTest.routeName),
-            arguments:
-                ScreenArguments(cobjectList, 0, 'MTE', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(MultipleChoiceQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+            arguments: ScreenArguments(cobjectList, 0, 'MTE', listQuestionIndex));
         break;
       case 'TXT':
-        Navigator.of(context).pushNamedAndRemoveUntil(TextQuestion.routeName,
-            ModalRoute.withName(StartAndSendTest.routeName),
-            arguments:
-                ScreenArguments(cobjectList, 0, 'TXT', listQuestionIndex));
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil(TextQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName), arguments: ScreenArguments(cobjectList, 0, 'TXT', listQuestionIndex));
         break;
     }
   });
@@ -151,45 +142,32 @@ Widget soundButton(BuildContext context, Question question) {
       : null;
 }
 
-void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
-    String questionType,
-    [String pieceId, bool isCorrect, int finalTime, int intervalResolution]) {
+void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex, String questionType, [String pieceId, bool isCorrect, int finalTime, int intervalResolution]) {
   timeStartIscaptured = false; // resetando
-  if (questionIndex < cobjectList[0].questions.length &&
-      questionType != 'TXT') {
+  if (questionIndex < cobjectList[0].questions.length && questionType != 'TXT') {
     switch (questionType) {
       case 'PRE':
-        Navigator.of(context).pushReplacementNamed(
-            SingleLineTextQuestion.routeName,
-            arguments: ScreenArguments(
-                cobjectList, questionIndex, 'PRE', listQuestionIndex));
+        Navigator.of(context).pushReplacementNamed(SingleLineTextQuestion.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'PRE', listQuestionIndex));
         break;
       case 'DDROP':
         Navigator.of(context).pushReplacementNamed(DragAndDrop.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'DDROP', listQuestionIndex));
         break;
       case 'MTE':
-        Navigator.of(context).pushReplacementNamed(
-            MultipleChoiceQuestion.routeName,
-            arguments: ScreenArguments(
-                cobjectList, questionIndex, 'MTE', listQuestionIndex));
+        Navigator.of(context).pushReplacementNamed(MultipleChoiceQuestion.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'MTE', listQuestionIndex));
         break;
     }
-  } else if (questionType == 'TXT' &&
-      indexTextQuestion < cobjectList[0].questions.length) {
+  } else if (questionType == 'TXT' && indexTextQuestion < cobjectList[0].questions.length) {
     if (questionIndex == 0) {
       indexTextQuestion = 0;
       Navigator.of(context).pushReplacementNamed(TextQuestion.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'TXT', listQuestionIndex));
     } else {
       print(indexTextQuestion);
-      Navigator.of(context).pushNamed(TextQuestion.routeName,
-          arguments: ScreenArguments(
-              cobjectList, indexTextQuestion, 'TXT', listQuestionIndex));
+      Navigator.of(context).pushNamed(TextQuestion.routeName, arguments: ScreenArguments(cobjectList, indexTextQuestion, 'TXT', listQuestionIndex));
     }
   } else {
     if (questionType == 'TXT') {
       //todo enviar como correto
-      Answer().sendAnswer(pieceId, true, 0,
-          intervalResolution: 0, groupId: "", value: "");
+      Answer().sendAnswer(pieceId, true, 0, intervalResolution: 0, groupId: "", value: "");
       print("enviada rewsposta do txt");
     }
     if (++listQuestionIndex < questionList.length) {
@@ -203,16 +181,8 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
   }
 }
 
-Widget submitAnswer(
-    BuildContext context,
-    List<Cobject> cobjectList,
-    String questionType,
-    int questionIndex,
-    int listQuestionIndex,
-    String pieceId,
-    bool isCorrect,
-    {String groupId,
-    String value}) {
+Widget submitAnswer(BuildContext context, List<Cobject> cobjectList, String questionType, int questionIndex, int listQuestionIndex, String pieceId, bool isCorrect,
+    {String groupId, String value}) {
   double screenHeight = MediaQuery.of(context).size.height;
   double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
   double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
@@ -255,8 +225,7 @@ Widget submitAnswer(
           );
           // ! O erro está vindo daqui, quando tenta subtrair timeStart do timeEnd. Motivo: timeStart vem null
 
-          submitLogic(context, questionIndex, listQuestionIndex, questionType,
-              pieceId, isCorrect, timeEnd);
+          submitLogic(context, questionIndex, listQuestionIndex, questionType, pieceId, isCorrect, timeEnd);
         },
       ),
     ),
@@ -264,42 +233,28 @@ Widget submitAnswer(
 }
 
 Future<String> scan(BuildContext context) async {
-  String returnedValue = await Navigator.push(
-      context,
-      new MaterialPageRoute(
-          builder: (BuildContext context) => new QrCodeReader()));
+  String returnedValue = await Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => new QrCodeReader()));
   //todo implementar aqui direcionamento pra aluma pagina se for preciso (OBS: Tem que ser antes do retorno pra não bugar)
   return returnedValue;
 }
 
-Future<void> sendMetaData(
-    {String pieceId,
-    String groupId,
-    int finalTime,
-    int intervalResolution,
-    String value,
-    bool isCorrect}) async {
+Future<void> sendMetaData({String pieceId, String groupId, int finalTime, int intervalResolution, String value, bool isCorrect}) async {
   print("tentando enviar metadata");
   print(isCorrect);
   try {
-    var response = await http.post(
-        "http://app.elesson.com.br/api-synapse/synapse/performance/actor/save",
-        body: {
-          "mode": "proficiency", //ok
-          "piece_id": pieceId, //ok
-          "group_id": groupId, //ok
-          "actor_id": "5", //ok (mockado)
-          "final_time": finalTime
-              .toString(), //ok // pode ser que precise colocar um .toString()
-          "interval_resolution": intervalResolution
-              .toString(), //ok // pode ser que precise colocar um .toString()
-          "value": value != null ? value : "",
-          "iscorrect": isCorrect.toString(),
-          "isMetadata": "true"
-        },
-        headers: {
-          HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
-        });
+    var response = await http.post("http://app.elesson.com.br/api-synapse/synapse/performance/actor/save", body: {
+      "mode": "proficiency", //ok
+      "piece_id": pieceId, //ok
+      "group_id": groupId, //ok
+      "actor_id": "5", //ok (mockado)
+      "final_time": finalTime.toString(), //ok // pode ser que precise colocar um .toString()
+      "interval_resolution": intervalResolution.toString(), //ok // pode ser que precise colocar um .toString()
+      "value": value != null ? value : "",
+      "iscorrect": isCorrect.toString(),
+      "isMetadata": "true"
+    }, headers: {
+      HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
+    });
   } catch (e) {
     print("ERROR:");
     print(e.message);
