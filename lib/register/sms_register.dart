@@ -121,7 +121,7 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                         if (_phoneNumberController.text.length == 11 &&
                             student != null) {
                           sendCode(
-                              _phoneNumberController.text, _twilioPhoneVerify);
+                              _phoneNumberController.text);
                           Navigator.popAndPushNamed(context, '/code-verify',
                               arguments: _phoneNumberController.text);
                         }

@@ -1,4 +1,5 @@
 import 'package:elesson/register/code_verify_view.dart';
+import 'package:elesson/share/block_conclusion.dart';
 import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
 import 'package:elesson/template_questoes/PRE_SOM_IA.dart';
 import 'package:shared_preferences/shared_preferences.dart';

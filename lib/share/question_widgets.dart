@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/root/start_and_send_test.dart';
-import 'package:elesson/share/qrCodeReader.dart';
+import 'package:elesson/share/qr_code_reader.dart';
 import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
 import 'package:elesson/template_questoes/ddrop/ddrop.dart';
 import 'package:elesson/template_questoes/multiple_choice.dart';
@@ -19,6 +19,7 @@ import 'package:http/http.dart' as http;
 
 
 import 'api.dart';
+import 'block_conclusion.dart';
 
 // Contém alguns métodos e variáveis globais necessárias para as questões.
 

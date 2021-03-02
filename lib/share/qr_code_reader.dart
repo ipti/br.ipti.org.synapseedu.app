@@ -134,7 +134,7 @@ class _QrCodeReaderState extends State<QrCodeReader> {
           print(number);
           controller.dispose();
           showLoading = false;
-          sendCode(number, _twilioPhoneVerify);
+          sendCode(number);
           _timer.cancel();
           Navigator.pushReplacementNamed(context, '/code-verify',
               arguments: number);
