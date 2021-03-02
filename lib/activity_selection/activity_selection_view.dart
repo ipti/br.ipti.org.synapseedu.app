@@ -257,7 +257,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                           cobjectId = 0;
                           break;
                       }
-                      redirectToQuestion(cobjectId, "1");
+                      redirectToQuestion(cobjectId);
                     });
                     Navigator.of(context).pop();
                     checkStudent = true;
@@ -419,7 +419,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   }
 
   // FUNÇÃO PARA RECEBER OS DADOS DO COBJECT QUANDO A TURMA E O ALUNO FOR SELECIONADO
-  void redirectToQuestion(int cobjectIdIndex, String disciplineId) {
+  void redirectToQuestion(int cobjectIdIndex) {
     if (checkStudent == true && checkDiscipline == true) {
       // print(questionListTest == null);
       getCobjectList("1").then((response) {
@@ -427,7 +427,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
         // print(questionListTest);
       });
       // print(cobjectList);
-      getCobject(cobjectIdIndex, context, questionListTest, disciplineId);
+      getCobject(cobjectIdIndex, context, questionListTest);
     }
   }
 }
@@ -439,7 +439,6 @@ class ScreenArguments {
   final int questionIndex;
   final String questionType;
   final int listQuestionIndex;
-  final String disciplineId;
 
   ScreenArguments(
       this.cobjectList,
@@ -447,6 +446,5 @@ class ScreenArguments {
       this.cobjectQuestionsLength,
       this.questionIndex,
       this.questionType,
-      this.listQuestionIndex,
-      this.disciplineId);
+      this.listQuestionIndex);
 }

@@ -41,6 +41,8 @@ class _DragAndDropState extends State<DragAndDrop> {
   }
 
   String pieceId = "";
+  int cobjectQuestionsLength;
+  int cobjectIdLength;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,8 @@ class _DragAndDropState extends State<DragAndDrop> {
     cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
     listQuestionIndex = args.listQuestionIndex;
+    cobjectQuestionsLength = args.cobjectQuestionsLength;
+    cobjectIdLength = args.cobjectIdLength;
 
     String questionText =
         cobjectList[0].questions[questionIndex].header["text"];
@@ -183,7 +187,9 @@ class _DragAndDropState extends State<DragAndDrop> {
               ? Padding(
                   padding: const EdgeInsets.only(top: 3.0),
                   child: submitAnswer(context, cobjectList, 'DDROP',
-                      ++questionIndex, listQuestionIndex, pieceId, isCorrect),
+                      ++questionIndex, listQuestionIndex, pieceId, isCorrect,
+                      cobjectIdListLength: cobjectIdLength,
+                      cobjectQuestionsLength: cobjectQuestionsLength),
                 )
               : Container(),
         ],
@@ -248,8 +254,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                 isCorrect: data == 1 ? true : false,
                 finalTime: 0,
                 groupId: "1",
-                intervalResolution:
-                    DateTime.now().millisecondsSinceEpoch - timeStart,
+                intervalResolution: DateTime.now().millisecondsSinceEpoch - 0,
                 value: "",
                 pieceId: pieceId.toString());
 

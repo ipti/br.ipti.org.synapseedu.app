@@ -97,11 +97,6 @@ class ConversorVoiceToText {
 
     print("CAMINHO ENVIADO: $audioPath ${audioBytes.toString()}");
 
-    // Map<String, String> _headers = {
-    //   'Ocp-Apim-Subscription-Key': 'b21db0729fc14cc7b6de72e1f44322dd',
-    //   // HttpHeaders.wwwAuthenticateHeader: 'b21db0729fc14cc7b6de72e1f44322dd',
-    //   // HttpHeaders.contentTypeHeader: 'audio/wav'
-    // };
     var headers = {
       'Ocp-Apim-Subscription-Key': 'b21db0729fc14cc7b6de72e1f44322dd',
       'Content-Type': 'audio/wav'
@@ -177,10 +172,12 @@ class ConversorVoiceToText {
 
 class Cobject {
   String description;
+  String discipline;
   List<Question> questions;
 
   Cobject({
     this.description,
+    this.discipline,
     this.questions = const [],
   });
 }
@@ -348,6 +345,7 @@ class Question {
 
     return Cobject(
       description: json["description"],
+      discipline: json["discipline"],
       questions: Question().insertQuestionList(json),
     );
 

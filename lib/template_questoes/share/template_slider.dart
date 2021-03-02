@@ -20,7 +20,6 @@ class TemplateSlider extends StatefulWidget {
   final int cobjectIdListLength;
   final int cobjectQuestionsLength;
   final List<Cobject> cobjectList;
-  final String disciplineId;
 
   TemplateSlider(
       {Key key,
@@ -37,8 +36,7 @@ class TemplateSlider extends StatefulWidget {
       this.linkImage,
       this.cobjectIdListLength,
       this.cobjectQuestionsLength,
-      this.cobjectList,
-      this.disciplineId})
+      this.cobjectList})
       : super(key: key);
 
   @override
@@ -104,7 +102,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
     //     259 > screenWidth * 0.63017 ? 259 : screenWidth * 0.63017;
     double buttonWidth =
         150 > 0.3649 * screenWidth ? 150 : 0.3649 * screenWidth;
-    print("disciplineId no template slider build: ${widget.disciplineId}");
+
     // print(
     //     'Template slider: ${widget.cobjectIdListLength} and ${widget.cobjectQuestionsLength}');
 
@@ -184,8 +182,6 @@ class _TemplateSliderState extends State<TemplateSlider> {
                             if (widget.isTextTemplate)
                               {
                                 print(
-                                    "disciplineId no envio: ${widget.disciplineId}"),
-                                print(
                                     'Submit no template slider: ${widget.cobjectQuestionsLength} e ${widget.cobjectIdListLength}'),
                                 indexTextQuestion++,
                                 submitLogic(context, ++widget.questionIndex,
@@ -194,8 +190,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                                         widget.cobjectIdListLength,
                                     cobjectQuestionsLength:
                                         widget.cobjectQuestionsLength,
-                                    cobjectList: cobjectList,
-                                    disciplineId: widget.disciplineId)
+                                    cobjectList: cobjectList)
                               }
                             else
                               {
@@ -240,6 +235,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
             if (timeStartIscaptured == false) {
               print("capturou time start");
               timeStart = DateTime.now().millisecondsSinceEpoch;
+              print('timeStart na função topScreen: $timeStart');
               timeStartIscaptured = true;
             }
             setState(() {

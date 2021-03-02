@@ -37,7 +37,7 @@ class _BlockSelectionState extends State<BlockSelection> {
     });
     print('cobjectIdList no redirect copiado: $cobjectIdList');
 
-    getCobject(0, context, cobjectIdList, disciplineId);
+    getCobject(0, context, cobjectIdList);
   }
 
   @override

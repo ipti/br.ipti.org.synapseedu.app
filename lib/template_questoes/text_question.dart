@@ -13,7 +13,6 @@ class TextQuestion extends ConsumerWidget {
   int listQuestionIndex;
   int cobjectIdListLength;
   int cobjectQuestionsLength;
-  String disciplineId;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -23,7 +22,6 @@ class TextQuestion extends ConsumerWidget {
     listQuestionIndex = args.listQuestionIndex;
     cobjectIdListLength = args.cobjectIdLength;
     cobjectQuestionsLength = args.cobjectQuestionsLength;
-    disciplineId = args.disciplineId;
 
     // String questionHeaderDescription = cobjectList[0].questions[questionIndex].header["description"]; (IMPORTANTE)
     String questionDescription = cobjectList[0].description;
@@ -36,7 +34,6 @@ class TextQuestion extends ConsumerWidget {
 
     return Scaffold(
       body: TemplateSlider(
-        disciplineId: disciplineId,
         cobjectIdListLength: cobjectIdListLength,
         cobjectQuestionsLength: cobjectQuestionsLength,
         isTextTemplate: true,
@@ -76,8 +73,7 @@ class TextQuestion extends ConsumerWidget {
               submitAnswer(context, cobjectList, 'TXT', ++questionIndex,
                   listQuestionIndex, pieceId, true,
                   cobjectIdListLength: cobjectIdListLength,
-                  cobjectQuestionsLength: cobjectQuestionsLength,
-                  disciplineId: disciplineId),
+                  cobjectQuestionsLength: cobjectQuestionsLength),
             ],
           ),
         ),
