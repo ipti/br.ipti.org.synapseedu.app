@@ -228,8 +228,10 @@ class _TemplateSliderState extends State<TemplateSlider> {
             indexTextQuestion++;
             submitLogic(context, ++widget.questionIndex, widget.listQuestionIndex, 'TXT');
           } else if (details.delta.dy > 0) {
-            if (indexTextQuestion > 0) indexTextQuestion--;
-            Navigator.of(context).pop();
+            if (indexTextQuestion > 0) {
+              indexTextQuestion--;
+              Navigator.of(context).pop();
+            }
           }
         }
       },
@@ -273,12 +275,12 @@ class _TemplateSliderState extends State<TemplateSlider> {
                   onTap: () {
                     playSound(widget.sound);
                   },
-                  child: Container(padding: EdgeInsets.all(20), child: widget.text),
+                  child: Container(padding: EdgeInsets.only(right: 20,left: 20), child: widget.text),
                 ),
               ),
-              height: (screenHeight * 0.145) - 12,
+              height: (screenHeight * 0.145),
               padding: EdgeInsets.only(left: 16, right: 16),
-              margin: EdgeInsets.only(bottom: 12),
+              // margin: EdgeInsets.only(bottom: 12),
             ),
           ],
         ),
