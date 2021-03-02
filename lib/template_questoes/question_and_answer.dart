@@ -175,6 +175,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                             ),
                           ),
                           onChanged: (val) {
+
                             correctAnswer == _textController.text.toString() ? isCorrect = true : isCorrect = false;
 
                             print("CORRETA: $correctAnswer , DIGITADA: ${_textController.text.toString()} ");
