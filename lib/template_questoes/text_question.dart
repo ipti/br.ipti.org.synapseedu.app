@@ -9,6 +9,7 @@ class TextQuestion extends ConsumerWidget {
   static const routeName = '/TXT';
 
   var cobjectList = new List<Cobject>();
+  var cobjectIdList = new List<String>();
   int questionIndex;
   int listQuestionIndex;
   int cobjectIdListLength;
@@ -18,12 +19,12 @@ class TextQuestion extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     cobjectList = args.cobjectList;
+    cobjectIdList = args.cobjectIdList;
     questionIndex = args.questionIndex;
     listQuestionIndex = args.listQuestionIndex;
     cobjectIdListLength = args.cobjectIdLength;
     cobjectQuestionsLength = args.cobjectQuestionsLength;
 
-    // String questionHeaderDescription = cobjectList[0].questions[questionIndex].header["description"]; (IMPORTANTE)
     String questionDescription = cobjectList[0].description;
     String headerText = cobjectList[0].questions[questionIndex].header["text"];
 
@@ -34,6 +35,7 @@ class TextQuestion extends ConsumerWidget {
 
     return Scaffold(
       body: TemplateSlider(
+        cobjectIdList: cobjectIdList,
         cobjectIdListLength: cobjectIdListLength,
         cobjectQuestionsLength: cobjectQuestionsLength,
         isTextTemplate: true,
@@ -73,7 +75,8 @@ class TextQuestion extends ConsumerWidget {
               submitAnswer(context, cobjectList, 'TXT', ++questionIndex,
                   listQuestionIndex, pieceId, true,
                   cobjectIdListLength: cobjectIdListLength,
-                  cobjectQuestionsLength: cobjectQuestionsLength),
+                  cobjectQuestionsLength: cobjectQuestionsLength,
+                  cobjectIdList: cobjectIdList),
             ],
           ),
         ),

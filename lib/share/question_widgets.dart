@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:elesson/activity_selection/activity_selection_view.dart';
+import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/root/start_and_send_test.dart';
 import 'package:elesson/share/qrCodeReader.dart';
 import 'package:elesson/template_questoes/ddrop/ddrop.dart';
@@ -96,20 +97,26 @@ getCobject(int listQuestionIndex, BuildContext context,
     cobjectList = context.read(cobjectProvider).items;
     // print('cobjectQuestionLength ${cobjectList[0].questions.length}');
     print('Lista de cobjects: $cobjectList');
-
     switch (questionType) {
       case 'PRE':
         Navigator.of(context).pushNamedAndRemoveUntil(
             SingleLineTextQuestion.routeName,
             ModalRoute.withName(StartAndSendTest.routeName),
-            arguments: ScreenArguments(cobjectList, cobjectIdListLength,
-                cobjectList[0].questions.length, 0, 'PRE', listQuestionIndex));
+            arguments: ScreenArguments(
+                cobjectList,
+                cobjectIdList,
+                cobjectIdListLength,
+                cobjectList[0].questions.length,
+                0,
+                'PRE',
+                listQuestionIndex));
         break;
       case 'DDROP':
         Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName,
             ModalRoute.withName(StartAndSendTest.routeName),
             arguments: ScreenArguments(
                 cobjectList,
+                cobjectIdList,
                 cobjectIdListLength,
                 cobjectList[0].questions.length,
                 0,
@@ -120,14 +127,26 @@ getCobject(int listQuestionIndex, BuildContext context,
         Navigator.of(context).pushNamedAndRemoveUntil(
             MultipleChoiceQuestion.routeName,
             ModalRoute.withName(StartAndSendTest.routeName),
-            arguments: ScreenArguments(cobjectList, cobjectIdListLength,
-                cobjectList[0].questions.length, 0, 'MTE', listQuestionIndex));
+            arguments: ScreenArguments(
+                cobjectList,
+                cobjectIdList,
+                cobjectIdListLength,
+                cobjectList[0].questions.length,
+                0,
+                'MTE',
+                listQuestionIndex));
         break;
       case 'TXT':
         Navigator.of(context).pushNamedAndRemoveUntil(TextQuestion.routeName,
             ModalRoute.withName(StartAndSendTest.routeName),
-            arguments: ScreenArguments(cobjectList, cobjectIdListLength,
-                cobjectList[0].questions.length, 0, 'TXT', listQuestionIndex));
+            arguments: ScreenArguments(
+                cobjectList,
+                cobjectIdList,
+                cobjectIdListLength,
+                cobjectList[0].questions.length,
+                0,
+                'TXT',
+                listQuestionIndex));
         break;
     }
   });
@@ -139,14 +158,6 @@ final cobjectProvider = Provider<Cobjects>((ref) {
 
 Widget soundButton(BuildContext context, Question question) {
   return question.header["sound"].isNotEmpty
-      // ? IconButton(
-      //     icon: Icon(Icons.volume_up),
-      //     highlightColor: Theme.of(context).primaryColor,
-      //     splashColor: Theme.of(context).primaryColor,
-      //     onPressed: () {
-      //       playSound(question.header["sound"]);
-      //     },
-      //   )
       ? OutlineButton(
           padding: EdgeInsets.all(6),
           borderSide: BorderSide(
@@ -176,9 +187,12 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
     int finalTime,
     int intervalResolution,
     List<Cobject> cobjectList,
+    List<String> cobjectIdList,
     int cobjectIdListLength,
     int cobjectQuestionsLength}) async {
   timeStartIscaptured = false; // resetando
+
+  print('CobjectIdList no submitLogic: $cobjectIdList');
 
   if (questionIndex < cobjectQuestionsLength && questionType != 'TXT') {
     switch (questionType) {
@@ -187,6 +201,7 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
             SingleLineTextQuestion.routeName,
             arguments: ScreenArguments(
                 cobjectList,
+                cobjectIdList,
                 cobjectIdListLength,
                 cobjectQuestionsLength,
                 questionIndex,
@@ -197,6 +212,7 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
         Navigator.of(context).pushReplacementNamed(DragAndDrop.routeName,
             arguments: ScreenArguments(
                 cobjectList,
+                cobjectIdList,
                 cobjectIdListLength,
                 cobjectQuestionsLength,
                 questionIndex,
@@ -208,6 +224,7 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
             MultipleChoiceQuestion.routeName,
             arguments: ScreenArguments(
                 cobjectList,
+                cobjectIdList,
                 cobjectIdListLength,
                 cobjectQuestionsLength,
                 questionIndex,
@@ -220,13 +237,20 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
     if (questionIndex == 0) {
       indexTextQuestion = 0;
       Navigator.of(context).pushReplacementNamed(TextQuestion.routeName,
-          arguments: ScreenArguments(cobjectList, cobjectIdListLength,
-              cobjectQuestionsLength, questionIndex, 'TXT', listQuestionIndex));
+          arguments: ScreenArguments(
+              cobjectList,
+              cobjectIdList,
+              cobjectIdListLength,
+              cobjectQuestionsLength,
+              questionIndex,
+              'TXT',
+              listQuestionIndex));
     } else {
       print('Índice da questão: $indexTextQuestion');
       Navigator.of(context).pushNamed(TextQuestion.routeName,
           arguments: ScreenArguments(
               cobjectList,
+              cobjectIdList,
               cobjectIdListLength,
               cobjectQuestionsLength,
               indexTextQuestion,
@@ -240,29 +264,26 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
       //     intervalResolution: 0, groupId: "", value: "");
     }
     print('cobjectIdListLength: $cobjectIdListLength $cobjectQuestionsLength ');
-
+    print("ListQuestionIndex: $listQuestionIndex");
+    print("cobject id List: $cobjectIdList");
     // Alterei o if(++listQuestionIndex para o atual, inclusive alterando o endereço do getCobject. Caso tenha problema de não alterar o cobject, é isso);
 
     if (listQuestionIndex + 1 < cobjectIdListLength) {
-      print(
-          "erroui aqui: $listQuestionIndex e $questionListTest e ${cobjectList[0].description}");
-      getCobject(listQuestionIndex, context, questionListTest);
+      print("erroui aqui: $listQuestionIndex e ${cobjectList[0].description}");
+      getCobject(listQuestionIndex + 1, context, cobjectIdList);
     } else {
-      // if (questionType != 'TXT')
-      //   Navigator.of(context).pop();
-      // else {
-      //   print('vem pra cá');
-      print(
-          "disciplineId no envio: ${cobjectList[listQuestionIndex].discipline} $questionIndex ou $listQuestionIndex");
+      print("listQ index: ${cobjectList[0].discipline}");
+
       SharedPreferences prefs;
       prefs = await SharedPreferences.getInstance();
-      // String subject = disciplineId == '1'
-      //     ? 'linguagens'
-      //     : disciplineId == '2'
-      //         ? 'matematica'
-      //         : 'ciencias';
-      prefs.setBool(cobjectList[listQuestionIndex].discipline, true);
+
+      prefs.setBool(cobjectList[0].discipline, true);
       indexTextQuestion = 0;
+      cobjectList.clear();
+      cobjectIdList.clear();
+      listQuestionIndex = 0;
+      questionIndex = 0;
+      mathOk = true;
       Navigator.of(context).pushReplacementNamed("/");
       // }
     }
@@ -279,17 +300,15 @@ Widget submitAnswer(
     bool isCorrect,
     {String groupId,
     String value,
+    List<String> cobjectIdList,
     int cobjectIdListLength,
     int cobjectQuestionsLength}) {
   double screenHeight = MediaQuery.of(context).size.height;
   double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
   double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
   // timeEnd = DateTime.now().millisecondsSinceEpoch;
-
+  print('CobjectIdList no submitAnswer: $cobjectIdList');
   // print("Time start e time end no submit answer: $timeEnd or $timeStart");
-
-  // print(
-  //     'No submitAnswer: cobjectidListLength: $cobjectIdListLength e cobjectQuestionsLength: $cobjectQuestionsLength');
 
   return Align(
     child: ButtonTheme(
@@ -334,6 +353,7 @@ Widget submitAnswer(
               finalTime: 22,
               intervalResolution: 1234566,
               cobjectList: cobjectList,
+              cobjectIdList: cobjectIdList,
               cobjectIdListLength: cobjectIdListLength,
               cobjectQuestionsLength: cobjectQuestionsLength);
         },

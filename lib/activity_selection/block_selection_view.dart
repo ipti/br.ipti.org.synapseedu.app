@@ -11,18 +11,19 @@ class BlockSelection extends StatefulWidget {
   _BlockSelectionState createState() => _BlockSelectionState();
 }
 
+bool langOk = false;
+bool mathOk = false;
+bool sciOk = false;
+
 class _BlockSelectionState extends State<BlockSelection> {
   SharedPreferences prefs;
-  bool langOk = false;
-  bool mathOk = false;
-  bool sciOk = false;
 
   @override
   void didChangeDependencies() async {
     prefs = await SharedPreferences.getInstance();
-    langOk = prefs.getBool('linguagens') ?? false;
-    mathOk = prefs.getBool('matematica') ?? false;
-    sciOk = prefs.getBool('ciencias') ?? false;
+    langOk = prefs.getBool('Português') ?? false;
+    mathOk = prefs.getBool('Matemática') ?? false;
+    sciOk = prefs.getBool('Ciências') ?? false;
     super.didChangeDependencies();
   }
 
@@ -60,7 +61,10 @@ class _BlockSelectionState extends State<BlockSelection> {
             text: "Linguagens",
             screenWidth: widthScreen,
             onTap: (value) {
-              redirectToQuestion(0, '1');
+              if (langOk == false)
+                redirectToQuestion(0, '1');
+              else
+                print("Você já fez essa tarefinha!");
             },
             context: context,
           ),
@@ -71,7 +75,11 @@ class _BlockSelectionState extends State<BlockSelection> {
             screenWidth: widthScreen,
             onTap: (value) {
               print('block math done?: $mathOk');
-              redirectToQuestion(0, '2');
+
+              if (mathOk == false)
+                redirectToQuestion(0, '2');
+              else
+                print("Você já fez essa tarefinha!");
             },
             context: context,
           ),
@@ -81,7 +89,8 @@ class _BlockSelectionState extends State<BlockSelection> {
             text: "Ciências",
             screenWidth: widthScreen,
             onTap: (value) {
-              redirectToQuestion(0, '3');
+              // if (sciOk == false) redirectToQuestion(0, '3');
+              // else print("Você já fez essa tarefinha!");
             },
             context: context,
           ),

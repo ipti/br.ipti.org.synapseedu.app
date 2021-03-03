@@ -20,6 +20,7 @@ class TemplateSlider extends StatefulWidget {
   final int cobjectIdListLength;
   final int cobjectQuestionsLength;
   final List<Cobject> cobjectList;
+  final List<String> cobjectIdList;
 
   TemplateSlider(
       {Key key,
@@ -36,7 +37,8 @@ class TemplateSlider extends StatefulWidget {
       this.linkImage,
       this.cobjectIdListLength,
       this.cobjectQuestionsLength,
-      this.cobjectList})
+      this.cobjectList,
+      this.cobjectIdList})
       : super(key: key);
 
   @override
@@ -190,7 +192,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
                                         widget.cobjectIdListLength,
                                     cobjectQuestionsLength:
                                         widget.cobjectQuestionsLength,
-                                    cobjectList: cobjectList)
+                                    cobjectList: cobjectList,
+                                    cobjectIdList: widget.cobjectIdList)
                               }
                             else
                               {

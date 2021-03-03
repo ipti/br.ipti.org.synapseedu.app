@@ -173,11 +173,13 @@ class ConversorVoiceToText {
 class Cobject {
   String description;
   String discipline;
+  String totalPieces;
   List<Question> questions;
 
   Cobject({
     this.description,
     this.discipline,
+    this.totalPieces,
     this.questions = const [],
   });
 }
@@ -346,14 +348,8 @@ class Question {
     return Cobject(
       description: json["description"],
       discipline: json["discipline"],
+      totalPieces: json["total_pieces"],
       questions: Question().insertQuestionList(json),
     );
-
-    // return Question(
-    //   questionImage: mapa["image"],
-    //   header: Question().questionMultimediaSearch(json),
-    //   pieces: Question()
-    //       .questionItemSearch(json["piecesets"][0]["pieces"][0]["groups"]),
-    // );
   }
 }

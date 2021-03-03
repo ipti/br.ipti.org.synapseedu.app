@@ -22,6 +22,7 @@ class DragAndDrop extends StatefulWidget {
 
 class _DragAndDropState extends State<DragAndDrop> {
   var cobjectList = new List<Cobject>();
+  var cobjectIdList = new List<String>();
 
   @override
   void initState() {
@@ -49,6 +50,7 @@ class _DragAndDropState extends State<DragAndDrop> {
     //pieceId = cobjectList[0].questions[questionIndex].pieceId;
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     cobjectList = args.cobjectList;
+    cobjectIdList = args.cobjectIdList;
     questionIndex = args.questionIndex;
     listQuestionIndex = args.listQuestionIndex;
     cobjectQuestionsLength = args.cobjectQuestionsLength;
@@ -188,6 +190,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                   padding: const EdgeInsets.only(top: 3.0),
                   child: submitAnswer(context, cobjectList, 'DDROP',
                       ++questionIndex, listQuestionIndex, pieceId, isCorrect,
+                      cobjectIdList: cobjectIdList,
                       cobjectIdListLength: cobjectIdLength,
                       cobjectQuestionsLength: cobjectQuestionsLength),
                 )
