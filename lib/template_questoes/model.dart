@@ -11,7 +11,7 @@ import 'package:flutter/services.dart' show ByteData, rootBundle;
 // Modelo para os cobjects e questões, além dos métodos para serialização do json recebido do servidor.
 
 class Answer {
-  Future<dynamic> sendAnswer(String pieceId, bool isCorrect, int finalTime,
+  Future<dynamic> sendAnswerToApi(String pieceId, bool isCorrect, int finalTime,
       {int intervalResolution, String groupId, String value}) async {
     // Response response;
     // BaseOptions options =
@@ -35,23 +35,23 @@ class Answer {
     // } catch (e) {
     //   print(e.toString());
     // }
-    var response = await http.post(
-        "http://app.elesson.com.br/api-synapse/synapse/performance/actor/save",
-        body: {
-          "mode": "proficiency",
-          "piece_id": pieceId,
-          "group_id": groupId,
-          "actor_id": "5",
-          "final_time": "1600718031765",
-          "interval_resolution": "187230",
-          "value": value != null ? value : "",
-          "iscorrect": "false"
-        },
-        headers: {
-          HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
-        });
-    // print("response: ${response.statusCode}");
-    print("Enviado: $value and $groupId");
+    // var response = await http.post(
+    //     "http://app.elesson.com.br/api-synapse/synapse/performance/actor/save",
+    //     body: {
+    //       "mode": "proficiency",
+    //       "piece_id": pieceId,
+    //       "group_id": groupId,
+    //       "actor_id": "5",
+    //       "final_time": "1600718031765",
+    //       "interval_resolution": "187230",
+    //       "value": value != null ? value : "",
+    //       "iscorrect": "false"
+    //     },
+    //     headers: {
+    //       HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
+    //     });
+    // // print("response: ${response.statusCode}");
+    // print("Enviado: $value and $groupId");
     // print("STATUS_CODE: ${response.statusCode}");
   }
 }
@@ -97,11 +97,6 @@ class ConversorVoiceToText {
 
     print("CAMINHO ENVIADO: $audioPath ${audioBytes.toString()}");
 
-    // Map<String, String> _headers = {
-    //   'Ocp-Apim-Subscription-Key': 'b21db0729fc14cc7b6de72e1f44322dd',
-    //   // HttpHeaders.wwwAuthenticateHeader: 'b21db0729fc14cc7b6de72e1f44322dd',
-    //   // HttpHeaders.contentTypeHeader: 'audio/wav'
-    // };
     var headers = {
       'Ocp-Apim-Subscription-Key': 'b21db0729fc14cc7b6de72e1f44322dd',
       'Content-Type': 'audio/wav'
@@ -177,10 +172,14 @@ class ConversorVoiceToText {
 
 class Cobject {
   String description;
+  String discipline;
+  String totalPieces;
   List<Question> questions;
 
   Cobject({
     this.description,
+    this.discipline,
+    this.totalPieces,
     this.questions = const [],
   });
 }
@@ -348,14 +347,9 @@ class Question {
 
     return Cobject(
       description: json["description"],
+      discipline: json["discipline"],
+      totalPieces: json["total_pieces"],
       questions: Question().insertQuestionList(json),
     );
-
-    // return Question(
-    //   questionImage: mapa["image"],
-    //   header: Question().questionMultimediaSearch(json),
-    //   pieces: Question()
-    //       .questionItemSearch(json["piecesets"][0]["pieces"][0]["groups"]),
-    // );
   }
 }

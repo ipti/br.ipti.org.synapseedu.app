@@ -7,18 +7,24 @@ Widget elessonCard(
     String text,
     double screenWidth,
     Function onTap,
-    BuildContext context}) {
+    BuildContext context,
+    bool blockDone}) {
   return GestureDetector(
     onTap: () {
       Future<String> retorno = onTap(context);
     },
     child: Container(
+      margin: EdgeInsets.all(2),
       height: 166,
       child: Card(
         semanticContainer: true,
         clipBehavior: Clip.hardEdge,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(36.0),
+          side: BorderSide(
+            width: blockDone ? 4 : 0,
+            color: Color.fromRGBO(0, 220, 140, 0.4),
+          ),
         ),
         elevation: 5,
         margin: EdgeInsets.only(left: 24, right: 24, bottom: 24),
@@ -51,13 +57,17 @@ Widget elessonCard(
                   Text(
                     text,
                     style: TextStyle(
-                        color: Colors.white,
+                        color: blockDone
+                            ? Color.fromRGBO(0, 220, 140, 1)
+                            : Colors.white,
                         fontWeight: FontWeight.bold,
                         fontFamily: "ElessonIconLib"),
                   ),
                   Icon(
                     ElessonIconLib.chevron_right,
-                    color: Colors.white,
+                    color: blockDone
+                        ? Color.fromRGBO(0, 220, 140, 1)
+                        : Colors.white,
                   ),
                 ],
               ),

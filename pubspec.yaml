@@ -50,8 +50,12 @@ dependencies:
   pin_code_fields: ^6.0.1
   shared_preferences: ^0.5.12+4
   percent_indicator: ^2.1.8
+<<<<<<< HEAD
   googleapis_auth: any
   googleapis: ^0.56.1
+=======
+  image_picker: ^0.6.7+22
+>>>>>>> vs1/sprint9/9.4
   #
 
 dev_dependencies:

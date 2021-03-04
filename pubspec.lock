@@ -610,5 +610,9 @@ packages:
     source: hosted
     version: "0.1.2"
 sdks:
+<<<<<<< HEAD
   dart: ">=2.10.0 <2.11.0"
+=======
+  dart: ">=2.10.0-110 <2.11.0"
+>>>>>>> vs1/sprint9/9.4
   flutter: ">=1.22.0 <2.0.0"

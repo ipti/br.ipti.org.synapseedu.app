@@ -75,41 +75,6 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
     });
   }
 
-  // _getCobject() async {
-  //   //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
-  //   ApiCobject.getQuestao(questionList[0]).then((response) {
-  //     setState(() {
-  //       cobject = response.data;
-  //       questionType = cobject[0]["cobjects"][0]["template_code"];
-  //     });
-  //     context.read(cobjectProvider).fetchCobjects(cobject);
-  //     List<Cobject> cobjectList = context.read(cobjectProvider).items;
-  //     switch (questionType) {
-  //       case 'PRE':
-  //         //NAVIGATOR(CObject processado, index da primeira questão, tipo);
-  //         Navigator.of(context).pushNamed(SingleLineTextQuestion.routeName,
-  //             arguments: ScreenArguments(cobjectList, 0, 'PRE',0));
-  //         break;
-  //       case 'DDROP':
-  //         Navigator.of(context).pushNamed(DragAndDrop.routeName,
-  //             arguments: ScreenArguments(cobjectList, 0, 'DDROP',0));
-  //         break;
-  //       case 'MTE':
-  //         Navigator.of(context).pushNamed(MultipleChoiceQuestion.routeName,
-  //             arguments: ScreenArguments(cobjectList, 0, 'MTE',0));
-  //         break;
-  //       case 'TXT':
-  //         Navigator.of(context).pushNamed(TextQuestion.routeName,
-  //             arguments: ScreenArguments(cobjectList, 0, 'TXT',0));
-  //         break;
-  //     }
-  //   });
-  // }
-  //
-  // final cobjectProvider = Provider<Cobjects>((ref) {
-  //   return Cobjects();
-  // });
-
   //<=================================WIDGET DE SELEÇÃO DE TURMA E ALUNO===============================================>
 
   Widget classAndName(double heightScreen, double widthScreen) {
@@ -469,10 +434,19 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
 
 class ScreenArguments {
   List<Cobject> cobjectList;
+  List<String> cobjectIdList;
+  final int cobjectIdLength;
+  final int cobjectQuestionsLength;
   final int questionIndex;
   final String questionType;
   final int listQuestionIndex;
 
-  ScreenArguments(this.cobjectList, this.questionIndex, this.questionType,
+  ScreenArguments(
+      this.cobjectList,
+      this.cobjectIdList,
+      this.cobjectIdLength,
+      this.cobjectQuestionsLength,
+      this.questionIndex,
+      this.questionType,
       this.listQuestionIndex);
 }

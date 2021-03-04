@@ -134,7 +134,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
           });
         } else {
           nextQuestionTimer.cancel();
-          Answer().sendAnswer(
+          Answer().sendAnswerToApi(
             widget.pieceId,
             isCorrect,
             timeEnd,
@@ -145,7 +145,10 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
           // // ! O erro está vindo daqui, quando tenta subtrair timeStart do timeEnd. Motivo: timeStart vem null
 
           submitLogic(context, widget.questionIndex, widget.listQuestionIndex,
-              widget.questionType, widget.pieceId, isCorrect, timeEnd);
+              widget.questionType,
+              pieceId: widget.pieceId,
+              isCorrect: isCorrect,
+              finalTime: timeEnd);
         }
 
         isSecondClick = true;

@@ -2,19 +2,24 @@ import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:elesson/activity_selection/activity_selection_view.dart';
+import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/root/start_and_send_test.dart';
 import 'package:elesson/share/qr_code_reader.dart';
 import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
 import 'package:elesson/template_questoes/ddrop/ddrop.dart';
+import 'package:elesson/template_questoes/ddrop/ddrop_function.dart';
 import 'package:elesson/template_questoes/multiple_choice.dart';
 import 'package:elesson/template_questoes/question_and_answer.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/text_question.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../template_questoes/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import '../share/elesson_icon_lib_icons.dart';
 
 import 'api.dart';
 import 'block_conclusion.dart';
@@ -61,46 +66,103 @@ var cobject = new List<dynamic>();
 // todo: essa é a lista que vai receber a lista de cobjects vindo da api
 List<String> cobjectIdList = [];
 
-getCobjectList(String blockId) async {
-  ApiBlock.getBlock(blockId).then((response) {
-    response.data[0]["cobject"].forEach((cobject) {
+getCobjectList(String disciplineId) async {
+  ApiBlock.getBlockByDiscipline(disciplineId).then((blockId) async {
+    var responseBlock = await ApiBlock.getBlock(blockId);
+    responseBlock.data[0]["cobject"].forEach((cobject) {
       // print(cobject["id"]);
       cobjectIdList.add(cobject["id"]);
     });
-  });
-  // print('Lista: $cobjectIdList');
 
-  return cobjectIdList;
+    return cobjectIdList;
+  });
+  // return cobjectIdList;
 }
 
-getCobject(int listQuestionIndex, BuildContext context, List<String> questionListTest) async {
+// Antigo para caso necessite testar
+// getCobjectList(String blockId) async {
+
+//   ApiBlock.getBlock(blockId).then((response) {
+//     response.data[0]["cobject"].forEach((cobject) {
+//       // print(cobject["id"]);
+//       cobjectIdList.add(cobject["id"]);
+//     });
+//   });
+//   print('Lista: $cobjectIdList');
+
+//   return cobjectIdList;
+// }
+
+getCobject(int listQuestionIndex, BuildContext context,
+    List<String> cobjectIdList) async {
+  // print('cobjectIdList: $cobjectIdList and ${cobjectIdList.length}');
+  int cobjectIdListLength = cobjectIdList.length;
   cobjectList.clear();
   //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
-  ApiCobject.getQuestao(questionList[listQuestionIndex]).then((response) {
+  ApiCobject.getQuestao(cobjectIdList[listQuestionIndex]).then((response) {
     cobject = response.data;
+    // O problema está sendo aqui. Corrigir para pegar todos os cobjects.
     var questionType = cobject[0]["cobjects"][0]["template_code"];
     context.read(cobjectProvider).fetchCobjects(cobject);
     cobjectList = context.read(cobjectProvider).items;
+    // print('cobjectQuestionLength ${cobjectList[0].questions.length}');
+    print('Lista de cobjects: $cobjectList');
     switch (questionType) {
       case 'PRE':
-        //todo voltar ao normal depois aqui
-        Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
-            arguments: ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
-        //todo aqui temos o novaigator levando para o PRE usando IA de imagem
+        // //todo voltar ao normal depois aqui
+        // Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+        //     arguments: ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
+        // //todo aqui temos o novaigator levando para o PRE usando IA de imagem
         // Navigator.of(context)
         //     .pushNamedAndRemoveUntil(PreImgIa.routeName, ModalRoute.withName(StartAndSendTest.routeName), arguments: ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            SingleLineTextQuestion.routeName,
+            ModalRoute.withName(StartAndSendTest.routeName),
+            arguments: ScreenArguments(
+                cobjectList,
+                cobjectIdList,
+                cobjectIdListLength,
+                cobjectList[0].questions.length,
+                0,
+                'PRE',
+                listQuestionIndex));
         break;
       case 'DDROP':
-        Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, ModalRoute.withName(StartAndSendTest.routeName),
-            arguments: ScreenArguments(cobjectList, 0, 'DDROP', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName,
+            ModalRoute.withName(StartAndSendTest.routeName),
+            arguments: ScreenArguments(
+                cobjectList,
+                cobjectIdList,
+                cobjectIdListLength,
+                cobjectList[0].questions.length,
+                0,
+                'DDROP',
+                listQuestionIndex));
         break;
       case 'MTE':
-        Navigator.of(context).pushNamedAndRemoveUntil(MultipleChoiceQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
-            arguments: ScreenArguments(cobjectList, 0, 'MTE', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            MultipleChoiceQuestion.routeName,
+            ModalRoute.withName(StartAndSendTest.routeName),
+            arguments: ScreenArguments(
+                cobjectList,
+                cobjectIdList,
+                cobjectIdListLength,
+                cobjectList[0].questions.length,
+                0,
+                'MTE',
+                listQuestionIndex));
         break;
       case 'TXT':
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil(TextQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName), arguments: ScreenArguments(cobjectList, 0, 'TXT', listQuestionIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(TextQuestion.routeName,
+            ModalRoute.withName(StartAndSendTest.routeName),
+            arguments: ScreenArguments(
+                cobjectList,
+                cobjectIdList,
+                cobjectIdListLength,
+                cobjectList[0].questions.length,
+                0,
+                'TXT',
+                listQuestionIndex));
         break;
     }
   });
@@ -112,14 +174,6 @@ final cobjectProvider = Provider<Cobjects>((ref) {
 
 Widget soundButton(BuildContext context, Question question) {
   return question.header["sound"].isNotEmpty
-      // ? IconButton(
-      //     icon: Icon(Icons.volume_up),
-      //     highlightColor: Theme.of(context).primaryColor,
-      //     splashColor: Theme.of(context).primaryColor,
-      //     onPressed: () {
-      //       playSound(question.header["sound"]);
-      //     },
-      //   )
       ? OutlineButton(
           padding: EdgeInsets.all(6),
           borderSide: BorderSide(
@@ -142,53 +196,142 @@ Widget soundButton(BuildContext context, Question question) {
       : null;
 }
 
-void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex, String questionType, [String pieceId, bool isCorrect, int finalTime, int intervalResolution]) {
+void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
+    String questionType,
+    {String pieceId,
+    bool isCorrect,
+    int finalTime,
+    int intervalResolution,
+    List<Cobject> cobjectList,
+    List<String> cobjectIdList,
+    int cobjectIdListLength,
+    int cobjectQuestionsLength}) async {
   timeStartIscaptured = false; // resetando
-  if (questionIndex < cobjectList[0].questions.length && questionType != 'TXT') {
+
+  if (questionIndex < cobjectQuestionsLength && questionType != 'TXT') {
     switch (questionType) {
       case 'PRE':
-        Navigator.of(context).pushReplacementNamed(SingleLineTextQuestion.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'PRE', listQuestionIndex));
+        Navigator.of(context).pushReplacementNamed(
+            SingleLineTextQuestion.routeName,
+            arguments: ScreenArguments(
+                cobjectList,
+                cobjectIdList,
+                cobjectIdListLength,
+                cobjectQuestionsLength,
+                questionIndex,
+                'PRE',
+                listQuestionIndex));
         break;
       case 'DDROP':
-        Navigator.of(context).pushReplacementNamed(DragAndDrop.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'DDROP', listQuestionIndex));
+        Navigator.of(context).pushReplacementNamed(DragAndDrop.routeName,
+            arguments: ScreenArguments(
+                cobjectList,
+                cobjectIdList,
+                cobjectIdListLength,
+                cobjectQuestionsLength,
+                questionIndex,
+                'DDROP',
+                listQuestionIndex));
         break;
       case 'MTE':
-        Navigator.of(context).pushReplacementNamed(MultipleChoiceQuestion.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'MTE', listQuestionIndex));
+        Navigator.of(context).pushReplacementNamed(
+            MultipleChoiceQuestion.routeName,
+            arguments: ScreenArguments(
+                cobjectList,
+                cobjectIdList,
+                cobjectIdListLength,
+                cobjectQuestionsLength,
+                questionIndex,
+                'MTE',
+                listQuestionIndex));
         break;
     }
-  } else if (questionType == 'TXT' && indexTextQuestion < cobjectList[0].questions.length) {
+  } else if (questionType == 'TXT' &&
+      indexTextQuestion < cobjectQuestionsLength) {
     if (questionIndex == 0) {
       indexTextQuestion = 0;
-      Navigator.of(context).pushReplacementNamed(TextQuestion.routeName, arguments: ScreenArguments(cobjectList, questionIndex, 'TXT', listQuestionIndex));
+      Navigator.of(context).pushReplacementNamed(TextQuestion.routeName,
+          arguments: ScreenArguments(
+              cobjectList,
+              cobjectIdList,
+              cobjectIdListLength,
+              cobjectQuestionsLength,
+              questionIndex,
+              'TXT',
+              listQuestionIndex));
     } else {
-      print(indexTextQuestion);
-      Navigator.of(context).pushNamed(TextQuestion.routeName, arguments: ScreenArguments(cobjectList, indexTextQuestion, 'TXT', listQuestionIndex));
+      print('Índice da questão: $indexTextQuestion');
+      Navigator.of(context).pushNamed(TextQuestion.routeName,
+          arguments: ScreenArguments(
+              cobjectList,
+              cobjectIdList,
+              cobjectIdListLength,
+              cobjectQuestionsLength,
+              indexTextQuestion,
+              'TXT',
+              listQuestionIndex));
     }
   } else {
     if (questionType == 'TXT') {
       //todo enviar como correto
-      Answer().sendAnswer(pieceId, true, 0, intervalResolution: 0, groupId: "", value: "");
-      print("enviada rewsposta do txt");
+      // Answer().sendAnswerToApi(pieceId, true, 0,
+      //     intervalResolution: 0, groupId: "", value: "");
     }
-    if (++listQuestionIndex < questionList.length) {
-      getCobject(listQuestionIndex, context, questionListTest);
+
+    // Alterei o if(++listQuestionIndex para o atual, inclusive alterando o endereço do getCobject. Caso tenha problema de não alterar o cobject, é isso);
+    if (listQuestionIndex + 1 < cobjectIdListLength) {
+      getCobject(listQuestionIndex + 1, context, cobjectIdList);
     } else {
-      if (questionType != 'TXT')
-        Navigator.of(context).pop();
-      else
-        Navigator.of(context).popAndPushNamed(BlockConclusion.routeName);
+      String discipline = cobjectList[0].discipline;
+
+      SharedPreferences prefs;
+      prefs = await SharedPreferences.getInstance();
+
+      prefs.setBool(discipline, true);
+      indexTextQuestion = 0;
+      cobjectList.clear();
+      cobjectIdList.clear();
+      listQuestionIndex = 0;
+      questionIndex = 0;
+
+      switch (discipline) {
+        case "Português":
+          langOk = true;
+          break;
+        case "Matemática":
+          langOk = true;
+          break;
+        case "Ciências":
+          sciOk = true;
+          break;
+        default:
+      }
+
+      Navigator.of(context).pushReplacementNamed("/");
+      // }
     }
   }
 }
 
-Widget submitAnswer(BuildContext context, List<Cobject> cobjectList, String questionType, int questionIndex, int listQuestionIndex, String pieceId, bool isCorrect,
-    {String groupId, String value}) {
+Widget submitAnswer(
+    BuildContext context,
+    List<Cobject> cobjectList,
+    String questionType,
+    int questionIndex,
+    int listQuestionIndex,
+    String pieceId,
+    bool isCorrect,
+    {String groupId,
+    String value,
+    List<String> cobjectIdList,
+    int cobjectIdListLength,
+    int cobjectQuestionsLength}) {
   double screenHeight = MediaQuery.of(context).size.height;
   double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
   double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
+  // timeEnd = DateTime.now().millisecondsSinceEpoch;
 
-  timeEnd = DateTime.now().millisecondsSinceEpoch;
-  print("$timeEnd or $timeStart");
+  // print("Time start e time end no submit answer: $timeEnd or $timeStart");
 
   return Align(
     child: ButtonTheme(
@@ -215,46 +358,160 @@ Widget submitAnswer(BuildContext context, List<Cobject> cobjectList, String ques
           // modifiquei para funcionar.
           // Answer().sendAnswer(pieceId, isCorrect, timeEnd,
           //     intervalResolution: timeEnd-timeStart, groupId: groupId != null ? groupId : "", value: value != null ? value : "");
-          Answer().sendAnswer(
+          Answer().sendAnswerToApi(
             pieceId,
             isCorrect,
-            timeEnd,
+            22,
             intervalResolution: 1234566,
             groupId: groupId != null ? groupId : "",
             value: value != null ? value : "",
           );
-          // ! O erro está vindo daqui, quando tenta subtrair timeStart do timeEnd. Motivo: timeStart vem null
 
-          submitLogic(context, questionIndex, listQuestionIndex, questionType, pieceId, isCorrect, timeEnd);
+          // ! O erro está vindo daqui, quando tenta subtrair timeStart do timeEnd. Motivo: timeStart vem null
+          // print(
+          //     'No submitAnswer: cobjectidListLength: $cobjectIdListLength e cobjectQuestionsLength: $cobjectQuestionsLength');
+          submitLogic(context, questionIndex, listQuestionIndex, questionType,
+              pieceId: pieceId,
+              isCorrect: isCorrect,
+              finalTime: 22,
+              intervalResolution: 1234566,
+              cobjectList: cobjectList,
+              cobjectIdList: cobjectIdList,
+              cobjectIdListLength: cobjectIdListLength,
+              cobjectQuestionsLength: cobjectQuestionsLength);
         },
       ),
     ),
   );
 }
 
+class ElessonCardWidget extends StatelessWidget {
+  bool blockDone;
+  String backgroundImage;
+  Function onTap;
+  double screenWidth;
+  String text;
+  BuildContext context;
+  ElessonCardWidget({
+    Key key,
+    this.blockDone,
+    this.backgroundImage,
+    this.onTap,
+    this.screenWidth,
+    this.text,
+    this.context,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Future<String> retorno = onTap(context);
+      },
+      child: Container(
+        margin: EdgeInsets.all(2),
+        height: 166,
+        child: Card(
+          semanticContainer: true,
+          clipBehavior: Clip.hardEdge,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(36.0),
+            side: BorderSide(
+              width: blockDone ? 4 : 0,
+              color: Color.fromRGBO(0, 220, 140, 0.4),
+            ),
+          ),
+          elevation: 5,
+          margin: EdgeInsets.only(left: 24, right: 24, bottom: 24),
+          child: Stack(
+            children: [
+              Image.asset(
+                backgroundImage,
+                fit: BoxFit.cover,
+                width: screenWidth,
+              ),
+              Container(
+                height: 166.0,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: FractionalOffset.topCenter,
+                    end: FractionalOffset.bottomCenter,
+                    colors: [
+                      Color(0XFFFFFFFF).withOpacity(0),
+                      Color(0XFF0000FF).withOpacity(0.4),
+                      //Colors.black,
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 18, right: 18, top: 105),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      text,
+                      style: TextStyle(
+                          color: blockDone
+                              ? Color.fromRGBO(0, 220, 140, 1)
+                              : Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "ElessonIconLib"),
+                    ),
+                    Icon(
+                      ElessonIconLib.chevron_right,
+                      color: blockDone
+                          ? Color.fromRGBO(0, 220, 140, 1)
+                          : Colors.white,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 Future<String> scan(BuildContext context) async {
-  String returnedValue = await Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => new QrCodeReader()));
+  String returnedValue = await Navigator.push(
+      context,
+      new MaterialPageRoute(
+          builder: (BuildContext context) => new QrCodeReader()));
   //todo implementar aqui direcionamento pra aluma pagina se for preciso (OBS: Tem que ser antes do retorno pra não bugar)
   return returnedValue;
 }
 
-Future<void> sendMetaData({String pieceId, String groupId, int finalTime, int intervalResolution, String value, bool isCorrect}) async {
+Future<void> sendMetaData(
+    {String pieceId,
+    String groupId,
+    int finalTime,
+    int intervalResolution,
+    String value,
+    bool isCorrect}) async {
   print("tentando enviar metadata");
   print(isCorrect);
   try {
-    var response = await http.post("http://app.elesson.com.br/api-synapse/synapse/performance/actor/save", body: {
-      "mode": "proficiency", //ok
-      "piece_id": pieceId, //ok
-      "group_id": groupId, //ok
-      "actor_id": "5", //ok (mockado)
-      "final_time": finalTime.toString(), //ok // pode ser que precise colocar um .toString()
-      "interval_resolution": intervalResolution.toString(), //ok // pode ser que precise colocar um .toString()
-      "value": value != null ? value : "",
-      "iscorrect": isCorrect.toString(),
-      "isMetadata": "true"
-    }, headers: {
-      HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
-    });
+    var response = await http.post(
+        "http://app.elesson.com.br/api-synapse/synapse/performance/actor/save",
+        body: {
+          "mode": "proficiency", //ok
+          "piece_id": pieceId, //ok
+          "group_id": groupId, //ok
+          "actor_id": "5", //ok (mockado)
+          "final_time": finalTime
+              .toString(), //ok // pode ser que precise colocar um .toString()
+          "interval_resolution": intervalResolution
+              .toString(), //ok // pode ser que precise colocar um .toString()
+          "value": value != null ? value : "",
+          "iscorrect": isCorrect.toString(),
+          "isMetadata": "true"
+        },
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
+        });
   } catch (e) {
     print("ERROR:");
     print(e.message);
@@ -284,7 +541,13 @@ double double5LoadingPercent = 0;
 double double6LoadingPercent = 0;
 double current = 0;
 // ignore: non_constant_identifier_names, missing_return
-Widget LoadingGestureDetector({Widget child, Function onLongPress, Function setState, int definedPosition, double widthScreen, bool enableMargin}) {
+Widget LoadingGestureDetector(
+    {Widget child,
+    Function onLongPress,
+    Function setState,
+    int definedPosition,
+    double widthScreen,
+    bool enableMargin}) {
   switch (definedPosition) {
     case 1:
       current = double1LoadingPercent;

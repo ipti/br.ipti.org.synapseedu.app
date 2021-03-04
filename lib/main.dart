@@ -1,3 +1,4 @@
+import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/register/code_verify_view.dart';
 import 'package:elesson/share/block_conclusion.dart';
 import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
@@ -128,12 +129,13 @@ class _HomeState extends State<Home> {
         textTheme: GoogleFonts.muliTextTheme(),
       ),
       // initialRoute: '/',
-      // initialRoute: PreImgIa.routeName,
+      initialRoute: BlockSelection.routeName,
+      // initialRoute: ActivitySelectionForm.routeName,
       // initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
-      initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName, // alterado para apresentação
-      // initialRoute: HeadlessWebView.routeName,
+      // initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName, // alterado para apresentação
       routes: {
-        SpaceSelection.routeName: (context) => SpaceSelection(),
+        '/': (context) => BlockSelection(),
+        BlockSelection.routeName: (context) => BlockSelection(),
         CountDownTimer.routeName: (context) => CountDownTimer(),
         RootPage.routeName: (context) => RootPage(),
         StartAndSendTest.routeName: (context) => StartAndSendTest(),

@@ -183,13 +183,19 @@ class MultipleChoiceQuestion extends ConsumerWidget {
 
   Stopwatch elapsedTimer = Stopwatch();
   bool timer = false;
+  List<String> cobjectIdList;
+  int cobjectIdListLength;
+  int cobjectQuestionsLength;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     // elapsedTimer.start();
     cobjectList = args.cobjectList;
+    cobjectIdList = args.cobjectIdList;
     questionIndex = args.questionIndex;
+    cobjectIdListLength = args.cobjectIdLength;
+    cobjectQuestionsLength = args.cobjectQuestionsLength;
     var listQuestionIndex = args.listQuestionIndex;
     double screenHeight = MediaQuery.of(context).size.height;
     double textCardHeight = 0.0985 * screenHeight;
@@ -299,7 +305,10 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                       // Enviar isCorrect
                       submitAnswer(context, cobjectList, 'MTE', ++questionIndex,
                           listQuestionIndex, pieceId, isCorrect,
-                          groupId: (_selectedButton + 1).toString()),
+                          groupId: (_selectedButton + 1).toString(),
+                          cobjectIdListLength: cobjectIdListLength,
+                          cobjectQuestionsLength: cobjectQuestionsLength,
+                          cobjectIdList: cobjectIdList),
                   ],
                 ),
               ),

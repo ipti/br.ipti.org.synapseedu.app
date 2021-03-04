@@ -40,6 +40,7 @@ class SingleLineTextQuestion extends StatefulWidget {
 class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
   // ignore: non_constant_identifier_names
   var cobjectList = new List<Cobject>();
+  var cobjectIdList = new List<String>();
   int questionIndex;
   int listQuestionIndex;
 

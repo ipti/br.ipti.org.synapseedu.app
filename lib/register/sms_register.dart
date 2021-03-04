@@ -19,7 +19,7 @@ Student student;
 StudentQuery studentQuery;
 
 Future<void> sendCode(String phoneNumber) async {
-    var result = await _twilioPhoneVerify.sendSmsCode('+55' + phoneNumber);
+  var result = await _twilioPhoneVerify.sendSmsCode('+55' + phoneNumber);
 
   if (result['message'] == 'success') {
     // code sent
@@ -48,6 +48,7 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
   @override
   void initState() {
     // TODO: implement initState
+
     _twilioPhoneVerify = new TwilioPhoneVerify(
         // meu
         accountSid:
@@ -63,6 +64,8 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
     //     authToken: '3389bb9152e13b4383cfc79538923c52', // replace with Auth Token
     //     serviceSid: 'A0041644482dcb11b671a45f2777da1ce' // replace with Service SID
     // );
+    // 'VA3346e166d40a6d69309fac0f15440e6f'); // replace with Service SI
+
     super.initState();
   }
 
@@ -120,8 +123,7 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                         if (studentQuery.valid == true) print("true");
                         if (_phoneNumberController.text.length == 11 &&
                             student != null) {
-                          sendCode(
-                              _phoneNumberController.text);
+                          sendCode(_phoneNumberController.text);
                           Navigator.popAndPushNamed(context, '/code-verify',
                               arguments: _phoneNumberController.text);
                         }
