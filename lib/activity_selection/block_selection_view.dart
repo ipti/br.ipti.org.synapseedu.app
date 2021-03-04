@@ -31,12 +31,11 @@ class _BlockSelectionState extends State<BlockSelection> {
     var blockId = await ApiBlock.getBlockByDiscipline(disciplineId);
     var responseBlock = await ApiBlock.getBlock(blockId);
     List<String> cobjectIdList = [];
-    print(cobjectIdList);
+
     responseBlock.data[0]["cobject"].forEach((cobject) {
       // print(cobject["id"]);
       cobjectIdList.add(cobject["id"]);
     });
-    print('cobjectIdList no redirect copiado: $cobjectIdList');
 
     getCobject(0, context, cobjectIdList);
   }
@@ -74,8 +73,6 @@ class _BlockSelectionState extends State<BlockSelection> {
             text: "Matemática",
             screenWidth: widthScreen,
             onTap: (value) {
-              print('block math done?: $mathOk');
-
               if (mathOk == false)
                 redirectToQuestion(0, '2');
               else
@@ -91,6 +88,7 @@ class _BlockSelectionState extends State<BlockSelection> {
             onTap: (value) {
               // if (sciOk == false) redirectToQuestion(0, '3');
               // else print("Você já fez essa tarefinha!");
+              print("Este bloco estará disponível em breve!");
             },
             context: context,
           ),

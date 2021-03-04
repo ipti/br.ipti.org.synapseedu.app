@@ -57,13 +57,12 @@ List<String> cobjectIdList = [];
 
 getCobjectList(String disciplineId) async {
   ApiBlock.getBlockByDiscipline(disciplineId).then((blockId) async {
-    print("ID DO BLOCO $blockId");
     var responseBlock = await ApiBlock.getBlock(blockId);
     responseBlock.data[0]["cobject"].forEach((cobject) {
       // print(cobject["id"]);
       cobjectIdList.add(cobject["id"]);
     });
-    print('cobjectIdList no getCobject: $cobjectIdList');
+
     return cobjectIdList;
   });
   // return cobjectIdList;
@@ -192,8 +191,6 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
     int cobjectQuestionsLength}) async {
   timeStartIscaptured = false; // resetando
 
-  print('CobjectIdList no submitLogic: $cobjectIdList');
-
   if (questionIndex < cobjectQuestionsLength && questionType != 'TXT') {
     switch (questionType) {
       case 'PRE':
@@ -263,27 +260,36 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
       // Answer().sendAnswerToApi(pieceId, true, 0,
       //     intervalResolution: 0, groupId: "", value: "");
     }
-    print('cobjectIdListLength: $cobjectIdListLength $cobjectQuestionsLength ');
-    print("ListQuestionIndex: $listQuestionIndex");
-    print("cobject id List: $cobjectIdList");
-    // Alterei o if(++listQuestionIndex para o atual, inclusive alterando o endereço do getCobject. Caso tenha problema de não alterar o cobject, é isso);
 
+    // Alterei o if(++listQuestionIndex para o atual, inclusive alterando o endereço do getCobject. Caso tenha problema de não alterar o cobject, é isso);
     if (listQuestionIndex + 1 < cobjectIdListLength) {
-      print("erroui aqui: $listQuestionIndex e ${cobjectList[0].description}");
       getCobject(listQuestionIndex + 1, context, cobjectIdList);
     } else {
-      print("listQ index: ${cobjectList[0].discipline}");
+      String discipline = cobjectList[0].discipline;
 
       SharedPreferences prefs;
       prefs = await SharedPreferences.getInstance();
 
-      prefs.setBool(cobjectList[0].discipline, true);
+      prefs.setBool(discipline, true);
       indexTextQuestion = 0;
       cobjectList.clear();
       cobjectIdList.clear();
       listQuestionIndex = 0;
       questionIndex = 0;
-      mathOk = true;
+
+      switch (discipline) {
+        case "Português":
+          langOk = true;
+          break;
+        case "Matemática":
+          langOk = true;
+          break;
+        case "Ciências":
+          sciOk = true;
+          break;
+        default:
+      }
+
       Navigator.of(context).pushReplacementNamed("/");
       // }
     }
@@ -307,7 +313,7 @@ Widget submitAnswer(
   double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
   double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
   // timeEnd = DateTime.now().millisecondsSinceEpoch;
-  print('CobjectIdList no submitAnswer: $cobjectIdList');
+
   // print("Time start e time end no submit answer: $timeEnd or $timeStart");
 
   return Align(
