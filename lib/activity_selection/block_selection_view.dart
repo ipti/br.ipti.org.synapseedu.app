@@ -3,7 +3,6 @@ import 'package:elesson/share/general_widgets.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import './activity_selection_view.dart';
 
 class BlockSelection extends StatefulWidget {
   static const routeName = '/block-selection';
@@ -44,7 +43,7 @@ class _BlockSelectionState extends State<BlockSelection> {
   Widget build(BuildContext context) {
     double heightScreen = MediaQuery.of(context).size.height;
     double widthScreen = MediaQuery.of(context).size.width;
-    print('Tela de seleção de blocos');
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(

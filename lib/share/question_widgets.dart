@@ -207,6 +207,7 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
     int cobjectIdListLength,
     int cobjectQuestionsLength}) async {
   timeStartIscaptured = false; // resetando
+  print('$questionIndex e $cobjectQuestionsLength');
 
   if (questionIndex < cobjectQuestionsLength && questionType != 'TXT') {
     switch (questionType) {
@@ -280,6 +281,7 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
 
     // Alterei o if(++listQuestionIndex para o atual, inclusive alterando o endereço do getCobject. Caso tenha problema de não alterar o cobject, é isso);
     if (listQuestionIndex + 1 < cobjectIdListLength) {
+      print('no if: $listQuestionIndex e $cobjectIdList');
       getCobject(listQuestionIndex + 1, context, cobjectIdList);
     } else {
       String discipline = cobjectList[0].discipline;
@@ -299,7 +301,7 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
           langOk = true;
           break;
         case "Matemática":
-          langOk = true;
+          mathOk = true;
           break;
         case "Ciências":
           sciOk = true;

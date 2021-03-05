@@ -1,4 +1,5 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
+import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/share/template_slider.dart';
@@ -65,6 +66,12 @@ class _DragAndDropState extends State<DragAndDrop> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: TemplateSlider(
+        cobjectIdList: cobjectIdList,
+        cobjectIdListLength: cobjectIdLength,
+        questionIndex: questionIndex,
+        listQuestionIndex: listQuestionIndex,
+        cobjectQuestionsLength: cobjectQuestionsLength,
+        cobjectList: cobjectList,
         linkImage: cobjectList[0].questions[0].header['image'] != ''
             ? BASE_URL + '/image/' + cobjectList[0].questions[0].header['image']
             : "",
@@ -88,14 +95,25 @@ class _DragAndDropState extends State<DragAndDrop> {
           ),
         ),
         activityScreen: activityScreen(heightScreen - 12, widthScreen,
-            cobjectList[0].questions[questionIndex], questionText, chronometer),
+            cobjectList[0].questions[questionIndex], questionText, chronometer,
+            cobjectIdList: cobjectIdList,
+            cobjectList: cobjectList,
+            questionIndex: questionIndex,
+            cobjectQuestionsLength: cobjectQuestionsLength,
+            cobjectIdLength: cobjectIdLength),
       ),
     );
   }
 
   Widget activityScreen(double heightScreen, double widthScreen,
-      Question question, String questionText, Stopwatch chronometer) {
+      Question question, String questionText, Stopwatch chronometer,
+      {List<String> cobjectIdList,
+      List<Cobject> cobjectList,
+      int questionIndex,
+      int cobjectQuestionsLength,
+      int cobjectIdLength}) {
     String pieceId = cobjectList[0].questions[questionIndex].pieceId;
+
     return Container(
       margin: EdgeInsets.only(bottom: 12),
       child: Wrap(
@@ -187,12 +205,25 @@ class _DragAndDropState extends State<DragAndDrop> {
                   valueSecondReceiver != 0 &&
                   valueThirdReceiver != 0
               ? Padding(
-                  padding: const EdgeInsets.only(top: 3.0),
-                  child: submitAnswer(context, cobjectList, 'DDROP',
-                      ++questionIndex, listQuestionIndex, pieceId, isCorrect,
-                      cobjectIdList: cobjectIdList,
-                      cobjectIdListLength: cobjectIdLength,
-                      cobjectQuestionsLength: cobjectQuestionsLength),
+                  padding: const EdgeInsets.only(top: 3.0, left: 76),
+                  // child: submitAnswer(context, cobjectList, 'DDROP',
+                  //     ++questionIndex, listQuestionIndex, pieceId, isCorrect,
+                  //     cobjectIdList: cobjectIdList,
+                  //     cobjectIdListLength: cobjectIdLength,
+                  //     cobjectQuestionsLength: cobjectQuestionsLength),
+                  child: ConfirmButtonWidget(
+                    // buttonHeight: buttonHeight,
+                    context: context,
+                    cobjectList: cobjectList,
+                    cobjectIdList: cobjectIdList,
+                    questionType: 'DDROP',
+                    questionIndex: ++questionIndex,
+                    listQuestionIndex: listQuestionIndex,
+                    cobjectIdListLength: cobjectIdLength,
+                    cobjectQuestionsLength: cobjectQuestionsLength,
+                    pieceId: pieceId,
+                    isCorrect: isCorrect,
+                  ),
                 )
               : Container(),
         ],

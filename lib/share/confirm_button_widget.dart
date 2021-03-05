@@ -10,23 +10,27 @@ import 'package:flutter/material.dart';
 class ConfirmButtonWidget extends StatefulWidget {
   const ConfirmButtonWidget({
     Key key,
-    @required this.buttonHeight,
-    @required this.minButtonWidth,
+    // @required this.buttonHeight,
+    // @required this.minButtonWidth,
     @required this.context,
     @required this.cobjectList,
+    @required this.cobjectIdList,
     @required this.questionType,
     @required this.questionIndex,
     @required this.listQuestionIndex,
-    @required this.pieceId,
+    this.pieceId,
     @required this.isCorrect,
-    @required this.groupId,
-    @required this.value,
+    this.groupId,
+    this.value,
+    this.cobjectIdListLength,
+    this.cobjectQuestionsLength,
   }) : super(key: key);
 
-  final double buttonHeight;
-  final double minButtonWidth;
+  // final double buttonHeight;
+  // final double minButtonWidth;
   final BuildContext context;
   final List<Cobject> cobjectList;
+  final List<String> cobjectIdList;
   final String questionType;
   final int questionIndex;
   final int listQuestionIndex;
@@ -34,6 +38,8 @@ class ConfirmButtonWidget extends StatefulWidget {
   final bool isCorrect;
   final String groupId;
   final String value;
+  final int cobjectIdListLength;
+  final int cobjectQuestionsLength;
 
   @override
   _ConfirmButtonWidgetState createState() => _ConfirmButtonWidgetState();
@@ -50,7 +56,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
 
   double confirmButtonBackgroundOpacity = 0;
 
-  bool isCorrect = true;
+  // bool isCorrect = true;
 
   AudioCache audioCache = AudioCache();
 
@@ -71,10 +77,13 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double buttonHeight =
+        48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
     double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
     return MaterialButton(
       elevation: 0,
-      height: widget.buttonHeight,
+      height: buttonHeight,
       minWidth: minButtonWidth,
       padding: EdgeInsets.all(8),
       color: confirmButtonColor
@@ -104,7 +113,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
       onPressed: () {
         if (isSecondClick == false) {
           setState(() {
-            if (isCorrect) {
+            if (widget.isCorrect) {
               confirmButtonColor = true;
               confirmButtonBorder = true;
               confirmButtonTextColor = true;
@@ -126,7 +135,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
             }
             confirmButtonBackgroundOpacity = 0.2;
           });
-          isCorrect = !isCorrect;
+          // isCorrect = !isCorrect;
           nextQuestionTimer = Timer(Duration(seconds: 2), () {
             setState(() {
               confirmButtonText = 'PRÓXIMA QUESTÃO';
@@ -134,21 +143,25 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
           });
         } else {
           nextQuestionTimer.cancel();
-          Answer().sendAnswerToApi(
-            widget.pieceId,
-            isCorrect,
-            timeEnd,
-            intervalResolution: 1234566,
-            groupId: widget.groupId != null ? widget.groupId : "",
-            value: widget.value != null ? widget.value : "",
-          );
-          // // ! O erro está vindo daqui, quando tenta subtrair timeStart do timeEnd. Motivo: timeStart vem null
-
+          // Answer().sendAnswerToApi(
+          //   widget.pieceId,
+          //   isCorrect,
+          //   timeEnd,
+          //   intervalResolution: 1234566,
+          //   groupId: widget.groupId != null ? widget.groupId : "",
+          //   value: widget.value != null ? widget.value : "",
+          // );
+          // ! O erro está vindo daqui, quando tenta subtrair timeStart do timeEnd. Motivo: timeStart vem null
           submitLogic(context, widget.questionIndex, widget.listQuestionIndex,
               widget.questionType,
               pieceId: widget.pieceId,
-              isCorrect: isCorrect,
-              finalTime: timeEnd);
+              isCorrect: widget.isCorrect,
+              finalTime: 22,
+              intervalResolution: 1234566,
+              cobjectList: widget.cobjectList,
+              cobjectIdList: widget.cobjectIdList,
+              cobjectIdListLength: widget.cobjectIdListLength,
+              cobjectQuestionsLength: widget.cobjectQuestionsLength);
         }
 
         isSecondClick = true;

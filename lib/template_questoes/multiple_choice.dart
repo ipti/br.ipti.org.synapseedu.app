@@ -1,4 +1,5 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
+import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'share/button_widgets.dart';
 import 'package:flutter/services.dart';
@@ -150,6 +151,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                 question.pieces["correctAnswer"] == index + 1
                     ? isCorrect = true
                     : isCorrect = false;
+                print('Correto: ${question.pieces["correctAnswer"]}');
                 // setState(() {
                 //   for (int i = 0; i < 3; i++) {
                 //     if (_buttonPressed[i] == true && i != index)
@@ -303,12 +305,25 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                     // 0, 1 ou 2, fazendo o botão aparecer.
                     if (_selectedButton < 3)
                       // Enviar isCorrect
-                      submitAnswer(context, cobjectList, 'MTE', ++questionIndex,
-                          listQuestionIndex, pieceId, isCorrect,
-                          groupId: (_selectedButton + 1).toString(),
-                          cobjectIdListLength: cobjectIdListLength,
-                          cobjectQuestionsLength: cobjectQuestionsLength,
-                          cobjectIdList: cobjectIdList),
+                      // submitAnswer(context, cobjectList, 'MTE', ++questionIndex,
+                      //     listQuestionIndex, pieceId, isCorrect,
+                      //     groupId: (_selectedButton + 1).toString(),
+                      //     cobjectIdListLength: cobjectIdListLength,
+                      //     cobjectQuestionsLength: cobjectQuestionsLength,
+                      //     cobjectIdList: cobjectIdList),
+                      ConfirmButtonWidget(
+                        context: context,
+                        cobjectList: cobjectList,
+                        cobjectIdList: cobjectIdList,
+                        questionType: 'MTE',
+                        questionIndex: ++questionIndex,
+                        listQuestionIndex: listQuestionIndex,
+                        cobjectIdListLength: cobjectIdListLength,
+                        cobjectQuestionsLength: cobjectQuestionsLength,
+                        pieceId: pieceId,
+                        isCorrect: isCorrect,
+                        groupId: (_selectedButton + 1).toString(),
+                      ),
                   ],
                 ),
               ),
