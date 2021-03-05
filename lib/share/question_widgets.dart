@@ -202,7 +202,7 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
     {String pieceId,
     bool isCorrect,
     int finalTime,
-    int intervalResolution,
+    // int intervalResolution,
     List<Cobject> cobjectList,
     List<String> cobjectIdList,
     int cobjectIdListLength,
@@ -337,9 +337,8 @@ Widget submitAnswer(
   double screenHeight = MediaQuery.of(context).size.height;
   double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
   double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
-  // timeEnd = DateTime.now().millisecondsSinceEpoch;
 
-  // print("Time start e time end no submit answer: $timeEnd or $timeStart");
+  print("Time start e time end no submit answer: $timeEnd or $timeStart");
 
   return Align(
     child: ButtonTheme(
@@ -363,17 +362,21 @@ Widget submitAnswer(
           ),
         ),
         onPressed: () {
+
+          timeEnd = DateTime.now().millisecondsSinceEpoch;
+
+          print('tempo de diferença ${timeEnd-timeStart}');
           // modifiquei para funcionar.
-          // Answer().sendAnswer(pieceId, isCorrect, timeEnd,
-          //     intervalResolution: timeEnd-timeStart, groupId: groupId != null ? groupId : "", value: value != null ? value : "");
-          Answer().sendAnswerToApi(
-            pieceId,
-            isCorrect,
-            22,
-            intervalResolution: 1234566,
-            groupId: groupId != null ? groupId : "",
-            value: value != null ? value : "",
-          );
+          Answer().sendAnswerToApi(pieceId, isCorrect, timeEnd,
+              intervalResolution: timeEnd-timeStart, groupId: groupId != null ? groupId : "", value: value != null ? value : "");
+          // Answer().sendAnswerToApi(
+          //   pieceId,
+          //   isCorrect,
+          //   22,
+          //   intervalResolution: 1234566,
+          //   groupId: groupId != null ? groupId : "",
+          //   value: value != null ? value : "",
+          // );
 
           // ! O erro está vindo daqui, quando tenta subtrair timeStart do timeEnd. Motivo: timeStart vem null
           // print(
@@ -382,7 +385,7 @@ Widget submitAnswer(
               pieceId: pieceId,
               isCorrect: isCorrect,
               finalTime: 22,
-              intervalResolution: 1234566,
+              // intervalResolution: timeEnd-timeStart,
               cobjectList: cobjectList,
               cobjectIdList: cobjectIdList,
               cobjectIdListLength: cobjectIdListLength,

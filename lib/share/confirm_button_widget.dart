@@ -111,6 +111,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
       ),
 
       onPressed: () {
+        timeEnd = DateTime.now().millisecondsSinceEpoch;
         if (isSecondClick == false) {
           setState(() {
             if (widget.isCorrect) {
@@ -142,22 +143,24 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
             });
           });
         } else {
+
+          print('tempo de intervalo: ${timeEnd-timeStart}');
           nextQuestionTimer.cancel();
-          // Answer().sendAnswerToApi(
-          //   widget.pieceId,
-          //   isCorrect,
-          //   timeEnd,
-          //   intervalResolution: 1234566,
-          //   groupId: widget.groupId != null ? widget.groupId : "",
-          //   value: widget.value != null ? widget.value : "",
-          // );
+          Answer().sendAnswerToApi(
+            widget.pieceId,
+            widget.isCorrect,
+            timeEnd,
+            intervalResolution: (timeEnd-timeStart),
+            groupId: widget.groupId != null ? widget.groupId : "",
+            value: widget.value != null ? widget.value : "",
+          );
           // ! O erro está vindo daqui, quando tenta subtrair timeStart do timeEnd. Motivo: timeStart vem null
           submitLogic(context, widget.questionIndex, widget.listQuestionIndex,
               widget.questionType,
               pieceId: widget.pieceId,
               isCorrect: widget.isCorrect,
               finalTime: 22,
-              intervalResolution: 1234566,
+              // intervalResolution: 1234566,
               cobjectList: widget.cobjectList,
               cobjectIdList: widget.cobjectIdList,
               cobjectIdListLength: widget.cobjectIdListLength,

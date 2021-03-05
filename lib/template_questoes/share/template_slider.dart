@@ -95,6 +95,15 @@ class _TemplateSliderState extends State<TemplateSlider> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    timeStartIscaptured = false;
+    timeStart = null;
+    timeEnd = null;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -233,14 +242,14 @@ class _TemplateSliderState extends State<TemplateSlider> {
     return GestureDetector(
       onPanUpdate: (details) {
         if (!widget.isTextTemplate) {
+          if (timeStartIscaptured == false) {
+            print("capturou time start");
+            timeStart = DateTime.now().millisecondsSinceEpoch;
+            print('timeStart na função topScreen: $timeStart');
+            timeStartIscaptured = true;
+          }
           if (details.delta.dy < 0) {
             //testes
-            if (timeStartIscaptured == false) {
-              print("capturou time start");
-              timeStart = DateTime.now().millisecondsSinceEpoch;
-              print('timeStart na função topScreen: $timeStart');
-              timeStartIscaptured = true;
-            }
             setState(() {
               boxResponder = Color(0xFF0000FF);
               colorResponder = Colors.white;
@@ -249,6 +258,11 @@ class _TemplateSliderState extends State<TemplateSlider> {
           }
         } else {
           if (details.delta.dy < 0) {
+            if (timeStartIscaptured == false) {
+              print("capturou time start 2");
+              timeStart = DateTime.now().millisecondsSinceEpoch;
+              timeStartIscaptured = true;
+            }
             print("veieeeeeeeeo aqui");
             indexTextQuestion++;
             submitLogic(
