@@ -59,10 +59,10 @@ class _BlockSelectionState extends State<BlockSelection> {
             text: "Linguagens",
             screenWidth: widthScreen,
             onTap: (value) {
-              // if (langOk == false)
-              redirectToQuestion(0, '1');
-              // else
-              //   print("Você já fez essa tarefinha!");
+              if (langOk == false)
+                redirectToQuestion(0, '1');
+              else
+                print("Você já fez essa tarefinha!");
             },
             context: context,
           ),
@@ -72,10 +72,10 @@ class _BlockSelectionState extends State<BlockSelection> {
             text: "Matemática",
             screenWidth: widthScreen,
             onTap: (value) {
-              // if (mathOk == false)
-              redirectToQuestion(0, '2');
-              // else
-              //   print("Você já fez essa tarefinha!");
+              if (mathOk == false)
+                redirectToQuestion(0, '2');
+              else
+                print("Você já fez essa tarefinha!");
             },
             context: context,
           ),

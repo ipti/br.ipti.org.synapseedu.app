@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:elesson/register/student_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import './sms_register.dart';
@@ -31,6 +32,8 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
   TextEditingController _pinCodeController = TextEditingController();
   final FocusNode _pinPutFocusNode = FocusNode();
 
+  Student student;
+
   TwilioPhoneVerify _twilioPhoneVerify;
 
   bool hasError = false;
@@ -58,15 +61,23 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
     //         'VA7686722166b582b1a7ab42770b104097' // replace with Service SID
     //     );
 
+    // _twilioPhoneVerify = new TwilioPhoneVerify(
+    //     //elesson
+    //     accountSid:
+    //         'AC7ad4a260cd8163d9ca9d957ff0dfebb7', // replace with Account SID
+    //     authToken:
+    //         '3389bb9152e13b4383cfc79538923c52', // replace with Auth Token
+    //     // serviceSid: 'VA3346e166d40a6d69309fac0f15440e6f',
+    //     serviceSid:
+    //         'A0041644482dcb11b671a45f2777da1ce' // replace with Service SID
+    //     );
+
+    // Twilio que tá no Trello
     _twilioPhoneVerify = new TwilioPhoneVerify(
-        //elesson
-        accountSid:
-            'AC7ad4a260cd8163d9ca9d957ff0dfebb7', // replace with Account SID
-        authToken:
-            '3389bb9152e13b4383cfc79538923c52', // replace with Auth Token
-        serviceSid:
-            'A0041644482dcb11b671a45f2777da1ce' // replace with Service SID
-        );
+      accountSid: 'ACe0d07ac9688051efbe6eceada8411f56',
+      authToken: 'ef2ba29203fece8499714387a1507fe9',
+      serviceSid: 'VA3346e166d40a6d69309fac0f15440e6f',
+    );
 
     countdownAnimationController = AnimationController(
       vsync: this,
@@ -115,15 +126,15 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
   GlobalKey<FormState> formKey;
   @override
   Widget build(BuildContext context) {
-    // String _phoneNumber = ModalRoute.of(context).settings.arguments;
-    String _phoneNumber = '79998836127';
+    student = ModalRoute.of(context).settings.arguments;
+
     double screenHeight = MediaQuery.of(context).size.height;
     double buttonHeight =
         48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
     double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
     double screenWidth = MediaQuery.of(context).size.width;
 
-    print(_phoneNumber);
+    print('Telefone: ${student.phone}');
 
     return Scaffold(
       body: Center(
@@ -186,7 +197,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
                   // ],
                   onCompleted: (v) {
                     print("Completed. Code: ${_pinCodeController.text}");
-                    verifyCode("+55" + _phoneNumber, _pinCodeController.text);
+                    verifyCode("+55" + student.phone, _pinCodeController.text);
                     setState(() {
                       hasError = true;
                     });
@@ -216,7 +227,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
                     text: TextSpan(
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          sendCode(_phoneNumber);
+                          sendCode(student.phone);
                           setState(() {
                             resendCode = false;
                           });

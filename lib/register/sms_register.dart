@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:elesson/register/code_verify_view.dart';
 import 'package:elesson/register/student_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -49,22 +50,34 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
   void initState() {
     // TODO: implement initState
 
-    _twilioPhoneVerify = new TwilioPhoneVerify(
-        // meu
-        accountSid:
-            'ACadd1dd994d143f635b442de15481e1f7', // replace with Account SID
-        authToken:
-            'fe9c3fa3784cd48017ca39f454bbc5bc', // replace with Auth Token
-        serviceSid:
-            'VA7686722166b582b1a7ab42770b104097' // replace with Service SID
-        );
+    // _twilioPhoneVerify = new TwilioPhoneVerify(
+    //     // meu
+    //     accountSid:
+    //         'ACadd1dd994d143f635b442de15481e1f7', // replace with Account SID
+    //     authToken:
+    //         'fe9c3fa3784cd48017ca39f454bbc5bc', // replace with Auth Token
+    //     serviceSid:
+    //         'VA7686722166b582b1a7ab42770b104097' // replace with Service SID
+    //     );
 
-    // _twilioPhoneVerify = new TwilioPhoneVerify( //elesson
-    //     accountSid: 'AC7ad4a260cd8163d9ca9d957ff0dfebb7', // replace with Account SID
-    //     authToken: '3389bb9152e13b4383cfc79538923c52', // replace with Auth Token
-    //     serviceSid: 'A0041644482dcb11b671a45f2777da1ce' // replace with Service SID
-    // );
+    // _twilioPhoneVerify = new TwilioPhoneVerify(
+    //     //elesson
+    //     accountSid:
+    //         'AC7ad4a260cd8163d9ca9d957ff0dfebb7', // replace with Account SID
+    //     authToken:
+    //         '3389bb9152e13b4383cfc79538923c52', // replace with Auth Token
+    //     // serviceSid: 'VA3346e166d40a6d69309fac0f15440e6f',
+    //     serviceSid:
+    //         'A0041644482dcb11b671a45f2777da1ce' // replace with Service SID
+    //     );
     // 'VA3346e166d40a6d69309fac0f15440e6f'); // replace with Service SI
+
+    // Twilio que tá no Trello
+    _twilioPhoneVerify = new TwilioPhoneVerify(
+      accountSid: 'ACe0d07ac9688051efbe6eceada8411f56',
+      authToken: 'ef2ba29203fece8499714387a1507fe9',
+      serviceSid: 'VA3346e166d40a6d69309fac0f15440e6f',
+    );
 
     super.initState();
   }
@@ -122,10 +135,11 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                         studentQuery = await StudentQuery().searchStudent();
                         if (studentQuery.valid == true) print("true");
                         if (_phoneNumberController.text.length == 11 &&
-                            student != null) {
+                            studentQuery.student != null) {
                           sendCode(_phoneNumberController.text);
-                          Navigator.popAndPushNamed(context, '/code-verify',
-                              arguments: _phoneNumberController.text);
+                          Navigator.popAndPushNamed(
+                              context, CodeVerifyView.routeName,
+                              arguments: studentQuery.student);
                         }
                       },
                     ),
@@ -246,3 +260,5 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
     );
   }
 }
+
+class LoginArguments {}
