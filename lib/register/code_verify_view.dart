@@ -104,8 +104,9 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
             }));
   }
 
-  Future<void> verifyCode(String phoneNumber, String code) async {
-    var result = await _twilioPhoneVerify.verifySmsCode(phoneNumber, code);
+  Future<void> verifyCode(Student student, String code) async {
+    var result =
+        await _twilioPhoneVerify.verifySmsCode('+55' + student.phone, code);
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     print("Enviado $code");
@@ -114,6 +115,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
       // phone number verified
       prefs.setBool('isConfirmed', true);
       print("Verificado com sucesso");
+
       Navigator.of(context).popAndPushNamed('/');
     } else {
       // error
@@ -197,7 +199,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
                   // ],
                   onCompleted: (v) {
                     print("Completed. Code: ${_pinCodeController.text}");
-                    verifyCode("+55" + student.phone, _pinCodeController.text);
+                    verifyCode(student, _pinCodeController.text);
                     setState(() {
                       hasError = true;
                     });
