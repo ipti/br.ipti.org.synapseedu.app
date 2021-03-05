@@ -152,7 +152,7 @@ class _HomeState extends State<Home> {
         MultipleChoiceQuestion.routeName: (context) => MultipleChoiceQuestion(),
         TextQuestion.routeName: (context) => TextQuestion(),
         ImageDetailScreen.routeName: (context) => ImageDetailScreen(),
-        BlockConclusion.routeName: (context) => BlockConclusion(),
+        BlockConclusionScreen.routeName: (context) => BlockConclusionScreen(),
       },
     );
   }

@@ -175,12 +175,14 @@ class Cobject {
   String discipline;
   String totalPieces;
   List<Question> questions;
+  String year;
 
   Cobject({
     this.description,
     this.discipline,
     this.totalPieces,
     this.questions = const [],
+    this.year,
   });
 }
 
@@ -350,6 +352,7 @@ class Question {
       discipline: json["discipline"],
       totalPieces: json["total_pieces"],
       questions: Question().insertQuestionList(json),
+      year: json["year"],
     );
   }
 }

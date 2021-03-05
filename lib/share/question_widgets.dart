@@ -6,6 +6,7 @@ import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/root/start_and_send_test.dart';
 import 'package:elesson/share/qr_code_reader.dart';
 import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
+import 'package:elesson/template_questoes/block_conclusion_arguments_model.dart';
 import 'package:elesson/template_questoes/ddrop/ddrop.dart';
 import 'package:elesson/template_questoes/ddrop/ddrop_function.dart';
 import 'package:elesson/template_questoes/multiple_choice.dart';
@@ -285,6 +286,7 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
       getCobject(listQuestionIndex + 1, context, cobjectIdList);
     } else {
       String discipline = cobjectList[0].discipline;
+      String year = cobjectList[0].year;
 
       SharedPreferences prefs;
       prefs = await SharedPreferences.getInstance();
@@ -309,7 +311,11 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
         default:
       }
 
-      Navigator.of(context).pushReplacementNamed("/");
+      // Navigator.of(context).pushReplacementNamed("/");
+      Navigator.of(context).pushReplacementNamed(
+          BlockConclusionScreen.routeName,
+          arguments: BlockConclusionArguments(
+              discipline: discipline.toUpperCase(), year: year));
       // }
     }
   }

@@ -1,23 +1,25 @@
 import 'package:elesson/share/colors.dart';
 import 'package:elesson/share/question_widgets.dart';
+import 'package:elesson/template_questoes/block_conclusion_arguments_model.dart';
 import 'package:flutter/material.dart';
 
-class BlockConclusion extends StatelessWidget {
+class BlockConclusionScreen extends StatelessWidget {
   static const routeName = '/block_conclusion';
 
   final String studentName = 'JOÃO';
   final String module = '1';
-  final int year = 1;
-  final String subject = 'LINGUAGENS';
+  // final String discipline = 'LINGUAGENS';
+  String discipline;
+  String year;
 
-  Widget subjectCharacter() {
+  Widget disciplineCharacter() {
     Widget imageAsset;
-    switch (subject) {
-      case 'CIÊNCIAS':
+    switch (discipline) {
+      case 'Português':
         imageAsset =
             Image.asset('assets/img/personagem_comemorando_LILA_ling.png');
         break;
-      case 'CIÊNCIAS':
+      case 'Ciências':
         imageAsset =
             Image.asset('assets/img/personagem_comemorando_CELESTE_cie.png');
         break;
@@ -30,6 +32,11 @@ class BlockConclusion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final BlockConclusionArguments args =
+        ModalRoute.of(context).settings.arguments;
+    discipline = args.discipline;
+    year = args.year;
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -48,7 +55,7 @@ class BlockConclusion extends StatelessWidget {
               ),
             ),
             // Image.asset('assets/img/personagem_comemorando_CELESTE_cie.png'),
-            subjectCharacter(),
+            disciplineCharacter(),
             Column(
               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -63,7 +70,7 @@ class BlockConclusion extends StatelessWidget {
                     text: 'VOCÊ COMPLETOU\n',
                     children: [
                       TextSpan(
-                        text: 'O MÓDULO $module DO\n$yearº ANO DE $subject',
+                        text: 'O MÓDULO $module DO\n$yearº ANO DE $discipline',
                         style: TextStyle(
                           color: Color.fromRGBO(0, 0, 255, 0.4),
                         ),
