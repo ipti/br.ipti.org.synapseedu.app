@@ -114,13 +114,14 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
     if (result['message'] == 'approved') {
       // phone number verified
       prefs.setBool('isConfirmed', true);
+      prefs.setString('student_name', student.name.toUpperCase());
+      prefs.setInt('student_id', student.id);
+      prefs.setString('student_phone', student.phone);
       print("Verificado com sucesso");
-
       Navigator.of(context).popAndPushNamed('/');
     } else {
       // error
-      print("ERROR:");
-      print('${result['statusCode']} : ${result['message']}');
+      print('ERROR:${result['statusCode']} : ${result['message']}');
     }
   }
 

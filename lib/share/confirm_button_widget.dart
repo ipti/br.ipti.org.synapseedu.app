@@ -143,14 +143,13 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
             });
           });
         } else {
-
-          print('tempo de intervalo: ${timeEnd-timeStart}');
+          print('tempo de intervalo: ${timeEnd - timeStart}');
           nextQuestionTimer.cancel();
           Answer().sendAnswerToApi(
             widget.pieceId,
             widget.isCorrect,
             timeEnd,
-            intervalResolution: (timeEnd-timeStart),
+            intervalResolution: (timeEnd - timeStart),
             groupId: widget.groupId != null ? widget.groupId : "",
             value: widget.value != null ? widget.value : "",
           );
