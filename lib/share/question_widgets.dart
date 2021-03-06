@@ -42,7 +42,8 @@ int timeStart;
 bool timeStartIscaptured = false;
 int timeEnd = 0;
 
-bool isChecked = false;
+bool isLogged = false;
+
 
 
 Color buttonBackground = Colors.white;

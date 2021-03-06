@@ -95,7 +95,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
         children: [
           ConstrainedBox(
             constraints:
-                BoxConstraints(maxHeight: cardHeight, maxWidth: cardWidth),
+                BoxConstraints(maxHeight: cardHeight, maxWidth: cardWidth,minHeight: cardHeight,minWidth: cardWidth),
             child: MaterialButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),

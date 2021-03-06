@@ -40,16 +40,12 @@ import './template_questoes/question_and_answer.dart';
 import './login/auto_login.dart';
 
 void main() async {
-
   //usando pra iniciar em outra tela
   //Força o modo retrato na inicialização do aplicativo
 
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) async {
-    if (isChecked == false) {
-      await isUserConfirmed();
-      isChecked = true;
-    }
+    isLogged = await isUserConfirmed();
     runApp(ProviderScope(child: new Home()));
   });
 
@@ -93,7 +89,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  bool isLogged = false;
   var questionType;
 
   var cobject = new List<dynamic>();
