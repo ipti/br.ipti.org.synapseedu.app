@@ -93,8 +93,8 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
     super.initState();
   }
 
-  void countdownLogic() {
-    countdownAnimationController
+  Future<void> countdownLogic() async {
+    await countdownAnimationController
         .reverse(
             from: countdownAnimationController.value == 0.0
                 ? 1.0

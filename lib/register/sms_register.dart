@@ -137,7 +137,7 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                         if (_phoneNumberController.text.length == 11 &&
                             studentQuery.student != null) {
                           sendCode(_phoneNumberController.text);
-                          Navigator.popAndPushNamed(
+                          Navigator.pushNamed(
                               context, CodeVerifyView.routeName,
                               arguments: studentQuery.student);
                         }
