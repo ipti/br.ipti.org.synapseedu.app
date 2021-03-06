@@ -31,7 +31,7 @@ class _PreImgIaState extends State<PreImgIa> {
   Response retorno;
 
   var cobjectList = new List<Cobject>();
-  int questionIndex;
+  int questionIndex = 0;
   int listQuestionIndex;
 
   double opacityFaleAgora = 0;

@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class BlockSelection extends StatefulWidget {
   static const routeName = '/block-selection';
+
   @override
   _BlockSelectionState createState() => _BlockSelectionState();
 }
@@ -48,28 +49,14 @@ class _BlockSelectionState extends State<BlockSelection> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          initTitle(
-              text: "Escolha o bloco de atividades",
-              heightScreen: heightScreen,
-              bottomMargin: 36),
+          initTitle(text: "Oi, João", heightScreen: heightScreen, bottomMargin: 20),
+          Text('INICIAR AVALIAÇÕES', style: TextStyle(color: Color(0XFF6E7291), fontWeight: FontWeight.bold, fontFamily: "ElessonIconLib", fontSize: 18)),
           SizedBox(height: 36.0),
-          ElessonCardWidget(
-            blockDone: langOk,
-            backgroundImage: "assets/img/cover.png",
-            text: "Linguagens",
-            screenWidth: widthScreen,
-            onTap: (value) {
-              if (langOk == false)
-                redirectToQuestion(0, '1');
-              else
-                print("Você já fez essa tarefinha!");
-            },
-            context: context,
-          ),
-          ElessonCardWidget(
+          !mathOk ? ElessonCardWidget(
             blockDone: mathOk,
-            backgroundImage: "assets/img/cover.png",
-            text: "Matemática",
+            backgroundImage: "assets/img/mate.png",
+            text: "MATEMÁTICA 1º ANO",
+            textModulo: 'MÓDULO 1',
             screenWidth: widthScreen,
             onTap: (value) {
               if (mathOk == false)
@@ -78,11 +65,26 @@ class _BlockSelectionState extends State<BlockSelection> {
                 print("Você já fez essa tarefinha!");
             },
             context: context,
-          ),
-          ElessonCardWidget(
+          ) : Container(),
+          !langOk ? ElessonCardWidget(
+            blockDone: langOk,
+            backgroundImage: "assets/img/ling.png",
+            text: "LINGUAGENS 1º ANO",
+            textModulo: 'MÓDULO 1',
+            screenWidth: widthScreen,
+            onTap: (value) {
+              if (langOk == false)
+                redirectToQuestion(0, '1');
+              else
+                print("Você já fez essa tarefinha!");
+            },
+            context: context,
+          ): Container(),
+          !sciOk ? ElessonCardWidget(
             blockDone: sciOk,
-            backgroundImage: "assets/img/cover.png",
-            text: "Ciências",
+            backgroundImage: "assets/img/cien.png",
+            text: "CIÊNCIAS 1º ANO",
+            textModulo: 'MÓDULO 1',
             screenWidth: widthScreen,
             onTap: (value) {
               // if (sciOk == false) redirectToQuestion(0, '3');
@@ -90,7 +92,50 @@ class _BlockSelectionState extends State<BlockSelection> {
               print("Este bloco estará disponível em breve!");
             },
             context: context,
-          ),
+          ): Container(),
+          mathOk == true || sciOk == true || langOk == true ? Text('INICIAR AVALIAÇÕES', style: TextStyle(color: Color(0XFF6E7291), fontWeight: FontWeight.bold, fontFamily: "ElessonIconLib", fontSize: 18)) : Container(),
+          SizedBox(height: 10.0),
+          mathOk ? ElessonCardWidget(
+            blockDone: mathOk,
+            backgroundImage: "assets/img/mate.png",
+            text: "MATEMÁTICA 1º ANO",
+            textModulo: 'MÓDULO 1',
+            screenWidth: widthScreen,
+            onTap: (value) {
+              if (mathOk == false)
+                redirectToQuestion(0, '2');
+              else
+                print("Você já fez essa tarefinha!");
+            },
+            context: context,
+          ) : Container(),
+          langOk ? ElessonCardWidget(
+            blockDone: langOk,
+            backgroundImage: "assets/img/ling.png",
+            text: "LINGUAGENS 1º ANO",
+            textModulo: 'MÓDULO 1',
+            screenWidth: widthScreen,
+            onTap: (value) {
+              if (langOk == false)
+                redirectToQuestion(0, '1');
+              else
+                print("Você já fez essa tarefinha!");
+            },
+            context: context,
+          ): Container(),
+          sciOk ? ElessonCardWidget(
+            blockDone: sciOk,
+            backgroundImage: "assets/img/cien.png",
+            text: "CIÊNCIAS 1º ANO",
+            textModulo: 'MÓDULO 1',
+            screenWidth: widthScreen,
+            onTap: (value) {
+              // if (sciOk == false) redirectToQuestion(0, '3');
+              // else print("Você já fez essa tarefinha!");
+              print("Este bloco estará disponível em breve!");
+            },
+            context: context,
+          ): Container(),
         ],
       ),
     );
