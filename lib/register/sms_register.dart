@@ -133,11 +133,11 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                       onPressed: () async {
                         // student = await Student().searchForStudent();
                         studentQuery = await StudentQuery().searchStudent();
-                        if (studentQuery.valid == true) print("true");
+                        if (studentQuery.valid == true) print("true ${studentQuery.student.name}");
                         if (_phoneNumberController.text.length == 11 &&
                             studentQuery.student != null) {
-                          sendCode(_phoneNumberController.text);
-                          Navigator.popAndPushNamed(
+                          await sendCode(_phoneNumberController.text);
+                          Navigator.pushReplacementNamed(
                               context, CodeVerifyView.routeName,
                               arguments: studentQuery.student);
                         }

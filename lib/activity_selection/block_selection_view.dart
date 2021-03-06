@@ -26,6 +26,7 @@ class _BlockSelectionState extends State<BlockSelection> {
     mathOk = prefs.getBool('Matemática') ?? false;
     sciOk = prefs.getBool('Ciências') ?? false;
     studentName = prefs.getString('student_name') ?? 'Aluno(a)';
+    setState(() {});
     super.didChangeDependencies();
   }
 
@@ -51,16 +52,8 @@ class _BlockSelectionState extends State<BlockSelection> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          initTitle(
-              text: "Oi, $studentName",
-              heightScreen: heightScreen,
-              bottomMargin: 20),
-          Text('INICIAR AVALIAÇÕES',
-              style: TextStyle(
-                  color: Color(0XFF6E7291),
-                  fontWeight: FontWeight.bold,
-                  fontFamily: "ElessonIconLib",
-                  fontSize: 18)),
+          initTitle(text: "Oi, $studentName", heightScreen: heightScreen, bottomMargin: 20),
+          Text('INICIAR AVALIAÇÕES', style: TextStyle(color: Color(0XFF6E7291), fontWeight: FontWeight.bold, fontFamily: "ElessonIconLib", fontSize: 18)),
           SizedBox(height: 36.0),
           !mathOk
               ? ElessonCardWidget(
@@ -110,12 +103,7 @@ class _BlockSelectionState extends State<BlockSelection> {
                 )
               : Container(),
           mathOk == true || sciOk == true || langOk == true
-              ? Text('AVALIAÇÕES CONCLUÍDAS',
-                  style: TextStyle(
-                      color: Color(0XFF6E7291),
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "ElessonIconLib",
-                      fontSize: 18))
+              ? Text('AVALIAÇÕES CONCLUÍDAS', style: TextStyle(color: Color(0XFF6E7291), fontWeight: FontWeight.bold, fontFamily: "ElessonIconLib", fontSize: 18))
               : Container(),
           SizedBox(height: 10.0),
           mathOk

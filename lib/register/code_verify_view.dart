@@ -118,7 +118,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
       prefs.setInt('student_id', student.id);
       prefs.setString('student_phone', student.phone);
       print("Verificado com sucesso");
-      Navigator.of(context).popAndPushNamed('/');
+      Navigator.of(context).pushReplacementNamed('/');
     } else {
       // error
       print('ERROR:${result['statusCode']} : ${result['message']}');
