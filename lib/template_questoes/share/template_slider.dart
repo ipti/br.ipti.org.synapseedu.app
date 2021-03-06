@@ -71,15 +71,15 @@ class _TemplateSliderState extends State<TemplateSlider> {
           color: Color(0xFF0000FF),
           size: 40,
         ),
-        onPressed: () => {
+        onPressed: () {
           // O template de texto não possui a tela inferior, diferente dos outros. O condicional verifica
           // o booleano e fornece o direcionamento adequado. O template de texto permite ao usuário voltar para
           // a tela anterior dentro do mesmo texto, enquanto os outros templates não possuem tal opção.
           if (widget.isTextTemplate)
             {
-              Navigator.of(context).pop(),
-              indexTextQuestion--,
-              print(indexTextQuestion),
+              Navigator.of(context).pop();
+              indexTextQuestion--;
+              print(indexTextQuestion);
             }
           else
             {
@@ -87,7 +87,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                 boxResponder = Colors.white;
                 colorResponder = Color(0xFF0000FF);
                 showSecondScreen = !showSecondScreen;
-              }),
+              });
             }
         },
       ),
@@ -189,12 +189,18 @@ class _TemplateSliderState extends State<TemplateSlider> {
                               ),
                             ],
                           ),
-                          onPressed: () => {
+                          onPressed: () {
+                            if (timeStartIscaptured == false) {
+                              print("capturou time start");
+                              timeStart = DateTime.now().millisecondsSinceEpoch;
+                              print('timeStart na função topScreen: $timeStart');
+                              timeStartIscaptured = true;
+                            }
                             if (widget.isTextTemplate)
                               {
                                 print(
-                                    'Submit no template slider: ${widget.cobjectQuestionsLength} e ${widget.cobjectIdListLength}'),
-                                indexTextQuestion++,
+                                    'Submit no template slider: ${widget.cobjectQuestionsLength} e ${widget.cobjectIdListLength}');
+                                indexTextQuestion++;
                                 submitLogic(context, ++widget.questionIndex,
                                     widget.listQuestionIndex, 'TXT',
                                     cobjectIdListLength:
@@ -202,7 +208,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                                     cobjectQuestionsLength:
                                         widget.cobjectQuestionsLength,
                                     cobjectList: cobjectList,
-                                    cobjectIdList: widget.cobjectIdList)
+                                    cobjectIdList: widget.cobjectIdList);
                               }
                             else
                               {
@@ -210,7 +216,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                                   boxResponder = Color(0xFF0000FF);
                                   colorResponder = Colors.white;
                                   showSecondScreen = !showSecondScreen;
-                                }),
+                                });
                               }
                           },
                         ),

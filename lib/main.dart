@@ -1,6 +1,7 @@
 import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/register/code_verify_view.dart';
 import 'package:elesson/share/block_conclusion.dart';
+import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
 import 'package:elesson/template_questoes/PRE_SOM_IA.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,6 +24,7 @@ import 'package:google_fonts/google_fonts.dart';
 import './register/sms_register.dart';
 
 import 'activity_selection/activity_selection_view.dart';
+
 // import 'login/login_view.dart';
 // import 'recover_password/recover_password_view.dart';
 // import 'register/register_view.dart';
@@ -38,12 +40,18 @@ import './template_questoes/question_and_answer.dart';
 import './login/auto_login.dart';
 
 void main() async {
+
   //usando pra iniciar em outra tela
   //Força o modo retrato na inicialização do aplicativo
+
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations(
-          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
-      .then((_) => runApp(ProviderScope(child: new Home())));
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) async {
+    if (isChecked == false) {
+      await isUserConfirmed();
+      isChecked = true;
+    }
+    runApp(ProviderScope(child: new Home()));
+  });
 
   LicenseRegistry.addLicense(() async* {
     final license = await rootBundle.loadString('fonts/OFL.txt');
@@ -99,13 +107,9 @@ class _HomeState extends State<Home> {
 
   @override
   // isUserConfirmed();
-  bool isChecked = false;
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIOverlays([]);
-    if (isChecked == false) {
-      isUserConfirmed();
-      isChecked = true;
-    }
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Elesson',
@@ -130,8 +134,8 @@ class _HomeState extends State<Home> {
       ),
       // initialRoute: '/',
       // initialRoute: BlockSelection.routeName,
-      initialRoute: SmsRegisterView.routeName,
-      // initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
+      // initialRoute: SmsRegisterView.routeName,
+      initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
       // initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName, // alterado para apresentação
       routes: {
         '/': (context) => BlockSelection(),

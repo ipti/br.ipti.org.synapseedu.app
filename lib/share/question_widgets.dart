@@ -42,6 +42,9 @@ int timeStart;
 bool timeStartIscaptured = false;
 int timeEnd = 0;
 
+bool isChecked = false;
+
+
 Color buttonBackground = Colors.white;
 Color iconBackground = Color(0xFF0000FF);
 
