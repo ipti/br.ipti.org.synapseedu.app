@@ -1,6 +1,7 @@
 import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/register/code_verify_view.dart';
 import 'package:elesson/share/block_conclusion.dart';
+import 'package:elesson/share/qr_code_reader.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
 import 'package:elesson/template_questoes/PRE_SOM_IA.dart';
@@ -128,9 +129,9 @@ class _HomeState extends State<Home> {
         textTheme: GoogleFonts.muliTextTheme(),
       ),
       // initialRoute: '/',
-      // initialRoute: BlockSelection.routeName,
+      initialRoute: QrCodeReader.routeName,
       // initialRoute: SmsRegisterView.routeName,
-      initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
+      // initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
       // initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName, // alterado para apresentação
       routes: {
         '/': (context) => BlockSelection(),
@@ -152,6 +153,7 @@ class _HomeState extends State<Home> {
         TextQuestion.routeName: (context) => TextQuestion(),
         ImageDetailScreen.routeName: (context) => ImageDetailScreen(),
         BlockConclusionScreen.routeName: (context) => BlockConclusionScreen(),
+        QrCodeReader.routeName: (context) => QrCodeReader(),
       },
     );
   }

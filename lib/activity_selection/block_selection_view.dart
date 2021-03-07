@@ -26,6 +26,7 @@ class _BlockSelectionState extends State<BlockSelection> {
     mathOk = prefs.getBool('Matemática') ?? false;
     sciOk = prefs.getBool('Ciências') ?? false;
     studentName = prefs.getString('student_name') ?? 'Aluno(a)';
+    print("Recuperado: $studentName");
     setState(() {});
     super.didChangeDependencies();
   }

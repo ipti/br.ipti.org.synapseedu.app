@@ -32,10 +32,11 @@ class StudentQuery {
   String error;
   Student student;
 
-  StudentQuery({@required this.valid, this.error, this.student});
+  StudentQuery({this.valid, this.error, this.student});
 
   Future<StudentQuery> searchStudent(
       {String phoneNumber = '79999466220'}) async {
+    print('student query: $phoneNumber');
     final url = 'https://elesson.com.br/api/student/' + phoneNumber;
 
     final stringsStudent =
