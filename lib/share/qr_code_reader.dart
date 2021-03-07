@@ -125,13 +125,12 @@ class _QrCodeReaderState extends State<QrCodeReader> {
       // setState(() async{
       print("exibindo loading");
       qrText = scanData;
-      showLoading = !showLoading;
       if (exp.hasMatch(qrText)) {
         number = exp.stringMatch(qrText);
         print(number);
         controller.dispose();
         setState(() {
-          showLoading = false;
+          showLoading = !showLoading;
         });
 
         //todo victor, é só fazer a busca nessa função aqui de busca e GGWP, correr pro abraço

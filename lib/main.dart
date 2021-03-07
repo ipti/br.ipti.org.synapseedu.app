@@ -128,8 +128,8 @@ class _HomeState extends State<Home> {
         fontFamily: 'Mulish',
         textTheme: GoogleFonts.muliTextTheme(),
       ),
-      // initialRoute: '/',
-      initialRoute: QrCodeReader.routeName,
+      initialRoute: SpaceSelection.routeName,
+      // initialRoute: QrCodeReader.routeName,
       // initialRoute: SmsRegisterView.routeName,
       // initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
       // initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName, // alterado para apresentação
