@@ -238,7 +238,10 @@ class MultipleChoiceQuestion extends ConsumerWidget {
               fontSize: fonteDaLetra,
               fontFamily: 'Mulish',
             ),
-            // recognizer: TapGestureRecognizer()..onTap = () {},
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                playSound(cobjectList[0].descriptionSound);
+              },
           ),
         ),
         linkImage: imageLink.isNotEmpty
@@ -253,31 +256,53 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        playSound(cobjectList[0]
-                            .questions[questionIndex]
-                            .header["sound"]);
-                      },
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-                        height: textCardHeight,
-                        child: Text(
-                          cobjectList[0]
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+                      height: textCardHeight,
+                      child: RichText(
+                        maxLines: 3,
+                        textAlign: TextAlign.justify,
+                        text: TextSpan(
+                          text: cobjectList[0]
                               .questions[questionIndex]
                               .header["text"]
                               .toUpperCase(),
-                          textAlign: TextAlign.justify,
-                          // textAlign: TextAlign.center,
                           style: TextStyle(
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: fonteDaLetra,
                             fontFamily: 'Mulish',
                           ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              playSound(cobjectList[0]
+                                  .questions[questionIndex]
+                                  .header["sound"]);
+                            },
                         ),
                       ),
                     ),
+                    // GestureDetector(
+                    //   child: Container(
+                    //     padding:
+                    //         EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+                    //     height: textCardHeight,
+                    //     child: Text(
+                    //       cobjectList[0]
+                    //           .questions[questionIndex]
+                    //           .header["text"]
+                    //           .toUpperCase(),
+                    //       textAlign: TextAlign.justify,
+                    //       // textAlign: TextAlign.center,
+                    //       style: TextStyle(
+                    //         fontWeight: FontWeight.bold,
+                    //         fontSize: fonteDaLetra,
+                    //         fontFamily: 'Mulish',
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 0, vertical: 12),
