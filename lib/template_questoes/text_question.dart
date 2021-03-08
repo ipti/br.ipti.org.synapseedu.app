@@ -11,7 +11,7 @@ class TextQuestion extends ConsumerWidget {
   var cobjectList = new List<Cobject>();
   var cobjectIdList = new List<String>();
   int questionIndex;
-  int listQuestionIndex;
+  int cobjectIndex;
   int cobjectIdListLength;
   int cobjectQuestionsLength;
 
@@ -21,7 +21,7 @@ class TextQuestion extends ConsumerWidget {
     cobjectList = args.cobjectList;
     cobjectIdList = args.cobjectIdList;
     questionIndex = args.questionIndex;
-    listQuestionIndex = args.listQuestionIndex;
+    cobjectIndex = args.cobjectIndex;
     cobjectIdListLength = args.cobjectIdLength;
     cobjectQuestionsLength = args.cobjectQuestionsLength;
 
@@ -39,7 +39,7 @@ class TextQuestion extends ConsumerWidget {
         cobjectIdListLength: cobjectIdListLength,
         cobjectQuestionsLength: cobjectQuestionsLength,
         isTextTemplate: true,
-        listQuestionIndex: listQuestionIndex,
+        cobjectIndex: cobjectIndex,
         questionIndex: questionIndex,
         title: Text(
           questionDescription,
@@ -73,7 +73,7 @@ class TextQuestion extends ConsumerWidget {
                 ),
               ),
               submitAnswer(context, cobjectList, 'TXT', ++questionIndex,
-                  listQuestionIndex, pieceId, true,
+                  cobjectIndex, pieceId, true,
                   cobjectIdListLength: cobjectIdListLength,
                   cobjectQuestionsLength: cobjectQuestionsLength,
                   cobjectIdList: cobjectIdList),

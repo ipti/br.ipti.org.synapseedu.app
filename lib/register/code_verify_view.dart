@@ -114,7 +114,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
     if (result['message'] == 'approved') {
       // phone number verified
       prefs.setBool('isConfirmed', true);
-      prefs.setString('student_name', student.name.toUpperCase());
+      prefs.setString('student_name', student.name.split(" ")[0].toUpperCase());
       prefs.setInt('student_id', student.id);
       prefs.setString('student_phone', student.phone);
       print("Verificado com sucesso");

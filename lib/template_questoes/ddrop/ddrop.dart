@@ -24,6 +24,7 @@ class DragAndDrop extends StatefulWidget {
 class _DragAndDropState extends State<DragAndDrop> {
   var cobjectList = new List<Cobject>();
   var cobjectIdList = new List<String>();
+  var cobjectIndex;
 
   @override
   void initState() {
@@ -53,7 +54,7 @@ class _DragAndDropState extends State<DragAndDrop> {
     cobjectList = args.cobjectList;
     cobjectIdList = args.cobjectIdList;
     questionIndex = args.questionIndex;
-    listQuestionIndex = args.listQuestionIndex;
+    cobjectIndex = args.cobjectIndex;
     cobjectQuestionsLength = args.cobjectQuestionsLength;
     cobjectIdLength = args.cobjectIdLength;
 
@@ -69,7 +70,7 @@ class _DragAndDropState extends State<DragAndDrop> {
         cobjectIdList: cobjectIdList,
         cobjectIdListLength: cobjectIdLength,
         questionIndex: questionIndex,
-        listQuestionIndex: listQuestionIndex,
+        cobjectIndex: cobjectIndex,
         cobjectQuestionsLength: cobjectQuestionsLength,
         cobjectList: cobjectList,
         linkImage: cobjectList[0].questions[0].header['image'] != ''
@@ -207,7 +208,7 @@ class _DragAndDropState extends State<DragAndDrop> {
               ? Padding(
                   padding: const EdgeInsets.only(top: 3.0, left: 76),
                   // child: submitAnswer(context, cobjectList, 'DDROP',
-                  //     ++questionIndex, listQuestionIndex, pieceId, isCorrect,
+                  //     ++questionIndex, cobjectIndex, pieceId, isCorrect,
                   //     cobjectIdList: cobjectIdList,
                   //     cobjectIdListLength: cobjectIdLength,
                   //     cobjectQuestionsLength: cobjectQuestionsLength),
@@ -218,7 +219,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                     cobjectIdList: cobjectIdList,
                     questionType: 'DDROP',
                     questionIndex: ++questionIndex,
-                    listQuestionIndex: listQuestionIndex,
+                    cobjectIndex: cobjectIndex,
                     cobjectIdListLength: cobjectIdLength,
                     cobjectQuestionsLength: cobjectQuestionsLength,
                     pieceId: pieceId,

@@ -31,17 +31,19 @@ class _BlockSelectionState extends State<BlockSelection> {
     super.didChangeDependencies();
   }
 
-  void redirectToQuestion(int cobjectIdIndex, String disciplineId) async {
+  void redirectToQuestion(
+      int cobjectIdIndex, String disciplineId, String discipline) async {
     var blockId = await ApiBlock.getBlockByDiscipline(disciplineId);
     var responseBlock = await ApiBlock.getBlock(blockId);
     List<String> cobjectIdList = [];
-
+    int cobjectId = prefs.getInt('last_cobject_$discipline') ?? 0;
+    int questionIndex = prefs.getInt('last_question_$discipline') ?? 0;
     responseBlock.data[0]["cobject"].forEach((cobject) {
       // print(cobject["id"]);
       cobjectIdList.add(cobject["id"]);
     });
 
-    getCobject(0, context, cobjectIdList);
+    getCobject(cobjectId, context, cobjectIdList, piecesetIndex: questionIndex);
   }
 
   @override
@@ -53,8 +55,16 @@ class _BlockSelectionState extends State<BlockSelection> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          initTitle(text: "Oi, $studentName", heightScreen: heightScreen, bottomMargin: 20),
-          Text('INICIAR AVALIAÇÕES', style: TextStyle(color: Color(0XFF6E7291), fontWeight: FontWeight.bold, fontFamily: "ElessonIconLib", fontSize: 18)),
+          initTitle(
+              text: "Oi, $studentName",
+              heightScreen: heightScreen,
+              bottomMargin: 20),
+          Text('INICIAR AVALIAÇÕES',
+              style: TextStyle(
+                  color: Color(0XFF6E7291),
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "ElessonIconLib",
+                  fontSize: 18)),
           SizedBox(height: 36.0),
           !mathOk
               ? ElessonCardWidget(
@@ -65,7 +75,7 @@ class _BlockSelectionState extends State<BlockSelection> {
                   screenWidth: widthScreen,
                   onTap: (value) {
                     if (mathOk == false)
-                      redirectToQuestion(0, '2');
+                      redirectToQuestion(0, '2', 'Matemática');
                     else
                       print("Você já fez essa tarefinha!");
                   },
@@ -81,7 +91,7 @@ class _BlockSelectionState extends State<BlockSelection> {
                   screenWidth: widthScreen,
                   onTap: (value) {
                     // if (langOk == false)
-                    redirectToQuestion(0, '1');
+                    redirectToQuestion(0, '1', 'Português');
                     // else
                     //   print("Você já fez essa tarefinha!");
                   },
@@ -96,7 +106,7 @@ class _BlockSelectionState extends State<BlockSelection> {
                   textModulo: 'MÓDULO 1',
                   screenWidth: widthScreen,
                   onTap: (value) {
-                    // if (sciOk == false) redirectToQuestion(0, '3');
+                    // if (sciOk == false) redirectToQuestion(0, '3','Ciências');
                     // else print("Você já fez essa tarefinha!");
                     print("Este bloco estará disponível em breve!");
                   },
@@ -104,7 +114,12 @@ class _BlockSelectionState extends State<BlockSelection> {
                 )
               : Container(),
           mathOk == true || sciOk == true || langOk == true
-              ? Text('AVALIAÇÕES CONCLUÍDAS', style: TextStyle(color: Color(0XFF6E7291), fontWeight: FontWeight.bold, fontFamily: "ElessonIconLib", fontSize: 18))
+              ? Text('AVALIAÇÕES CONCLUÍDAS',
+                  style: TextStyle(
+                      color: Color(0XFF6E7291),
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "ElessonIconLib",
+                      fontSize: 18))
               : Container(),
           SizedBox(height: 10.0),
           mathOk
@@ -116,7 +131,7 @@ class _BlockSelectionState extends State<BlockSelection> {
                   screenWidth: widthScreen,
                   onTap: (value) {
                     // if (mathOk == false)
-                    redirectToQuestion(0, '2');
+                    redirectToQuestion(0, '2', 'Matemática');
                     // else
                     //   print("Você já fez essa tarefinha!");
                   },
@@ -132,7 +147,7 @@ class _BlockSelectionState extends State<BlockSelection> {
                   screenWidth: widthScreen,
                   onTap: (value) {
                     if (langOk == false)
-                      redirectToQuestion(0, '1');
+                      redirectToQuestion(0, '1', 'Português');
                     else
                       print("Você já fez essa tarefinha!");
                   },
@@ -147,7 +162,7 @@ class _BlockSelectionState extends State<BlockSelection> {
                   textModulo: 'MÓDULO 1',
                   screenWidth: widthScreen,
                   onTap: (value) {
-                    // if (sciOk == false) redirectToQuestion(0, '3');
+                    // if (sciOk == false) redirectToQuestion(0, '3','Ciências');
                     // else print("Você já fez essa tarefinha!");
                     print("Este bloco estará disponível em breve!");
                   },

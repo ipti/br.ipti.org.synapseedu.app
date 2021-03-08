@@ -439,7 +439,7 @@ class ScreenArguments {
   final int cobjectQuestionsLength;
   final int questionIndex;
   final String questionType;
-  final int listQuestionIndex;
+  final int cobjectIndex;
 
   ScreenArguments(
       this.cobjectList,
@@ -448,5 +448,5 @@ class ScreenArguments {
       this.cobjectQuestionsLength,
       this.questionIndex,
       this.questionType,
-      this.listQuestionIndex);
+      this.cobjectIndex);
 }

@@ -31,10 +31,12 @@ class SingleLineTextQuestion extends StatefulWidget {
   static const routeName = '/PRE';
   final LocalFileSystem localFileSystem;
 
-  SingleLineTextQuestion({localFileSystem}) : this.localFileSystem = localFileSystem ?? LocalFileSystem();
+  SingleLineTextQuestion({localFileSystem})
+      : this.localFileSystem = localFileSystem ?? LocalFileSystem();
 
   @override
-  _SingleLineTextQuestionState createState() => new _SingleLineTextQuestionState();
+  _SingleLineTextQuestionState createState() =>
+      new _SingleLineTextQuestionState();
 }
 
 class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
@@ -42,10 +44,11 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
   var cobjectList = new List<Cobject>();
   var cobjectIdList = new List<String>();
   int questionIndex;
-  int listQuestionIndex;
+  int cobjectIndex;
 
   String alertMessage = "FALE AGORA...";
-  String naoEndendivel = "Não entendemos o que você quis dizer...\nTente Novamente!";
+  String naoEndendivel =
+      "Não entendemos o que você quis dizer...\nTente Novamente!";
 
   double opacityFaleAgora = 0;
   double opacityNaoEntendivel = 0;
@@ -85,10 +88,11 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
 
     cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
-    listQuestionIndex = args.listQuestionIndex;
+    cobjectIndex = args.cobjectIndex;
 
     String questionDescription = cobjectList[0].description;
-    String questionText = cobjectList[0].questions[questionIndex].header["text"];
+    String questionText =
+        cobjectList[0].questions[questionIndex].header["text"];
     String pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
     correctAnswer = cobjectList[0].questions[0].pieces["1"]["text"];
@@ -119,7 +123,8 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
           ),
         ),
         sound: cobjectList[0].questions[questionIndex].header["sound"],
-        linkImage: 'https://elesson.com.br/app/library/image/' + cobjectList[0].questions[0].header["image"],
+        linkImage: 'https://elesson.com.br/app/library/image/' +
+            cobjectList[0].questions[0].header["image"],
         isPreTemplate: true,
         activityScreen: Form(
           key: _formKey,
@@ -151,7 +156,6 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                           minLines: 1,
                           enableSuggestions: false,
                           keyboardType: TextInputType.visiblePassword,
-
                           controller: _textController,
                           autofocus: false,
                           textAlign: TextAlign.center,
@@ -176,10 +180,12 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                             ),
                           ),
                           onChanged: (val) {
+                            correctAnswer == _textController.text.toString()
+                                ? isCorrect = true
+                                : isCorrect = false;
 
-                            correctAnswer == _textController.text.toString() ? isCorrect = true : isCorrect = false;
-
-                            print("CORRETA: $correctAnswer , DIGITADA: ${_textController.text.toString()} ");
+                            print(
+                                "CORRETA: $correctAnswer , DIGITADA: ${_textController.text.toString()} ");
                             if (_textController.text.length == 1) {
                               submitButton(context);
                             }
@@ -197,7 +203,11 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                       //padding: EdgeInsets.only(left: 16, right: 16, bottom: 0),
                       margin: EdgeInsets.only(
                           bottom: _textController.text.isNotEmpty
-                              ? (screenHeight * 0.93) - 18 - (48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656)
+                              ? (screenHeight * 0.93) -
+                                  18 -
+                                  (48 > screenHeight * 0.0656
+                                      ? 48
+                                      : screenHeight * 0.0656)
                               : screenHeight * 0.92),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -213,7 +223,9 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                       child: Center(
                         child: GestureDetector(
                           onTap: () {
-                            playSound(cobjectList[0].questions[questionIndex].header["sound"]);
+                            playSound(cobjectList[0]
+                                .questions[questionIndex]
+                                .header["sound"]);
                           },
                           child: Container(
                             padding: EdgeInsets.all(20),
@@ -241,7 +253,8 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                               style: TextStyle(
                                 fontSize: widthScreen * 0.05,
                                 fontWeight: FontWeight.bold,
-                                color: colorAlertMessage.withOpacity(opacityNaoEntendivel),
+                                color: colorAlertMessage
+                                    .withOpacity(opacityNaoEntendivel),
                               ),
                             ),
                             Text(
@@ -249,7 +262,8 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                               style: TextStyle(
                                 fontSize: widthScreen * 0.05,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF0000FF).withOpacity(opacityFaleAgora),
+                                color: Color(0xFF0000FF)
+                                    .withOpacity(opacityFaleAgora),
                               ),
                             ),
                           ],
@@ -268,7 +282,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                       cobjectList,
                       'PRE',
                       ++questionIndex,
-                      listQuestionIndex,
+                      cobjectIndex,
                       pieceId,
                       isCorrect,
                       value: _textController.text,
@@ -289,5 +303,4 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
     });
     colorAlertMessage = Colors.red;
   }
-
 }

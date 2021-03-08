@@ -45,7 +45,9 @@ void main() async {
   //Força o modo retrato na inicialização do aplicativo
 
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) async {
+  SystemChrome.setPreferredOrientations(
+          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
+      .then((_) async {
     isLogged = await isUserConfirmed();
     runApp(ProviderScope(child: new Home()));
   });
@@ -96,9 +98,9 @@ class _HomeState extends State<Home> {
 
   Future<bool> isUserConfirmed() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      isLogged = prefs.getBool('isConfirmed') ?? false;
-    });
+    // setState(() {
+    isLogged = prefs.getBool('isConfirmed') ?? false;
+    // });
   }
 
   @override
@@ -128,13 +130,14 @@ class _HomeState extends State<Home> {
         fontFamily: 'Mulish',
         textTheme: GoogleFonts.muliTextTheme(),
       ),
-      initialRoute: SpaceSelection.routeName,
-      // initialRoute: QrCodeReader.routeName,
+      initialRoute: isLogged ? '/' : SpaceSelection.routeName,
+      // initialRoute: BlockSelection.routeName,
       // initialRoute: SmsRegisterView.routeName,
       // initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
       // initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName, // alterado para apresentação
       routes: {
         '/': (context) => BlockSelection(),
+        SpaceSelection.routeName: (contet) => SpaceSelection(),
         BlockSelection.routeName: (context) => BlockSelection(),
         CountDownTimer.routeName: (context) => CountDownTimer(),
         RootPage.routeName: (context) => RootPage(),

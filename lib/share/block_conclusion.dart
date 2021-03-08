@@ -36,7 +36,7 @@ class BlockConclusionScreen extends StatelessWidget {
     final BlockConclusionArguments args =
         ModalRoute.of(context).settings.arguments;
     discipline = args.discipline;
-    studentName = args.studentName;
+    studentName = args.studentName ?? 'Aluno(a)';
     year = args.year;
 
     return Scaffold(

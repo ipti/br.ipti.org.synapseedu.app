@@ -83,7 +83,8 @@ class _QrCodeReaderState extends State<QrCodeReader> {
                   margin: EdgeInsets.only(top: 24),
                   child: Text(
                     textToTimeout,
-                    style: TextStyle(color: colorToTimerOut, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: colorToTimerOut, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -96,7 +97,10 @@ class _QrCodeReaderState extends State<QrCodeReader> {
               margin: EdgeInsets.only(top: 24, left: 24),
               width: 50,
               height: 50,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), border: Border.all(width: 2, color: Colors.white.withOpacity(0.4))),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(
+                      width: 2, color: Colors.white.withOpacity(0.4))),
               child: Icon(
                 ElessonIconLib.chevron_left,
                 color: Colors.white,
@@ -106,7 +110,8 @@ class _QrCodeReaderState extends State<QrCodeReader> {
           Container(
             height: 100,
             width: 100,
-            margin: EdgeInsets.only(top: heightScreen * 0.77 - 100, left: widthScreen / 2 - 50),
+            margin: EdgeInsets.only(
+                top: heightScreen * 0.77 - 100, left: widthScreen / 2 - 50),
             child: showLoading == true ? loadingAnimation() : null,
           ),
         ],
@@ -135,16 +140,19 @@ class _QrCodeReaderState extends State<QrCodeReader> {
 
         //todo victor, é só fazer a busca nessa função aqui de busca e GGWP, correr pro abraço
         studentQuery = await StudentQuery().searchStudent(phoneNumber: number);
-        if(studentQuery.valid == true){
+        if (studentQuery.valid == true) {
           print('TRUE ${studentQuery.student.name}');
           prefs.setBool('isConfirmed', true);
-          prefs.setString('student_name', studentQuery.student.name.toUpperCase());
+          prefs.setString('student_name',
+              studentQuery.student.name.split(" ")[0].toUpperCase());
+          // prefs.setString('student_name', studentQuery.student.name.toUpperCase());
           prefs.setInt('student_id', studentQuery.student.id);
-          prefs.setString('student_name', studentQuery.student.name);
+          // prefs.setString('student_name', studentQuery.student.name);
         }
-        prefs.setBool('isConfirmed',true);
+        prefs.setBool('isConfirmed', true);
         _timer.cancel();
-        Navigator.pushReplacementNamed(context, BlockSelection.routeName, arguments: studentQuery.student);
+        Navigator.pushReplacementNamed(context, BlockSelection.routeName,
+            arguments: studentQuery.student);
         // studentQuery = await StudentQuery().searchStudent();
         // if(studentQuery.valid == true){
         //   print('TRUE ${studentQuery.student.name}');
