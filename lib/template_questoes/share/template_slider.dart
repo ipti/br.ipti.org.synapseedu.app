@@ -14,7 +14,7 @@ class TemplateSlider extends StatefulWidget {
   final bool isTextTemplate;
   final bool isPreTemplate;
   int questionIndex;
-  int listQuestionIndex;
+  int cobjectIndex;
   DateTime startTime;
   final Widget activityScreen;
   final int cobjectIdListLength;
@@ -33,7 +33,7 @@ class TemplateSlider extends StatefulWidget {
       this.isTextTemplate = false,
       this.isPreTemplate = false,
       this.questionIndex,
-      this.listQuestionIndex,
+      this.cobjectIndex,
       this.linkImage,
       this.cobjectIdListLength,
       this.cobjectQuestionsLength,
@@ -71,27 +71,33 @@ class _TemplateSliderState extends State<TemplateSlider> {
           color: Color(0xFF0000FF),
           size: 40,
         ),
-        onPressed: () => {
+        onPressed: () {
           // O template de texto não possui a tela inferior, diferente dos outros. O condicional verifica
           // o booleano e fornece o direcionamento adequado. O template de texto permite ao usuário voltar para
           // a tela anterior dentro do mesmo texto, enquanto os outros templates não possuem tal opção.
-          if (widget.isTextTemplate)
-            {
-              Navigator.of(context).pop(),
-              indexTextQuestion--,
-              print(indexTextQuestion),
-            }
-          else
-            {
-              setState(() {
-                boxResponder = Colors.white;
-                colorResponder = Color(0xFF0000FF);
-                showSecondScreen = !showSecondScreen;
-              }),
-            }
+          if (widget.isTextTemplate) {
+            Navigator.of(context).pop();
+            indexTextQuestion--;
+            print(indexTextQuestion);
+          } else {
+            setState(() {
+              boxResponder = Colors.white;
+              colorResponder = Color(0xFF0000FF);
+              showSecondScreen = !showSecondScreen;
+            });
+          }
         },
       ),
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    timeStartIscaptured = false;
+    timeStart = null;
+    timeEnd = null;
+    super.initState();
   }
 
   @override
@@ -180,29 +186,33 @@ class _TemplateSliderState extends State<TemplateSlider> {
                               ),
                             ],
                           ),
-                          onPressed: () => {
-                            if (widget.isTextTemplate)
-                              {
-                                print(
-                                    'Submit no template slider: ${widget.cobjectQuestionsLength} e ${widget.cobjectIdListLength}'),
-                                indexTextQuestion++,
-                                submitLogic(context, ++widget.questionIndex,
-                                    widget.listQuestionIndex, 'TXT',
-                                    cobjectIdListLength:
-                                        widget.cobjectIdListLength,
-                                    cobjectQuestionsLength:
-                                        widget.cobjectQuestionsLength,
-                                    cobjectList: cobjectList,
-                                    cobjectIdList: widget.cobjectIdList)
-                              }
-                            else
-                              {
-                                setState(() {
-                                  boxResponder = Color(0xFF0000FF);
-                                  colorResponder = Colors.white;
-                                  showSecondScreen = !showSecondScreen;
-                                }),
-                              }
+                          onPressed: () {
+                            if (timeStartIscaptured == false) {
+                              print("capturou time start");
+                              timeStart = DateTime.now().millisecondsSinceEpoch;
+                              print(
+                                  'timeStart na função topScreen: $timeStart');
+                              timeStartIscaptured = true;
+                            }
+                            if (widget.isTextTemplate) {
+                              print(
+                                  'Submit no template slider: ${widget.cobjectQuestionsLength} e ${widget.cobjectIdListLength}');
+                              indexTextQuestion++;
+                              submitLogic(context, ++widget.questionIndex,
+                                  widget.cobjectIndex, 'TXT',
+                                  cobjectIdListLength:
+                                      widget.cobjectIdListLength,
+                                  cobjectQuestionsLength:
+                                      widget.cobjectQuestionsLength,
+                                  cobjectList: cobjectList,
+                                  cobjectIdList: widget.cobjectIdList);
+                            } else {
+                              setState(() {
+                                boxResponder = Color(0xFF0000FF);
+                                colorResponder = Colors.white;
+                                showSecondScreen = !showSecondScreen;
+                              });
+                            }
                           },
                         ),
                       )
@@ -233,14 +243,14 @@ class _TemplateSliderState extends State<TemplateSlider> {
     return GestureDetector(
       onPanUpdate: (details) {
         if (!widget.isTextTemplate) {
+          if (timeStartIscaptured == false) {
+            print("capturou time start");
+            timeStart = DateTime.now().millisecondsSinceEpoch;
+            print('timeStart na função topScreen: $timeStart');
+            timeStartIscaptured = true;
+          }
           if (details.delta.dy < 0) {
             //testes
-            if (timeStartIscaptured == false) {
-              print("capturou time start");
-              timeStart = DateTime.now().millisecondsSinceEpoch;
-              print('timeStart na função topScreen: $timeStart');
-              timeStartIscaptured = true;
-            }
             setState(() {
               boxResponder = Color(0xFF0000FF);
               colorResponder = Colors.white;
@@ -249,12 +259,17 @@ class _TemplateSliderState extends State<TemplateSlider> {
           }
         } else {
           if (details.delta.dy < 0) {
+            if (timeStartIscaptured == false) {
+              print("capturou time start 2");
+              timeStart = DateTime.now().millisecondsSinceEpoch;
+              timeStartIscaptured = true;
+            }
             print("veieeeeeeeeo aqui");
             indexTextQuestion++;
             submitLogic(
               context,
               ++widget.questionIndex,
-              widget.listQuestionIndex,
+              widget.cobjectIndex,
               'TXT',
             );
           } else if (details.delta.dy > 0) {

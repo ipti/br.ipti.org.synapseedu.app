@@ -34,15 +34,14 @@ class PreSomIa extends StatefulWidget {
   PreSomIa({localFileSystem})
       : this.localFileSystem = localFileSystem ?? LocalFileSystem();
   @override
-  _PreSomIaState createState() =>
-      new _PreSomIaState();
+  _PreSomIaState createState() => new _PreSomIaState();
 }
 
 class _PreSomIaState extends State<PreSomIa> {
   // ignore: non_constant_identifier_names
   var cobjectList = new List<Cobject>();
   int questionIndex;
-  int listQuestionIndex;
+  int cobjectIndex;
 
   String alertMessage = "FALE AGORA...";
   String naoEndendivel =
@@ -133,11 +132,11 @@ class _PreSomIaState extends State<PreSomIa> {
 
     cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
-    listQuestionIndex = args.listQuestionIndex;
+    cobjectIndex = args.cobjectIndex;
 
     String questionDescription = cobjectList[0].description;
     String questionText =
-    cobjectList[0].questions[questionIndex].header["text"];
+        cobjectList[0].questions[questionIndex].header["text"];
     String pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
     correctAnswer = cobjectList[0].questions[0].pieces["1"]["text"];
@@ -253,10 +252,10 @@ class _PreSomIaState extends State<PreSomIa> {
                       margin: EdgeInsets.only(
                           bottom: _textController.text.isNotEmpty
                               ? (screenHeight * 0.93) -
-                              18 -
-                              (48 > screenHeight * 0.0656
-                                  ? 48
-                                  : screenHeight * 0.0656)
+                                  18 -
+                                  (48 > screenHeight * 0.0656
+                                      ? 48
+                                      : screenHeight * 0.0656)
                               : screenHeight * 0.92),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -388,7 +387,7 @@ class _PreSomIaState extends State<PreSomIa> {
                         padding: EdgeInsets.all(6),
                         decoration: BoxDecoration(
                           border:
-                          Border.all(color: Color.fromRGBO(0, 0, 255, 1)),
+                              Border.all(color: Color.fromRGBO(0, 0, 255, 1)),
                           color: buttonBackground,
                           borderRadius: BorderRadius.circular(18.0),
                         ),
@@ -407,14 +406,14 @@ class _PreSomIaState extends State<PreSomIa> {
                   Padding(
                     padding: const EdgeInsets.only(top: 3.0),
                     child: submitAnswer(context, cobjectList, 'PRE',
-                        ++questionIndex, listQuestionIndex, pieceId, isCorrect,
+                        ++questionIndex, cobjectIndex, pieceId, isCorrect,
                         value: _textController.text),
                     // SizedBox(height: 15),
                     // if (_textController.text.isNotEmpty)
                     //   Padding(
                     //     padding: const EdgeInsets.only(bottom: 4.0),
                     //     child: submitAnswer(context, cobjectList, 'PRE',
-                    //         ++questionIndex, listQuestionIndex),
+                    //         ++questionIndex, cobjectIndex),
                   ),
               ],
             ),

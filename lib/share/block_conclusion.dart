@@ -2,11 +2,12 @@ import 'package:elesson/share/colors.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/block_conclusion_arguments_model.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BlockConclusionScreen extends StatelessWidget {
   static const routeName = '/block_conclusion';
 
-  final String studentName = 'JOÃO';
+  String studentName;
   final String module = '1';
   // final String discipline = 'LINGUAGENS';
   String discipline;
@@ -35,6 +36,7 @@ class BlockConclusionScreen extends StatelessWidget {
     final BlockConclusionArguments args =
         ModalRoute.of(context).settings.arguments;
     discipline = args.discipline;
+    studentName = args.studentName ?? 'Aluno(a)';
     year = args.year;
 
     return Scaffold(

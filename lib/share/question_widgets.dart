@@ -40,7 +40,9 @@ int indexTextQuestion = 0;
 
 int timeStart;
 bool timeStartIscaptured = false;
-int timeEnd;
+int timeEnd = 0;
+
+bool isLogged = false;
 
 Color buttonBackground = Colors.white;
 Color iconBackground = Color(0xFF0000FF);
@@ -80,42 +82,32 @@ getCobjectList(String disciplineId) async {
   // return cobjectIdList;
 }
 
-// Antigo para caso necessite testar
-// getCobjectList(String blockId) async {
-
-//   ApiBlock.getBlock(blockId).then((response) {
-//     response.data[0]["cobject"].forEach((cobject) {
-//       // print(cobject["id"]);
-//       cobjectIdList.add(cobject["id"]);
-//     });
-//   });
-//   print('Lista: $cobjectIdList');
-
-//   return cobjectIdList;
-// }
-
-getCobject(int listQuestionIndex, BuildContext context,
-    List<String> cobjectIdList) async {
-  // print('cobjectIdList: $cobjectIdList and ${cobjectIdList.length}');
+getCobject(int cobjectIndex, BuildContext context, List<String> cobjectIdList,
+    {int piecesetIndex = 0}) async {
   int cobjectIdListLength = cobjectIdList.length;
   cobjectList.clear();
+  // piecesetIndex pode substituir o questionIndex
   //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
-  ApiCobject.getQuestao(cobjectIdList[listQuestionIndex]).then((response) {
+
+  ApiCobject.getQuestao(cobjectIdList[cobjectIndex]).then((response) {
     cobject = response.data;
+
     // O problema está sendo aqui. Corrigir para pegar todos os cobjects.
+
     var questionType = cobject[0]["cobjects"][0]["template_code"];
     context.read(cobjectProvider).fetchCobjects(cobject);
     cobjectList = context.read(cobjectProvider).items;
+    print('PiecesetIndex: $piecesetIndex');
     // print('cobjectQuestionLength ${cobjectList[0].questions.length}');
-    print('Lista de cobjects: $cobjectList');
+
     switch (questionType) {
       case 'PRE':
         // //todo voltar ao normal depois aqui
         // Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
-        //     arguments: ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
+        //     arguments: ScreenArguments(cobjectList, 0, 'PRE', cobjectIndex));
         // //todo aqui temos o novaigator levando para o PRE usando IA de imagem
         // Navigator.of(context)
-        //     .pushNamedAndRemoveUntil(PreImgIa.routeName, ModalRoute.withName(StartAndSendTest.routeName), arguments: ScreenArguments(cobjectList, 0, 'PRE', listQuestionIndex));
+        //     .pushNamedAndRemoveUntil(PreImgIa.routeName, ModalRoute.withName(StartAndSendTest.routeName), arguments: ScreenArguments(cobjectList, 0, 'PRE', cobjectIndex));
         Navigator.of(context).pushNamedAndRemoveUntil(
             SingleLineTextQuestion.routeName,
             ModalRoute.withName(StartAndSendTest.routeName),
@@ -124,9 +116,9 @@ getCobject(int listQuestionIndex, BuildContext context,
                 cobjectIdList,
                 cobjectIdListLength,
                 cobjectList[0].questions.length,
-                0,
+                piecesetIndex,
                 'PRE',
-                listQuestionIndex));
+                cobjectIndex));
         break;
       case 'DDROP':
         Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName,
@@ -136,9 +128,9 @@ getCobject(int listQuestionIndex, BuildContext context,
                 cobjectIdList,
                 cobjectIdListLength,
                 cobjectList[0].questions.length,
-                0,
+                piecesetIndex,
                 'DDROP',
-                listQuestionIndex));
+                cobjectIndex));
         break;
       case 'MTE':
         Navigator.of(context).pushNamedAndRemoveUntil(
@@ -149,9 +141,9 @@ getCobject(int listQuestionIndex, BuildContext context,
                 cobjectIdList,
                 cobjectIdListLength,
                 cobjectList[0].questions.length,
-                0,
+                piecesetIndex,
                 'MTE',
-                listQuestionIndex));
+                cobjectIndex));
         break;
       case 'TXT':
         Navigator.of(context).pushNamedAndRemoveUntil(TextQuestion.routeName,
@@ -161,9 +153,9 @@ getCobject(int listQuestionIndex, BuildContext context,
                 cobjectIdList,
                 cobjectIdListLength,
                 cobjectList[0].questions.length,
-                0,
+                piecesetIndex,
                 'TXT',
-                listQuestionIndex));
+                cobjectIndex));
         break;
     }
   });
@@ -197,18 +189,23 @@ Widget soundButton(BuildContext context, Question question) {
       : null;
 }
 
-void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
+void submitLogic(BuildContext context, int questionIndex, int cobjectIndex,
     String questionType,
     {String pieceId,
     bool isCorrect,
     int finalTime,
-    int intervalResolution,
+    // int intervalResolution,
     List<Cobject> cobjectList,
     List<String> cobjectIdList,
     int cobjectIdListLength,
     int cobjectQuestionsLength}) async {
   timeStartIscaptured = false; // resetando
   print('$questionIndex e $cobjectQuestionsLength');
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String discipline = cobjectList[0].discipline;
+  // prefs.setInt('last_cobject_$discipline', cobjectIndex);
+
+  // prefs.setInt('last_question_$discipline', questionIndex);
 
   if (questionIndex < cobjectQuestionsLength && questionType != 'TXT') {
     switch (questionType) {
@@ -222,7 +219,7 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
                 cobjectQuestionsLength,
                 questionIndex,
                 'PRE',
-                listQuestionIndex));
+                cobjectIndex));
         break;
       case 'DDROP':
         Navigator.of(context).pushReplacementNamed(DragAndDrop.routeName,
@@ -233,7 +230,7 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
                 cobjectQuestionsLength,
                 questionIndex,
                 'DDROP',
-                listQuestionIndex));
+                cobjectIndex));
         break;
       case 'MTE':
         Navigator.of(context).pushReplacementNamed(
@@ -245,11 +242,14 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
                 cobjectQuestionsLength,
                 questionIndex,
                 'MTE',
-                listQuestionIndex));
+                cobjectIndex));
         break;
     }
   } else if (questionType == 'TXT' &&
       indexTextQuestion < cobjectQuestionsLength) {
+    // Para resolver o problema de pop na questão de texto tem que reavaliar a lógica
+    // do botão de voltar na questão de texto
+    // prefs.setInt('last_question_$discipline', indexTextQuestion);
     if (questionIndex == 0) {
       indexTextQuestion = 0;
       Navigator.of(context).pushReplacementNamed(TextQuestion.routeName,
@@ -260,7 +260,7 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
               cobjectQuestionsLength,
               questionIndex,
               'TXT',
-              listQuestionIndex));
+              cobjectIndex));
     } else {
       print('Índice da questão: $indexTextQuestion');
       Navigator.of(context).pushNamed(TextQuestion.routeName,
@@ -271,31 +271,37 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
               cobjectQuestionsLength,
               indexTextQuestion,
               'TXT',
-              listQuestionIndex));
+              cobjectIndex));
     }
   } else {
     if (questionType == 'TXT') {
       //todo enviar como correto
-      // Answer().sendAnswerToApi(pieceId, true, 0,
-      //     intervalResolution: 0, groupId: "", value: "");
+      Answer().sendAnswerToApi(pieceId, true, 0,
+          intervalResolution: 0, groupId: "", value: "");
     }
 
-    // Alterei o if(++listQuestionIndex para o atual, inclusive alterando o endereço do getCobject. Caso tenha problema de não alterar o cobject, é isso);
-    if (listQuestionIndex + 1 < cobjectIdListLength) {
-      print('no if: $listQuestionIndex e $cobjectIdList');
-      getCobject(listQuestionIndex + 1, context, cobjectIdList);
+    // Alterei o if(++cobjectIndex para o atual, inclusive alterando o endereço do getCobject. Caso tenha problema de não alterar o cobject, é isso);
+    if (cobjectIndex + 1 < cobjectIdListLength) {
+      print('no if: $cobjectIndex e $cobjectIdList');
+      // prefs.setInt('last_question_$discipline', 0);
+      // prefs.setInt('last_cobject_$discipline', cobjectIndex + 1);
+      getCobject(cobjectIndex + 1, context, cobjectIdList);
     } else {
-      String discipline = cobjectList[0].discipline;
+      // String discipline = cobjectList[0].discipline;
       String year = cobjectList[0].year;
+      // prefs.setInt('last_cobject_$discipline', 0);
+      // prefs.setInt('last_question_$discipline', 0);
 
-      SharedPreferences prefs;
-      prefs = await SharedPreferences.getInstance();
+      // SharedPreferences prefs;
+      // prefs = await SharedPreferences.getInstance();
+      // String studentName =
+      //     prefs.getString('student_name').split(" ")[0] ?? 'Aluno(a)';
 
       prefs.setBool(discipline, true);
       indexTextQuestion = 0;
       cobjectList.clear();
       cobjectIdList.clear();
-      listQuestionIndex = 0;
+      cobjectIndex = 0;
       questionIndex = 0;
 
       switch (discipline) {
@@ -315,7 +321,9 @@ void submitLogic(BuildContext context, int questionIndex, int listQuestionIndex,
       Navigator.of(context).pushReplacementNamed(
           BlockConclusionScreen.routeName,
           arguments: BlockConclusionArguments(
-              discipline: discipline.toUpperCase(), year: year));
+              discipline: discipline.toUpperCase(),
+              year: year,
+              studentName: studentName ?? 'Name'));
       // }
     }
   }
@@ -326,7 +334,7 @@ Widget submitAnswer(
     List<Cobject> cobjectList,
     String questionType,
     int questionIndex,
-    int listQuestionIndex,
+    int cobjectIndex,
     String pieceId,
     bool isCorrect,
     {String groupId,
@@ -337,9 +345,8 @@ Widget submitAnswer(
   double screenHeight = MediaQuery.of(context).size.height;
   double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
   double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
-  // timeEnd = DateTime.now().millisecondsSinceEpoch;
 
-  // print("Time start e time end no submit answer: $timeEnd or $timeStart");
+  print("Time start e time end no submit answer: $timeEnd or $timeStart");
 
   return Align(
     child: ButtonTheme(
@@ -363,26 +370,31 @@ Widget submitAnswer(
           ),
         ),
         onPressed: () {
+          timeEnd = DateTime.now().millisecondsSinceEpoch;
+
+          print('tempo de diferença ${timeEnd - timeStart}');
           // modifiquei para funcionar.
-          // Answer().sendAnswer(pieceId, isCorrect, timeEnd,
-          //     intervalResolution: timeEnd-timeStart, groupId: groupId != null ? groupId : "", value: value != null ? value : "");
-          Answer().sendAnswerToApi(
-            pieceId,
-            isCorrect,
-            22,
-            intervalResolution: 1234566,
-            groupId: groupId != null ? groupId : "",
-            value: value != null ? value : "",
-          );
+          Answer().sendAnswerToApi(pieceId, isCorrect, timeEnd,
+              intervalResolution: timeEnd - timeStart,
+              groupId: groupId != null ? groupId : "",
+              value: value != null ? value : "");
+          // Answer().sendAnswerToApi(
+          //   pieceId,
+          //   isCorrect,
+          //   22,
+          //   intervalResolution: 1234566,
+          //   groupId: groupId != null ? groupId : "",
+          //   value: value != null ? value : "",
+          // );
 
           // ! O erro está vindo daqui, quando tenta subtrair timeStart do timeEnd. Motivo: timeStart vem null
           // print(
           //     'No submitAnswer: cobjectidListLength: $cobjectIdListLength e cobjectQuestionsLength: $cobjectQuestionsLength');
-          submitLogic(context, questionIndex, listQuestionIndex, questionType,
+          submitLogic(context, questionIndex, cobjectIndex, questionType,
               pieceId: pieceId,
               isCorrect: isCorrect,
               finalTime: 22,
-              intervalResolution: 1234566,
+              // intervalResolution: timeEnd-timeStart,
               cobjectList: cobjectList,
               cobjectIdList: cobjectIdList,
               cobjectIdListLength: cobjectIdListLength,
@@ -399,7 +411,9 @@ class ElessonCardWidget extends StatelessWidget {
   Function onTap;
   double screenWidth;
   String text;
+  String textModulo;
   BuildContext context;
+
   ElessonCardWidget({
     Key key,
     this.blockDone,
@@ -407,6 +421,7 @@ class ElessonCardWidget extends StatelessWidget {
     this.onTap,
     this.screenWidth,
     this.text,
+    this.textModulo = '',
     this.context,
   }) : super(key: key);
 
@@ -424,10 +439,10 @@ class ElessonCardWidget extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(36.0),
-            side: BorderSide(
-              width: blockDone ? 4 : 0,
-              color: Color.fromRGBO(0, 220, 140, 0.4),
-            ),
+            // side: BorderSide(
+            //   width: blockDone ? 4 : 0,
+            //   color: Color.fromRGBO(0, 220, 140, 0.4),
+            // ),
           ),
           elevation: 5,
           margin: EdgeInsets.only(left: 24, right: 24, bottom: 24),
@@ -438,41 +453,63 @@ class ElessonCardWidget extends StatelessWidget {
                 fit: BoxFit.cover,
                 width: screenWidth,
               ),
+              !blockDone
+                  ? Container(
+                      height: 166.0,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: FractionalOffset.topCenter,
+                          end: FractionalOffset.bottomCenter,
+                          colors: [
+                            Color(0XFFFFFFFF).withOpacity(0),
+                            Color(0XFF0000FF).withOpacity(0.4),
+                            //Colors.black,
+                          ],
+                        ),
+                      ),
+                    )
+                  : Container(
+                      height: 166.0,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.6),
+                      ),
+                    ),
               Container(
-                height: 166.0,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: FractionalOffset.topCenter,
-                    end: FractionalOffset.bottomCenter,
-                    colors: [
-                      Color(0XFFFFFFFF).withOpacity(0),
-                      Color(0XFF0000FF).withOpacity(0.4),
-                      //Colors.black,
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(left: 18, right: 18, top: 105),
+                margin: EdgeInsets.only(left: 18, right: 18, top: 90),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      text,
-                      style: TextStyle(
-                          color: blockDone
-                              ? Color.fromRGBO(0, 220, 140, 1)
-                              : Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: "ElessonIconLib"),
-                    ),
-                    Icon(
-                      ElessonIconLib.chevron_right,
-                      color: blockDone
-                          ? Color.fromRGBO(0, 220, 140, 1)
-                          : Colors.white,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          text,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "ElessonIconLib"),
+                        ),
+                        Text(
+                          textModulo,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "ElessonIconLib"),
+                        ),
+                      ],
                     ),
                   ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * 0.7),
+                alignment: Alignment.centerRight,
+                child: Center(
+                  child: Icon(
+                    ElessonIconLib.chevron_right,
+                    color: Colors.white,
+                  ),
                 ),
               )
             ],

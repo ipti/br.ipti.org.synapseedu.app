@@ -18,14 +18,6 @@ final cobjectProvider = Provider<Cobjects>((ref) {
   return Cobjects();
 });
 
-// final cobjectProvider = StateNotifierProvider<Cobjects>((ref) {
-//   return Cobjects();
-// });
-
-// final questionChangeNotifierProvider = ChangeNotifierProvider<Cobjects>((ref) {
-//   return Cobjects();
-// });
-
 class MultipleChoiceQuestion extends ConsumerWidget {
   static const routeName = '/MTE';
 
@@ -94,8 +86,11 @@ class MultipleChoiceQuestion extends ConsumerWidget {
         alignment: Alignment.bottomLeft,
         children: [
           ConstrainedBox(
-            constraints:
-                BoxConstraints(maxHeight: cardHeight, maxWidth: cardWidth),
+            constraints: BoxConstraints(
+                maxHeight: cardHeight,
+                maxWidth: cardWidth,
+                minHeight: cardHeight,
+                minWidth: cardWidth),
             child: MaterialButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
@@ -198,7 +193,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     questionIndex = args.questionIndex;
     cobjectIdListLength = args.cobjectIdLength;
     cobjectQuestionsLength = args.cobjectQuestionsLength;
-    var listQuestionIndex = args.listQuestionIndex;
+    var cobjectIndex = args.cobjectIndex;
     double screenHeight = MediaQuery.of(context).size.height;
     double textCardHeight = 0.0985 * screenHeight;
     double buttonHeight =
@@ -304,20 +299,13 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                     // Caso nenhuma opção esteja selecionada, _selectedButton = 3. Conforme uma resposta é selecionada, ele mudará para
                     // 0, 1 ou 2, fazendo o botão aparecer.
                     if (_selectedButton < 3)
-                      // Enviar isCorrect
-                      // submitAnswer(context, cobjectList, 'MTE', ++questionIndex,
-                      //     listQuestionIndex, pieceId, isCorrect,
-                      //     groupId: (_selectedButton + 1).toString(),
-                      //     cobjectIdListLength: cobjectIdListLength,
-                      //     cobjectQuestionsLength: cobjectQuestionsLength,
-                      //     cobjectIdList: cobjectIdList),
                       ConfirmButtonWidget(
                         context: context,
                         cobjectList: cobjectList,
                         cobjectIdList: cobjectIdList,
                         questionType: 'MTE',
                         questionIndex: ++questionIndex,
-                        listQuestionIndex: listQuestionIndex,
+                        cobjectIndex: cobjectIndex,
                         cobjectIdListLength: cobjectIdListLength,
                         cobjectQuestionsLength: cobjectQuestionsLength,
                         pieceId: pieceId,

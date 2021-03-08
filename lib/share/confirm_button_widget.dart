@@ -6,6 +6,7 @@ import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/model.dart';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ConfirmButtonWidget extends StatefulWidget {
   const ConfirmButtonWidget({
@@ -17,7 +18,7 @@ class ConfirmButtonWidget extends StatefulWidget {
     @required this.cobjectIdList,
     @required this.questionType,
     @required this.questionIndex,
-    @required this.listQuestionIndex,
+    @required this.cobjectIndex,
     this.pieceId,
     @required this.isCorrect,
     this.groupId,
@@ -33,7 +34,7 @@ class ConfirmButtonWidget extends StatefulWidget {
   final List<String> cobjectIdList;
   final String questionType;
   final int questionIndex;
-  final int listQuestionIndex;
+  final int cobjectIndex;
   final String pieceId;
   final bool isCorrect;
   final String groupId;
@@ -56,6 +57,8 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
 
   double confirmButtonBackgroundOpacity = 0;
 
+  SharedPreferences prefs;
+
   // bool isCorrect = true;
 
   AudioCache audioCache = AudioCache();
@@ -73,6 +76,12 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
       }
     }
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    prefs = await SharedPreferences.getInstance();
+    super.didChangeDependencies();
   }
 
   @override
@@ -111,6 +120,26 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
       ),
 
       onPressed: () {
+        timeEnd = DateTime.now().millisecondsSinceEpoch;
+        // prefs.setInt('last_question_${widget.cobjectList[0].discipline}',
+        //     widget.questionIndex);
+        // prefs.setInt('last_cobject_${widget.cobjectList[0].discipline}',
+        //     widget.cobjectIndex);
+
+        // if (!(widget.questionIndex < widget.cobjectQuestionsLength)) {
+        //   if (widget.cobjectIndex + 1 < widget.cobjectIdListLength) {
+        //     prefs.setInt(
+        //         'last_question_${widget.cobjectList[0].discipline}', 0);
+        //     prefs.setInt('last_cobject_${widget.cobjectList[0].discipline}',
+        //         widget.cobjectIndex + 1);
+        //   } else {
+        //     prefs.setInt('last_cobject_${widget.cobjectList[0].discipline}', 0);
+        //     prefs.setInt(
+        //         'last_question_${widget.cobjectList[0].discipline}', 0);
+        //     prefs.setBool(widget.cobjectList[0].discipline, true);
+        //   }
+        // }
+
         if (isSecondClick == false) {
           setState(() {
             if (widget.isCorrect) {
@@ -142,22 +171,23 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
             });
           });
         } else {
+          print('tempo de intervalo: ${timeEnd - timeStart}');
           nextQuestionTimer.cancel();
-          // Answer().sendAnswerToApi(
-          //   widget.pieceId,
-          //   isCorrect,
-          //   timeEnd,
-          //   intervalResolution: 1234566,
-          //   groupId: widget.groupId != null ? widget.groupId : "",
-          //   value: widget.value != null ? widget.value : "",
-          // );
+          Answer().sendAnswerToApi(
+            widget.pieceId,
+            widget.isCorrect,
+            timeEnd,
+            intervalResolution: (timeEnd - timeStart),
+            groupId: widget.groupId != null ? widget.groupId : "",
+            value: widget.value != null ? widget.value : "",
+          );
           // ! O erro está vindo daqui, quando tenta subtrair timeStart do timeEnd. Motivo: timeStart vem null
-          submitLogic(context, widget.questionIndex, widget.listQuestionIndex,
+          submitLogic(context, widget.questionIndex, widget.cobjectIndex,
               widget.questionType,
               pieceId: widget.pieceId,
               isCorrect: widget.isCorrect,
               finalTime: 22,
-              intervalResolution: 1234566,
+              // intervalResolution: 1234566,
               cobjectList: widget.cobjectList,
               cobjectIdList: widget.cobjectIdList,
               cobjectIdListLength: widget.cobjectIdListLength,
