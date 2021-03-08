@@ -172,6 +172,7 @@ class ConversorVoiceToText {
 
 class Cobject {
   String description;
+  String descriptionSound;
   String discipline;
   String totalPieces;
   List<Question> questions;
@@ -179,6 +180,7 @@ class Cobject {
 
   Cobject({
     this.description,
+    this.descriptionSound,
     this.discipline,
     this.totalPieces,
     this.questions = const [],
@@ -307,6 +309,7 @@ class Question {
             for (var pair in value["generalProperties"]) {
               if (pair["name"] == "src") {
                 if (pair["value"].endsWith(".mp3")) {
+                  print('MP3: ${pair["value"]}');
                   item[index].update("sound", (val) => pair["value"]);
                   if (itemsMap["composition"]["sound"] == false)
                     itemsMap["composition"]["sound"] = true;
@@ -320,6 +323,7 @@ class Question {
           }
         }
       });
+
       itemsMap.putIfAbsent(group, () => item[index]);
       index++;
     });
@@ -327,6 +331,8 @@ class Question {
   }
 
   // factory Question.fromJson(Map<String, dynamic> json) => Question(
+
+  String descriptionSound() {}
 
   List<Question> insertQuestionList(Map<String, dynamic> cobject) {
     List<Question> questionList = [];
@@ -349,6 +355,7 @@ class Question {
 
     return Cobject(
       description: json["description"],
+      descriptionSound: json[''],
       discipline: json["discipline"],
       totalPieces: json["total_pieces"],
       questions: Question().insertQuestionList(json),

@@ -1,6 +1,7 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
+import 'package:flutter/gestures.dart';
 import 'share/button_widgets.dart';
 import 'package:flutter/services.dart';
 
@@ -216,14 +217,28 @@ class MultipleChoiceQuestion extends ConsumerWidget {
       // bottomNavigationBar: bottomNavBar(context),
       body: TemplateSlider(
         showConfirmButton: showConfirmButton,
-        title: Text(
-          questionDescription.toUpperCase(),
-          textAlign: TextAlign.justify,
+        // title: Text(
+        //   questionDescription.toUpperCase(),
+        //   textAlign: TextAlign.justify,
+        //   maxLines: 3,
+        //   style: TextStyle(
+        //     fontWeight: FontWeight.bold,
+        //     fontSize: fonteDaLetra,
+        //     fontFamily: 'Mulish',
+        //   ),
+        // ),
+        title: RichText(
           maxLines: 3,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: fonteDaLetra,
-            fontFamily: 'Mulish',
+          textAlign: TextAlign.justify,
+          text: TextSpan(
+            text: questionDescription.toUpperCase(),
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: fonteDaLetra,
+              fontFamily: 'Mulish',
+            ),
+            // recognizer: TapGestureRecognizer()..onTap = () {},
           ),
         ),
         linkImage: imageLink.isNotEmpty
