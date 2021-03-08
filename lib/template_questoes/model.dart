@@ -332,7 +332,15 @@ class Question {
 
   // factory Question.fromJson(Map<String, dynamic> json) => Question(
 
-  String descriptionSound() {}
+  String descriptionSound(Map<String, dynamic> elements) {
+    if (elements["type"] == 'multimidia' &&
+        elements['generalProperties'].length == 5 &&
+        elements['generalProperties'][2]['name'] == 'src') {
+      print('HEY SOM: ${elements['generalProperties'][2]['value']}');
+      return elements['generalProperties'][2]['value'];
+    }
+    return '';
+  }
 
   List<Question> insertQuestionList(Map<String, dynamic> cobject) {
     List<Question> questionList = [];
@@ -355,7 +363,9 @@ class Question {
 
     return Cobject(
       description: json["description"],
-      descriptionSound: json[''],
+      descriptionSound: json['elements'].isNotEmpty
+          ? Question().descriptionSound(json['elements'][0])
+          : '',
       discipline: json["discipline"],
       totalPieces: json["total_pieces"],
       questions: Question().insertQuestionList(json),
