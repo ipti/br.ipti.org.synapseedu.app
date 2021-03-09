@@ -143,7 +143,7 @@ class _QrCodeReaderState extends State<QrCodeReader> {
         print(number);
         controller.dispose();
 
-        studentQuery = await StudentQuery().searchStudent(phoneNumber: number);
+        studentQuery = await StudentQuery().searchStudent(number);
 
         print('+55' + number);
         var result = await _twilioPhoneVerify.sendSmsCode('+55' + number);
@@ -162,7 +162,6 @@ class _QrCodeReaderState extends State<QrCodeReader> {
           print("ERROR:");
           print('${result['statusCode']} : ${result['message']}');
         }
-
 
         // //todo victor, é só fazer a busca nessa função aqui de busca e GGWP, correr pro abraço
         // studentQuery = await StudentQuery().searchStudent(phoneNumber: number);

@@ -41,6 +41,8 @@ class SmsRegisterView extends StatefulWidget {
 class _SmsRegisterViewState extends State<SmsRegisterView> {
   final _phoneNumberController = TextEditingController();
   String phoneNumber;
+  String errorText = "";
+  double opacity = 0;
 
   //CRIAR TEXTCONTROLLERS PARA CADA ENTRADA
 
@@ -87,8 +89,6 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
-    print('$screenWidth and $screenHeight');
-
     return Scaffold(
       body: SingleChildScrollView(
         // padding: EdgeInsets.symmetric(horizontal: 24),
@@ -132,22 +132,42 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                       ),
                       onPressed: () async {
                         // student = await Student().searchForStudent();
-                        studentQuery = await StudentQuery().searchStudent();
-                        if (studentQuery.valid == true) print("true ${studentQuery.student.name}");
-                        if (_phoneNumberController.text.length == 11 &&
-                            studentQuery.student != null) {
-                          await sendCode(_phoneNumberController.text);
-                          Navigator.pushReplacementNamed(
-                              context, CodeVerifyView.routeName,
-                              arguments: studentQuery.student);
-                        }
+                        studentQuery = await StudentQuery()
+                            .searchStudent(_phoneNumberController.text);
+
+                        // print("true ${studentQuery.student.name}");
+                        if (studentQuery.valid != false) {
+                          if (_phoneNumberController.text.length == 11 &&
+                              studentQuery.student != null) {
+                            await sendCode(_phoneNumberController.text);
+                            Navigator.pushReplacementNamed(
+                                context, CodeVerifyView.routeName,
+                                arguments: studentQuery.student);
+                          }
+                        } else
+                          setState(() {
+                            errorText = studentQuery.error +
+                                ".\nPor favor, tente novamente.";
+
+                            opacity = 1;
+                          });
                       },
                     ),
                   ),
                 ],
               ),
             ),
-            // registerButton(screenWidth, screenHeight),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              errorText,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Color.fromRGBO(255, 51, 0, opacity),
+              ),
+            ),
           ],
         ),
       ),
