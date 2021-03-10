@@ -17,29 +17,31 @@ class _SpaceSelectionState extends State<SpaceSelection> {
     double widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          initTitle(
-              text: "Acesse seu espaço",
-              heightScreen: heightScreen,
-              bottomMargin: 36),
-          SizedBox(height: 36.0),
-          elessonCard(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            initTitle(
+                text: "Acesse seu espaço",
+                heightScreen: heightScreen,
+                bottomMargin: 36),
+            SizedBox(height: 36.0),
+            elessonCard(
+                backgroundImage: "assets/img/cover.png",
+                text: "USAR QR CODE",
+                screenWidth: widthScreen,
+                onTap: scan,
+                context: context),
+            elessonCard(
               backgroundImage: "assets/img/cover.png",
-              text: "USAR QR CODE",
+              text: "DIGITAR CÓDIGO",
               screenWidth: widthScreen,
-              onTap: scan,
-              context: context),
-          elessonCard(
-            backgroundImage: "assets/img/cover.png",
-            text: "DIGITAR CÓDIGO",
-            screenWidth: widthScreen,
-            onTap: (value) {
-              Navigator.of(context).pushNamed(SmsRegisterView.routeName);
-            },
-            context: context,
-          ),
-        ],
+              onTap: (value) {
+                Navigator.of(context).pushNamed(SmsRegisterView.routeName);
+              },
+              context: context,
+            ),
+          ],
+        ),
       ),
     );
   }

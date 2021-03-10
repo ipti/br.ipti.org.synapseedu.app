@@ -47,17 +47,20 @@ class StudentQuery {
     );
 
     // if (response.data[0]["valid"] == true) print("hey");
-    // print(response.data[0]);
+    print(response.data[0]);
     if (response.data[0]["valid"] == true) {
       student = Student(
           id: int.parse(response.data[0]['person'][0]['id']),
           name: response.data[0]['person'][0]['name'],
           phone: response.data[0]['person'][0]['phone']);
     }
+    // if (response.data[0]["valid"] != trye) print(student.name);
     StudentQuery studentQuery = StudentQuery(
       valid: response.data[0]["valid"],
       student: student,
-      error: response.data[0]["error"][0],
+      error: response.data[0]["valid"] == false
+          ? response.data[0]["error"][0]
+          : '',
     );
 
     return studentQuery;
