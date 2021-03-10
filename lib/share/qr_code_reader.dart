@@ -83,8 +83,7 @@ class _QrCodeReaderState extends State<QrCodeReader> {
                   margin: EdgeInsets.only(top: 24),
                   child: Text(
                     textToTimeout,
-                    style: TextStyle(
-                        color: colorToTimerOut, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: colorToTimerOut, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -97,10 +96,7 @@ class _QrCodeReaderState extends State<QrCodeReader> {
               margin: EdgeInsets.only(top: 24, left: 24),
               width: 50,
               height: 50,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(
-                      width: 2, color: Colors.white.withOpacity(0.4))),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), border: Border.all(width: 2, color: Colors.white.withOpacity(0.4))),
               child: Icon(
                 ElessonIconLib.chevron_left,
                 color: Colors.white,
@@ -110,8 +106,7 @@ class _QrCodeReaderState extends State<QrCodeReader> {
           Container(
             height: 100,
             width: 100,
-            margin: EdgeInsets.only(
-                top: heightScreen * 0.77 - 100, left: widthScreen / 2 - 50),
+            margin: EdgeInsets.only(top: heightScreen * 0.77 - 100, left: widthScreen / 2 - 50),
             child: showLoading == true ? loadingAnimation() : null,
           ),
         ],
@@ -145,66 +140,31 @@ class _QrCodeReaderState extends State<QrCodeReader> {
 
         studentQuery = await StudentQuery().searchStudent(number);
 
-        print('+55' + number);
-        var result = await _twilioPhoneVerify.sendSmsCode('+55' + number);
+        if (studentQuery.valid != false) {
+          print('+55' + number);
+          var result = await _twilioPhoneVerify.sendSmsCode('+55' + number);
 
-        if (result['message'] == 'success') {
-          // code sent
-          print("Código enviado");
-          Navigator.pushReplacementNamed(context, '/code-verify',
-              arguments: studentQuery.student);
-        } else {
+          if (result['message'] == 'success') {
+            // code sent
+            print("Código enviado");
+            Navigator.pushReplacementNamed(context, '/code-verify', arguments: studentQuery.student);
+          } else {
+            setState(() {
+              showLoading = !showLoading;
+              colorToTimerOut = Colors.red;
+              textToTimeout = "NÃO FOI POSSÍVEL \nVALIDAR O CÓGIGO QR";
+            });
+            print("ERROR:");
+            print('${result['statusCode']} : ${result['message']}');
+          }
+        }else{
           setState(() {
             showLoading = !showLoading;
             colorToTimerOut = Colors.red;
             textToTimeout = "NÃO FOI POSSÍVEL \nVALIDAR O CÓGIGO QR";
           });
-          print("ERROR:");
-          print('${result['statusCode']} : ${result['message']}');
         }
-
-        // //todo victor, é só fazer a busca nessa função aqui de busca e GGWP, correr pro abraço
-        // studentQuery = await StudentQuery().searchStudent(phoneNumber: number);
-        // if (studentQuery.valid == true) {
-        //
-        //   print('TRUE ${studentQuery.student.name}');
-        //   prefs.setBool('isConfirmed', true);
-        //   prefs.setString('student_name',
-        //       studentQuery.student.name.split(" ")[0].toUpperCase());
-        //   // prefs.setString('student_name', studentQuery.student.name.toUpperCase());
-        //   prefs.setInt('student_id', studentQuery.student.id);
-        //   // prefs.setString('student_name', studentQuery.student.name);
-        // }
-        // prefs.setBool('isConfirmed', true);
-        // _timer.cancel();
-        // Navigator.pushReplacementNamed(context, BlockSelection.routeName,
-        //     arguments: studentQuery.student);
-        // studentQuery = await StudentQuery().searchStudent();
-        // if(studentQuery.valid == true){
-        //   print('TRUE ${studentQuery.student.name}');
-        //   prefs.setString('student_name', studentQuery.student.name);
-        // }
-        // prefs.setBool('isConfirmed',true);
-        // _timer.cancel();
-        // Navigator.pushReplacementNamed(context, BlockSelection.routeName, arguments: studentQuery.student);
       }
-      // });
-      // setState(() {
-      //   // qrText = scanData;
-      //   // controller.dispose();
-      //   //todo implementar aqui o que vai acontecer depois de receber os dados do qrcode
-
-      //   //Navigator.pop(context, qrText);
-      //   //Navigator.of(context).pushReplacementNamed(StartAndSendTest.routeName);
-      // });
-      // print(qrText);
-      // if (exp.hasMatch(qrText)) {
-      //   number = exp.stringMatch(qrText);
-      //   print(number);
-      // }
-      // else
-      //   textToTimeout =
-      //       "Não conseguimos ler o seu Q";
     });
   }
 
