@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:elesson/register/code_verify_view.dart';
+import 'package:elesson/register/student_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +16,8 @@ import '../share/header_widget.dart';
 
 TwilioPhoneVerify _twilioPhoneVerify;
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+Student student;
+StudentQuery studentQuery;
 
 Future<void> sendCode(String phoneNumber) async {
   var result = await _twilioPhoneVerify.sendSmsCode('+55' + phoneNumber);
@@ -37,6 +41,8 @@ class SmsRegisterView extends StatefulWidget {
 class _SmsRegisterViewState extends State<SmsRegisterView> {
   final _phoneNumberController = TextEditingController();
   String phoneNumber;
+  String errorText = "";
+  double opacity = 0;
 
   //CRIAR TEXTCONTROLLERS PARA CADA ENTRADA
 
@@ -45,21 +51,36 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
   @override
   void initState() {
     // TODO: implement initState
-    _twilioPhoneVerify = new TwilioPhoneVerify(
-        // meu
-        accountSid:
-            'ACadd1dd994d143f635b442de15481e1f7', // replace with Account SID
-        authToken:
-            'fe9c3fa3784cd48017ca39f454bbc5bc', // replace with Auth Token
-        serviceSid:
-            'VA7686722166b582b1a7ab42770b104097' // replace with Service SID
-        );
 
-    // _twilioPhoneVerify = new TwilioPhoneVerify( //elesson
-    //     accountSid: 'AC7ad4a260cd8163d9ca9d957ff0dfebb7', // replace with Account SID
-    //     authToken: '3389bb9152e13b4383cfc79538923c52', // replace with Auth Token
-    //     serviceSid: 'A0041644482dcb11b671a45f2777da1ce' // replace with Service SID
-    // );
+    // _twilioPhoneVerify = new TwilioPhoneVerify(
+    //     // meu
+    //     accountSid:
+    //         'ACadd1dd994d143f635b442de15481e1f7', // replace with Account SID
+    //     authToken:
+    //         'fe9c3fa3784cd48017ca39f454bbc5bc', // replace with Auth Token
+    //     serviceSid:
+    //         'VA7686722166b582b1a7ab42770b104097' // replace with Service SID
+    //     );
+
+    // _twilioPhoneVerify = new TwilioPhoneVerify(
+    //     //elesson
+    //     accountSid:
+    //         'AC7ad4a260cd8163d9ca9d957ff0dfebb7', // replace with Account SID
+    //     authToken:
+    //         '3389bb9152e13b4383cfc79538923c52', // replace with Auth Token
+    //     // serviceSid: 'VA3346e166d40a6d69309fac0f15440e6f',
+    //     serviceSid:
+    //         'A0041644482dcb11b671a45f2777da1ce' // replace with Service SID
+    //     );
+    // 'VA3346e166d40a6d69309fac0f15440e6f'); // replace with Service SI
+
+    // Twilio que tá no Trello
+    _twilioPhoneVerify = new TwilioPhoneVerify(
+      accountSid: 'ACe0d07ac9688051efbe6eceada8411f56',
+      authToken: 'ef2ba29203fece8499714387a1507fe9',
+      serviceSid: 'VA3346e166d40a6d69309fac0f15440e6f',
+    );
+
     super.initState();
   }
 
@@ -67,8 +88,6 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-
-    print('$screenWidth and $screenHeight');
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -111,20 +130,44 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                       child: ImageIcon(
                         AssetImage("assets/icons/chevron_right.png"),
                       ),
-                      onPressed: () => {
-                        if (_phoneNumberController.text.length == 11)
-                          {
-                            sendCode(_phoneNumberController.text),
-                            Navigator.popAndPushNamed(context, '/code-verify',
-                                arguments: _phoneNumberController.text),
+                      onPressed: () async {
+                        // student = await Student().searchForStudent();
+                        studentQuery = await StudentQuery()
+                            .searchStudent(_phoneNumberController.text);
+
+                        // print("true ${studentQuery.student.name}");
+                        if (studentQuery.valid != false) {
+                          if (_phoneNumberController.text.length == 11 &&
+                              studentQuery.student != null) {
+                            await sendCode(_phoneNumberController.text);
+                            Navigator.pushReplacementNamed(
+                                context, CodeVerifyView.routeName,
+                                arguments: studentQuery.student);
                           }
+                        } else
+                          setState(() {
+                            errorText = studentQuery.error +
+                                ".\nPor favor, tente novamente.";
+
+                            opacity = 1;
+                          });
                       },
                     ),
                   ),
                 ],
               ),
             ),
-            // registerButton(screenWidth, screenHeight),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              errorText,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Color.fromRGBO(255, 51, 0, opacity),
+              ),
+            ),
           ],
         ),
       ),
@@ -161,9 +204,10 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
           ),
           onPressed: () {
             //função de envio do sms e checagem
-            sendCode(_phoneNumberController.text);
-            Navigator.popAndPushNamed(context, '/code-verify',
-                arguments: _phoneNumberController.text);
+
+            // sendCode(_phoneNumberController.text, _twilioPhoneVerify);
+            // Navigator.popAndPushNamed(context, '/code-verify',
+            //     arguments: _phoneNumberController.text);
           },
         ),
       ),
@@ -236,3 +280,5 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
     );
   }
 }
+
+class LoginArguments {}

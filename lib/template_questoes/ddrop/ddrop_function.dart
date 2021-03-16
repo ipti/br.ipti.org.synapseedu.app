@@ -5,7 +5,7 @@ import 'dart:ui';
 import '../model.dart';
 
 int questionIndex;
-int listQuestionIndex;
+int cobjectIndex;
 
 bool isCorrect = false;
 bool accepted = false;
@@ -46,7 +46,6 @@ void updateReceiver(String url, int index, Question question) {
       break;
   }
 }
-
 
 void tradeValue(int receiverIndex, int data, Function setState) {
   switch (receiverIndex) {
@@ -102,7 +101,9 @@ void tradeValue(int receiverIndex, int data, Function setState) {
 }
 
 void verifyIsCorrect() {
-  if (valueFirstReceiver == 1 && valueSecondReceiver == 2 && valueThirdReceiver == 3) {
+  if (valueFirstReceiver == 1 &&
+      valueSecondReceiver == 2 &&
+      valueThirdReceiver == 3) {
     isCorrect = true;
   }
 }

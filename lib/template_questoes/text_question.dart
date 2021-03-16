@@ -9,27 +9,37 @@ class TextQuestion extends ConsumerWidget {
   static const routeName = '/TXT';
 
   var cobjectList = new List<Cobject>();
+  var cobjectIdList = new List<String>();
   int questionIndex;
-  int listQuestionIndex;
+  int cobjectIndex;
+  int cobjectIdListLength;
+  int cobjectQuestionsLength;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     cobjectList = args.cobjectList;
+    cobjectIdList = args.cobjectIdList;
     questionIndex = args.questionIndex;
-    listQuestionIndex = args.listQuestionIndex;
+    cobjectIndex = args.cobjectIndex;
+    cobjectIdListLength = args.cobjectIdLength;
+    cobjectQuestionsLength = args.cobjectQuestionsLength;
 
-    // String questionHeaderDescription = cobjectList[0].questions[questionIndex].header["description"]; (IMPORTANTE)
     String questionDescription = cobjectList[0].description;
     String headerText = cobjectList[0].questions[questionIndex].header["text"];
 
-    String questionText = cobjectList[0].questions[questionIndex].pieces['1']['text'];
+    String questionText =
+        cobjectList[0].questions[questionIndex].pieces['1']['text'];
     String pieceId = cobjectList[0].questions[questionIndex].pieceId;
     Stopwatch chronometer = Stopwatch();
+
     return Scaffold(
       body: TemplateSlider(
+        cobjectIdList: cobjectIdList,
+        cobjectIdListLength: cobjectIdListLength,
+        cobjectQuestionsLength: cobjectQuestionsLength,
         isTextTemplate: true,
-        listQuestionIndex: listQuestionIndex,
+        cobjectIndex: cobjectIndex,
         questionIndex: questionIndex,
         title: Text(
           questionDescription,
@@ -41,7 +51,8 @@ class TextQuestion extends ConsumerWidget {
           ),
         ),
         sound: cobjectList[0].questions[questionIndex].header["sound"],
-        linkImage: 'https://elesson.com.br/app/library/image/' + cobjectList[0].questions[questionIndex].header["image"],
+        linkImage: 'https://elesson.com.br/app/library/image/' +
+            cobjectList[0].questions[questionIndex].header["image"],
         text: Text(
           headerText,
           style: TextStyle(
@@ -61,7 +72,11 @@ class TextQuestion extends ConsumerWidget {
                   fontFamily: 'Mulish',
                 ),
               ),
-              submitAnswer(context, cobjectList, 'TXT', ++questionIndex, listQuestionIndex, pieceId, true),
+              submitAnswer(context, cobjectList, 'TXT', ++questionIndex,
+                  cobjectIndex, pieceId, true,
+                  cobjectIdListLength: cobjectIdListLength,
+                  cobjectQuestionsLength: cobjectQuestionsLength,
+                  cobjectIdList: cobjectIdList),
             ],
           ),
         ),

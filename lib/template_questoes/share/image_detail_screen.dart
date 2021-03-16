@@ -61,7 +61,9 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
                   side: BorderSide(color: Color(0x3300004C), width: 2),
                 ),
                 child: Hero(
-                  tag: arguments.heroString != null ? arguments.heroString : grouping,
+                  tag: arguments.heroString != null
+                      ? arguments.heroString
+                      : grouping,
                   child: question.pieces[grouping]["image"].isNotEmpty
                       ? Image.network(
                           BASE_URL +
@@ -115,7 +117,8 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
                               buttonBackground =
                                   Color(0xFF0000FF).withOpacity(0.2);
                             });
-                            playSoundDetailScreen(question.header["sound"]);
+                            playSoundDetailScreen(
+                                question.pieces[grouping]["sound"]);
                           }
                         },
                       ),
@@ -168,12 +171,16 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
   }
 
   void playSoundDetailScreen(String sound) async {
-    await player.play(BASE_URL + '/sound/' + sound);
-    player.onPlayerCompletion.listen((event) {
-      setState(() {
-        buttonBackground = Colors.white;
-      });
-    });
+    await player.play(BASE_URL + '/sound/' + sound).whenComplete(() => {
+          setState(() {
+            buttonBackground = Colors.white;
+          }),
+        });
+    // player.onPlayerCompletion.((event) {
+    //   setState(() {
+    //     buttonBackground = Colors.white;
+    //   });
+    // });
   }
 }
 

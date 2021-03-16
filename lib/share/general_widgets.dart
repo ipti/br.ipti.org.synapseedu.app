@@ -2,18 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'elesson_icon_lib_icons.dart';
 
-Widget elessonCard({String backgroundImage, String text, double screenWidth, Function onTap,BuildContext context}) {
+Widget elessonCard({String backgroundImage, String text, double screenWidth, Function onTap, BuildContext context, bool blockDone}) {
   return GestureDetector(
     onTap: () {
       Future<String> retorno = onTap(context);
     },
     child: Container(
+      margin: EdgeInsets.all(2),
       height: 166,
       child: Card(
         semanticContainer: true,
         clipBehavior: Clip.hardEdge,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(36.0),
+          // side: BorderSide(
+          //   width: blockDone ? 4 : 0,
+          //   color: Color.fromRGBO(0, 220, 140, 0.4),
+          // ),
         ),
         elevation: 5,
         margin: EdgeInsets.only(left: 24, right: 24, bottom: 24),
@@ -74,7 +79,7 @@ Widget loadingAnimation() {
   );
 }
 
-Widget initTitle({String text,double heightScreen,double bottomMargin}) {
+Widget initTitle({String text, double heightScreen, double bottomMargin}) {
   return Container(
     height: heightScreen * 0.12,
     margin: EdgeInsets.only(bottom: bottomMargin == null ? 0 : bottomMargin),
@@ -90,7 +95,12 @@ Widget initTitle({String text,double heightScreen,double bottomMargin}) {
     child: Center(
       child: Text(
         text,
-        style: TextStyle(color: Color(0XFF00004C), fontWeight: FontWeight.bold, fontFamily: "ElessonIconLib", fontSize: heightScreen * 0.024),
+        style: TextStyle(
+          color: Color(0XFF00004C),
+          fontWeight: FontWeight.bold,
+          fontFamily: "ElessonIconLib",
+          fontSize: heightScreen * 0.024,
+        ),
       ),
     ),
   );
