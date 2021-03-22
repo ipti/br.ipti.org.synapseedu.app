@@ -107,55 +107,52 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                 style: TextStyle(fontSize: screenHeight < 823 ? 16 : 24),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  inputWidget(_phoneNumberController, 'Ex: 79987651234',
-                      screenWidth, screenHeight),
-                  ButtonTheme(
-                    minWidth: screenHeight < 823 ? 48 : 64,
-                    height: screenHeight < 823 ? 48 : 64,
-                    child: OutlineButton(
-                      padding: const EdgeInsets.all(0),
-                      borderSide: const BorderSide(
-                        color: Color.fromRGBO(0, 0, 255, 0.2),
-                      ),
-                      color: Colors.white,
-                      textColor: const Color(0xFF0000FF),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      child: ImageIcon(
-                        AssetImage("assets/icons/chevron_right.png"),
-                      ),
-                      onPressed: () async {
-                        // student = await Student().searchForStudent();
-                        studentQuery = await StudentQuery()
-                            .searchStudent(_phoneNumberController.text);
-
-                        // print("true ${studentQuery.student.name}");
-                        if (studentQuery.valid != false) {
-                          if (_phoneNumberController.text.length == 11 &&
-                              studentQuery.student != null) {
-                            await sendCode(_phoneNumberController.text);
-                            Navigator.pushReplacementNamed(
-                                context, CodeVerifyView.routeName,
-                                arguments: studentQuery.student);
-                          }
-                        } else
-                          setState(() {
-                            errorText = studentQuery.error +
-                                ".\nPor favor, tente novamente.";
-
-                            opacity = 1;
-                          });
-                      },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                inputWidget(_phoneNumberController, 'Ex: 79987651234',
+                    screenWidth, screenHeight),
+                ButtonTheme(
+                  minWidth: screenHeight < 823 ? 48 : 64,
+                  height: screenHeight < 823 ? 48 : 64,
+                  child: OutlineButton(
+                    padding: const EdgeInsets.all(0),
+                    borderSide: const BorderSide(
+                      color: Color.fromRGBO(0, 0, 255, 0.2),
                     ),
+                    color: Colors.white,
+                    textColor: const Color(0xFF0000FF),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                    child: ImageIcon(
+                      AssetImage("assets/icons/chevron_right.png"),
+                    ),
+                    onPressed: () async {
+                      // student = await Student().searchForStudent();
+                      studentQuery = await StudentQuery()
+                          .searchStudent(_phoneNumberController.text);
+
+                      // print("true ${studentQuery.student.name}");
+                      if (studentQuery.valid != false) {
+                        if (_phoneNumberController.text.length == 11 &&
+                            studentQuery.student != null) {
+                          await sendCode(_phoneNumberController.text);
+                          Navigator.pushReplacementNamed(
+                              context, CodeVerifyView.routeName,
+                              arguments: studentQuery.student);
+                        }
+                      } else
+                        setState(() {
+                          errorText = studentQuery.error +
+                              ".\nPor favor, tente novamente.";
+
+                          opacity = 1;
+                        });
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             SizedBox(
               height: 10,
