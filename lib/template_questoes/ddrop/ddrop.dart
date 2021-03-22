@@ -4,6 +4,7 @@ import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:fdottedline/fdottedline.dart';
 import '../share/image_detail_screen.dart';
@@ -49,7 +50,7 @@ class _DragAndDropState extends State<DragAndDrop> {
 
   @override
   Widget build(BuildContext context) {
-    //pieceId = cobjectList[0].questions[questionIndex].pieceId;
+    SystemChrome.setEnabledSystemUIOverlays([]);
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     cobjectList = args.cobjectList;
     cobjectIdList = args.cobjectIdList;
@@ -65,7 +66,7 @@ class _DragAndDropState extends State<DragAndDrop> {
     double heightScreen = MediaQuery.of(context).size.height * 0.93;
     Stopwatch chronometer = Stopwatch();
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      // resizeToAvoidBottomPadding: false,
       body: TemplateSlider(
         cobjectIdList: cobjectIdList,
         cobjectIdListLength: cobjectIdLength,
