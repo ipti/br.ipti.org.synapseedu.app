@@ -287,10 +287,9 @@ class _TemplateSliderState extends State<TemplateSlider> {
         child: Column(
           children: <Widget>[
             Container(
-              // color: Colors.red,
               child: Center(child: widget.title),
               height: (screenHeight * 0.145) - 12,
-              padding: EdgeInsets.only(left: 16, right: 16),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               margin: EdgeInsets.only(top: 12),
             ),
             widget.linkImage != null
