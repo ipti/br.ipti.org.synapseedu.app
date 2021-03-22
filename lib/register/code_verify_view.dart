@@ -154,7 +154,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
             Form(
               key: formKey,
               child: Padding(
-                padding: const EdgeInsets.only(top: 8.0, left: 30, right: 30),
+                padding: const EdgeInsets.only(top: 8.0, left: 10, right: 10),
                 child: PinCodeTextField(
                   appContext: context,
                   pastedTextStyle: TextStyle(
