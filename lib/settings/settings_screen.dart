@@ -129,7 +129,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             alignment: Alignment.center,
             child: Text(
               'Ajustes',
-              style: TextStyle(fontWeight: FontWeight.lerp(FontWeight.w100, FontWeight.bold, 1), fontSize: size.height * 0.03, color: Color(0xFF00004C)),
+              style: TextStyle(
+                  fontWeight:
+                      FontWeight.lerp(FontWeight.w100, FontWeight.bold, 1),
+                  fontSize: size.height * 0.03,
+                  color: Color(0xFF00004C)),
             ),
           ),
           Container(
@@ -137,7 +141,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
             child: Text(
               "Fizemos o máximo para explicar de forma clara e simples quais dados pessoais precisaremos de você e o que vamos fazer com cada um deles. Por isso, separamos no link abaixo os pontos mais importantes, que também podem ser lidos de forma bem completa e detalhada no nosso site.",
-              style: TextStyle(color: Colors.black54, fontSize: size.height * 0.02, fontWeight: FontWeight.w500),
+              style: TextStyle(
+                  color: Colors.black54,
+                  fontSize: size.height * 0.02,
+                  fontWeight: FontWeight.w500),
             ),
           ),
           Container(
@@ -149,7 +156,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     launch("https://www.elesson.com.br/privacidade/");
                   },
                 text: 'Políticas de privacidade',
-                style: TextStyle(color: Color(0xFF00004C), fontWeight: FontWeight.bold, fontSize: size.height * 0.02),
+                style: TextStyle(
+                    color: Color(0xFF00004C),
+                    fontWeight: FontWeight.bold,
+                    fontSize: size.height * 0.02),
               ),
             ),
           ),
@@ -164,7 +174,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 Text(
                   'Aceito os termos',
-                  style: TextStyle(color: Colors.black54, fontSize: size.height * 0.02, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: size.height * 0.02,
+                      fontWeight: FontWeight.w600),
                 ),
                 Transform.scale(
                   scale: 1.2,
