@@ -52,7 +52,6 @@ dependencies:
   percent_indicator: ^2.1.8
   googleapis_auth: any
   googleapis: ^0.56.1
-  flutter_switch: ^0.0.2
   #
 
 dev_dependencies:
