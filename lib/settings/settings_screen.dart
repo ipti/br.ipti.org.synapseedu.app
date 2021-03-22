@@ -1,8 +1,12 @@
+import 'package:elesson/share/question_widgets.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_switch/flutter_switch.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /**
- * Tela de configuração do aplicativo. No momento, é apenas uma tela sem funções lógicas, apenas implementada para o aplicativo entrar na playstore. * 
- * 
+ * Tela de configuração do aplicativo. No momento, é apenas uma tela sem funções lógicas, apenas implementada para o aplicativo entrar na playstore. *
+ *
  */
 
 class SettingsScreen extends StatefulWidget {
@@ -43,10 +47,12 @@ Widget backButton(double buttonSize, BuildContext context) {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  bool status = true;
+
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double buttonSize = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+    Size size = MediaQuery.of(context).size;
+    double buttonSize = 48 > size.height * 0.0656 ? 48 : size.height * 0.0656;
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
@@ -58,18 +64,67 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ],
         ),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            RichText(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: size.height * 0.15,
+            width: size.width,
+            alignment: Alignment.center,
+            child: Text(
+              'Ajustes',
+              style: TextStyle(fontWeight: FontWeight.lerp(FontWeight.w100, FontWeight.bold, 1), fontSize: size.height * 0.03, color: Color(0xFF00DC8C)),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(bottom: 20),
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+            child: Text(
+              "Fizemos o máximo para explicar de forma clara e simples quais dados pessoais precisaremos de você e o que vamos fazer com cada um deles. Por isso, separamos no link abaixo os pontos mais importantes, que também podem ser lidos de forma bem completa e detalhada no nosso site.",
+              style: TextStyle(color: Colors.black54,fontSize: size.height*0.02,fontWeight: FontWeight.w500),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+            child: RichText(
               text: TextSpan(
-                  text: 'hey', style: TextStyle(color: Color(0xFF0000FF))),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    launch("https://www.elesson.com.br/privacidade/");
+                  },
+                text: 'Politicas de privacidade',
+                style: TextStyle(color: Color(0xFF00004C), fontWeight: FontWeight.bold, fontSize: size.height * 0.02),
+              ),
             ),
-            SizedBox(
-              height: 50,
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            width: size.width,
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Aceito os termos',style: TextStyle(color: Colors.black54,fontSize: size.height*0.02,fontWeight: FontWeight.w600),),
+                FlutterSwitch(
+                  height: 20.0,
+                  width: 40.0,
+                  padding: 4.0,
+                  toggleSize: 15.0,
+                  borderRadius: 10.0,
+                  activeColor: Color(0xFF00DC8C),
+                  value: status,
+                  onToggle: (value) {
+                    setState(() {
+                      status = value;
+                    });
+                  },
+                ),
+              ],
             ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
