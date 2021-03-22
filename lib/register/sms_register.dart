@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/register/code_verify_view.dart';
 import 'package:elesson/register/student_model.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ Future<void> sendCode(String phoneNumber) async {
 
 class SmsRegisterView extends StatefulWidget {
   static const routeName = '/sms-register';
+
   @override
   _SmsRegisterViewState createState() => _SmsRegisterViewState();
 }
@@ -112,8 +114,7 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  inputWidget(_phoneNumberController, 'Ex: 79987651234',
-                      screenWidth, screenHeight),
+                  inputWidget(_phoneNumberController, 'Ex: 79987651234', screenWidth, screenHeight),
                   ButtonTheme(
                     minWidth: screenHeight < 823 ? 48 : 64,
                     height: screenHeight < 823 ? 48 : 64,
@@ -132,25 +133,32 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                       ),
                       onPressed: () async {
                         // student = await Student().searchForStudent();
-                        studentQuery = await StudentQuery()
-                            .searchStudent(_phoneNumberController.text);
+                        studentQuery = await StudentQuery().searchStudent(_phoneNumberController.text);
 
-                        // print("true ${studentQuery.student.name}");
-                        if (studentQuery.valid != false) {
-                          if (_phoneNumberController.text.length == 11 &&
-                              studentQuery.student != null) {
-                            await sendCode(_phoneNumberController.text);
-                            Navigator.pushReplacementNamed(
-                                context, CodeVerifyView.routeName,
-                                arguments: studentQuery.student);
+                        //todo remover aqui pra retirar o usuario de testes
+                        if (studentQuery.student.phone == '79999466220') {
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+
+                          prefs.setBool('isConfirmed', true);
+                          prefs.setString('student_name', studentQuery.student.name.split(" ")[0].toUpperCase());
+                          prefs.setInt('student_id', studentQuery.student.id);
+                          prefs.setString('student_phone', studentQuery.student.phone);
+                          print("Verificado com sucesso");
+                          Navigator.of(context).pushReplacementNamed('/');
+                        } else {
+                          // print("true ${studentQuery.student.name}");
+                          if (studentQuery.valid != false) {
+                            if (_phoneNumberController.text.length == 11 && studentQuery.student != null) {
+                              await sendCode(_phoneNumberController.text);
+                              Navigator.pushReplacementNamed(context, CodeVerifyView.routeName, arguments: studentQuery.student);
+                            }
+                          } else {
+                            setState(() {
+                              errorText = studentQuery.error + ".\nPor favor, tente novamente.";
+                              opacity = 1;
+                            });
                           }
-                        } else
-                          setState(() {
-                            errorText = studentQuery.error +
-                                ".\nPor favor, tente novamente.";
-
-                            opacity = 1;
-                          });
+                        }
                       },
                     ),
                   ),
@@ -215,8 +223,7 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
   }
 
   //<====parametros(controller , texto inicial)====>
-  Widget inputWidget(TextEditingController phoneNumberController,
-      String hintText, double screenWidth, double screenHeight) {
+  Widget inputWidget(TextEditingController phoneNumberController, String hintText, double screenWidth, double screenHeight) {
     return Container(
       height: screenHeight < 823 ? 48 : 70,
       width: (303 / 411) * screenWidth,
@@ -229,8 +236,9 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
             height: 1,
             fontWeight: FontWeight.w700,
           ),
-          validator: (value) =>
-              value.length < 11 ? "Entre um número válido" : null,
+          validator: (value) {
+            return value.length < 11 ? "Entre um número válido" : null;
+          },
           onChanged: (value) {
             setState(() {
               phoneNumber = value;
