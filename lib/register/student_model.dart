@@ -12,7 +12,8 @@ class Student {
   Student({@required this.id, @required this.name, @required this.phone});
 
 // 79999466220
-  Future<Student> searchForStudent({String phoneNumber = '79999466220'}) async {
+  //   Future<Student> searchForStudent({String phoneNumber = '79999466220'}) async {
+  Future<Student> searchForStudent(String phoneNumber) async {
     final url = 'https://elesson.com.br/api/student/' + phoneNumber;
 
     final stringsStudent =
@@ -27,6 +28,7 @@ class Student {
     return student;
   }
 }
+
 
 class StudentQuery {
   bool valid;
