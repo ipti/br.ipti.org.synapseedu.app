@@ -98,6 +98,7 @@ getCobject(int cobjectIndex, BuildContext context, List<String> cobjectIdList,
     context.read(cobjectProvider).fetchCobjects(cobject);
     cobjectList = context.read(cobjectProvider).items;
     print('PiecesetIndex: $piecesetIndex');
+    print('ID ATUAL: ${cobjectIdList[cobjectIndex]}');
     // print('cobjectQuestionLength ${cobjectList[0].questions.length}');
 
     switch (questionType) {

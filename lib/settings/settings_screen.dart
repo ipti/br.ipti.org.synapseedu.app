@@ -2,6 +2,7 @@ import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /**
@@ -47,12 +48,55 @@ Widget backButton(double buttonSize, BuildContext context) {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool status = true;
+  // bool status = true;
+  SharedPreferences prefs;
+  bool acceptTerms = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getTermsSwitchValues();
+  }
+
+  getTermsSwitchValues() async {
+    // print('AQUI: $acceptTerms');
+    print('VEIO CÁ $acceptTerms');
+    acceptTerms = await getTermsSwitchState();
+    setState(() {});
+  }
+
+  Future<bool> getTermsSwitchState() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      acceptTerms = prefs.getBool('termos') ?? false;
+    });
+    return acceptTerms;
+    // return a
+  }
+
+  void saveSwitchState(bool value) async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setBool("termos", value);
+    print('Switch Value saved $value');
+    // return prefs.setBool("switchState", value);
+  }
+
+  // @override
+  // void didChangeDependencies() async {
+  //   // TODO: implement didChangeDependencies
+  //   prefs = await SharedPreferences.getInstance();
+  //   acceptTerms = await prefs.getBool('termos') ?? false;
+  //   // print(acceptTerms);
+  //   setState(() {});
+  //   super.didChangeDependencies();
+  // }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double buttonSize = 48 > size.height * 0.0656 ? 48 : size.height * 0.0656;
+    print('ESSE: $acceptTerms');
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
@@ -73,7 +117,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             alignment: Alignment.center,
             child: Text(
               'Ajustes',
-              style: TextStyle(fontWeight: FontWeight.lerp(FontWeight.w100, FontWeight.bold, 1), fontSize: size.height * 0.03, color: Color(0xFF00DC8C)),
+              style: TextStyle(
+                  fontWeight:
+                      FontWeight.lerp(FontWeight.w100, FontWeight.bold, 1),
+                  fontSize: size.height * 0.03,
+                  color: Color(0xFF00004C)),
             ),
           ),
           Container(
@@ -81,7 +129,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
             child: Text(
               "Fizemos o máximo para explicar de forma clara e simples quais dados pessoais precisaremos de você e o que vamos fazer com cada um deles. Por isso, separamos no link abaixo os pontos mais importantes, que também podem ser lidos de forma bem completa e detalhada no nosso site.",
-              style: TextStyle(color: Colors.black54,fontSize: size.height*0.02,fontWeight: FontWeight.w500),
+              style: TextStyle(
+                  color: Colors.black54,
+                  fontSize: size.height * 0.02,
+                  fontWeight: FontWeight.w500),
             ),
           ),
           Container(
@@ -92,8 +143,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ..onTap = () {
                     launch("https://www.elesson.com.br/privacidade/");
                   },
-                text: 'Politicas de privacidade',
-                style: TextStyle(color: Color(0xFF00004C), fontWeight: FontWeight.bold, fontSize: size.height * 0.02),
+                text: 'Políticas de privacidade',
+                style: TextStyle(
+                    color: Color(0xFF00004C),
+                    fontWeight: FontWeight.bold,
+                    fontSize: size.height * 0.02),
               ),
             ),
           ),
@@ -106,7 +160,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Aceito os termos',style: TextStyle(color: Colors.black54,fontSize: size.height*0.02,fontWeight: FontWeight.w600),),
+                Text(
+                  'Aceito os termos',
+                  style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: size.height * 0.02,
+                      fontWeight: FontWeight.w600),
+                ),
                 FlutterSwitch(
                   height: 20.0,
                   width: 40.0,
@@ -114,11 +174,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   toggleSize: 15.0,
                   borderRadius: 10.0,
                   activeColor: Color(0xFF00DC8C),
-                  value: status,
+                  value: acceptTerms,
                   onToggle: (value) {
                     setState(() {
-                      status = value;
+                      acceptTerms = value;
                     });
+                    // prefs.setBool('termos', value);
+                    saveSwitchState(value);
+                    print('Mudou para: $acceptTerms');
                   },
                 ),
               ],
