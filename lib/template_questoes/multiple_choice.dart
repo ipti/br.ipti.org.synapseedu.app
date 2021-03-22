@@ -229,23 +229,25 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16,vertical: 32),
+                      padding: EdgeInsets.symmetric(horizontal: 16,vertical: 0),
                       height: textCardHeight + 32,
                       child: GestureDetector(
                         onTap: () => playSound(cobjectList[0].questions[questionIndex].header["sound"]),
-                        child: Text(
-                          cobjectList[0].questions[questionIndex].header["text"].toUpperCase(),
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: fonteDaLetra,
-                            fontFamily: 'Mulish',
+                        child: Center(
+                          child: Text(
+                            cobjectList[0].questions[questionIndex].header["text"].toUpperCase(),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: fonteDaLetra,
+                              fontFamily: 'Mulish',
+                            ),
+                            // recognizer: TapGestureRecognizer()
+                            //   ..onTap = () {
+                            //     ;
+                            //   },
+                            // ),
                           ),
-                          // recognizer: TapGestureRecognizer()
-                          //   ..onTap = () {
-                          //     ;
-                          //   },
-                          // ),
                         ),
                       ),
                     ),

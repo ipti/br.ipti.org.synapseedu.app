@@ -448,10 +448,13 @@ class ElessonCardWidget extends StatelessWidget {
           margin: EdgeInsets.only(left: 24, right: 24, bottom: 24),
           child: Stack(
             children: [
-              Image.asset(
-                backgroundImage,
-                fit: BoxFit.cover,
-                width: screenWidth,
+              Container(
+                height: 166.0,
+                child: Image.asset(
+                  backgroundImage,
+                  fit: BoxFit.cover,
+                  width: screenWidth,
+                ),
               ),
               !blockDone
                   ? Container(

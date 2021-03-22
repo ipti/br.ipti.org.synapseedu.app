@@ -1,5 +1,6 @@
 import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/register/code_verify_view.dart';
+import 'package:elesson/settings/settings_screen.dart';
 import 'package:elesson/share/block_conclusion.dart';
 import 'package:elesson/share/qr_code_reader.dart';
 import 'package:elesson/share/question_widgets.dart';
@@ -150,6 +151,7 @@ class _HomeState extends State<Home> {
         // PreSomIa.routeName: (context) => PreSomIa(),
         //----------------------------rotas fora de fluxo---------------------------
         ActivitySelectionForm.routeName: (context) => ActivitySelectionForm(),
+        SettingsScreen.routeName: (context) => SettingsScreen(),
         SingleLineTextQuestion.routeName: (context) => SingleLineTextQuestion(),
         DragAndDrop.routeName: (context) => DragAndDrop(),
         MultipleChoiceQuestion.routeName: (context) => MultipleChoiceQuestion(),
