@@ -309,7 +309,7 @@ class Question {
             for (var pair in value["generalProperties"]) {
               if (pair["name"] == "src") {
                 if (pair["value"].endsWith(".mp3")) {
-                  print('MP3: ${pair["value"]}');
+                  // print('MP3: ${pair["value"]}');
                   item[index].update("sound", (val) => pair["value"]);
                   if (itemsMap["composition"]["sound"] == false)
                     itemsMap["composition"]["sound"] = true;
