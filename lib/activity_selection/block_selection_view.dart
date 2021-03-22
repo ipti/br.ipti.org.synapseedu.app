@@ -42,6 +42,7 @@ class _BlockSelectionState extends State<BlockSelection> {
       // print(cobject["id"]);
       cobjectIdList.add(cobject["id"]);
     });
+    print(cobjectIdList);
 
     getCobject(cobjectId, context, cobjectIdList, piecesetIndex: questionIndex);
   }
@@ -106,9 +107,10 @@ class _BlockSelectionState extends State<BlockSelection> {
                   textModulo: 'MÓDULO 1',
                   screenWidth: widthScreen,
                   onTap: (value) {
-                    // if (sciOk == false) redirectToQuestion(0, '3','Ciências');
-                    // else print("Você já fez essa tarefinha!");
-                    print("Este bloco estará disponível em breve!");
+                    if (sciOk == false)
+                      redirectToQuestion(0, '3', 'Ciências');
+                    else
+                      print("Você já fez essa tarefinha!");
                   },
                   context: context,
                 )

@@ -1,3 +1,4 @@
+import 'package:elesson/settings/settings_screen.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -141,6 +142,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                 ),
                 onPressed: () => {
                   // A ser decidido o que fará
+                  Navigator.of(context).pushNamed(SettingsScreen.routeName),
                 },
               ),
             ),
