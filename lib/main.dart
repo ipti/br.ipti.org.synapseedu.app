@@ -131,9 +131,9 @@ class _HomeState extends State<Home> {
         fontFamily: 'Mulish',
         textTheme: GoogleFonts.muliTextTheme(),
       ),
-      // initialRoute: isLogged ? '/' : SpaceSelection.routeName,
+      initialRoute: isLogged ? '/' : SpaceSelection.routeName,
       // initialRoute: BlockSelection.routeName,
-      initialRoute: SettingsScreen.routeName,
+      // initialRoute: SettingsScreen.routeName,
       // initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
       // initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName, // alterado para apresentação
       routes: {
