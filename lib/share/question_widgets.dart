@@ -542,8 +542,9 @@ Future<void> sendMetaData(
     bool isCorrect}) async {
   print("tentando enviar metadata");
   print(isCorrect);
+  var response;
   try {
-    var response = await http.post(
+    response = await http.post(
         "http://app.elesson.com.br/api-synapse/synapse/performance/actor/save",
         body: {
           "mode": "proficiency", //ok
@@ -561,6 +562,7 @@ Future<void> sendMetaData(
         headers: {
           HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
         });
+    print('foi');
   } catch (e) {
     print("ERROR:");
     print(e.message);
@@ -641,6 +643,27 @@ Widget LoadingGestureDetector(
         ],
       ),
     ),
+    onHorizontalDragCancel: definedPosition >= 4 ? () {
+      setState(() {
+        switch (definedPosition) {
+          case 4:
+            setState(() {
+              double4LoadingPercent = 0;
+            });
+            break;
+          case 5:
+            setState(() {
+              double5LoadingPercent = 0;
+            });
+            break;
+          case 6:
+            setState(() {
+              double6LoadingPercent = 0;
+            });
+            break;
+        }
+      });
+    } : null,
     onPanCancel: () {
       setState(() {
         switch (definedPosition) {
