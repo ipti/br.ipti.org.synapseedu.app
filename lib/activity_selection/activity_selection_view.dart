@@ -299,7 +299,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
     }
 
     return Scaffold(
-      resizeToAvoidBottomPadding: true,
+      // resizeToAvoidBottomPadding: true,
       appBar: AppBar(
         title: Text(
           'Elesson',

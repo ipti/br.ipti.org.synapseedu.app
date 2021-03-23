@@ -237,7 +237,7 @@ class _DragAndDropState extends State<DragAndDrop> {
               height: widthScreen / 2.6,
               child: Stack(
                 children: [
-                  box(1, widthScreen, question),
+                  box(index: 1, widthScreen: widthScreen, question: question,cor: valueFirstReceiver == 1 ? Color(0xFFBD00FF).withOpacity(0.2) : valueFirstReceiver == 3 ? Color(0xFF00CBFF).withOpacity(0.2) : valueFirstReceiver == 2 ? Color(0xFFFF8A00).withOpacity(0.2) : null),
                   LoadingGestureDetector(
                     enableMargin: true,
                     widthScreen: widthScreen,
@@ -294,7 +294,7 @@ class _DragAndDropState extends State<DragAndDrop> {
               height: widthScreen / 2.6,
               child: Stack(
                 children: [
-                  box(2, widthScreen, question),
+                  box(index: 2, widthScreen: widthScreen, question: question,cor: valueSecondReceiver == 1 ? Color(0xFFBD00FF).withOpacity(0.2) : valueSecondReceiver == 3 ? Color(0xFF00CBFF).withOpacity(0.2) : valueSecondReceiver == 2 ? Color(0xFFFF8A00).withOpacity(0.2) : null),
                   LoadingGestureDetector(
                     enableMargin: true,
                     widthScreen: widthScreen,
@@ -342,7 +342,7 @@ class _DragAndDropState extends State<DragAndDrop> {
               height: widthScreen / 2.6,
               child: Stack(
                 children: [
-                  box(3, widthScreen, question),
+                  box(index: 3, widthScreen: widthScreen, question: question,cor: valueThirdReceiver == 1 ? Color(0xFFBD00FF).withOpacity(0.2) : valueThirdReceiver == 3 ? Color(0xFF00CBFF).withOpacity(0.2) : valueThirdReceiver == 2 ? Color(0xFFFF8A00).withOpacity(0.2) : null),
                   LoadingGestureDetector(
                     enableMargin: true,
                     widthScreen: widthScreen,
@@ -487,7 +487,7 @@ class _DragAndDropState extends State<DragAndDrop> {
     );
   }
 
-  Widget box(int index, double widthScreen, Question question) {
+  Widget box({int index, double widthScreen, Question question, Color cor}) {
     return Hero(
       tag: index == 1
           ? 'box1'
@@ -503,7 +503,7 @@ class _DragAndDropState extends State<DragAndDrop> {
             fit: BoxFit.cover,
           ),
           border: Border.all(
-            color: Color.fromRGBO(189, 0, 255, 0.2),
+            color: cor != null ? cor : Color(0xFF6E7291).withOpacity(0.2),
             width: 2,
           ),
         ),
