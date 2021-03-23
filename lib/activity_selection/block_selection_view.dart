@@ -108,9 +108,11 @@ class _BlockSelectionState extends State<BlockSelection> {
                     textModulo: 'MÓDULO 1',
                     screenWidth: widthScreen,
                     onTap: (value) {
-                      // if (sciOk == false) redirectToQuestion(0, '3','Ciências');
-                      // else print("Você já fez essa tarefinha!");
-                      print("Este bloco estará disponível em breve!");
+                      if (sciOk == false)
+                        redirectToQuestion(0, '3', 'Ciências');
+                      else
+                        print("Você já fez essa tarefinha!");
+                      // print("Este bloco estará disponível em breve!");
                     },
                     context: context,
                   )
