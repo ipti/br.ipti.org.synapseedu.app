@@ -213,7 +213,7 @@ class _PreSomIaState extends State<PreSomIa> {
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
-                            hintText: 'Escreva a resposta aqui',
+                            hintText: 'Digite a resposta aqui',
                             contentPadding: const EdgeInsets.all(8.0),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.white),
