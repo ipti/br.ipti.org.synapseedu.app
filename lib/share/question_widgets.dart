@@ -204,9 +204,9 @@ void submitLogic(BuildContext context, int questionIndex, int cobjectIndex,
   print('$questionIndex e $cobjectQuestionsLength');
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String discipline = cobjectList[0].discipline;
-  // prefs.setInt('last_cobject_$discipline', cobjectIndex);
+  prefs.setInt('last_cobject_$discipline', cobjectIndex);
 
-  // prefs.setInt('last_question_$discipline', questionIndex);
+  prefs.setInt('last_question_$discipline', questionIndex);
 
   if (questionIndex < cobjectQuestionsLength && questionType != 'TXT') {
     switch (questionType) {
@@ -284,14 +284,14 @@ void submitLogic(BuildContext context, int questionIndex, int cobjectIndex,
     // Alterei o if(++cobjectIndex para o atual, inclusive alterando o endereço do getCobject. Caso tenha problema de não alterar o cobject, é isso);
     if (cobjectIndex + 1 < cobjectIdListLength) {
       print('no if: $cobjectIndex e $cobjectIdList');
-      // prefs.setInt('last_question_$discipline', 0);
-      // prefs.setInt('last_cobject_$discipline', cobjectIndex + 1);
+      prefs.setInt('last_question_$discipline', 0);
+      prefs.setInt('last_cobject_$discipline', cobjectIndex + 1);
       getCobject(cobjectIndex + 1, context, cobjectIdList);
     } else {
       // String discipline = cobjectList[0].discipline;
       String year = cobjectList[0].year;
-      // prefs.setInt('last_cobject_$discipline', 0);
-      // prefs.setInt('last_question_$discipline', 0);
+      prefs.setInt('last_cobject_$discipline', 0);
+      prefs.setInt('last_question_$discipline', 0);
 
       // SharedPreferences prefs;
       // prefs = await SharedPreferences.getInstance();
