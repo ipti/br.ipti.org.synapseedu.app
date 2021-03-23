@@ -6,6 +6,7 @@ import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/root/start_and_send_test.dart';
 import 'package:elesson/share/qr_code_reader.dart';
 import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
+import 'package:elesson/template_questoes/PRE_SOM_IA.dart';
 import 'package:elesson/template_questoes/block_conclusion_arguments_model.dart';
 import 'package:elesson/template_questoes/ddrop/ddrop.dart';
 import 'package:elesson/template_questoes/ddrop/ddrop_function.dart';
@@ -102,6 +103,32 @@ getCobject(int cobjectIndex, BuildContext context, List<String> cobjectIdList,
     // print('cobjectQuestionLength ${cobjectList[0].questions.length}');
 
     switch (questionType) {
+      case "PRE_VISION":
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            PreImgIa.routeName,
+            ModalRoute.withName(StartAndSendTest.routeName),
+            arguments: ScreenArguments(
+                cobjectList,
+                cobjectIdList,
+                cobjectIdListLength,
+                cobjectList[0].questions.length,
+                piecesetIndex,
+                'PRE_VISION',
+                cobjectIndex));
+        break;
+        case "PRE_EAR":
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            PreSomIa.routeName,
+            ModalRoute.withName(StartAndSendTest.routeName),
+            arguments: ScreenArguments(
+                cobjectList,
+                cobjectIdList,
+                cobjectIdListLength,
+                cobjectList[0].questions.length,
+                piecesetIndex,
+                'PRE_EAR',
+                cobjectIndex));
+        break;
       case 'PRE':
         // //todo voltar ao normal depois aqui
         // Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
