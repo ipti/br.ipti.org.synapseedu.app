@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:elesson/settings/settings_screen.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
@@ -311,6 +312,34 @@ class _TemplateSliderState extends State<TemplateSlider> {
                               fit: BoxFit.cover,
                             ),
                           ),
+                          // child: Container(
+                          //   alignment: Alignment.center,
+                          //   height: screenWidth,
+                          //   child: Image.network(
+                          //     widget.linkImage,
+
+                          //     frameBuilder: (context, image, frame,
+                          //         wasSynchronouslyLoaded) {
+                          //       return Container(
+                          //         decoration: BoxDecoration(
+                          //           borderRadius: BorderRadius.circular(18),
+                          //           border: Border.all(
+                          //               width: 2,
+                          //               color:
+                          //                   Color.fromRGBO(110, 114, 145, 0.2)),
+                          //           image: DecorationImage(
+                          //             image: image,
+                          //             fit: BoxFit.cover,
+                          //           ),
+                          //         ),
+                          //       );
+                          //     },
+                          //     // placeholder: (context, url) =>
+                          //     //     CircularProgressIndicator(),
+                          //     // errorWidget: (context, url, error) =>
+                          //     //     Icon(Icons.error),
+                          //   ),
+                          // ),
                         ),
                       ),
                       padding: EdgeInsets.only(left: 16, right: 16),

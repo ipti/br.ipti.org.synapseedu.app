@@ -115,6 +115,20 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                         BASE_URL +
                             '/image/' +
                             question.pieces[grouping]["image"],
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          }
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes
+                                  : null,
+                            ),
+                          );
+                        },
                       )
                     // ? Image.asset('assets/img/placeholder.jpg')
                     : Container(
