@@ -165,7 +165,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                 question.pieces["correctAnswer"] == index + 1
                     ? isCorrect = true
                     : isCorrect = false;
-                print('Correto: ${question.pieces["correctAnswer"]}');
+                // print('Correto: ${question.pieces["correctAnswer"]}');
                 // setState(() {
                 //   for (int i = 0; i < 3; i++) {
                 //     if (_buttonPressed[i] == true && i != index)
@@ -220,12 +220,9 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     double buttonHeight =
         48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
     print(
-        'COBJECT LIST ID ${cobjectList[0]} e qindex ${cobjectList[0].questions[questionIndex]}');
+        'COBJECT LIST ID ${cobjectIdList[0]} e qindex ${cobjectList[0].questions[questionIndex]}');
 
     String imageLink = cobjectList[0].questions[questionIndex].header["image"];
-
-    // if (imageLink.isEmpty) print('O link tá vazio: "$imageLink"');
-    // if (imageLink == null) print('O link tá null: $imageLink');
 
     String pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
@@ -233,8 +230,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     SystemChrome.setEnabledSystemUIOverlays([]);
     String questionDescription = cobjectList[0].description;
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
-    // print(elapsedTimer.elapsed);
-    Stopwatch chronometer = Stopwatch();
+
+    // Stopwatch chronometer = Stopwatch();
 
     if (!pieceOrdered) {
       pieceOrdered = true;

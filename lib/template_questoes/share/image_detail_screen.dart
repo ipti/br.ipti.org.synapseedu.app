@@ -70,6 +70,21 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
                               question.pieces[grouping]["image"],
                           fit: BoxFit.fill,
                           width: screenWidth,
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            }
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes
+                                    : null,
+                              ),
+                            );
+                          },
                         )
                       : Padding(
                           padding: const EdgeInsets.all(8.0),

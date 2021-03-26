@@ -247,9 +247,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
       onPanUpdate: (details) {
         if (!widget.isTextTemplate) {
           if (timeStartIscaptured == false) {
-            print("capturou time start");
             timeStart = DateTime.now().millisecondsSinceEpoch;
-            print('timeStart na função topScreen: $timeStart');
+            // print('timeStart na função topScreen: $timeStart');
             timeStartIscaptured = true;
           }
           if (details.delta.dy < 0) {
@@ -263,11 +262,9 @@ class _TemplateSliderState extends State<TemplateSlider> {
         } else {
           if (details.delta.dy < 0) {
             if (timeStartIscaptured == false) {
-              print("capturou time start 2");
               timeStart = DateTime.now().millisecondsSinceEpoch;
               timeStartIscaptured = true;
             }
-            print("veieeeeeeeeo aqui");
             indexTextQuestion++;
             submitLogic(
               context,
@@ -305,12 +302,32 @@ class _TemplateSliderState extends State<TemplateSlider> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(18),
                             border: Border.all(
-                                width: 2,
-                                color: Color.fromRGBO(110, 114, 145, 0.2)),
-                            image: DecorationImage(
-                              image: NetworkImage(widget.linkImage),
-                              fit: BoxFit.cover,
+                              width: 2,
+                              color: Color.fromRGBO(110, 114, 145, 0.2),
                             ),
+                            // image: DecorationImage(
+                            //   image: NetworkImage(widget.linkImage),
+                            //   fit: BoxFit.cover,
+                            // ),
+                          ),
+                          child: Image.network(
+                            widget.linkImage,
+                            fit: BoxFit.cover,
+                            loadingBuilder: (BuildContext context, Widget child,
+                                ImageChunkEvent loadingProgress) {
+                              if (loadingProgress == null) {
+                                return child;
+                              }
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes !=
+                                          null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes
+                                      : null,
+                                ),
+                              );
+                            },
                           ),
                           // child: Container(
                           //   alignment: Alignment.center,
