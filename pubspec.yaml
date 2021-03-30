@@ -53,6 +53,7 @@ dependencies:
   googleapis_auth: any
   googleapis: ^0.56.1
   cached_network_image: ^2.5.1
+  screen_loader: ^2.0.1
   #
 
 dev_dependencies:

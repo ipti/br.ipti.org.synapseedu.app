@@ -48,7 +48,7 @@ class ApiBlock {
       response = await dio.get(url);
       blockId = response.data[0]["cobjectblock"][0]["id"];
     } catch (e) {
-      print(e.message);
+      blockId = "-1";
     }
 
     return blockId;

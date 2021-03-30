@@ -643,27 +643,29 @@ Widget LoadingGestureDetector(
         ],
       ),
     ),
-    onHorizontalDragCancel: definedPosition >= 4 ? () {
-      setState(() {
-        switch (definedPosition) {
-          case 4:
+    onHorizontalDragCancel: definedPosition >= 4
+        ? () {
             setState(() {
-              double4LoadingPercent = 0;
+              switch (definedPosition) {
+                case 4:
+                  setState(() {
+                    double4LoadingPercent = 0;
+                  });
+                  break;
+                case 5:
+                  setState(() {
+                    double5LoadingPercent = 0;
+                  });
+                  break;
+                case 6:
+                  setState(() {
+                    double6LoadingPercent = 0;
+                  });
+                  break;
+              }
             });
-            break;
-          case 5:
-            setState(() {
-              double5LoadingPercent = 0;
-            });
-            break;
-          case 6:
-            setState(() {
-              double6LoadingPercent = 0;
-            });
-            break;
-        }
-      });
-    } : null,
+          }
+        : null,
     onPanCancel: () {
       setState(() {
         switch (definedPosition) {

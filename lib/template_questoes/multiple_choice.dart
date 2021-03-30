@@ -129,6 +129,10 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                             ),
                           );
                         },
+                        errorBuilder: (context, exception, stackTrace) {
+                          print('erro');
+                          return Text('Hello');
+                        },
                       )
                     // ? Image.asset('assets/img/placeholder.jpg')
                     : Container(
