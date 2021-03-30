@@ -1,5 +1,5 @@
 import 'package:elesson/init_pages/space_selection.dart';
-import 'package:elesson/root/start_and_send_test.dart';
+import 'package:elesson/root/start_and_send_test(descontinuada).dart';
 import 'package:flutter/material.dart';
 
 // ESSA É UMA BASE DE UM PROJETO MEU QUE USA FIREBASE E FUNCIONA COM O PERSISTENTE, PODEMOS USAR ELA COMO BASE PARA FAZER A NOSSA,

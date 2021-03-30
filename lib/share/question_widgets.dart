@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/activity_selection/block_selection_view.dart';
-import 'package:elesson/root/start_and_send_test.dart';
+import 'package:elesson/root/start_and_send_test(descontinuada).dart';
 import 'package:elesson/share/qr_code_reader.dart';
 import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
 import 'package:elesson/template_questoes/PRE_SOM_IA.dart';
@@ -44,6 +44,7 @@ bool timeStartIscaptured = false;
 int timeEnd = 0;
 
 bool isLogged = false;
+bool isAdmin = false;
 
 Color buttonBackground = Colors.white;
 Color iconBackground = Color(0xFF0000FF);
@@ -83,8 +84,7 @@ getCobjectList(String disciplineId) async {
   // return cobjectIdList;
 }
 
-getCobject(int cobjectIndex, BuildContext context, List<String> cobjectIdList,
-    {int piecesetIndex = 0}) async {
+getCobject(int cobjectIndex, BuildContext context, List<String> cobjectIdList, {int piecesetIndex = 0}) async {
   int cobjectIdListLength = cobjectIdList.length;
   cobjectList.clear();
   // piecesetIndex pode substituir o questionIndex
@@ -104,30 +104,12 @@ getCobject(int cobjectIndex, BuildContext context, List<String> cobjectIdList,
 
     switch (questionType) {
       case "PRE_VISION":
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            PreImgIa.routeName,
-            ModalRoute.withName(StartAndSendTest.routeName),
-            arguments: ScreenArguments(
-                cobjectList,
-                cobjectIdList,
-                cobjectIdListLength,
-                cobjectList[0].questions.length,
-                piecesetIndex,
-                'PRE_VISION',
-                cobjectIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(PreImgIa.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+            arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'PRE_VISION', cobjectIndex));
         break;
-        case "PRE_EAR":
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            PreSomIa.routeName,
-            ModalRoute.withName(StartAndSendTest.routeName),
-            arguments: ScreenArguments(
-                cobjectList,
-                cobjectIdList,
-                cobjectIdListLength,
-                cobjectList[0].questions.length,
-                piecesetIndex,
-                'PRE_EAR',
-                cobjectIndex));
+      case "PRE_EAR":
+        Navigator.of(context).pushNamedAndRemoveUntil(PreSomIa.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+            arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'PRE_EAR', cobjectIndex));
         break;
       case 'PRE':
         // //todo voltar ao normal depois aqui
@@ -136,54 +118,20 @@ getCobject(int cobjectIndex, BuildContext context, List<String> cobjectIdList,
         // //todo aqui temos o novaigator levando para o PRE usando IA de imagem
         // Navigator.of(context)
         //     .pushNamedAndRemoveUntil(PreImgIa.routeName, ModalRoute.withName(StartAndSendTest.routeName), arguments: ScreenArguments(cobjectList, 0, 'PRE', cobjectIndex));
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            SingleLineTextQuestion.routeName,
-            ModalRoute.withName(StartAndSendTest.routeName),
-            arguments: ScreenArguments(
-                cobjectList,
-                cobjectIdList,
-                cobjectIdListLength,
-                cobjectList[0].questions.length,
-                piecesetIndex,
-                'PRE',
-                cobjectIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+            arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'PRE', cobjectIndex));
         break;
       case 'DDROP':
-        Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName,
-            ModalRoute.withName(StartAndSendTest.routeName),
-            arguments: ScreenArguments(
-                cobjectList,
-                cobjectIdList,
-                cobjectIdListLength,
-                cobjectList[0].questions.length,
-                piecesetIndex,
-                'DDROP',
-                cobjectIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+            arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'DDROP', cobjectIndex));
         break;
       case 'MTE':
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            MultipleChoiceQuestion.routeName,
-            ModalRoute.withName(StartAndSendTest.routeName),
-            arguments: ScreenArguments(
-                cobjectList,
-                cobjectIdList,
-                cobjectIdListLength,
-                cobjectList[0].questions.length,
-                piecesetIndex,
-                'MTE',
-                cobjectIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(MultipleChoiceQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+            arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'MTE', cobjectIndex));
         break;
       case 'TXT':
-        Navigator.of(context).pushNamedAndRemoveUntil(TextQuestion.routeName,
-            ModalRoute.withName(StartAndSendTest.routeName),
-            arguments: ScreenArguments(
-                cobjectList,
-                cobjectIdList,
-                cobjectIdListLength,
-                cobjectList[0].questions.length,
-                piecesetIndex,
-                'TXT',
-                cobjectIndex));
+        Navigator.of(context).pushNamedAndRemoveUntil(TextQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+            arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'TXT', cobjectIndex));
         break;
     }
   });
@@ -217,8 +165,7 @@ Widget soundButton(BuildContext context, Question question) {
       : null;
 }
 
-void submitLogic(BuildContext context, int questionIndex, int cobjectIndex,
-    String questionType,
+void submitLogic(BuildContext context, int questionIndex, int cobjectIndex, String questionType,
     {String pieceId,
     bool isCorrect,
     int finalTime,
@@ -238,74 +185,35 @@ void submitLogic(BuildContext context, int questionIndex, int cobjectIndex,
   if (questionIndex < cobjectQuestionsLength && questionType != 'TXT') {
     switch (questionType) {
       case 'PRE':
-        Navigator.of(context).pushReplacementNamed(
-            SingleLineTextQuestion.routeName,
-            arguments: ScreenArguments(
-                cobjectList,
-                cobjectIdList,
-                cobjectIdListLength,
-                cobjectQuestionsLength,
-                questionIndex,
-                'PRE',
-                cobjectIndex));
+        Navigator.of(context).pushReplacementNamed(SingleLineTextQuestion.routeName,
+            arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectQuestionsLength, questionIndex, 'PRE', cobjectIndex));
         break;
       case 'DDROP':
         Navigator.of(context).pushReplacementNamed(DragAndDrop.routeName,
-            arguments: ScreenArguments(
-                cobjectList,
-                cobjectIdList,
-                cobjectIdListLength,
-                cobjectQuestionsLength,
-                questionIndex,
-                'DDROP',
-                cobjectIndex));
+            arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectQuestionsLength, questionIndex, 'DDROP', cobjectIndex));
         break;
       case 'MTE':
-        Navigator.of(context).pushReplacementNamed(
-            MultipleChoiceQuestion.routeName,
-            arguments: ScreenArguments(
-                cobjectList,
-                cobjectIdList,
-                cobjectIdListLength,
-                cobjectQuestionsLength,
-                questionIndex,
-                'MTE',
-                cobjectIndex));
+        Navigator.of(context).pushReplacementNamed(MultipleChoiceQuestion.routeName,
+            arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectQuestionsLength, questionIndex, 'MTE', cobjectIndex));
         break;
     }
-  } else if (questionType == 'TXT' &&
-      indexTextQuestion < cobjectQuestionsLength) {
+  } else if (questionType == 'TXT' && indexTextQuestion < cobjectQuestionsLength) {
     // Para resolver o problema de pop na questão de texto tem que reavaliar a lógica
     // do botão de voltar na questão de texto
     // prefs.setInt('last_question_$discipline', indexTextQuestion);
     if (questionIndex == 0) {
       indexTextQuestion = 0;
       Navigator.of(context).pushReplacementNamed(TextQuestion.routeName,
-          arguments: ScreenArguments(
-              cobjectList,
-              cobjectIdList,
-              cobjectIdListLength,
-              cobjectQuestionsLength,
-              questionIndex,
-              'TXT',
-              cobjectIndex));
+          arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectQuestionsLength, questionIndex, 'TXT', cobjectIndex));
     } else {
       print('Índice da questão: $indexTextQuestion');
       Navigator.of(context).pushNamed(TextQuestion.routeName,
-          arguments: ScreenArguments(
-              cobjectList,
-              cobjectIdList,
-              cobjectIdListLength,
-              cobjectQuestionsLength,
-              indexTextQuestion,
-              'TXT',
-              cobjectIndex));
+          arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectQuestionsLength, indexTextQuestion, 'TXT', cobjectIndex));
     }
   } else {
     if (questionType == 'TXT') {
       //todo enviar como correto
-      Answer().sendAnswerToApi(pieceId, true, 0,
-          intervalResolution: 0, groupId: "", value: "");
+      Answer().sendAnswerToApi(pieceId, true, 0, intervalResolution: 0, groupId: "", value: "");
     }
 
     // Alterei o if(++cobjectIndex para o atual, inclusive alterando o endereço do getCobject. Caso tenha problema de não alterar o cobject, é isso);
@@ -346,30 +254,15 @@ void submitLogic(BuildContext context, int questionIndex, int cobjectIndex,
       }
 
       // Navigator.of(context).pushReplacementNamed("/");
-      Navigator.of(context).pushReplacementNamed(
-          BlockConclusionScreen.routeName,
-          arguments: BlockConclusionArguments(
-              discipline: discipline.toUpperCase(),
-              year: year,
-              studentName: studentName ?? 'Name'));
+      Navigator.of(context).pushReplacementNamed(BlockConclusionScreen.routeName,
+          arguments: BlockConclusionArguments(discipline: discipline.toUpperCase(), year: year, studentName: studentName ?? 'Name'));
       // }
     }
   }
 }
 
-Widget submitAnswer(
-    BuildContext context,
-    List<Cobject> cobjectList,
-    String questionType,
-    int questionIndex,
-    int cobjectIndex,
-    String pieceId,
-    bool isCorrect,
-    {String groupId,
-    String value,
-    List<String> cobjectIdList,
-    int cobjectIdListLength,
-    int cobjectQuestionsLength}) {
+Widget submitAnswer(BuildContext context, List<Cobject> cobjectList, String questionType, int questionIndex, int cobjectIndex, String pieceId, bool isCorrect,
+    {String groupId, String value, List<String> cobjectIdList, int cobjectIdListLength, int cobjectQuestionsLength}) {
   double screenHeight = MediaQuery.of(context).size.height;
   double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
   double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
@@ -402,10 +295,8 @@ Widget submitAnswer(
 
           print('tempo de diferença ${timeEnd - timeStart}');
           // modifiquei para funcionar.
-          Answer().sendAnswerToApi(pieceId, isCorrect, timeEnd,
-              intervalResolution: timeEnd - timeStart,
-              groupId: groupId != null ? groupId : "",
-              value: value != null ? value : "");
+          Answer()
+              .sendAnswerToApi(pieceId, isCorrect, timeEnd, intervalResolution: timeEnd - timeStart, groupId: groupId != null ? groupId : "", value: value != null ? value : "");
           // Answer().sendAnswerToApi(
           //   pieceId,
           //   isCorrect,
@@ -515,17 +406,11 @@ class ElessonCardWidget extends StatelessWidget {
                       children: [
                         Text(
                           text,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "ElessonIconLib"),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: "ElessonIconLib"),
                         ),
                         Text(
                           textModulo,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "ElessonIconLib"),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: "ElessonIconLib"),
                         ),
                       ],
                     ),
@@ -533,8 +418,7 @@ class ElessonCardWidget extends StatelessWidget {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width * 0.7),
+                margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.7),
                 alignment: Alignment.centerRight,
                 child: Center(
                   child: Icon(
@@ -552,43 +436,29 @@ class ElessonCardWidget extends StatelessWidget {
 }
 
 Future<String> scan(BuildContext context) async {
-  String returnedValue = await Navigator.push(
-      context,
-      new MaterialPageRoute(
-          builder: (BuildContext context) => new QrCodeReader()));
+  String returnedValue = await Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => new QrCodeReader()));
   //todo implementar aqui direcionamento pra aluma pagina se for preciso (OBS: Tem que ser antes do retorno pra não bugar)
   return returnedValue;
 }
 
-Future<void> sendMetaData(
-    {String pieceId,
-    String groupId,
-    int finalTime,
-    int intervalResolution,
-    String value,
-    bool isCorrect}) async {
+Future<void> sendMetaData({String pieceId, String groupId, int finalTime, int intervalResolution, String value, bool isCorrect}) async {
   print("tentando enviar metadata");
   print(isCorrect);
   var response;
   try {
-    response = await http.post(
-        "http://app.elesson.com.br/api-synapse/synapse/performance/actor/save",
-        body: {
-          "mode": "proficiency", //ok
-          "piece_id": pieceId, //ok
-          "group_id": groupId, //ok
-          "actor_id": "5", //ok (mockado)
-          "final_time": finalTime
-              .toString(), //ok // pode ser que precise colocar um .toString()
-          "interval_resolution": intervalResolution
-              .toString(), //ok // pode ser que precise colocar um .toString()
-          "value": value != null ? value : "",
-          "iscorrect": isCorrect.toString(),
-          "isMetadata": "true"
-        },
-        headers: {
-          HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
-        });
+    response = await http.post("http://app.elesson.com.br/api-synapse/synapse/performance/actor/save", body: {
+      "mode": "proficiency", //ok
+      "piece_id": pieceId, //ok
+      "group_id": groupId, //ok
+      "actor_id": "5", //ok (mockado)
+      "final_time": finalTime.toString(), //ok // pode ser que precise colocar um .toString()
+      "interval_resolution": intervalResolution.toString(), //ok // pode ser que precise colocar um .toString()
+      "value": value != null ? value : "",
+      "iscorrect": isCorrect.toString(),
+      "isMetadata": "true"
+    }, headers: {
+      HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
+    });
     print('foi');
   } catch (e) {
     print("ERROR:");
@@ -619,13 +489,7 @@ double double5LoadingPercent = 0;
 double double6LoadingPercent = 0;
 double current = 0;
 // ignore: non_constant_identifier_names, missing_return
-Widget LoadingGestureDetector(
-    {Widget child,
-    Function onLongPress,
-    Function setState,
-    int definedPosition,
-    double widthScreen,
-    bool enableMargin}) {
+Widget LoadingGestureDetector({Widget child, Function onLongPress, Function setState, int definedPosition, double widthScreen, bool enableMargin}) {
   switch (definedPosition) {
     case 1:
       current = double1LoadingPercent;
@@ -670,27 +534,29 @@ Widget LoadingGestureDetector(
         ],
       ),
     ),
-    onHorizontalDragCancel: definedPosition >= 4 ? () {
-      setState(() {
-        switch (definedPosition) {
-          case 4:
+    onHorizontalDragCancel: definedPosition >= 4
+        ? () {
             setState(() {
-              double4LoadingPercent = 0;
+              switch (definedPosition) {
+                case 4:
+                  setState(() {
+                    double4LoadingPercent = 0;
+                  });
+                  break;
+                case 5:
+                  setState(() {
+                    double5LoadingPercent = 0;
+                  });
+                  break;
+                case 6:
+                  setState(() {
+                    double6LoadingPercent = 0;
+                  });
+                  break;
+              }
             });
-            break;
-          case 5:
-            setState(() {
-              double5LoadingPercent = 0;
-            });
-            break;
-          case 6:
-            setState(() {
-              double6LoadingPercent = 0;
-            });
-            break;
-        }
-      });
-    } : null,
+          }
+        : null,
     onPanCancel: () {
       setState(() {
         switch (definedPosition) {

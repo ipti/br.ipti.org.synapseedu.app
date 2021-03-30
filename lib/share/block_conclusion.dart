@@ -9,6 +9,7 @@ class BlockConclusionScreen extends StatelessWidget {
 
   String studentName;
   final String module = '1';
+
   // final String discipline = 'LINGUAGENS';
   String discipline;
   String year;
@@ -17,24 +18,20 @@ class BlockConclusionScreen extends StatelessWidget {
     Widget imageAsset;
     switch (discipline) {
       case 'Português':
-        imageAsset =
-            Image.asset('assets/img/personagem_comemorando_LILA_ling.png');
+        imageAsset = Image.asset('assets/img/personagem_comemorando_LILA_ling.png');
         break;
       case 'Ciências':
-        imageAsset =
-            Image.asset('assets/img/personagem_comemorando_CELESTE_cie.png');
+        imageAsset = Image.asset('assets/img/personagem_comemorando_CELESTE_cie.png');
         break;
       default:
-        imageAsset =
-            Image.asset('assets/img/personagem_comemorando_MATEUS_mat.png');
+        imageAsset = Image.asset('assets/img/personagem_comemorando_MATEUS_mat.png');
     }
     return imageAsset;
   }
 
   @override
   Widget build(BuildContext context) {
-    final BlockConclusionArguments args =
-        ModalRoute.of(context).settings.arguments;
+    final BlockConclusionArguments args = ModalRoute.of(context).settings.arguments;
     discipline = args.discipline;
     studentName = args.studentName ?? 'Aluno(a)';
     year = args.year;
@@ -103,8 +100,9 @@ class BlockConclusionScreen extends StatelessWidget {
                           fontSize: 18,
                         ),
                       ),
-                      onPressed: () =>
-                          Navigator.of(context).popAndPushNamed("/"),
+                      onPressed: () {
+                        isAdmin ? Navigator.of(context).pushReplacementNamed("/admin") : Navigator.of(context).pushReplacementNamed("/");
+                      },
                       textTheme: ButtonTextTheme.accent,
                     ),
                   ),

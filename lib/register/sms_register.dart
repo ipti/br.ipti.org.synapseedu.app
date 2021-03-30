@@ -134,16 +134,25 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                       studentQuery = await StudentQuery().searchStudent(_phoneNumberController.text);
 
                       //todo remover aqui pra retirar o usuario de testes
-                      if (studentQuery.student.phone == '79999466220') {
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
-
-                        prefs.setBool('isConfirmed', true);
-                        prefs.setString('student_name', studentQuery.student.name.split(" ")[0].toUpperCase());
-                        prefs.setInt('student_id', studentQuery.student.id);
-                        prefs.setString('student_phone', studentQuery.student.phone);
-                        print("Verificado com sucesso");
-                        Navigator.of(context).pushReplacementNamed('/');
-                      } else {
+                      // if (studentQuery.student.phone == '79999466220') {
+                      //   SharedPreferences prefs = await SharedPreferences.getInstance();
+                      //
+                      //   prefs.setBool('isConfirmed', true);
+                      //
+                      //   // usando para criar temporariamente usuarios admin
+                      //   studentQuery.student.id == 5 || studentQuery.student.id == 4 ? prefs.setBool('admin', true) : prefs.setBool('admin', false);
+                      //
+                      //   prefs.setString('student_name', studentQuery.student.name.split(" ")[0].toUpperCase());
+                      //   prefs.setInt('student_id', studentQuery.student.id);
+                      //   prefs.setString('student_phone', studentQuery.student.phone);
+                      //   print("Verificado com sucesso");
+                      //
+                      //   if (studentQuery.student.id == 5 || studentQuery.student.id == 4) {
+                      //     Navigator.of(context).pushReplacementNamed('/admin');
+                      //   } else {
+                      //     Navigator.of(context).pushReplacementNamed('/');
+                      //   }
+                      // } else {
                         // print("true ${studentQuery.student.name}");
                         if (studentQuery.valid != false) {
                           if (_phoneNumberController.text.length == 11 && studentQuery.student != null) {
@@ -156,7 +165,7 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                             opacity = 1;
                           });
                         }
-                      }
+                      // }
                     },
                   ),
                 ),

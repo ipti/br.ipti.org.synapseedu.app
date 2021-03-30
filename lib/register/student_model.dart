@@ -13,22 +13,21 @@ class Student {
 
 // 79999466220
   //   Future<Student> searchForStudent({String phoneNumber = '79999466220'}) async {
-  Future<Student> searchForStudent(String phoneNumber) async {
-    final url = 'https://elesson.com.br/api/student/' + phoneNumber;
+  Future<Student> searchForStudent({String phoneNumber}) async {
+    // final url = 'https://elesson.com.br/api/student/' + phoneNumber;
 
-    final stringsStudent =
-        await rootBundle.loadString('assets/json/students.json');
+    final stringsStudent = await rootBundle.loadString('assets/json/students.json');
     final json = jsonDecode(stringsStudent);
 
     if (json[0]["valid"] == true) print("hey");
     Student student = Student(
-        id: int.parse(json[0]['student']['id']),
-        name: json[0]['student']['name'],
-        phone: json[0]['student']['phone']);
+      id: int.parse(json[0]['person'][0]['id']),
+      name: json[0]['person'][0]['name'],
+      phone: json[0]['person'][0]['phone'],
+    );
     return student;
   }
 }
-
 
 class StudentQuery {
   bool valid;
@@ -51,18 +50,13 @@ class StudentQuery {
     // if (response.data[0]["valid"] == true) print("hey");
     print(response.data[0]);
     if (response.data[0]["valid"] == true) {
-      student = Student(
-          id: int.parse(response.data[0]['person'][0]['id']),
-          name: response.data[0]['person'][0]['name'],
-          phone: response.data[0]['person'][0]['phone']);
+      student = Student(id: int.parse(response.data[0]['person'][0]['id']), name: response.data[0]['person'][0]['name'], phone: response.data[0]['person'][0]['phone']);
     }
     // if (response.data[0]["valid"] != trye) print(student.name);
     StudentQuery studentQuery = StudentQuery(
       valid: response.data[0]["valid"],
       student: student,
-      error: response.data[0]["valid"] == false
-          ? response.data[0]["error"][0]
-          : '',
+      error: response.data[0]["valid"] == false ? response.data[0]["error"][0] : '',
     );
 
     return studentQuery;
