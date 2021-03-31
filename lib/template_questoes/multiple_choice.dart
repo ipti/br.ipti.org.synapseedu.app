@@ -5,6 +5,8 @@ import 'package:flutter/gestures.dart';
 import 'share/button_widgets.dart';
 import 'package:flutter/services.dart';
 
+import 'dart:math';
+
 import 'share/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'question_provider.dart';
@@ -186,6 +188,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   List<String> cobjectIdList;
   int cobjectIdListLength;
   int cobjectQuestionsLength;
+  List<int> pieceOrder = [0, 1, 2];
+  bool pieceOrdered = false;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -201,8 +205,11 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     double textCardHeight = 0.0985 * screenHeight;
     double buttonHeight =
         48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+    print(
+        'COBJECT LIST ID ${cobjectList[0]} e qindex ${cobjectList[0].questions[questionIndex]}');
 
     String imageLink = cobjectList[0].questions[questionIndex].header["image"];
+
     // if (imageLink.isEmpty) print('O link tá vazio: "$imageLink"');
     // if (imageLink == null) print('O link tá null: $imageLink');
 
@@ -214,6 +221,11 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
     // print(elapsedTimer.elapsed);
     Stopwatch chronometer = Stopwatch();
+
+    if (!pieceOrdered) {
+      pieceOrdered = true;
+      pieceOrder.shuffle();
+    }
 
     return Scaffold(
       // bottomNavigationBar: bottomNavBar(context),
@@ -287,26 +299,6 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    // GestureDetector(
-                    //   child: Container(
-                    //     padding:
-                    //         EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-                    //     height: textCardHeight,
-                    //     child: Text(
-                    //       cobjectList[0]
-                    //           .questions[questionIndex]
-                    //           .header["text"]
-                    //           .toUpperCase(),
-                    //       textAlign: TextAlign.justify,
-                    //       // textAlign: TextAlign.center,
-                    //       style: TextStyle(
-                    //         fontWeight: FontWeight.bold,
-                    //         fontSize: fonteDaLetra,
-                    //         fontFamily: 'Mulish',
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 0, vertical: 12),
@@ -314,7 +306,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                         children: [
                           // Monta as escolhas em uma coluna, com base na função que retorna um Widget de piece unitário.
                           piece(
-                              0,
+                              pieceOrder[0],
                               context,
                               watch,
                               cobjectList[0].questions[questionIndex],
@@ -322,7 +314,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                               screenHeight,
                               textCardHeight),
                           piece(
-                              1,
+                              pieceOrder[1],
                               context,
                               watch,
                               cobjectList[0].questions[questionIndex],
@@ -330,7 +322,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                               screenHeight,
                               textCardHeight),
                           piece(
-                              2,
+                              pieceOrder[2],
                               context,
                               watch,
                               cobjectList[0].questions[questionIndex],
