@@ -8,8 +8,9 @@ class Student {
   int id;
   String name;
   String phone;
+  int personage_id;
 
-  Student({@required this.id, @required this.name, @required this.phone});
+  Student({@required this.id, @required this.name, @required this.phone, @required this.personage_id});
 
 // 79999466220
   //   Future<Student> searchForStudent({String phoneNumber = '79999466220'}) async {
@@ -19,11 +20,14 @@ class Student {
     final stringsStudent = await rootBundle.loadString('assets/json/students.json');
     final json = jsonDecode(stringsStudent);
 
+    print(json[0]['person'][0]['id']);
+
     if (json[0]["valid"] == true) print("hey");
     Student student = Student(
       id: int.parse(json[0]['person'][0]['id']),
       name: json[0]['person'][0]['name'],
       phone: json[0]['person'][0]['phone'],
+      personage_id: int.parse(json[0]['personage'][0]['id']),
     );
     return student;
   }
@@ -50,7 +54,15 @@ class StudentQuery {
     // if (response.data[0]["valid"] == true) print("hey");
     print(response.data[0]);
     if (response.data[0]["valid"] == true) {
-      student = Student(id: int.parse(response.data[0]['person'][0]['id']), name: response.data[0]['person'][0]['name'], phone: response.data[0]['person'][0]['phone']);
+
+      print(response.data[0]['person'][0]['id']);
+
+      student = Student(
+        id: int.parse(response.data[0]['person'][0]['id']),
+        name: response.data[0]['person'][0]['name'],
+        phone: response.data[0]['person'][0]['phone'],
+        personage_id: int.parse(response.data[0]['personage'][0]['id']),
+      );
     }
     // if (response.data[0]["valid"] != trye) print(student.name);
     StudentQuery studentQuery = StudentQuery(

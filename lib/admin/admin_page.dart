@@ -11,16 +11,11 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
-  SharedPreferences prefs;
   TextEditingController cobjectId = TextEditingController();
-  // @override
-  // void didChangeDependencies() async {
-  //   prefs = await SharedPreferences.getInstance();
-  //   setState(() {});
-  //   super.didChangeDependencies();
-  // }
 
   void redirectToQuestion(int cobjectIdIndex, String disciplineId, String discipline) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     var blockId = await ApiBlock.getBlockByDiscipline(disciplineId);
     var responseBlock = await ApiBlock.getBlock(blockId);
     List<String> cobjectIdList = [];

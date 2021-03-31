@@ -109,7 +109,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView> with TickerProviderStat
       prefs.setInt('student_id', student.id);
       prefs.setString('student_phone', student.phone);
 
-      if (studentQuery.student.id == 5 || studentQuery.student.id == 4) {
+      if (studentQuery.student.personage_id == 4) {
         prefs.setBool('admin', true);
         Navigator.of(context).pushReplacementNamed('/admin');
       } else {

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/activity_selection/block_selection_view.dart';
@@ -29,6 +28,7 @@ import 'block_conclusion.dart';
 // Contém alguns métodos e variáveis globais necessárias para as questões.
 
 const String BASE_URL = 'https://elesson.com.br/app/library';
+const String API_URL = "https://www.elesson.com.br/api/";
 
 List<String> questionList = ['3988', '3987', '3977', '3976'];
 List<String> questionListTest = [];
@@ -446,7 +446,7 @@ Future<void> sendMetaData({String pieceId, String groupId, int finalTime, int in
   print(isCorrect);
   var response;
   try {
-    response = await http.post("http://app.elesson.com.br/api-synapse/synapse/performance/actor/save", body: {
+    response = await http.post("${API_URL}performance/actor/save", body: {
       "mode": "proficiency", //ok
       "piece_id": pieceId, //ok
       "group_id": groupId, //ok
