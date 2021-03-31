@@ -21,12 +21,12 @@ import '../share/header_widget.dart';
 
 class CodeVerifyView extends StatefulWidget {
   static const routeName = "/code-verify";
+
   @override
   _CodeVerifyViewState createState() => _CodeVerifyViewState();
 }
 
-class _CodeVerifyViewState extends State<CodeVerifyView>
-    with TickerProviderStateMixin {
+class _CodeVerifyViewState extends State<CodeVerifyView> with TickerProviderStateMixin {
   String _code;
   StreamController<ErrorAnimationType> errorController;
   TextEditingController _pinCodeController = TextEditingController();
@@ -42,11 +42,8 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
   AnimationController countdownAnimationController;
 
   String get timerString {
-    Duration duration = countdownAnimationController.duration *
-        countdownAnimationController.value;
-    return duration.inSeconds < 10
-        ? '${((duration.inSeconds % 60) + 1).toString().padLeft(1, '0')}'
-        : '${((duration.inSeconds % 60) + 1).toString().padLeft(2, '0')}';
+    Duration duration = countdownAnimationController.duration * countdownAnimationController.value;
+    return duration.inSeconds < 10 ? '${((duration.inSeconds % 60) + 1).toString().padLeft(1, '0')}' : '${((duration.inSeconds % 60) + 1).toString().padLeft(2, '0')}';
   }
 
   void initState() {
@@ -94,19 +91,13 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
   }
 
   Future<void> countdownLogic() async {
-    await countdownAnimationController
-        .reverse(
-            from: countdownAnimationController.value == 0.0
-                ? 1.0
-                : countdownAnimationController.value)
-        .whenComplete(() => setState(() {
-              resendCode = true;
-            }));
+    await countdownAnimationController.reverse(from: countdownAnimationController.value == 0.0 ? 1.0 : countdownAnimationController.value).whenComplete(() => setState(() {
+          resendCode = true;
+        }));
   }
 
   Future<void> verifyCode(Student student, String code) async {
-    var result =
-        await _twilioPhoneVerify.verifySmsCode('+55' + student.phone, code);
+    var result = await _twilioPhoneVerify.verifySmsCode('+55' + student.phone, code);
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     print("Enviado $code");
@@ -117,8 +108,16 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
       prefs.setString('student_name', student.name.split(" ")[0].toUpperCase());
       prefs.setInt('student_id', student.id);
       prefs.setString('student_phone', student.phone);
+
+      if (studentQuery.student.personage_id == 4) {
+        prefs.setBool('admin', true);
+        Navigator.of(context).pushReplacementNamed('/admin');
+      } else {
+        prefs.setBool('admin', false);
+        Navigator.of(context).pushReplacementNamed('/');
+      }
+
       print("Verificado com sucesso");
-      Navigator.of(context).pushReplacementNamed('/');
     } else {
       // error
       print('ERROR:${result['statusCode']} : ${result['message']}');
@@ -127,13 +126,13 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
 
   String currentText = "";
   GlobalKey<FormState> formKey;
+
   @override
   Widget build(BuildContext context) {
     student = ModalRoute.of(context).settings.arguments;
 
     double screenHeight = MediaQuery.of(context).size.height;
-    double buttonHeight =
-        48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+    double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
     double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -173,9 +172,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
                   //   }
                   // },
                   pinTheme: PinTheme(
-                    activeColor: hasError
-                        ? Colors.redAccent
-                        : Color.fromRGBO(0, 0, 255, 0.4),
+                    activeColor: hasError ? Colors.redAccent : Color.fromRGBO(0, 0, 255, 0.4),
                     inactiveColor: const Color.fromRGBO(0, 0, 255, 0.4),
                     shape: PinCodeFieldShape.box,
                     fieldHeight: screenHeight < 823 ? 48 : 72,

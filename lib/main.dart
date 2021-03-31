@@ -10,9 +10,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import './register/countdown.dart';
 
+import 'admin/admin_page.dart';
 import 'init_pages/space_selection.dart';
 
-import 'package:elesson/root/start_and_send_test.dart';
+import 'package:elesson/root/start_and_send_test(descontinuada).dart';
 
 import './root/poc.dart';
 import 'package:elesson/register/sms_register.dart';
@@ -46,9 +47,7 @@ void main() async {
   //Força o modo retrato na inicialização do aplicativo
 
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations(
-          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
-      .then((_) async {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) async {
     isLogged = await isUserConfirmed();
     runApp(ProviderScope(child: new Home()));
   });
@@ -101,6 +100,7 @@ class _HomeState extends State<Home> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // setState(() {
     isLogged = prefs.getBool('isConfirmed') ?? false;
+    isAdmin = prefs.getBool('admin') ?? false;
     // });
   }
 
@@ -131,13 +131,14 @@ class _HomeState extends State<Home> {
         fontFamily: 'Mulish',
         textTheme: GoogleFonts.muliTextTheme(),
       ),
-      initialRoute: isLogged ? '/' : SpaceSelection.routeName,
+      initialRoute: isLogged && isAdmin? '/admin' : isLogged ? '/' : SpaceSelection.routeName,
       // initialRoute: BlockSelection.routeName,
       // initialRoute: SettingsScreen.routeName,
       // initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
       // initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName, // alterado para apresentação
       routes: {
         '/': (context) => BlockSelection(),
+        '/admin': (context) => AdminPage(),
         SpaceSelection.routeName: (contet) => SpaceSelection(),
         BlockSelection.routeName: (context) => BlockSelection(),
         CountDownTimer.routeName: (context) => CountDownTimer(),
