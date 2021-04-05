@@ -225,8 +225,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     double textCardHeight = 0.0985 * screenHeight;
     double buttonHeight =
         48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
-    print(
-        'COBJECT LIST ID ${cobjectIdList[0]} e qindex ${cobjectList[0].questions[questionIndex]}');
+    // print(
+    //     'COBJECT LIST ID ${cobjectIdList[0]} e qindex ${cobjectList[0].questions[questionIndex]}');
 
     String imageLink = cobjectList[0].questions[questionIndex].header["image"];
 

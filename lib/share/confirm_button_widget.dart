@@ -215,8 +215,8 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
         } else {
           if (_connectionStatus != 'ConnectivityResult.none' &&
               _connectionStatus != 'ConnectivityResult.waiting') {
-            print('DEU ESSE: $_connectionStatus');
-            print('tempo de intervalo: ${timeEnd - timeStart}');
+            // print('DEU ESSE: $_connectionStatus');
+            // print('tempo de intervalo: ${timeEnd - timeStart}');
             nextQuestionTimer.cancel();
 
             Answer().sendAnswerToApi(
@@ -241,7 +241,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
                   cobjectIdListLength: widget.cobjectIdListLength,
                   cobjectQuestionsLength: widget.cobjectQuestionsLength);
             } catch (e) {
-              print('FOI AQUI');
+              // print('FOI AQUI');
             }
           } else
             callSnackBar(context);

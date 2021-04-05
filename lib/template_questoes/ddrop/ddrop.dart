@@ -605,15 +605,32 @@ class _DragAndDropState extends State<DragAndDrop> {
   }
 
   Widget dragSenderTemplate(int index, double widthScreen, Question question) {
+    // return Container(
+    //   decoration: BoxDecoration(
+    //     borderRadius: BorderRadius.circular(12),
+    //     image: DecorationImage(
+    //       image: NetworkImage(BASE_URL +
+    //           '/image/' +
+    //           question.pieces[index.toString()]["image"]),
+    //       fit: BoxFit.cover,
+    //     ),
+    //     border: Border.all(
+    //       color: index == 1
+    //           ? Color.fromRGBO(189, 0, 255, 0.2)
+    //           : index == 2
+    //               ? Color.fromRGBO(255, 138, 0, 0.2)
+    //               : Color.fromRGBO(0, 203, 255, 0.2),
+    //       width: 2,
+    //     ),
+    //   ),
+    //   width: widthScreen / 2.6,
+    //   height: widthScreen / 2.6,
+    // );
     return Container(
+      width: widthScreen / 2.6,
+      height: widthScreen / 2.6,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        image: DecorationImage(
-          image: NetworkImage(BASE_URL +
-              '/image/' +
-              question.pieces[index.toString()]["image"]),
-          fit: BoxFit.cover,
-        ),
         border: Border.all(
           color: index == 1
               ? Color.fromRGBO(189, 0, 255, 0.2)
@@ -623,8 +640,29 @@ class _DragAndDropState extends State<DragAndDrop> {
           width: 2,
         ),
       ),
-      width: widthScreen / 2.6,
-      height: widthScreen / 2.6,
+      child: Image.network(
+        BASE_URL + '/image/' + question.pieces[index.toString()]["image"],
+        fit: BoxFit.cover,
+        errorBuilder: (context, exception, stackTrace) {
+          // print('erro');
+          // callSnackBar(context);
+          return Container();
+        },
+        loadingBuilder: (BuildContext context, Widget child,
+            ImageChunkEvent loadingProgress) {
+          if (loadingProgress == null) {
+            return child;
+          }
+          return Center(
+            child: CircularProgressIndicator(
+              value: loadingProgress.expectedTotalBytes != null
+                  ? loadingProgress.cumulativeBytesLoaded /
+                      loadingProgress.expectedTotalBytes
+                  : null,
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -653,15 +691,33 @@ class _DragAndDropState extends State<DragAndDrop> {
         break;
     }
     return show != false
+        // ? Container(
+        //     //margin: EdgeInsets.only(right: 0),
+        //     decoration: BoxDecoration(
+        //       color: Colors.grey,
+        //       borderRadius: BorderRadius.circular(12),
+        //       image: DecorationImage(
+        //         image: NetworkImage(urlToThisReceiver),
+        //         fit: BoxFit.cover,
+        //       ),
+        //       border: Border.all(
+        //         color: index == 1
+        //             ? colorFirstReceiverAccepted
+        //             : index == 2
+        //                 ? colorSecondReceiverAccepted
+        //                 : colorThirdReceiverAccepted,
+        //         width: 2,
+        //       ),
+        //     ),
+        //     width: widthScreen / 2.6,
+        //     height: widthScreen / 2.6,
+        //   )
         ? Container(
-            //margin: EdgeInsets.only(right: 0),
+            width: widthScreen / 2.6,
+            height: widthScreen / 2.6,
             decoration: BoxDecoration(
               color: Colors.grey,
               borderRadius: BorderRadius.circular(12),
-              image: DecorationImage(
-                image: NetworkImage(urlToThisReceiver),
-                fit: BoxFit.cover,
-              ),
               border: Border.all(
                 color: index == 1
                     ? colorFirstReceiverAccepted
@@ -671,8 +727,29 @@ class _DragAndDropState extends State<DragAndDrop> {
                 width: 2,
               ),
             ),
-            width: widthScreen / 2.6,
-            height: widthScreen / 2.6,
+            child: Image.network(
+              urlToThisReceiver,
+              fit: BoxFit.cover,
+              errorBuilder: (context, exception, stackTrace) {
+                // print('erro');
+                // callSnackBar(context);
+                return Container();
+              },
+              loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent loadingProgress) {
+                if (loadingProgress == null) {
+                  return child;
+                }
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes
+                        : null,
+                  ),
+                );
+              },
+            ),
           )
         : dragSenderInvisible(widthScreen);
   }
