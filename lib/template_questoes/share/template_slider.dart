@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:elesson/settings/settings_screen.dart';
 import 'package:elesson/share/question_widgets.dart';
+import 'package:elesson/share/snackbar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../model.dart';
 
@@ -93,13 +98,58 @@ class _TemplateSliderState extends State<TemplateSlider> {
     );
   }
 
+  final Connectivity _connectivity = Connectivity();
+  StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  String _connectionStatus = 'Unknown';
+
   @override
   void initState() {
     // TODO: implement initState
     timeStartIscaptured = false;
     timeStart = null;
     timeEnd = null;
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     super.initState();
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+    _connectivitySubscription.cancel();
+  }
+
+  Future<void> initConnectivity() async {
+    ConnectivityResult result = ConnectivityResult.none;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      print(e.toString());
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    switch (result) {
+      case ConnectivityResult.wifi:
+      case ConnectivityResult.mobile:
+      case ConnectivityResult.none:
+        setState(() => _connectionStatus = result.toString());
+        break;
+      default:
+        setState(() => _connectionStatus = 'Failed to get connectivity.');
+        break;
+    }
   }
 
   @override
@@ -115,6 +165,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
 
     // print(
     //     'Template slider: ${widget.cobjectIdListLength} and ${widget.cobjectQuestionsLength}');
+
+    print('STATUS DA CONEXÃO: $_connectionStatus');
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -313,6 +365,11 @@ class _TemplateSliderState extends State<TemplateSlider> {
                           child: Image.network(
                             widget.linkImage,
                             fit: BoxFit.cover,
+                            errorBuilder: (context, exception, stackTrace) {
+                              // print('erro');
+                              callSnackBar(context);
+                              return Container();
+                            },
                             loadingBuilder: (BuildContext context, Widget child,
                                 ImageChunkEvent loadingProgress) {
                               if (loadingProgress == null) {

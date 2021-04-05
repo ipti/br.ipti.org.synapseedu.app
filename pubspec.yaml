@@ -54,6 +54,7 @@ dependencies:
   googleapis: ^0.56.1
   cached_network_image: ^2.5.1
   screen_loader: ^2.0.1
+  connectivity: ^3.0.3
   #
 
 dev_dependencies:

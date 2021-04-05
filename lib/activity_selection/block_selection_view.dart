@@ -1,6 +1,7 @@
 import 'package:elesson/share/api.dart';
 import 'package:elesson/share/general_widgets.dart';
 import 'package:elesson/share/question_widgets.dart';
+import 'package:elesson/share/snackbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:screen_loader/screen_loader.dart';
@@ -56,21 +57,25 @@ class _BlockSelectionState extends State<BlockSelection>
     });
   }
 
-  void callSnackBar() {
-    final snackBar = SnackBar(
-      backgroundColor: Color(0xFF00DC8C),
-      content:
-          Text('Não consegui carregar a atividade! Verifique a sua internet!'),
-      action: SnackBarAction(
-        textColor: Color.fromRGBO(0, 0, 255, 1),
-        label: 'Fechar',
-        onPressed: () {
-          // Some code to undo the change.
-        },
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
+  // void callSnackBar(BuildContext context) {
+  //   final snackBar = SnackBar(
+  //     backgroundColor: Color(0xFF00DC8C),
+  //     content: Text(
+  //       'Não foi possível conectar o Elesson Duo. Verifique a conexão e tente de novo.',
+  //       style: TextStyle(
+  //         fontSize: fonteDaLetra,
+  //       ),
+  //     ),
+  //     action: SnackBarAction(
+  //       textColor: Color.fromRGBO(0, 0, 255, 1),
+  //       label: 'Fechar',
+  //       onPressed: () {
+  //         // Some code to undo the change.
+  //       },
+  //     ),
+  //   );
+  //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  // }
 
   @override
   loader() {
@@ -117,7 +122,7 @@ class _BlockSelectionState extends State<BlockSelection>
                               0, '2', 'Matemática', blockId));
                         } catch (e) {}
                       } else
-                        callSnackBar();
+                        callSnackBar(context);
                     },
                     context: context,
                   )
@@ -139,7 +144,7 @@ class _BlockSelectionState extends State<BlockSelection>
                               redirectToQuestion(0, '1', 'Português', blockId));
                         } catch (e) {}
                       else
-                        callSnackBar();
+                        callSnackBar(context);
                     },
                     context: context,
                   )
@@ -164,7 +169,7 @@ class _BlockSelectionState extends State<BlockSelection>
                               redirectToQuestion(0, '3', 'Ciências', blockId));
                         } catch (e) {}
                       else
-                        callSnackBar();
+                        callSnackBar(context);
                     },
                     context: context,
                   )

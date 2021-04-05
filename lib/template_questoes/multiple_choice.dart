@@ -1,6 +1,7 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
+import 'package:elesson/share/snackbar_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'share/button_widgets.dart';
 import 'package:flutter/services.dart';
@@ -130,8 +131,9 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                           );
                         },
                         errorBuilder: (context, exception, stackTrace) {
-                          print('erro');
-                          return Text('Hello');
+                          // print('erro');
+                          // callSnackBar(context);
+                          return Container();
                         },
                       )
                     // ? Image.asset('assets/img/placeholder.jpg')
