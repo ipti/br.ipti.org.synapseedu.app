@@ -228,7 +228,8 @@ class _PreSomIaState extends State<PreSomIa> {
                           // receber um texto, acionando o botão. O condicional faz com que a UI seja renderizada
                           // apenas uma vez enquanto o texto estiver sendo digitado.
                           onChanged: (val) {
-                            correctAnswer == _textController.text.toString()
+                            verificarResposta(respostasCorretas: correctAnswer, respostaUsuario: _textController.text.toString())
+                            // correctAnswer == _textController.text.toString()
                                 ? isCorrect = true
                                 : isCorrect = false;
 
