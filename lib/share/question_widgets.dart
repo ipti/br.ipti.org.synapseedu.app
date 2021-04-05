@@ -182,6 +182,7 @@ void submitLogic(BuildContext context, int questionIndex, int cobjectIndex, Stri
 
   prefs.setInt('last_question_$discipline', questionIndex);
 
+  print("$questionIndex // $cobjectQuestionsLength");
   if (questionIndex < cobjectQuestionsLength && questionType != 'TXT') {
     switch (questionType) {
       case 'PRE':
@@ -309,15 +310,17 @@ Widget submitAnswer(BuildContext context, List<Cobject> cobjectList, String ques
           // ! O erro está vindo daqui, quando tenta subtrair timeStart do timeEnd. Motivo: timeStart vem null
           // print(
           //     'No submitAnswer: cobjectidListLength: $cobjectIdListLength e cobjectQuestionsLength: $cobjectQuestionsLength');
-          submitLogic(context, questionIndex, cobjectIndex, questionType,
-              pieceId: pieceId,
-              isCorrect: isCorrect,
-              finalTime: 22,
-              // intervalResolution: timeEnd-timeStart,
-              cobjectList: cobjectList,
-              cobjectIdList: cobjectIdList,
-              cobjectIdListLength: cobjectIdListLength,
-              cobjectQuestionsLength: cobjectQuestionsLength);
+          submitLogic(
+            context, questionIndex, cobjectIndex, questionType,
+            pieceId: pieceId,
+            isCorrect: isCorrect,
+            finalTime: 22,
+            // intervalResolution: timeEnd-timeStart,
+            cobjectList: cobjectList,
+            cobjectIdList: cobjectIdList,
+            cobjectIdListLength: cobjectIdListLength,
+            cobjectQuestionsLength: cobjectQuestionsLength,
+          );
         },
       ),
     ),
@@ -666,4 +669,13 @@ Widget LoadingGestureDetector({Widget child, Function onLongPress, Function setS
       });
     },
   );
+}
+
+bool verificarResposta({String respostaUsuario, String respostasCorretas}) {
+  respostasCorretas.split(';').forEach((element) {
+    if (respostaUsuario.trim().toLowerCase() == element.trim().toLowerCase()) {
+      return true;
+    }
+  });
+  return false;
 }

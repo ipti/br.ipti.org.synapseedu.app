@@ -180,7 +180,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                             ),
                           ),
                           onChanged: (val) {
-                            correctAnswer == _textController.text.toString()
+                            verificarResposta(respostasCorretas: correctAnswer, respostaUsuario: _textController.text.toString())
                                 ? isCorrect = true
                                 : isCorrect = false;
 
