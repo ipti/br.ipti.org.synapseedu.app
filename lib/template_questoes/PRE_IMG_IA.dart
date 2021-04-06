@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/google_api.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -33,6 +34,8 @@ class _PreImgIaState extends State<PreImgIa> {
   var cobjectList = new List<Cobject>();
   int questionIndex = 0;
   int cobjectIndex;
+  int cobjectIdListLength;
+  int cobjectQuestionsLength;
 
   double opacityFaleAgora = 0;
   double opacityNaoEntendivel = 0;
@@ -73,9 +76,12 @@ class _PreImgIaState extends State<PreImgIa> {
     cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
     cobjectIndex = args.cobjectIndex;
+    cobjectIdListLength = args.cobjectIdLength;
+    cobjectQuestionsLength = args.cobjectQuestionsLength;
 
     String questionDescription = cobjectList[0].description;
-    String questionText = cobjectList[0].questions[questionIndex].header["text"];
+    String questionText =
+        cobjectList[0].questions[questionIndex].header["text"];
     String pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
     correctAnswer = cobjectList[0].questions[0].pieces["1"]["text"];
@@ -106,7 +112,8 @@ class _PreImgIaState extends State<PreImgIa> {
           ),
         ),
         sound: cobjectList[0].questions[questionIndex].header["sound"],
-        linkImage: 'https://elesson.com.br/app/library/image/' + cobjectList[0].questions[0].header["image"],
+        linkImage: 'https://elesson.com.br/app/library/image/' +
+            cobjectList[0].questions[0].header["image"],
         isPreTemplate: true,
         activityScreen: Form(
           key: _formKey,
@@ -162,12 +169,16 @@ class _PreImgIaState extends State<PreImgIa> {
                             ),
                           ),
                           onChanged: (val) {
-                            verificarResposta(respostasCorretas: correctAnswer, respostaUsuario: _textController.text.toString())
+                            verificarResposta(
+                                    respostasCorretas: correctAnswer,
+                                    respostaUsuario:
+                                        _textController.text.toString())
                                 // correctAnswer == _textController.text.toString()
                                 ? isCorrect = true
                                 : isCorrect = false;
 
-                            print("CORRETA: $correctAnswer , DIGITADA: ${_textController.text.toString()} ");
+                            print(
+                                "CORRETA: $correctAnswer , DIGITADA: ${_textController.text.toString()} ");
                             if (_textController.text.length == 1) {
                               submitButton(context);
                             }
@@ -183,7 +194,13 @@ class _PreImgIaState extends State<PreImgIa> {
                     ),
                     Container(
                       margin: EdgeInsets.only(
-                          bottom: _textController.text.isNotEmpty ? (screenHeight * 0.93) - 18 - (48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656) : screenHeight * 0.92),
+                          bottom: _textController.text.isNotEmpty
+                              ? (screenHeight * 0.93) -
+                                  18 -
+                                  (48 > screenHeight * 0.0656
+                                      ? 48
+                                      : screenHeight * 0.0656)
+                              : screenHeight * 0.92),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         boxShadow: [
@@ -198,7 +215,9 @@ class _PreImgIaState extends State<PreImgIa> {
                       child: Center(
                         child: GestureDetector(
                           onTap: () {
-                            playSound(cobjectList[0].questions[questionIndex].header["sound"]);
+                            playSound(cobjectList[0]
+                                .questions[questionIndex]
+                                .header["sound"]);
                           },
                           child: Container(
                             padding: EdgeInsets.all(20),
@@ -226,7 +245,8 @@ class _PreImgIaState extends State<PreImgIa> {
                               style: TextStyle(
                                 fontSize: widthScreen * 0.05,
                                 fontWeight: FontWeight.bold,
-                                color: colorAlertMessage.withOpacity(opacityNaoEntendivel),
+                                color: colorAlertMessage
+                                    .withOpacity(opacityNaoEntendivel),
                               ),
                             ),
                             Text(
@@ -234,7 +254,8 @@ class _PreImgIaState extends State<PreImgIa> {
                               style: TextStyle(
                                 fontSize: widthScreen * 0.05,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF0000FF).withOpacity(opacityFaleAgora),
+                                color: Color(0xFF0000FF)
+                                    .withOpacity(opacityFaleAgora),
                               ),
                             ),
                           ],
@@ -251,7 +272,8 @@ class _PreImgIaState extends State<PreImgIa> {
                         await loadingLocalAlertDialog(context);
                         if (retorno != null) {
                           setState(() {
-                            _textController.text = retorno.data["responses"][0]['textAnnotations'][0]['description'];
+                            _textController.text = retorno.data["responses"][0]
+                                ['textAnnotations'][0]['description'];
                           });
                         }
                       },
@@ -262,7 +284,8 @@ class _PreImgIaState extends State<PreImgIa> {
                         ),
                         padding: EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          border: Border.all(color: Color.fromRGBO(0, 0, 255, 1)),
+                          border:
+                              Border.all(color: Color.fromRGBO(0, 0, 255, 1)),
                           color: buttonBackground,
                           borderRadius: BorderRadius.circular(18.0),
                         ),
@@ -279,7 +302,22 @@ class _PreImgIaState extends State<PreImgIa> {
                 if (_textController.text.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 3.0),
-                    child: submitAnswer(context, cobjectList, 'PRE', ++questionIndex, cobjectIndex, pieceId, isCorrect, value: _textController.text),
+                    // child: submitAnswer(context, cobjectList, 'PRE',
+                    //     ++questionIndex, cobjectIndex, pieceId, isCorrect,
+                    //     value: _textController.text),
+                    child: ConfirmButtonWidget(
+                      context: context,
+                      cobjectList: cobjectList,
+                      cobjectIdList: cobjectIdList,
+                      questionType: 'PRE',
+                      questionIndex: ++questionIndex,
+                      cobjectIndex: cobjectIndex,
+                      cobjectIdListLength: cobjectIdListLength,
+                      cobjectQuestionsLength: cobjectQuestionsLength,
+                      pieceId: pieceId,
+                      isCorrect: isCorrect,
+                      value: _textController.text,
+                    ),
                   ),
               ],
             ),
@@ -295,7 +333,8 @@ class _PreImgIaState extends State<PreImgIa> {
       builder: (BuildContext context) {
         return Container(
           child: AlertDialog(
-            insetPadding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.39),
+            insetPadding:
+                EdgeInsets.all(MediaQuery.of(context).size.width * 0.39),
             content: CircularProgressIndicator(),
           ),
         );
@@ -339,7 +378,9 @@ class _PreImgIaState extends State<PreImgIa> {
     try {
       retorno = await Dio().post(
         "https://vision.googleapis.com/v1/images:annotate",
-        options: Options(headers: {'Authorization': googleApiToken}, contentType: "application/json"),
+        options: Options(
+            headers: {'Authorization': googleApiToken},
+            contentType: "application/json"),
         data: {
           "requests": [
             {
