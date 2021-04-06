@@ -8,9 +8,10 @@ class Student {
   int id;
   String name;
   String phone;
+  String actorId;
   int personage_id;
 
-  Student({@required this.id, @required this.name, @required this.phone, @required this.personage_id});
+  Student({@required this.id, @required this.name, @required this.phone, @required this.actorId, @required this.personage_id});
 
 // 79999466220
   //   Future<Student> searchForStudent({String phoneNumber = '79999466220'}) async {
@@ -27,6 +28,7 @@ class Student {
       id: int.parse(json[0]['person'][0]['id']),
       name: json[0]['person'][0]['name'],
       phone: json[0]['person'][0]['phone'],
+      actorId: json[0]['actor'][0]['id'],
       personage_id: int.parse(json[0]['personage'][0]['id']),
     );
     return student;
@@ -54,13 +56,13 @@ class StudentQuery {
     // if (response.data[0]["valid"] == true) print("hey");
     print(response.data[0]);
     if (response.data[0]["valid"] == true) {
-
       print(response.data[0]['person'][0]['id']);
 
       student = Student(
         id: int.parse(response.data[0]['person'][0]['id']),
         name: response.data[0]['person'][0]['name'],
         phone: response.data[0]['person'][0]['phone'],
+        actorId: response.data[0]['actor'][0]['id'],
         personage_id: int.parse(response.data[0]['personage'][0]['id']),
       );
     }

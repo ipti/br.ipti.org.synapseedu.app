@@ -103,11 +103,13 @@ class _CodeVerifyViewState extends State<CodeVerifyView> with TickerProviderStat
     print("Enviado $code");
 
     if (result['message'] == 'approved') {
-      // phone number verified
       prefs.setBool('isConfirmed', true);
       prefs.setString('student_name', student.name.split(" ")[0].toUpperCase());
       prefs.setInt('student_id', student.id);
       prefs.setString('student_phone', student.phone);
+      prefs.setString('actor_id', student.actorId);
+
+      print("ActorId salvo: ${student.actorId}");
 
       if (studentQuery.student.personage_id == 4) {
         prefs.setBool('admin', true);

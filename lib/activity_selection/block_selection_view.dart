@@ -42,6 +42,7 @@ class _BlockSelectionState extends State<BlockSelection> {
       // print(cobject["id"]);
       cobjectIdList.add(cobject["id"]);
     });
+
     print(cobjectIdList);
 
     getCobject(cobjectId, context, cobjectIdList, piecesetIndex: questionIndex);
