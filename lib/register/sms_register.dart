@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/register/code_verify_view.dart';
 import 'package:elesson/register/student_model.dart';
+import 'package:elesson/share/my_twillio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:twilio_phone_verify/twilio_phone_verify.dart';
+
+// import 'package:twilio_phone_verify/twilio_phone_verify.dart';
 import '../share/header_widget.dart';
 
 /**
@@ -130,42 +132,18 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                       AssetImage("assets/icons/chevron_right.png"),
                     ),
                     onPressed: () async {
-                      // student = await Student().searchForStudent();
                       studentQuery = await StudentQuery().searchStudent(_phoneNumberController.text);
-
-                      //todo remover aqui pra retirar o usuario de testes
-                      // if (studentQuery.student.phone == '79999466220') {
-                      //   SharedPreferences prefs = await SharedPreferences.getInstance();
-                      //
-                      //   prefs.setBool('isConfirmed', true);
-                      //
-                      //   // usando para criar temporariamente usuarios admin
-                      //   studentQuery.student.id == 5 || studentQuery.student.id == 4 ? prefs.setBool('admin', true) : prefs.setBool('admin', false);
-                      //
-                      //   prefs.setString('student_name', studentQuery.student.name.split(" ")[0].toUpperCase());
-                      //   prefs.setInt('student_id', studentQuery.student.id);
-                      //   prefs.setString('student_phone', studentQuery.student.phone);
-                      //   print("Verificado com sucesso");
-                      //
-                      //   if (studentQuery.student.id == 5 || studentQuery.student.id == 4) {
-                      //     Navigator.of(context).pushReplacementNamed('/admin');
-                      //   } else {
-                      //     Navigator.of(context).pushReplacementNamed('/');
-                      //   }
-                      // } else {
-                        // print("true ${studentQuery.student.name}");
-                        if (studentQuery.valid != false) {
-                          if (_phoneNumberController.text.length == 11 && studentQuery.student != null) {
-                            await sendCode(_phoneNumberController.text);
-                            Navigator.pushReplacementNamed(context, CodeVerifyView.routeName, arguments: studentQuery.student);
-                          }
-                        } else {
-                          setState(() {
-                            errorText = studentQuery.error + ".\nPor favor, tente novamente.";
-                            opacity = 1;
-                          });
+                      if (studentQuery.valid != false) {
+                        if (_phoneNumberController.text.length == 11 && studentQuery.student != null) {
+                          await sendCode(_phoneNumberController.text);
+                          Navigator.pushReplacementNamed(context, CodeVerifyView.routeName, arguments: studentQuery.student);
                         }
-                      // }
+                      } else {
+                        setState(() {
+                          errorText = studentQuery.error + ".\nPor favor, tente novamente.";
+                          opacity = 1;
+                        });
+                      }
                     },
                   ),
                 ),

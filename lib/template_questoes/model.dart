@@ -38,9 +38,20 @@ class Answer {
     // } catch (e) {
     //   print(e.toString());
     // }
+
+    print(pieceId);
+    print(groupId);
+    print(actor_id);
+    print(finalTime);
+    print(intervalResolution);
+    print(value);
+    print(isCorrect);
+
+
+
     try {
       var response = await http.post("${API_URL}performance/actor/save", body: {
-        "mode": "evaliation",
+        "mode": "evaluation",
         "piece_id": "$pieceId",
         "group_id": "$groupId",
         "actor_id": "$actor_id",
