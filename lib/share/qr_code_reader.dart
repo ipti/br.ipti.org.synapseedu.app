@@ -6,8 +6,9 @@ import 'package:elesson/share/general_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:twilio_phone_verify/twilio_phone_verify.dart';
+// import 'package:twilio_phone_verify/twilio_phone_verify.dart';
 import 'elesson_icon_lib_icons.dart';
+import 'my_twillio.dart';
 
 class QrCodeReader extends StatefulWidget {
   static const routeName = '/qr_code';
