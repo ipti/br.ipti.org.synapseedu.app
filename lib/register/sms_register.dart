@@ -112,7 +112,8 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                inputWidget(_phoneNumberController, 'Ex: 79987651234', screenWidth, screenHeight),
+                inputWidget(_phoneNumberController, 'Ex: 79987651234',
+                    screenWidth, screenHeight),
                 ButtonTheme(
                   minWidth: screenHeight < 823 ? 48 : 64,
                   height: screenHeight < 823 ? 48 : 64,
@@ -131,28 +132,39 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                     ),
                     onPressed: () async {
                       // student = await Student().searchForStudent();
-                      studentQuery = await StudentQuery().searchStudent(_phoneNumberController.text);
+                      studentQuery = await StudentQuery()
+                          .searchStudent(_phoneNumberController.text);
 
                       //todo remover aqui pra retirar o usuario de testes
                       if (studentQuery.student.phone == '79999466220') {
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
 
                         prefs.setBool('isConfirmed', true);
-                        prefs.setString('student_name', studentQuery.student.name.split(" ")[0].toUpperCase());
+                        prefs.setString(
+                            'student_name',
+                            studentQuery.student.name
+                                .split(" ")[0]
+                                .toUpperCase());
                         prefs.setInt('student_id', studentQuery.student.id);
-                        prefs.setString('student_phone', studentQuery.student.phone);
+                        prefs.setString(
+                            'student_phone', studentQuery.student.phone);
                         print("Verificado com sucesso");
                         Navigator.of(context).pushReplacementNamed('/');
                       } else {
                         // print("true ${studentQuery.student.name}");
                         if (studentQuery.valid != false) {
-                          if (_phoneNumberController.text.length == 11 && studentQuery.student != null) {
+                          if (_phoneNumberController.text.length == 11 &&
+                              studentQuery.student != null) {
                             await sendCode(_phoneNumberController.text);
-                            Navigator.pushReplacementNamed(context, CodeVerifyView.routeName, arguments: studentQuery.student);
+                            Navigator.pushReplacementNamed(
+                                context, CodeVerifyView.routeName,
+                                arguments: studentQuery.student);
                           }
                         } else {
                           setState(() {
-                            errorText = studentQuery.error + ".\nPor favor, tente novamente.";
+                            errorText = studentQuery.error +
+                                ".\nPor favor, tente novamente.";
                             opacity = 1;
                           });
                         }
@@ -220,7 +232,8 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
   }
 
   //<====parametros(controller , texto inicial)====>
-  Widget inputWidget(TextEditingController phoneNumberController, String hintText, double screenWidth, double screenHeight) {
+  Widget inputWidget(TextEditingController phoneNumberController,
+      String hintText, double screenWidth, double screenHeight) {
     return Container(
       height: screenHeight < 823 ? 48 : 70,
       width: (303 / 411) * screenWidth,
@@ -233,14 +246,15 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
             height: 1,
             fontWeight: FontWeight.w700,
           ),
-          validator: (value) => value.length < 11 ? "Entre um número válido" : null,
+          validator: (value) =>
+              value.length < 11 ? "Entre um número válido" : null,
           onChanged: (value) {
             setState(() {
               phoneNumber = value;
             });
           },
           onSaved: (value) => phoneNumber = value,
-          maxLengthEnforced: true,
+          // maxLengthEnforced: true,
           maxLength: 11,
           controller: phoneNumberController,
           textAlign: TextAlign.center,

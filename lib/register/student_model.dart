@@ -29,7 +29,6 @@ class Student {
   }
 }
 
-
 class StudentQuery {
   bool valid;
   String error;
@@ -41,12 +40,18 @@ class StudentQuery {
   Future<StudentQuery> searchStudent(String phoneNumber) async {
     final url = 'https://elesson.com.br/api/login';
     Student student;
+    Response response;
 
-    Response response = await Dio().post(
-      url,
-      options: Options(contentType: 'application/x-www-form-urlencoded'),
-      data: {'phone': phoneNumber},
-    );
+    try {
+      response = await Dio().post(
+        url,
+        options: Options(contentType: 'application/x-www-form-urlencoded'),
+        data: {'phone': phoneNumber},
+      );
+      print(response);
+    } catch (e) {
+      print('Erro: ${e.message}');
+    }
 
     // if (response.data[0]["valid"] == true) print("hey");
     print(response.data[0]);
