@@ -241,23 +241,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
         //     fontFamily: 'Mulish',
         //   ),
         // ),
-        title: RichText(
-          maxLines: 3,
-          textAlign: TextAlign.justify,
-          text: TextSpan(
-            text: questionDescription.toUpperCase(),
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: fonteDaLetra,
-              fontFamily: 'Mulish',
-            ),
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                playSound(cobjectList[0].descriptionSound);
-              },
-          ),
-        ),
+        title: questionDescription.toUpperCase(),
         linkImage: imageLink.isNotEmpty
             ? 'https://elesson.com.br/app/library/image/' + imageLink
             : null,

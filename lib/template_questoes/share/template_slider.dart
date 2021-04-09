@@ -1,5 +1,6 @@
 import 'package:elesson/settings/settings_screen.dart';
 import 'package:elesson/share/question_widgets.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../model.dart';
@@ -7,7 +8,7 @@ import '../model.dart';
 // Classe que implementa o template geral de questões.
 
 class TemplateSlider extends StatefulWidget {
-  final Widget title;
+  final String title;
   final Widget text;
   final String linkImage;
   final String sound;
@@ -50,6 +51,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
   bool showSecondScreen = false;
   Color colorResponder = Color(0xFF0000FF);
   Color boxResponder = Colors.white;
+  String formattedTitle;
 
   // bool showConfirmButton = false;
 
@@ -98,17 +100,25 @@ class _TemplateSliderState extends State<TemplateSlider> {
     timeStartIscaptured = false;
     timeStart = null;
     timeEnd = null;
+    // formattedTitle = formatTitle();
+
     super.initState();
   }
+
+  // String formatTitle() {
+  //   return widget.title;
+  // }
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+    double buttonHeight =
+        48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
     // double buttonWidth =
     //     259 > screenWidth * 0.63017 ? 259 : screenWidth * 0.63017;
-    double buttonWidth = 150 > 0.3649 * screenWidth ? 150 : 0.3649 * screenWidth;
+    double buttonWidth =
+        150 > 0.3649 * screenWidth ? 150 : 0.3649 * screenWidth;
 
     // print(
     //     'Template slider: ${widget.cobjectIdListLength} and ${widget.cobjectQuestionsLength}');
@@ -146,7 +156,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
             ),
             Row(
               children: [
-                if (widget.isTextTemplate && widget.questionIndex > 0) backButton(buttonHeight),
+                if (widget.isTextTemplate && widget.questionIndex > 0)
+                  backButton(buttonHeight),
                 if (widget.isTextTemplate)
                   SizedBox(
                     width: 6,
@@ -169,7 +180,9 @@ class _TemplateSliderState extends State<TemplateSlider> {
                             // mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Text(
-                                widget.isTextTemplate ? 'VER MAIS   ' : 'RESPONDER',
+                                widget.isTextTemplate
+                                    ? 'VER MAIS   '
+                                    : 'RESPONDER',
                                 style: TextStyle(
                                   color: colorResponder,
                                   fontSize: fonteDaLetra,
@@ -187,11 +200,13 @@ class _TemplateSliderState extends State<TemplateSlider> {
                             if (timeStartIscaptured == false) {
                               print("capturou time start");
                               timeStart = DateTime.now().millisecondsSinceEpoch;
-                              print('timeStart na função topScreen: $timeStart');
+                              print(
+                                  'timeStart na função topScreen: $timeStart');
                               timeStartIscaptured = true;
                             }
                             if (widget.isTextTemplate) {
-                              print('Submit no template slider: ${widget.cobjectQuestionsLength} e ${widget.cobjectIdListLength}');
+                              print(
+                                  'Submit no template slider: ${widget.cobjectQuestionsLength} e ${widget.cobjectIdListLength}');
                               indexTextQuestion++;
                               submitLogic(
                                 context,
@@ -199,7 +214,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
                                 widget.cobjectIndex,
                                 'TXT',
                                 cobjectIdListLength: widget.cobjectIdListLength,
-                                cobjectQuestionsLength: widget.cobjectQuestionsLength,
+                                cobjectQuestionsLength:
+                                    widget.cobjectQuestionsLength,
                                 cobjectList: cobjectList,
                                 cobjectIdList: widget.cobjectIdList,
                               );
@@ -284,7 +300,25 @@ class _TemplateSliderState extends State<TemplateSlider> {
         child: Column(
           children: <Widget>[
             Container(
-              child: Center(child: widget.title),
+              child: Center(
+                child: RichText(
+                  maxLines: 3,
+                  textAlign: TextAlign.justify,
+                  text: TextSpan(
+                    text: widget.title,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: fonteDaLetra,
+                      fontFamily: 'Mulish',
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        playSound(cobjectList[0].descriptionSound);
+                      },
+                  ),
+                ),
+              ),
               height: (screenHeight * 0.145) - 12,
               padding: EdgeInsets.symmetric(horizontal: 16),
               margin: EdgeInsets.only(top: 12),
@@ -298,7 +332,9 @@ class _TemplateSliderState extends State<TemplateSlider> {
                           height: screenWidth,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(18),
-                            border: Border.all(width: 2, color: Color.fromRGBO(110, 114, 145, 0.2)),
+                            border: Border.all(
+                                width: 2,
+                                color: Color.fromRGBO(110, 114, 145, 0.2)),
                             image: DecorationImage(
                               image: NetworkImage(widget.linkImage),
                               fit: BoxFit.cover,
@@ -317,7 +353,9 @@ class _TemplateSliderState extends State<TemplateSlider> {
                   onTap: () {
                     playSound(widget.sound);
                   },
-                  child: Container(padding: EdgeInsets.only(right: 20, left: 20), child: widget.text),
+                  child: Container(
+                      padding: EdgeInsets.only(right: 20, left: 20),
+                      child: widget.text),
                 ),
               ),
               height: (screenHeight * 0.145),
@@ -345,7 +383,9 @@ class _TemplateSliderState extends State<TemplateSlider> {
       },
       child: AnimatedContainer(
         duration: Duration(milliseconds: 250),
-        margin: showSecondScreen == true ? EdgeInsets.only(bottom: 0) : EdgeInsets.only(top: screenHeight),
+        margin: showSecondScreen == true
+            ? EdgeInsets.only(bottom: 0)
+            : EdgeInsets.only(top: screenHeight),
         decoration: BoxDecoration(color: Colors.white),
         width: screenWidth,
         height: screenHeight,
