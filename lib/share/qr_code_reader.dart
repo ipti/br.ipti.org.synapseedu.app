@@ -3,10 +3,12 @@ import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/register/sms_register.dart';
 import 'package:elesson/register/student_model.dart';
 import 'package:elesson/share/general_widgets.dart';
+import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:twilio_phone_verify/twilio_phone_verify.dart';
+import 'api.dart';
 import 'elesson_icon_lib_icons.dart';
 import 'my_twillio.dart';
 
@@ -84,7 +86,8 @@ class _QrCodeReaderState extends State<QrCodeReader> {
                   margin: EdgeInsets.only(top: 24),
                   child: Text(
                     textToTimeout,
-                    style: TextStyle(color: colorToTimerOut, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: colorToTimerOut, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -97,7 +100,10 @@ class _QrCodeReaderState extends State<QrCodeReader> {
               margin: EdgeInsets.only(top: 24, left: 24),
               width: 50,
               height: 50,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), border: Border.all(width: 2, color: Colors.white.withOpacity(0.4))),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(
+                      width: 2, color: Colors.white.withOpacity(0.4))),
               child: Icon(
                 ElessonIconLib.chevron_left,
                 color: Colors.white,
@@ -107,7 +113,8 @@ class _QrCodeReaderState extends State<QrCodeReader> {
           Container(
             height: 100,
             width: 100,
-            margin: EdgeInsets.only(top: heightScreen * 0.77 - 100, left: widthScreen / 2 - 50),
+            margin: EdgeInsets.only(
+                top: heightScreen * 0.77 - 100, left: widthScreen / 2 - 50),
             child: showLoading == true ? loadingAnimation() : null,
           ),
         ],
@@ -121,10 +128,13 @@ class _QrCodeReaderState extends State<QrCodeReader> {
       authToken: 'ef2ba29203fece8499714387a1507fe9',
       serviceSid: 'VA3346e166d40a6d69309fac0f15440e6f',
     );
-    RegExp exp = new RegExp(r"([0-9])\d{10}");
-    String number = "";
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // RegExp exp = new RegExp(r"([0-9])\d{10}");
+    // RegExp exp = new RegExp(r"(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})");
+    RegExp exp = new RegExp(r"(\w|-){36}");
 
+    String studentUuid = "";
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print('heyu');
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) async {
       print(scanData);
@@ -135,36 +145,81 @@ class _QrCodeReaderState extends State<QrCodeReader> {
           showLoading = !showLoading;
         });
         _timer.cancel();
-        number = exp.stringMatch(qrText);
-        print(number);
+        studentUuid = exp.stringMatch(qrText);
+        print(studentUuid);
         controller.dispose();
 
-        studentQuery = await StudentQuery().searchStudent(number);
+        loginQuery =
+            await LoginQuery().searchStudent(true, studentUuid: studentUuid);
 
-        if (studentQuery.valid != false) {
-          print('+55' + number);
-          var result = await _twilioPhoneVerify.sendSmsCode('+55' + number);
+        if (loginQuery.valid != false) {
+          print('UID:' + studentUuid);
 
-          if (result['message'] == 'success') {
-            // code sent
-            print("Código enviado");
-            Navigator.pushReplacementNamed(context, '/code-verify', arguments: studentQuery.student);
-          } else {
-            setState(() {
-              showLoading = !showLoading;
-              colorToTimerOut = Colors.red;
-              textToTimeout = "NÃO FOI POSSÍVEL \nVALIDAR O CÓGIGO QR";
-            });
-            print("ERROR:");
-            print('${result['statusCode']} : ${result['message']}');
-          }
-        }else{
+          var discipline = ApiBlock.getDiscipline(loginQuery.actorAccess.id);
+
+          var responseBlock =
+              await ApiBlock.getBlock(loginQuery.actorAccess.cobjectBlockId);
+
+          List<String> cobjectIdList = [];
+
+          int cobjectId = prefs.getInt('last_cobject_$discipline') ?? 0;
+
+          int questionIndex = prefs.getInt('last_question_$discipline') ?? 0;
+
+          responseBlock.data[0]["cobject"].forEach((cobject) {
+            cobjectIdList.add(cobject["id"]);
+          });
+
+          prefs.setBool('isConfirmed', true);
+          prefs.setString('student_name',
+              loginQuery.student.name.split(" ")[0].toUpperCase());
+          if (loginQuery.student.id != -1)
+            prefs.setInt('student_id', loginQuery.student.id);
+          if (loginQuery.student.phone.isNotEmpty)
+            prefs.setString('student_phone', loginQuery.student.phone);
+          if (loginQuery.student.actorId.isNotEmpty)
+            prefs.setString('actor_id', loginQuery.student.actorId);
+
+          getCobject(cobjectId, context, cobjectIdList,
+              piecesetIndex: questionIndex);
+
+          // Navigator.pushReplacementNamed(context, '/code-verify',
+          //     arguments: loginQuery.student);
+
+        } else {
           setState(() {
             showLoading = !showLoading;
             colorToTimerOut = Colors.red;
             textToTimeout = "NÃO FOI POSSÍVEL \nVALIDAR O CÓGIGO QR";
           });
         }
+
+        // if (loginQuery.valid != false) {
+        //   print('+55' + studentUuid);
+        //   var result =
+        //       await _twilioPhoneVerify.sendSmsCode('+55' + studentUuid);
+
+        //   if (result['message'] == 'success') {
+        //     // code sent
+        //     print("Código enviado");
+        //     Navigator.pushReplacementNamed(context, '/code-verify',
+        //         arguments: loginQuery.student);
+        //   } else {
+        //     setState(() {
+        //       showLoading = !showLoading;
+        //       colorToTimerOut = Colors.red;
+        //       textToTimeout = "NÃO FOI POSSÍVEL \nVALIDAR O CÓGIGO QR";
+        //     });
+        //     print("ERROR:");
+        //     print('${result['statusCode']} : ${result['message']}');
+        //   }
+        // } else {
+        //   setState(() {
+        //     showLoading = !showLoading;
+        //     colorToTimerOut = Colors.red;
+        //     textToTimeout = "NÃO FOI POSSÍVEL \nVALIDAR O CÓGIGO QR";
+        //   });
+        // }
       }
     });
   }

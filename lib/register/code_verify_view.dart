@@ -27,7 +27,8 @@ class CodeVerifyView extends StatefulWidget {
   _CodeVerifyViewState createState() => _CodeVerifyViewState();
 }
 
-class _CodeVerifyViewState extends State<CodeVerifyView> with TickerProviderStateMixin {
+class _CodeVerifyViewState extends State<CodeVerifyView>
+    with TickerProviderStateMixin {
   String _code;
   StreamController<ErrorAnimationType> errorController;
   TextEditingController _pinCodeController = TextEditingController();
@@ -43,8 +44,11 @@ class _CodeVerifyViewState extends State<CodeVerifyView> with TickerProviderStat
   AnimationController countdownAnimationController;
 
   String get timerString {
-    Duration duration = countdownAnimationController.duration * countdownAnimationController.value;
-    return duration.inSeconds < 10 ? '${((duration.inSeconds % 60) + 1).toString().padLeft(1, '0')}' : '${((duration.inSeconds % 60) + 1).toString().padLeft(2, '0')}';
+    Duration duration = countdownAnimationController.duration *
+        countdownAnimationController.value;
+    return duration.inSeconds < 10
+        ? '${((duration.inSeconds % 60) + 1).toString().padLeft(1, '0')}'
+        : '${((duration.inSeconds % 60) + 1).toString().padLeft(2, '0')}';
   }
 
   void initState() {
@@ -92,13 +96,19 @@ class _CodeVerifyViewState extends State<CodeVerifyView> with TickerProviderStat
   }
 
   Future<void> countdownLogic() async {
-    await countdownAnimationController.reverse(from: countdownAnimationController.value == 0.0 ? 1.0 : countdownAnimationController.value).whenComplete(() => setState(() {
-          resendCode = true;
-        }));
+    await countdownAnimationController
+        .reverse(
+            from: countdownAnimationController.value == 0.0
+                ? 1.0
+                : countdownAnimationController.value)
+        .whenComplete(() => setState(() {
+              resendCode = true;
+            }));
   }
 
   Future<void> verifyCode(Student student, String code) async {
-    var result = await _twilioPhoneVerify.verifySmsCode('+55' + student.phone, code);
+    var result =
+        await _twilioPhoneVerify.verifySmsCode('+55' + student.phone, code);
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     print("Enviado $code");
@@ -112,7 +122,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView> with TickerProviderStat
 
       print("ActorId salvo: ${student.actorId}");
 
-      if (studentQuery.student.personage_id == 4) {
+      if (loginQuery.student.personage_id == 4) {
         prefs.setBool('admin', true);
         Navigator.of(context).pushReplacementNamed('/admin');
       } else {
@@ -135,7 +145,8 @@ class _CodeVerifyViewState extends State<CodeVerifyView> with TickerProviderStat
     student = ModalRoute.of(context).settings.arguments;
 
     double screenHeight = MediaQuery.of(context).size.height;
-    double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+    double buttonHeight =
+        48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
     double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -175,7 +186,9 @@ class _CodeVerifyViewState extends State<CodeVerifyView> with TickerProviderStat
                   //   }
                   // },
                   pinTheme: PinTheme(
-                    activeColor: hasError ? Colors.redAccent : Color.fromRGBO(0, 0, 255, 0.4),
+                    activeColor: hasError
+                        ? Colors.redAccent
+                        : Color.fromRGBO(0, 0, 255, 0.4),
                     inactiveColor: const Color.fromRGBO(0, 0, 255, 0.4),
                     shape: PinCodeFieldShape.box,
                     fieldHeight: screenHeight < 823 ? 48 : 72,
