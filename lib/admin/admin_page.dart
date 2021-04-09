@@ -12,11 +12,15 @@ class AdminPage extends StatefulWidget {
 
 class _AdminPageState extends State<AdminPage> {
   TextEditingController cobjectId = TextEditingController();
+  TextEditingController blockIdController = TextEditingController();
 
-  void redirectToQuestion(int cobjectIdIndex, String disciplineId, String discipline) async {
+  void redirectToQuestion(
+      int cobjectIdIndex, String disciplineId, String discipline,
+      {String blockChosen}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var blockId = await ApiBlock.getBlockByDiscipline(disciplineId);
+    var blockId =
+        blockChosen ?? await ApiBlock.getBlockByDiscipline(disciplineId);
     var responseBlock = await ApiBlock.getBlock(blockId);
     List<String> cobjectIdList = [];
     int cobjectId = prefs.getInt('last_cobject_$discipline') ?? 0;
@@ -40,9 +44,107 @@ class _AdminPageState extends State<AdminPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            initTitle(text: "Oi, $studentName", heightScreen: heightScreen, bottomMargin: 20),
-            Text('INICIAR AVALIAÇÕES', style: TextStyle(color: Color(0XFF6E7291), fontWeight: FontWeight.bold, fontFamily: "ElessonIconLib", fontSize: 18)),
-            SizedBox(height: 36.0),
+            initTitle(
+                text: "Oi, $studentName",
+                heightScreen: heightScreen,
+                bottomMargin: 20),
+            // Text(
+            //   'INICIAR AVALIAÇÕES',
+            //   style: TextStyle(
+            //       color: Color(0XFF6E7291),
+            //       fontWeight: FontWeight.bold,
+            //       fontFamily: "ElessonIconLib",
+            //       fontSize: 18),
+            // ),
+            // SizedBox(height: 36.0),
+            Container(
+              width: widthScreen * 0.8,
+              height: heightScreen * 0.1,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(10)),
+                    width: widthScreen * 0.55,
+                    child: TextFormField(
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                          hintText: 'Digite o ID do CObject',
+                          border: InputBorder.none),
+                      controller: cobjectId,
+                    ),
+                  ),
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      getCobject(0, context, [cobjectId.text]);
+                      // ApiCobject.getQuestao(0,[cobjectId.text])cobjectId.text;
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.red,
+                      ),
+                      width: widthScreen * 0.2,
+                      height: heightScreen * 0.05,
+                      child: Center(
+                        child: Text(
+                          'BUSCAR',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              width: widthScreen * 0.8,
+              height: heightScreen * 0.1,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(10)),
+                    width: widthScreen * 0.55,
+                    child: TextFormField(
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                          hintText: 'Digite o ID do bloco',
+                          border: InputBorder.none),
+                      controller: blockIdController,
+                    ),
+                  ),
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      redirectToQuestion(0, '1', 'Teste',
+                          blockChosen: blockIdController.text);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.red,
+                      ),
+                      width: widthScreen * 0.2,
+                      height: heightScreen * 0.05,
+                      child: Center(
+                        child: Text(
+                          'BUSCAR',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             ElessonCardWidget(
               blockDone: false,
               backgroundImage: "assets/img/mate.png",
@@ -85,43 +187,6 @@ class _AdminPageState extends State<AdminPage> {
                 // print("Este bloco estará disponível em breve!");
               },
               context: context,
-            ),
-            Container(
-              width: widthScreen * 0.8,
-              height: heightScreen * 0.1,
-              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                    width: widthScreen * 0.55,
-                    child: TextFormField(
-                      textAlign: TextAlign.center,decoration: InputDecoration(hintText: 'Digite o ID do CObject',border: InputBorder.none),
-                      controller: cobjectId,
-                    ),
-                  ),
-                  GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () {
-                      getCobject(0,context,[cobjectId.text]);
-                      // ApiCobject.getQuestao(0,[cobjectId.text])cobjectId.text;
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.red,
-                      ),
-                      width: widthScreen * 0.2,
-                      height: heightScreen * 0.05,
-                      child: Center(
-                        child: Text(
-                          'BUSCAR',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ),
           ],
         ),
