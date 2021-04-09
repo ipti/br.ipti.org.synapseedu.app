@@ -79,7 +79,7 @@ Widget loadingAnimation() {
   );
 }
 
-Widget initTitle({String text, double heightScreen, double bottomMargin}) {
+Widget initTitle({String text, double heightScreen, double bottomMargin}) { 
   return Container(
     height: heightScreen * 0.12,
     margin: EdgeInsets.only(bottom: bottomMargin == null ? 0 : bottomMargin),

@@ -13,8 +13,6 @@ import './register/countdown.dart';
 import 'admin/admin_page.dart';
 import 'init_pages/space_selection.dart';
 
-import 'package:elesson/root/start_and_send_test(descontinuada).dart';
-
 import './root/poc.dart';
 import 'package:elesson/register/sms_register.dart';
 import 'package:elesson/template_questoes/share/image_detail_screen.dart';
@@ -143,7 +141,6 @@ class _HomeState extends State<Home> {
         BlockSelection.routeName: (context) => BlockSelection(),
         CountDownTimer.routeName: (context) => CountDownTimer(),
         RootPage.routeName: (context) => RootPage(),
-        StartAndSendTest.routeName: (context) => StartAndSendTest(),
         SmsRegisterView.routeName: (context) => SmsRegisterView(),
         CodeVerifyView.routeName: (context) => CodeVerifyView(),
         HeadlessWebView.routeName: (context) => HeadlessWebView(),
