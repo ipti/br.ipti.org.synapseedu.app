@@ -70,56 +70,49 @@ class LoginQuery {
     Response response;
     ActorAccess actorAccess;
 
-    // if (isQrcode) {
-    //   url = 'https://elesson.com.br/api/loginuuid';
-    //   response = await Dio().post(
-    //     url,
-    //     options: Options(contentType: 'application/x-www-form-urlencoded'),
-    //     data: {'uuid': studentUuid},
-    //   );
-    // } else {
-    //   url = 'https://elesson.com.br/api/login';
-    //   response = await Dio().post(
-    //     url,
-    //     options: Options(contentType: 'application/x-www-form-urlencoded'),
-    //     data: {'phone': phoneNumber},
-    //   );
-    // }
+    if (isQrcode) {
+      url = 'https://elesson.com.br/api/loginuuid';
+      response = await Dio().post(
+        url,
+        options: Options(contentType: 'application/x-www-form-urlencoded'),
+        data: {'uuid': studentUuid},
+      );
+    } else {
+      url = 'https://elesson.com.br/api/login';
+      response = await Dio().post(
+        url,
+        options: Options(contentType: 'application/x-www-form-urlencoded'),
+        data: {'phone': phoneNumber},
+      );
+    }
 
-    // if (studentJson["valid"] == true) print("hey");
-    //
-
-    final studentJson =
-        jsonDecode(await rootBundle.loadString('assets/json/qrcode.json'));
-
-    print(studentJson[0]);
-    if (studentJson[0]["valid"] == true) {
-      // print(studentJson[0]['person'][0]['id']);
+    if (response.data[0]["valid"] == true) {
+      // print(response.data[0]['person'][0]['id']);
 
       student = Student(
-        id: int.parse(studentJson[0]['person'][0]['id']) ?? -1,
-        name: studentJson[0]['person'][0]['name'] ?? 'Aluno(a)',
-        phone: studentJson[0]['person'][0]['phone'] ?? "",
-        actorId: studentJson[0]['actor'][0]['id'] ?? "",
-        personage_id: int.parse(studentJson[0]['personage'][0]['id']) ?? -1,
+        id: int.parse(response.data[0]['person'][0]['id']) ?? -1,
+        name: response.data[0]['person'][0]['name'] ?? 'Aluno(a)',
+        phone: response.data[0]['person'][0]['phone'] ?? "",
+        actorId: response.data[0]['actor'][0]['id'] ?? "",
+        personage_id: int.parse(response.data[0]['personage'][0]['id']) ?? -1,
       );
     }
 
     if (studentUuid != null)
       actorAccess = ActorAccess(
-          id: studentJson[0]["actor_access"][0]["id"],
-          uuid: studentJson[0]["actor_access"][0]["uuid"],
-          date: studentJson[0]["actor_access"][0]["date"],
-          cobjectBlockId: studentJson[0]["actor_access"][0]
+          id: response.data[0]["actorAccess"][0]["id"],
+          uuid: response.data[0]["actorAccess"][0]["uuid"],
+          date: response.data[0]["actorAccess"][0]["date"],
+          cobjectBlockId: response.data[0]["actorAccess"][0]
               ["cobject_block_fk"]);
-    // if (studentJson[0]["valid"] != trye) print(student.name);
+    // if (response.data[0]["valid"] != trye) print(student.name);
     LoginQuery loginQuery = LoginQuery(
-        valid: studentJson[0]["valid"],
+        valid: response.data[0]["valid"],
         student: student,
-        error:
-            studentJson[0]["valid"] == false ? studentJson[0]["error"][0] : '',
+        error: response.data[0]["valid"] == false
+            ? response.data[0]["error"][0]
+            : '',
         actorAccess: actorAccess);
-
     return loginQuery;
   }
 }
