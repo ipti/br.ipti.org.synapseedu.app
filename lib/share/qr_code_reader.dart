@@ -157,20 +157,21 @@ class _QrCodeReaderState extends State<QrCodeReader> {
 
           var discipline = ApiBlock.getDiscipline(loginQuery.actorAccess.id);
 
-          var responseBlock =
-              await ApiBlock.getBlock(loginQuery.actorAccess.cobjectBlockId);
+          // var responseBlock =
+          //     await ApiBlock.getBlock(loginQuery.actorAccess.cobjectBlockId);
 
-          List<String> cobjectIdList = [];
+          // List<String> cobjectIdList = [];
 
-          int cobjectId = prefs.getInt('last_cobject_$discipline') ?? 0;
+          // int cobjectId = prefs.getInt('last_cobject_$discipline') ?? 0;
 
-          int questionIndex = prefs.getInt('last_question_$discipline') ?? 0;
+          // int questionIndex = prefs.getInt('last_question_$discipline') ?? 0;
 
-          responseBlock.data[0]["cobject"].forEach((cobject) {
-            cobjectIdList.add(cobject["id"]);
-          });
+          // responseBlock.data[0]["cobject"].forEach((cobject) {
+          //   cobjectIdList.add(cobject["id"]);
+          // });
 
           prefs.setBool('isConfirmed', true);
+          prefs.setString('student_uuid', studentUuid);
           prefs.setString('student_name',
               loginQuery.student.name.split(" ")[0].toUpperCase());
           if (loginQuery.student.id != -1)
@@ -179,13 +180,16 @@ class _QrCodeReaderState extends State<QrCodeReader> {
             prefs.setString('student_phone', loginQuery.student.phone);
           if (loginQuery.student.actorId.isNotEmpty)
             prefs.setString('actor_id', loginQuery.student.actorId);
+          if (loginQuery.actorAccess.actorAcessBlocks != null) {
+            loginQuery.actorAccess.actorAcessBlocks.forEach((key, value) {
+              prefs.setString('block_$key', value);
+            });
+          }
 
-          getCobject(cobjectId, context, cobjectIdList,
-              piecesetIndex: questionIndex);
+          // getCobject(cobjectId, context, cobjectIdList,
+          //     piecesetIndex: questionIndex);
 
-          // Navigator.pushReplacementNamed(context, '/code-verify',
-          //     arguments: loginQuery.student);
-
+          Navigator.pushReplacementNamed(context, BlockSelection.routeName);
         } else {
           setState(() {
             showLoading = !showLoading;

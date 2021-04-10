@@ -1,0 +1,66 @@
+[
+    {
+        "valid": true,
+        "error": [],
+        "person": [
+            {
+                "id": "3",
+                "name": "Fábio Nascimento Santos",
+                "login": "fabio",
+                "email": "fabio@elesson.com.br",
+                "password": "123456",
+                "mother_name": null,
+                "father_name": null,
+                "phone": "79999466220"
+            }
+        ],
+        "actor": [
+            {
+                "id": "53694",
+                "person_id": "3",
+                "personage_id": "4",
+                "classroom_fk": "1",
+                "fk_id": null,
+                "source": null,
+                "personId": "3",
+                "personageId": "4",
+                "classroomFk": "1",
+                "fkId": null
+            }
+        ],
+        "personage": [
+            {
+                "id": "4",
+                "name": "Admin"
+            }
+        ],
+        "actorAccess": [
+            {
+                "id": "2",
+                "uuid": "b3bfd26a-ecba-4f28-9e98-c8aefc92ca99",
+                "date": "2021-04-06 02:53:50",
+                "actor_fk": "53694",
+                "actorFk": "53694"
+            }
+        ],
+	    "actorAccessBlocks": [
+            {
+                "id": "2",
+                "actor_access_fk": "2",
+		        "actorAccessFk": "2",
+                "date": "2021-04-06 02:53:50",
+                "cobject_block_fk": "94",
+                "cobjectBlockFk": "94"
+            },
+	        {
+                "id": "3",
+                "actor_access_fk": "2",
+		        "actorAccessFk": "2",
+                "date": "2021-04-08 02:00:00",
+                "cobject_block_fk": "95",
+                "cobjectBlockFk": "95"
+            }
+        ]
+	
+    }
+]
