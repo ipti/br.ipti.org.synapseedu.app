@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:audioplayers/audio_cache.dart';
 import 'package:elesson/share/question_widgets.dart';
+import 'package:elesson/template_questoes/ddrop/ddrop_function.dart';
 import 'package:elesson/template_questoes/model.dart';
 
 import 'package:flutter/material.dart';
@@ -174,7 +175,21 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
             groupId: widget.groupId != null ? widget.groupId : "",
             value: widget.value != null ? widget.value : "",
           );
-          // ! O erro está vindo daqui, quando tenta subtrair timeStart do timeEnd. Motivo: timeStart vem null
+          if(widget.questionType == "DDROP"){
+            //resetando variaveis do DDROP
+            valueFirstReceiver = 0;
+            valueSecondReceiver = 0;
+            valueThirdReceiver = 0;
+
+            showFirstSender = true;
+            showSecondSender = true;
+            showThirdSender = true;
+
+            urlFirstBox = '';
+            urlSecondBox = '';
+            urlThirdBox = '';
+
+          }
           submitLogic(
             context, widget.questionIndex, widget.cobjectIndex, widget.questionType,
             pieceId: widget.pieceId,

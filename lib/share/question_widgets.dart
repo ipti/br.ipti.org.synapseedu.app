@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/activity_selection/block_selection_view.dart';
-import 'package:elesson/root/start_and_send_test(descontinuada).dart';
 import 'package:elesson/share/qr_code_reader.dart';
 import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
 import 'package:elesson/template_questoes/PRE_SOM_IA.dart';
@@ -104,11 +103,11 @@ getCobject(int cobjectIndex, BuildContext context, List<String> cobjectIdList, {
 
     switch (questionType) {
       case "PRE_VISION":
-        Navigator.of(context).pushNamedAndRemoveUntil(PreImgIa.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+        Navigator.of(context).pushNamedAndRemoveUntil(PreImgIa.routeName, ModalRoute.withName(BlockSelection.routeName),
             arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'PRE_VISION', cobjectIndex));
         break;
       case "PRE_EAR":
-        Navigator.of(context).pushNamedAndRemoveUntil(PreSomIa.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+        Navigator.of(context).pushNamedAndRemoveUntil(PreSomIa.routeName, ModalRoute.withName(BlockSelection.routeName),
             arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'PRE_EAR', cobjectIndex));
         break;
       case 'PRE':
@@ -118,19 +117,19 @@ getCobject(int cobjectIndex, BuildContext context, List<String> cobjectIdList, {
         // //todo aqui temos o novaigator levando para o PRE usando IA de imagem
         // Navigator.of(context)
         //     .pushNamedAndRemoveUntil(PreImgIa.routeName, ModalRoute.withName(StartAndSendTest.routeName), arguments: ScreenArguments(cobjectList, 0, 'PRE', cobjectIndex));
-        Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+        Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName(BlockSelection.routeName),
             arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'PRE', cobjectIndex));
         break;
       case 'DDROP':
-        Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+        Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, ModalRoute.withName(BlockSelection.routeName),
             arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'DDROP', cobjectIndex));
         break;
       case 'MTE':
-        Navigator.of(context).pushNamedAndRemoveUntil(MultipleChoiceQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+        Navigator.of(context).pushNamedAndRemoveUntil(MultipleChoiceQuestion.routeName, ModalRoute.withName(BlockSelection.routeName),
             arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'MTE', cobjectIndex));
         break;
       case 'TXT':
-        Navigator.of(context).pushNamedAndRemoveUntil(TextQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
+        Navigator.of(context).pushNamedAndRemoveUntil(TextQuestion.routeName, ModalRoute.withName(BlockSelection.routeName),
             arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'TXT', cobjectIndex));
         break;
     }
