@@ -1,3 +1,4 @@
+import 'package:elesson/register/student_model.dart';
 import 'package:elesson/share/api.dart';
 import 'package:elesson/share/general_widgets.dart';
 import 'package:elesson/share/question_widgets.dart';
@@ -14,6 +15,7 @@ class BlockSelection extends StatefulWidget {
 bool langOk = false;
 bool mathOk = false;
 bool sciOk = false;
+String studentUuid;
 String studentName;
 
 class _BlockSelectionState extends State<BlockSelection> {
@@ -25,6 +27,7 @@ class _BlockSelectionState extends State<BlockSelection> {
     langOk = prefs.getBool('Português') ?? false;
     mathOk = prefs.getBool('Matemática') ?? false;
     sciOk = prefs.getBool('Ciências') ?? false;
+    studentUuid = prefs.getString('student_uuid');
     studentName = prefs.getString('student_name') ?? 'Aluno(a)';
     print("Recuperado: $studentName");
     setState(() {});
@@ -33,7 +36,9 @@ class _BlockSelectionState extends State<BlockSelection> {
 
   void redirectToQuestion(
       int cobjectIdIndex, String disciplineId, String discipline) async {
-    var blockId = await ApiBlock.getBlockByDiscipline(disciplineId);
+    var blockId = studentUuid != null
+        ? prefs.getString('block_$disciplineId')
+        : await ApiBlock.getBlockByDiscipline(disciplineId);
     var responseBlock = await ApiBlock.getBlock(blockId);
     List<String> cobjectIdList = [];
     int cobjectId = prefs.getInt('last_cobject_$discipline') ?? 0;
