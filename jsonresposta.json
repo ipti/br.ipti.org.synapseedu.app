@@ -43,24 +43,37 @@
                 "actorFk": "53694"
             }
         ],
-	    "actorAccessBlocks": [
+        "actorAccessBlocks": [
+            {
+                "id": "1",
+                "actor_access_fk": "2",
+                "date": "2021-04-06 02:53:50",
+                "cobject_block_fk": "94",
+                "discipline_fk": "1",
+                "actorAccessFk": "2",
+                "cobjectBlockFk": "94",
+                "disciplineFk": "1"
+            },
             {
                 "id": "2",
                 "actor_access_fk": "2",
-		        "actorAccessFk": "2",
                 "date": "2021-04-06 02:53:50",
-                "cobject_block_fk": "94",
-                "cobjectBlockFk": "94"
+                "cobject_block_fk": "95",
+                "discipline_fk": "2",
+                "actorAccessFk": "2",
+                "cobjectBlockFk": "95",
+                "disciplineFk": "2"
             },
-	        {
+            {
                 "id": "3",
                 "actor_access_fk": "2",
-		        "actorAccessFk": "2",
-                "date": "2021-04-08 02:00:00",
-                "cobject_block_fk": "95",
-                "cobjectBlockFk": "95"
+                "date": "2021-04-06 02:53:50",
+                "cobject_block_fk": "96",
+                "discipline_fk": "3",
+                "actorAccessFk": "2",
+                "cobjectBlockFk": "96",
+                "disciplineFk": "3"
             }
         ]
-	
     }
 ]
