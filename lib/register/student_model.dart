@@ -86,41 +86,43 @@ class LoginQuery {
         data: {'phone': phoneNumber},
       );
     }
-    final stringsStudent =
-        await rootBundle.loadString('assets/json/jsonresposta.json');
-    final jsonStudent = jsonDecode(stringsStudent);
-
-    if (jsonStudent[0]["valid"] == true) {
-      // print(jsonStudent[0]['person'][0]['id']);
+    // final stringsStudent =
+    //     await rootBundle.loadString('assets/json/jsonresposta.json');
+    // final response.data = jsonDecode(stringsStudent);
+    print(response.data[0]);
+    if (response.data[0]["valid"] == true) {
+      // print(response.data[0]['person'][0]['id']);
 
       student = Student(
-        id: int.parse(jsonStudent[0]['person'][0]['id']) ?? -1,
-        name: jsonStudent[0]['person'][0]['name'] ?? 'Aluno(a)',
-        phone: jsonStudent[0]['person'][0]['phone'] ?? "",
-        actorId: jsonStudent[0]['actor'][0]['id'] ?? "",
-        personage_id: int.parse(jsonStudent[0]['personage'][0]['id']) ?? -1,
+        id: int.parse(response.data[0]['person'][0]['id'] ?? "-1"),
+        name: response.data[0]['person'][0]['name'] ?? 'Aluno(a)',
+        phone: response.data[0]['person'][0]['phone'] ?? "",
+        actorId: response.data[0]['actor'][0]['id'] ?? "",
+        personage_id: int.parse(response.data[0]['personage'][0]['id'] ?? "-1"),
       );
     }
 
     if (studentUuid != null) {
-      jsonStudent[0]["actorAccessBlocks"].forEach((block) {
-        blocks.putIfAbsent(block["id"], () => block["cobjectBlockFk"]);
+      response.data[0]["actorAccessBlocks"].forEach((block) {
+        blocks.putIfAbsent(
+            block["discipline_fk"], () => block["cobjectBlockFk"]);
         // print(block);
       });
       actorAccess = ActorAccess(
-        id: jsonStudent[0]["actorAccess"][0]["id"],
-        uuid: jsonStudent[0]["actorAccess"][0]["uuid"],
-        date: jsonStudent[0]["actorAccess"][0]["date"],
+        id: response.data[0]["actorAccess"][0]["id"],
+        uuid: response.data[0]["actorAccess"][0]["uuid"],
+        date: response.data[0]["actorAccess"][0]["date"],
         actorAcessBlocks: blocks,
       );
       print(actorAccess.actorAcessBlocks);
     }
-    // if (jsonStudent[0]["valid"] != trye) print(student.name);
+    // if (response.data[0]["valid"] != trye) print(student.name);
     LoginQuery loginQuery = LoginQuery(
-        valid: jsonStudent[0]["valid"],
+        valid: response.data[0]["valid"],
         student: student,
-        error:
-            jsonStudent[0]["valid"] == false ? jsonStudent[0]["error"][0] : '',
+        error: response.data[0]["valid"] == false
+            ? response.data[0]["error"][0]
+            : '',
         actorAccess: actorAccess);
     return loginQuery;
   }
