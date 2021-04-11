@@ -89,7 +89,7 @@ class LoginQuery {
     // final stringsStudent =
     //     await rootBundle.loadString('assets/json/jsonresposta.json');
     // final response.data = jsonDecode(stringsStudent);
-    print(response.data[0]);
+
     if (response.data[0]["valid"] == true) {
       // print(response.data[0]['person'][0]['id']);
 
@@ -114,7 +114,6 @@ class LoginQuery {
         date: response.data[0]["actorAccess"][0]["date"],
         actorAcessBlocks: blocks,
       );
-      print(actorAccess.actorAcessBlocks);
     }
     // if (response.data[0]["valid"] != trye) print(student.name);
     LoginQuery loginQuery = LoginQuery(
