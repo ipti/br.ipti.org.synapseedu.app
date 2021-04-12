@@ -51,7 +51,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
   bool showSecondScreen = false;
   Color colorResponder = Color(0xFF0000FF);
   Color boxResponder = Colors.white;
-  String formattedTitle;
+  List<String> formattedTitle;
+  bool isTitleFormatted = false;
 
   // bool showConfirmButton = false;
 
@@ -100,14 +101,18 @@ class _TemplateSliderState extends State<TemplateSlider> {
     timeStartIscaptured = false;
     timeStart = null;
     timeEnd = null;
-    // formattedTitle = formatTitle();
+    isTitleFormatted = formatTitle();
 
     super.initState();
   }
 
-  // String formatTitle() {
-  //   return widget.title;
-  // }
+  bool formatTitle() {
+    if (!widget.title.contains(RegExp("<[a-zA-Z]>"))) return false;
+    List<String> openingTagFormat = widget.title.split(RegExp("<[a-zA-Z]>"));
+    formattedTitle = openingTagFormat[0].split(RegExp(r"<\/[a-zA-Z]>"));
+    formattedTitle.insert(0, openingTagFormat[0]);
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -305,13 +310,26 @@ class _TemplateSliderState extends State<TemplateSlider> {
                   maxLines: 3,
                   textAlign: TextAlign.justify,
                   text: TextSpan(
-                    text: widget.title,
+                    text: isTitleFormatted ? formattedTitle[0] : widget.title,
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: fonteDaLetra,
                       fontFamily: 'Mulish',
                     ),
+                    children: isTitleFormatted
+                        ? [
+                            TextSpan(
+                              text: formattedTitle[1],
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                            TextSpan(
+                              text: formattedTitle[2],
+                            ),
+                          ]
+                        : [],
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         playSound(cobjectList[0].descriptionSound);
