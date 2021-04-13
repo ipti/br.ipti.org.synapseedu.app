@@ -1,6 +1,8 @@
 import 'package:elesson/settings/settings_screen.dart';
 import 'package:elesson/share/question_widgets.dart';
+import 'package:elesson/template_questoes/ddrop/ddrop_function.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model.dart';
 
@@ -22,6 +24,7 @@ class TemplateSlider extends StatefulWidget {
   final int cobjectQuestionsLength;
   final List<Cobject> cobjectList;
   final List<String> cobjectIdList;
+  final String currentId;
 
   TemplateSlider(
       {Key key,
@@ -39,7 +42,8 @@ class TemplateSlider extends StatefulWidget {
       this.cobjectIdListLength,
       this.cobjectQuestionsLength,
       this.cobjectList,
-      this.cobjectIdList})
+      this.cobjectIdList,
+      this.currentId})
       : super(key: key);
 
   @override
@@ -98,7 +102,23 @@ class _TemplateSliderState extends State<TemplateSlider> {
     timeStartIscaptured = false;
     timeStart = null;
     timeEnd = null;
+    // getAdmin();
     super.initState();
+  }
+
+  // void getAdmin() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   isAdmin = prefs.getBool('admin') ?? false;
+  // }
+
+  // bool isAdmin = false;
+  @override
+  void didChangeDependencies() async {
+    // TODO: implement didChangeDependencies
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // // setState(() {
+    // isAdmin = prefs.getBool('admin') ?? false;
+    super.didChangeDependencies();
   }
 
   @override
@@ -114,7 +134,6 @@ class _TemplateSliderState extends State<TemplateSlider> {
 
     // print(
     //     'Template slider: ${widget.cobjectIdListLength} and ${widget.cobjectQuestionsLength}');
-
     return Scaffold(
       backgroundColor: Colors.white,
       floatingActionButton: Padding(
@@ -246,9 +265,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
       onPanUpdate: (details) {
         if (!widget.isTextTemplate) {
           if (timeStartIscaptured == false) {
-            print("capturou time start");
             timeStart = DateTime.now().millisecondsSinceEpoch;
-            print('timeStart na função topScreen: $timeStart');
             timeStartIscaptured = true;
           }
           if (details.delta.dy < 0) {
@@ -262,11 +279,10 @@ class _TemplateSliderState extends State<TemplateSlider> {
         } else {
           if (details.delta.dy < 0) {
             if (timeStartIscaptured == false) {
-              print("capturou time start 2");
+              // print("capturou time start 2");
               timeStart = DateTime.now().millisecondsSinceEpoch;
               timeStartIscaptured = true;
             }
-            print("veieeeeeeeeo aqui");
             indexTextQuestion++;
             submitLogic(
               context,
@@ -289,7 +305,23 @@ class _TemplateSliderState extends State<TemplateSlider> {
         child: Column(
           children: <Widget>[
             Container(
-              child: Center(child: widget.title),
+              child: !isAdmin
+                  ? Center(child: widget.title)
+                  : Stack(
+                      children: [
+                        Positioned(
+                          right: 0,
+                          child: Text(
+                            widget.currentId,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Center(child: widget.title),
+                      ],
+                    ),
               height: (screenHeight * 0.145) - 12,
               padding: EdgeInsets.symmetric(horizontal: 16),
               margin: EdgeInsets.only(top: 12),

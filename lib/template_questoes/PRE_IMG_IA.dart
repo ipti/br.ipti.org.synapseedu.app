@@ -88,6 +88,7 @@ class _PreImgIaState extends State<PreImgIa> {
 
     return Scaffold(
       body: TemplateSlider(
+        currentId: cobjectIdList[cobjectIndex],
         title: Text(
           questionDescription.toUpperCase(),
           textAlign: TextAlign.center,

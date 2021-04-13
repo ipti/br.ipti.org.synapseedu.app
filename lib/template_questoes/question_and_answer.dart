@@ -104,6 +104,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
 
     return Scaffold(
       body: TemplateSlider(
+        currentId: cobjectIdList[cobjectIndex],
         title: Text(
           questionDescription.toUpperCase(),
           textAlign: TextAlign.center,
