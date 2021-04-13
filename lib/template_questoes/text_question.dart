@@ -35,6 +35,7 @@ class TextQuestion extends ConsumerWidget {
 
     return Scaffold(
       body: TemplateSlider(
+        currentId: cobjectIdList[cobjectIndex],
         cobjectIdList: cobjectIdList,
         cobjectIdListLength: cobjectIdListLength,
         cobjectQuestionsLength: cobjectQuestionsLength,

@@ -153,6 +153,7 @@ class _PreSomIaState extends State<PreSomIa> {
 
     return Scaffold(
       body: TemplateSlider(
+        currentId: cobjectIdList[cobjectIndex],
         title: Text(
           questionDescription.toUpperCase(),
           textAlign: TextAlign.center,

@@ -230,6 +230,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     return Scaffold(
       // bottomNavigationBar: bottomNavBar(context),
       body: TemplateSlider(
+        currentId: cobjectIdList[cobjectIndex],
         showConfirmButton: showConfirmButton,
         // title: Text(
         //   questionDescription.toUpperCase(),
