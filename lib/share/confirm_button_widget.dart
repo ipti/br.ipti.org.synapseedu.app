@@ -167,6 +167,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
         } else {
           print('tempo de intervalo: ${timeEnd - timeStart}');
           nextQuestionTimer.cancel();
+          print('pieceID: ${widget.pieceId}');
           Answer().sendAnswerToApi(
             widget.pieceId,
             widget.isCorrect,
