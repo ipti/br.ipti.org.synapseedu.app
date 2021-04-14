@@ -308,8 +308,23 @@ class _TemplateSliderState extends State<TemplateSlider> {
         child: Column(
           children: <Widget>[
             Container(
-              child: !isAdmin
-                  ? Center(child: widget.title)
+              child: isAdmin
+                  ? Stack(
+                      children: [
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          child: Text(
+                            'MODO DEMONSTRAÇÃO',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Center(child: widget.title),
+                      ],
+                    )
                   : Stack(
                       children: [
                         Positioned(
