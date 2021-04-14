@@ -24,24 +24,19 @@ class _AdminPageState extends State<AdminPage> {
   void didChangeDependencies() async {
     prefs = await SharedPreferences.getInstance();
     studentName = prefs.getString('student_name') ?? 'Aluno(a)';
-    print("Recuperado: $studentName");
     setState(() {});
     super.didChangeDependencies();
   }
 
-  void redirectToQuestion(
-      int cobjectIdIndex, String disciplineId, String discipline,
-      {String blockChosen}) async {
+  void redirectToQuestion(int cobjectIdIndex, String disciplineId, String discipline, {String blockChosen}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var blockId =
-        blockChosen ?? await ApiBlock.getBlockByDiscipline(disciplineId);
+    var blockId = blockChosen ?? await ApiBlock.getBlockByDiscipline(disciplineId);
     var responseBlock = await ApiBlock.getBlock(blockId);
     List<String> cobjectIdList = [];
     int cobjectId = prefs.getInt('last_cobject_$discipline') ?? 0;
     int questionIndex = prefs.getInt('last_question_$discipline') ?? 0;
     responseBlock.data[0]["cobject"].forEach((cobject) {
-      // print(cobject["id"]);
       cobjectIdList.add(cobject["id"]);
     });
     print(cobjectIdList);
@@ -60,18 +55,10 @@ class _AdminPageState extends State<AdminPage> {
         child: Column(
           children: [
             initTitle(
-                text: "Oi, $studentName",
-                heightScreen: heightScreen,
-                bottomMargin: 20),
-            // Text(
-            //   'INICIAR AVALIAÇÕES',
-            //   style: TextStyle(
-            //       color: Color(0XFF6E7291),
-            //       fontWeight: FontWeight.bold,
-            //       fontFamily: "ElessonIconLib",
-            //       fontSize: 18),
-            // ),
-            // SizedBox(height: 36.0),
+              text: "Oi, $studentName",
+              heightScreen: heightScreen,
+              bottomMargin: 20,
+            ),
             Container(
               width: widthScreen * 0.8,
               height: heightScreen * 0.1,
@@ -79,15 +66,11 @@ class _AdminPageState extends State<AdminPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.circular(10)),
+                    decoration: BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(10)),
                     width: widthScreen * 0.55,
                     child: TextFormField(
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                          hintText: 'Digite o ID do CObject',
-                          border: InputBorder.none),
+                      decoration: InputDecoration(hintText: 'Digite o ID do CObject', border: InputBorder.none),
                       controller: cobjectId,
                     ),
                   ),
@@ -95,7 +78,6 @@ class _AdminPageState extends State<AdminPage> {
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
                       getCobject(0, context, [cobjectId.text]);
-                      // ApiCobject.getQuestao(0,[cobjectId.text])cobjectId.text;
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -107,8 +89,7 @@ class _AdminPageState extends State<AdminPage> {
                       child: Center(
                         child: Text(
                           'BUSCAR',
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -123,23 +104,18 @@ class _AdminPageState extends State<AdminPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.circular(10)),
+                    decoration: BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(10)),
                     width: widthScreen * 0.55,
                     child: TextFormField(
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                          hintText: 'Digite o ID do bloco',
-                          border: InputBorder.none),
+                      decoration: InputDecoration(hintText: 'Digite o ID do bloco', border: InputBorder.none),
                       controller: blockIdController,
                     ),
                   ),
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      redirectToQuestion(0, '1', 'Teste',
-                          blockChosen: blockIdController.text);
+                      redirectToQuestion(0, '1', 'Teste', blockChosen: blockIdController.text);
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -151,8 +127,7 @@ class _AdminPageState extends State<AdminPage> {
                       child: Center(
                         child: Text(
                           'BUSCAR',
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -181,10 +156,7 @@ class _AdminPageState extends State<AdminPage> {
               textModulo: 'MÓDULO 1',
               screenWidth: widthScreen,
               onTap: (value) {
-                // if (langOk == false)
                 redirectToQuestion(0, '1', 'Português');
-                // else
-                //   print("Você já fez essa tarefinha!");
               },
               context: context,
             ),
@@ -199,7 +171,6 @@ class _AdminPageState extends State<AdminPage> {
                   redirectToQuestion(0, '3', 'Ciências');
                 else
                   print("Você já fez essa tarefinha!");
-                // print("Este bloco estará disponível em breve!");
               },
               context: context,
             ),
