@@ -346,7 +346,6 @@ class Question {
   List<Question> insertQuestionList(Map<String, dynamic> cobject) {
     List<Question> questionList = [];
     cobject["screens"].forEach((screens) {
-      // print(screens['piecesets'][0]['pieces'][0]['id']);
       questionList.add(Question(
         pieceId: screens['piecesets'][0]['pieces'][0]['id'],
         header: Question().questionMultimediaSearch(screens),
