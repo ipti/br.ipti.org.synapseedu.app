@@ -39,13 +39,16 @@ class Answer {
     //   print(e.toString());
     // }
     print('======');
-    print(pieceId);
-    print(groupId);
-    print(actor_id);
-    print(finalTime);
-    print(intervalResolution);
-    print(value);
-    print(isCorrect);
+    print("value:" +value);
+    print("""{
+        "mode": "evaluation",
+        "piece_id": "$pieceId",
+        "group_id": "$groupId",
+        "actor_id": "$actor_id",
+        "final_time": "$finalTime",
+        "interval_resolution": "$intervalResolution",
+        "iscorrect": "$isCorrect"
+      }""");
 
 
 
@@ -342,10 +345,10 @@ class Question {
 
   List<Question> insertQuestionList(Map<String, dynamic> cobject) {
     List<Question> questionList = [];
-
     cobject["screens"].forEach((screens) {
+      // print(screens['piecesets'][0]['pieces'][0]['id']);
       questionList.add(Question(
-        pieceId: screens["id"],
+        pieceId: screens['piecesets'][0]['pieces'][0]['id'],
         header: Question().questionMultimediaSearch(screens),
         pieces: Question().questionItemSearch(screens["piecesets"][0]["pieces"][0]["groups"]),
       ));
