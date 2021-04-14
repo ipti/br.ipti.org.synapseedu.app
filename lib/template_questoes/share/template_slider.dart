@@ -54,6 +54,10 @@ class _TemplateSliderState extends State<TemplateSlider> {
   bool showSecondScreen = false;
   Color colorResponder = Color(0xFF0000FF);
   Color boxResponder = Colors.white;
+  List<String> formattedTitle;
+  List<String> formattedDescription;
+  bool isTitleFormatted = false;
+  bool isDescriptionFormatted = false;
 
   // bool showConfirmButton = false;
 
@@ -102,33 +106,31 @@ class _TemplateSliderState extends State<TemplateSlider> {
     timeStartIscaptured = false;
     timeStart = null;
     timeEnd = null;
-    // getAdmin();
+    // isTitleFormatted = formatTextTags(widget.title, true);
+    // isDescriptionFormatted = formatTextTags(widget.text ,false);
     super.initState();
   }
 
-  // void getAdmin() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   isAdmin = prefs.getBool('admin') ?? false;
-  // }
-
-  // bool isAdmin = false;
-  @override
-  void didChangeDependencies() async {
-    // TODO: implement didChangeDependencies
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // // setState(() {
-    // isAdmin = prefs.getBool('admin') ?? false;
-    super.didChangeDependencies();
+  bool formatTextTags(String textToFormat, bool isTitle) {
+    if (!textToFormat.contains(RegExp("<[a-zA-Z]>"))) return false;
+    List<String> openingTagFormat = textToFormat.split(RegExp("<[a-zA-Z]>"));
+    // print(openingTagFormat);
+    formattedTitle = openingTagFormat[1].split(RegExp(r"<\/[a-zA-Z]>"));
+    formattedTitle.insert(0, openingTagFormat[0]);
+    // print(formattedTitle);
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+    double buttonHeight =
+        48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
     // double buttonWidth =
     //     259 > screenWidth * 0.63017 ? 259 : screenWidth * 0.63017;
-    double buttonWidth = 150 > 0.3649 * screenWidth ? 150 : 0.3649 * screenWidth;
+    double buttonWidth =
+        150 > 0.3649 * screenWidth ? 150 : 0.3649 * screenWidth;
 
     // print(
     //     'Template slider: ${widget.cobjectIdListLength} and ${widget.cobjectQuestionsLength}');
@@ -165,7 +167,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
             ),
             Row(
               children: [
-                if (widget.isTextTemplate && widget.questionIndex > 0) backButton(buttonHeight),
+                if (widget.isTextTemplate && widget.questionIndex > 0)
+                  backButton(buttonHeight),
                 if (widget.isTextTemplate)
                   SizedBox(
                     width: 6,
@@ -188,7 +191,9 @@ class _TemplateSliderState extends State<TemplateSlider> {
                             // mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Text(
-                                widget.isTextTemplate ? 'VER MAIS   ' : 'RESPONDER',
+                                widget.isTextTemplate
+                                    ? 'VER MAIS   '
+                                    : 'RESPONDER',
                                 style: TextStyle(
                                   color: colorResponder,
                                   fontSize: fonteDaLetra,
@@ -206,11 +211,13 @@ class _TemplateSliderState extends State<TemplateSlider> {
                             if (timeStartIscaptured == false) {
                               print("capturou time start");
                               timeStart = DateTime.now().millisecondsSinceEpoch;
-                              print('timeStart na função topScreen: $timeStart');
+                              print(
+                                  'timeStart na função topScreen: $timeStart');
                               timeStartIscaptured = true;
                             }
                             if (widget.isTextTemplate) {
-                              print('Submit no template slider: ${widget.cobjectQuestionsLength} e ${widget.cobjectIdListLength}');
+                              print(
+                                  'Submit no template slider: ${widget.cobjectQuestionsLength} e ${widget.cobjectIdListLength}');
                               indexTextQuestion++;
                               submitLogic(
                                 context,
@@ -218,7 +225,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
                                 widget.cobjectIndex,
                                 'TXT',
                                 cobjectIdListLength: widget.cobjectIdListLength,
-                                cobjectQuestionsLength: widget.cobjectQuestionsLength,
+                                cobjectQuestionsLength:
+                                    widget.cobjectQuestionsLength,
                                 cobjectList: cobjectList,
                                 cobjectIdList: widget.cobjectIdList,
                               );
@@ -332,7 +340,9 @@ class _TemplateSliderState extends State<TemplateSlider> {
                           height: screenWidth,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(18),
-                            border: Border.all(width: 2, color: Color.fromRGBO(110, 114, 145, 0.2)),
+                            border: Border.all(
+                                width: 2,
+                                color: Color.fromRGBO(110, 114, 145, 0.2)),
                             image: DecorationImage(
                               image: NetworkImage(widget.linkImage),
                               fit: BoxFit.cover,
@@ -351,7 +361,10 @@ class _TemplateSliderState extends State<TemplateSlider> {
                   onTap: () {
                     playSound(widget.sound);
                   },
-                  child: Container(padding: EdgeInsets.only(right: 20, left: 20), child: widget.text),
+                  child: Container(
+                    padding: EdgeInsets.only(right: 20, left: 20),
+                    child: widget.text,
+                  ),
                 ),
               ),
               height: (screenHeight * 0.145),
@@ -379,7 +392,9 @@ class _TemplateSliderState extends State<TemplateSlider> {
       },
       child: AnimatedContainer(
         duration: Duration(milliseconds: 250),
-        margin: showSecondScreen == true ? EdgeInsets.only(bottom: 0) : EdgeInsets.only(top: screenHeight),
+        margin: showSecondScreen == true
+            ? EdgeInsets.only(bottom: 0)
+            : EdgeInsets.only(top: screenHeight),
         decoration: BoxDecoration(color: Colors.white),
         width: screenWidth,
         height: screenHeight,
