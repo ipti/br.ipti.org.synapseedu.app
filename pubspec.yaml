@@ -45,7 +45,7 @@ dependencies:
   #TESTE
   http: ^0.12.2
   image_picker: ^0.6.7+22
-#  twilio_phone_verify: ^0.0.2
+  #  twilio_phone_verify: ^0.0.2
   # sms_autofill: ^1.2.6
   pin_code_fields: ^6.0.1
   shared_preferences: ^0.5.12+4
@@ -75,7 +75,6 @@ flutter:
     - assets/icons/
     - assets/animations/
     - assets/audio/
-    - assets/json/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
