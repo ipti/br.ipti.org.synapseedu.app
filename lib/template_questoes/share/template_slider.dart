@@ -109,8 +109,10 @@ class _TemplateSliderState extends State<TemplateSlider> {
   bool formatTitle() {
     if (!widget.title.contains(RegExp("<[a-zA-Z]>"))) return false;
     List<String> openingTagFormat = widget.title.split(RegExp("<[a-zA-Z]>"));
-    formattedTitle = openingTagFormat[0].split(RegExp(r"<\/[a-zA-Z]>"));
+    // print(openingTagFormat);
+    formattedTitle = openingTagFormat[1].split(RegExp(r"<\/[a-zA-Z]>"));
     formattedTitle.insert(0, openingTagFormat[0]);
+    // print(formattedTitle);
     return true;
   }
 
@@ -311,6 +313,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                   textAlign: TextAlign.justify,
                   text: TextSpan(
                     text: isTitleFormatted ? formattedTitle[0] : widget.title,
+                    // text: widget.title,
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
