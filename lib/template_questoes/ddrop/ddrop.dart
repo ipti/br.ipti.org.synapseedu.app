@@ -3,6 +3,7 @@ import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/share/template_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/all.dart';
@@ -557,7 +558,7 @@ class _DragAndDropState extends State<DragAndDrop> {
           width: widthScreen / 2.6,
           height: widthScreen / 2.6,
         ),
-        Material(type: MaterialType.transparency,child: Center(child: Container(color: Colors.white,child: Text(question.pieces[index.toString()]['text'],style: TextStyle(fontWeight: FontWeight.bold),),)))
+        Material(type: MaterialType.transparency,child: Container(padding: EdgeInsets.only(bottom: 2),alignment: Alignment.bottomCenter,child: Text(question.pieces[index.toString()]['text'],style: TextStyle(fontWeight: FontWeight.bold,backgroundColor: Colors.white),),))
       ],
     );
   }
