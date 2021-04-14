@@ -307,7 +307,9 @@ class _TemplateSliderState extends State<TemplateSlider> {
                         Positioned(
                           right: 0,
                           child: Text(
-                            widget.currentId != null ? widget.currentId : "N/A",
+                            isAdmin && cobjectIdList.length == 1
+                                ? cobjectIdList[0]
+                                : widget.currentId,
                             style: TextStyle(
                               color: Colors.red,
                               fontWeight: FontWeight.bold,
