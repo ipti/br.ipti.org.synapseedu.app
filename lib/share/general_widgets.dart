@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'elesson_icon_lib_icons.dart';
+import 'global_variables.dart';
 
-Widget elessonCard({String backgroundImage, String text, double screenWidth, Function onTap, BuildContext context, bool blockDone}) {
+Widget elessonCard(
+    {String backgroundImage,
+    String text,
+    double screenWidth,
+    Function onTap,
+    BuildContext context,
+    bool blockDone}) {
   return GestureDetector(
     onTap: () {
       Future<String> retorno = onTap(context);
@@ -50,7 +57,10 @@ Widget elessonCard({String backgroundImage, String text, double screenWidth, Fun
                 children: [
                   Text(
                     text,
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: "ElessonIconLib"),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "ElessonIconLib"),
                   ),
                   Icon(
                     ElessonIconLib.chevron_right,
@@ -79,7 +89,7 @@ Widget loadingAnimation() {
   );
 }
 
-Widget initTitle({String text, double heightScreen, double bottomMargin}) { 
+Widget initTitle({String text, double heightScreen, double bottomMargin}) {
   return Container(
     height: heightScreen * 0.12,
     margin: EdgeInsets.only(bottom: bottomMargin == null ? 0 : bottomMargin),
@@ -92,16 +102,43 @@ Widget initTitle({String text, double heightScreen, double bottomMargin}) {
         ),
       ],
     ),
-    child: Center(
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Color(0XFF00004C),
-          fontWeight: FontWeight.bold,
-          fontFamily: "ElessonIconLib",
-          fontSize: heightScreen * 0.024,
-        ),
-      ),
-    ),
+    child: isDemo
+        ? Stack(
+            children: [
+              Positioned(
+                right: 10,
+                top: 10,
+                child: Text(
+                  'MODO DEMONSTRAÇÃO',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Center(
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    color: Color(0XFF00004C),
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "ElessonIconLib",
+                    fontSize: heightScreen * 0.024,
+                  ),
+                ),
+              ),
+            ],
+          )
+        : Center(
+            child: Text(
+              text,
+              style: TextStyle(
+                color: Color(0XFF00004C),
+                fontWeight: FontWeight.bold,
+                fontFamily: "ElessonIconLib",
+                fontSize: heightScreen * 0.024,
+              ),
+            ),
+          ),
   );
 }
