@@ -312,7 +312,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                         Positioned(
                           right: 0,
                           child: Text(
-                            widget.currentId,
+                            widget.currentId != null ? widget.currentId : "N/A",
                             style: TextStyle(
                               color: Colors.red,
                               fontWeight: FontWeight.bold,
