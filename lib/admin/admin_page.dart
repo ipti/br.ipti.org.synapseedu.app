@@ -1,4 +1,4 @@
-import 'package:elesson/activity_selection/block_selection_view.dart';
+// import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/share/api.dart';
 import 'package:elesson/share/general_widgets.dart';
 import 'package:elesson/share/question_widgets.dart';
@@ -13,6 +13,21 @@ class AdminPage extends StatefulWidget {
 class _AdminPageState extends State<AdminPage> {
   TextEditingController cobjectId = TextEditingController();
   TextEditingController blockIdController = TextEditingController();
+
+  SharedPreferences prefs;
+  String studentName;
+  bool langOk = false;
+  bool mathOk = false;
+  bool sciOk = false;
+
+  @override
+  void didChangeDependencies() async {
+    prefs = await SharedPreferences.getInstance();
+    studentName = prefs.getString('student_name') ?? 'Aluno(a)';
+    print("Recuperado: $studentName");
+    setState(() {});
+    super.didChangeDependencies();
+  }
 
   void redirectToQuestion(
       int cobjectIdIndex, String disciplineId, String discipline,
