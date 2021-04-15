@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:audioplayers/audio_cache.dart';
 import 'package:elesson/share/question_widgets.dart';
+import 'package:elesson/template_questoes/ddrop/ddrop_function.dart';
 import 'package:elesson/template_questoes/model.dart';
 
 import 'package:flutter/material.dart';
@@ -87,32 +88,25 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    double buttonHeight =
-        48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+    double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
     double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
     return MaterialButton(
       elevation: 0,
       height: buttonHeight,
       minWidth: minButtonWidth,
       padding: EdgeInsets.all(8),
-      color: confirmButtonColor
-          ? Color.fromRGBO(0, 220, 140, confirmButtonBackgroundOpacity)
-          : Color.fromRGBO(255, 51, 0, confirmButtonBackgroundOpacity),
+      color: confirmButtonColor ? Color.fromRGBO(0, 220, 140, confirmButtonBackgroundOpacity) : Color.fromRGBO(255, 51, 0, confirmButtonBackgroundOpacity),
       // textColor: Color.fromRGBO(0, 220, 140, 1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
         side: BorderSide(
-          color: confirmButtonBorder
-              ? Color.fromRGBO(0, 220, 140, 1)
-              : Color.fromRGBO(255, 51, 0, 1),
+          color: confirmButtonBorder ? Color.fromRGBO(0, 220, 140, 1) : Color.fromRGBO(255, 51, 0, 1),
         ),
       ),
       child: Text(
         confirmButtonText,
         style: TextStyle(
-          color: confirmButtonTextColor
-              ? Color.fromRGBO(0, 220, 140, 1)
-              : Color.fromRGBO(255, 51, 0, 1),
+          color: confirmButtonTextColor ? Color.fromRGBO(0, 220, 140, 1) : Color.fromRGBO(255, 51, 0, 1),
           fontWeight: FontWeight.w900,
           // fontSize: fonteDaLetra,
           fontSize: 16,
@@ -173,6 +167,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
         } else {
           print('tempo de intervalo: ${timeEnd - timeStart}');
           nextQuestionTimer.cancel();
+          print('pieceID: ${widget.pieceId}');
           Answer().sendAnswerToApi(
             widget.pieceId,
             widget.isCorrect,
@@ -181,17 +176,32 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
             groupId: widget.groupId != null ? widget.groupId : "",
             value: widget.value != null ? widget.value : "",
           );
-          // ! O erro está vindo daqui, quando tenta subtrair timeStart do timeEnd. Motivo: timeStart vem null
-          submitLogic(context, widget.questionIndex, widget.cobjectIndex,
-              widget.questionType,
-              pieceId: widget.pieceId,
-              isCorrect: widget.isCorrect,
-              finalTime: 22,
-              // intervalResolution: 1234566,
-              cobjectList: widget.cobjectList,
-              cobjectIdList: widget.cobjectIdList,
-              cobjectIdListLength: widget.cobjectIdListLength,
-              cobjectQuestionsLength: widget.cobjectQuestionsLength);
+          if(widget.questionType == "DDROP"){
+            //resetando variaveis do DDROP
+            valueFirstReceiver = 0;
+            valueSecondReceiver = 0;
+            valueThirdReceiver = 0;
+
+            showFirstSender = true;
+            showSecondSender = true;
+            showThirdSender = true;
+
+            urlFirstBox = '';
+            urlSecondBox = '';
+            urlThirdBox = '';
+
+          }
+          submitLogic(
+            context, widget.questionIndex, widget.cobjectIndex, widget.questionType,
+            pieceId: widget.pieceId,
+            isCorrect: widget.isCorrect,
+            finalTime: 22,
+            // intervalResolution: 1234566,
+            cobjectList: widget.cobjectList,
+            cobjectIdList: widget.cobjectIdList,
+            cobjectIdListLength: widget.cobjectIdListLength,
+            cobjectQuestionsLength: widget.cobjectQuestionsLength,
+          );
         }
 
         isSecondClick = true;

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/google_api.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -33,6 +34,8 @@ class _PreImgIaState extends State<PreImgIa> {
   var cobjectList = new List<Cobject>();
   int questionIndex = 0;
   int cobjectIndex;
+  int cobjectIdListLength;
+  int cobjectQuestionsLength;
 
   double opacityFaleAgora = 0;
   double opacityNaoEntendivel = 0;
@@ -73,6 +76,8 @@ class _PreImgIaState extends State<PreImgIa> {
     cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
     cobjectIndex = args.cobjectIndex;
+    cobjectIdListLength = args.cobjectIdLength;
+    cobjectQuestionsLength = args.cobjectQuestionsLength;
 
     String questionDescription = cobjectList[0].description;
     String questionText =
@@ -88,6 +93,7 @@ class _PreImgIaState extends State<PreImgIa> {
 
     return Scaffold(
       body: TemplateSlider(
+        currentId: cobjectIdList[cobjectIndex],
         title: Text(
           questionDescription.toUpperCase(),
           textAlign: TextAlign.center,
@@ -164,7 +170,11 @@ class _PreImgIaState extends State<PreImgIa> {
                             ),
                           ),
                           onChanged: (val) {
-                            correctAnswer == _textController.text.toString()
+                            verificarResposta(
+                                    respostasCorretas: correctAnswer,
+                                    respostaUsuario:
+                                        _textController.text.toString())
+                                // correctAnswer == _textController.text.toString()
                                 ? isCorrect = true
                                 : isCorrect = false;
 
@@ -293,9 +303,24 @@ class _PreImgIaState extends State<PreImgIa> {
                 if (_textController.text.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 3.0),
-                    child: submitAnswer(context, cobjectList, 'PRE',
-                        ++questionIndex, cobjectIndex, pieceId, isCorrect,
-                        value: _textController.text),
+                    // child: submitAnswer(context, cobjectList, 'PRE',
+                    //     ++questionIndex, cobjectIndex, pieceId, isCorrect,
+                    //     value: _textController.text),
+                    child: Center(
+                      child: ConfirmButtonWidget(
+                        context: context,
+                        cobjectList: cobjectList,
+                        cobjectIdList: cobjectIdList,
+                        questionType: 'PRE',
+                        questionIndex: ++questionIndex,
+                        cobjectIndex: cobjectIndex,
+                        cobjectIdListLength: cobjectIdListLength,
+                        cobjectQuestionsLength: cobjectQuestionsLength,
+                        pieceId: pieceId,
+                        isCorrect: isCorrect,
+                        value: _textController.text,
+                      ),
+                    ),
                   ),
               ],
             ),

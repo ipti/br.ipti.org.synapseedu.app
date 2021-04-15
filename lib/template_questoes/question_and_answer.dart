@@ -1,5 +1,6 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/share/api.dart';
+import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/model.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
@@ -45,6 +46,8 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
   var cobjectIdList = new List<String>();
   int questionIndex;
   int cobjectIndex;
+  int cobjectIdListLength;
+  int cobjectQuestionsLength;
 
   String alertMessage = "FALE AGORA...";
   String naoEndendivel =
@@ -89,6 +92,8 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
     cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
     cobjectIndex = args.cobjectIndex;
+    cobjectIdListLength = args.cobjectIdLength;
+    cobjectQuestionsLength = args.cobjectQuestionsLength;
 
     String questionDescription = cobjectList[0].description;
     String questionText =
@@ -104,6 +109,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
 
     return Scaffold(
       body: TemplateSlider(
+        currentId: cobjectIdList[cobjectIndex],
         title: Text(
           questionDescription.toUpperCase(),
           textAlign: TextAlign.center,
@@ -180,7 +186,10 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                             ),
                           ),
                           onChanged: (val) {
-                            correctAnswer == _textController.text.toString()
+                            verificarResposta(
+                                    respostasCorretas: correctAnswer,
+                                    respostaUsuario:
+                                        _textController.text.toString())
                                 ? isCorrect = true
                                 : isCorrect = false;
 
@@ -274,20 +283,35 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                 ),
                 SizedBox(height: 15),
                 // Aciona o botão de confirmar apenas quando algum texto é digitado na tela.
+
                 if (_textController.text.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3.0),
-                    child: submitAnswer(
-                      context,
-                      cobjectList,
-                      'PRE',
-                      ++questionIndex,
-                      cobjectIndex,
-                      pieceId,
-                      isCorrect,
-                      value: _textController.text,
-                    ),
+                  ConfirmButtonWidget(
+                    context: context,
+                    cobjectList: cobjectList,
+                    cobjectIdList: cobjectIdList,
+                    questionType: 'PRE',
+                    questionIndex: ++questionIndex,
+                    cobjectIndex: cobjectIndex,
+                    cobjectIdListLength: cobjectIdListLength,
+                    cobjectQuestionsLength: cobjectQuestionsLength,
+                    pieceId: pieceId,
+                    isCorrect: isCorrect,
+                    value: _textController.text,
                   ),
+                // if (_textController.text.isNotEmpty)
+                //   Padding(
+                //     padding: const EdgeInsets.only(top: 3.0),
+                //     child: submitAnswer(
+                //       context,
+                //       cobjectList,
+                //       'PRE',
+                //       ++questionIndex,
+                //       cobjectIndex,
+                //       pieceId,
+                //       isCorrect,
+                //       value: _textController.text,
+                //     ),
+                //   ),
               ],
             ),
           ),

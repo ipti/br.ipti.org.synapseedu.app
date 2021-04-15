@@ -32,6 +32,7 @@ class _DragAndDropState extends State<DragAndDrop> {
     // TODO: implement initState
     super.initState();
     int aux;
+    randomNumber = [0,0,0];
     for (int i = 0; i < 3; i++) {
       aux = random.nextInt(3) + 1;
       print("$aux");
@@ -271,7 +272,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                 isCorrect: data == 1 ? true : false,
                 finalTime: 0,
                 groupId: "1",
-                intervalResolution: DateTime.now().millisecondsSinceEpoch - 0,
+                intervalResolution: 1 - DateTime.now().millisecondsSinceEpoch,
                 value: "",
                 pieceId: pieceId.toString());
 
@@ -323,6 +324,13 @@ class _DragAndDropState extends State<DragAndDrop> {
             updateSender(data, setState);
             tradeValue(2, data, setState);
             updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 2, question);
+            sendMetaData(
+                isCorrect: data == 2 ? true : false,
+                finalTime: 0,
+                groupId: "2",
+                intervalResolution: 1 - DateTime.now().millisecondsSinceEpoch,
+                value: "",
+                pieceId: pieceId.toString());
             verifyIsCorrect();
             print("""
                             1_1: $valueFirstReceiver
@@ -371,6 +379,13 @@ class _DragAndDropState extends State<DragAndDrop> {
             updateSender(data, setState);
             tradeValue(3, data, setState);
             updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 3, question);
+            sendMetaData(
+                isCorrect: data == 3 ? true : false,
+                finalTime: 0,
+                groupId: "3",
+                intervalResolution: 1 - DateTime.now().millisecondsSinceEpoch,
+                value: "",
+                pieceId: pieceId.toString());
             verifyIsCorrect();
             print("""
                             1_1: $valueFirstReceiver
@@ -521,24 +536,29 @@ class _DragAndDropState extends State<DragAndDrop> {
   }
 
   Widget dragSenderTemplate(int index, double widthScreen, Question question) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        image: DecorationImage(
-          image: NetworkImage(BASE_URL + '/image/' + question.pieces[index.toString()]["image"]),
-          fit: BoxFit.cover,
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            image: DecorationImage(
+              image: NetworkImage(BASE_URL + '/image/' + question.pieces[index.toString()]["image"]),
+              fit: BoxFit.cover,
+            ),
+            border: Border.all(
+              color: index == 1
+                  ? Color.fromRGBO(189, 0, 255, 0.2)
+                  : index == 2
+                      ? Color.fromRGBO(255, 138, 0, 0.2)
+                      : Color.fromRGBO(0, 203, 255, 0.2),
+              width: 2,
+            ),
+          ),
+          width: widthScreen / 2.6,
+          height: widthScreen / 2.6,
         ),
-        border: Border.all(
-          color: index == 1
-              ? Color.fromRGBO(189, 0, 255, 0.2)
-              : index == 2
-                  ? Color.fromRGBO(255, 138, 0, 0.2)
-                  : Color.fromRGBO(0, 203, 255, 0.2),
-          width: 2,
-        ),
-      ),
-      width: widthScreen / 2.6,
-      height: widthScreen / 2.6,
+        Material(type: MaterialType.transparency,child: Center(child: Container(color: Colors.white,child: Text(question.pieces[index.toString()]['text'],style: TextStyle(fontWeight: FontWeight.bold),),)))
+      ],
     );
   }
 

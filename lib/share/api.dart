@@ -54,6 +54,22 @@ class ApiBlock {
     return blockId;
   }
 
+  static String getDiscipline(String disciplineId) {
+    switch (disciplineId) {
+      case "1":
+        return "Português";
+        break;
+      case "2":
+        return "Matemática";
+        break;
+      case "3":
+        return "Ciências";
+        break;
+      default:
+        return "Elesson";
+    }
+  }
+
   static Future getBlock(String blockId) async {
     // var url =
     //     'http://app.elesson.com.br/api-synapse/synapse/cobjectblock/cobjects/' +

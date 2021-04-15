@@ -525,13 +525,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.19"
-  twilio_phone_verify:
-    dependency: "direct main"
-    description:
-      name: twilio_phone_verify
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.2"
   typed_data:
     dependency: transitive
     description:

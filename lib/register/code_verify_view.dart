@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:elesson/register/student_model.dart';
+import 'package:elesson/share/my_twillio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import './sms_register.dart';
@@ -11,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:twilio_phone_verify/twilio_phone_verify.dart';
+// import 'package:twilio_phone_verify/twilio_phone_verify.dart';
 import '../share/header_widget.dart';
 
 /**
@@ -21,6 +22,7 @@ import '../share/header_widget.dart';
 
 class CodeVerifyView extends StatefulWidget {
   static const routeName = "/code-verify";
+
   @override
   _CodeVerifyViewState createState() => _CodeVerifyViewState();
 }
@@ -112,13 +114,23 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
     print("Enviado $code");
 
     if (result['message'] == 'approved') {
-      // phone number verified
       prefs.setBool('isConfirmed', true);
       prefs.setString('student_name', student.name.split(" ")[0].toUpperCase());
       prefs.setInt('student_id', student.id);
       prefs.setString('student_phone', student.phone);
+      prefs.setString('actor_id', student.actorId);
+
+      print("ActorId salvo: ${student.actorId}");
+
+      if (loginQuery.student.personage_id == 4) {
+        prefs.setBool('admin', true);
+        Navigator.of(context).pushReplacementNamed('/admin');
+      } else {
+        prefs.setBool('admin', false);
+        Navigator.of(context).pushReplacementNamed('/');
+      }
+
       print("Verificado com sucesso");
-      Navigator.of(context).pushReplacementNamed('/');
     } else {
       // error
       print('ERROR:${result['statusCode']} : ${result['message']}');
@@ -127,6 +139,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
 
   String currentText = "";
   GlobalKey<FormState> formKey;
+
   @override
   Widget build(BuildContext context) {
     student = ModalRoute.of(context).settings.arguments;

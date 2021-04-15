@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/register/code_verify_view.dart';
 import 'package:elesson/register/student_model.dart';
+import 'package:elesson/share/my_twillio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:twilio_phone_verify/twilio_phone_verify.dart';
+
+// import 'package:twilio_phone_verify/twilio_phone_verify.dart';
 import '../share/header_widget.dart';
 
 /**
@@ -18,7 +20,7 @@ import '../share/header_widget.dart';
 TwilioPhoneVerify _twilioPhoneVerify;
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 Student student;
-StudentQuery studentQuery;
+LoginQuery loginQuery;
 
 Future<void> sendCode(String phoneNumber) async {
   var result = await _twilioPhoneVerify.sendSmsCode('+55' + phoneNumber);
@@ -112,7 +114,8 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                inputWidget(_phoneNumberController, 'Ex: 79987651234', screenWidth, screenHeight),
+                inputWidget(_phoneNumberController, 'Ex: 79987651234',
+                    screenWidth, screenHeight),
                 ButtonTheme(
                   minWidth: screenHeight < 823 ? 48 : 64,
                   height: screenHeight < 823 ? 48 : 64,
@@ -130,32 +133,22 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                       AssetImage("assets/icons/chevron_right.png"),
                     ),
                     onPressed: () async {
-                      // student = await Student().searchForStudent();
-                      studentQuery = await StudentQuery().searchStudent(_phoneNumberController.text);
-
-                      //todo remover aqui pra retirar o usuario de testes
-                      if (studentQuery.student.phone == '79999466220') {
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
-
-                        prefs.setBool('isConfirmed', true);
-                        prefs.setString('student_name', studentQuery.student.name.split(" ")[0].toUpperCase());
-                        prefs.setInt('student_id', studentQuery.student.id);
-                        prefs.setString('student_phone', studentQuery.student.phone);
-                        print("Verificado com sucesso");
-                        Navigator.of(context).pushReplacementNamed('/');
-                      } else {
-                        // print("true ${studentQuery.student.name}");
-                        if (studentQuery.valid != false) {
-                          if (_phoneNumberController.text.length == 11 && studentQuery.student != null) {
-                            await sendCode(_phoneNumberController.text);
-                            Navigator.pushReplacementNamed(context, CodeVerifyView.routeName, arguments: studentQuery.student);
-                          }
-                        } else {
-                          setState(() {
-                            errorText = studentQuery.error + ".\nPor favor, tente novamente.";
-                            opacity = 1;
-                          });
+                      loginQuery = await LoginQuery().searchStudent(false,
+                          phoneNumber: _phoneNumberController.text);
+                      if (loginQuery.valid != false) {
+                        if (_phoneNumberController.text.length == 11 &&
+                            loginQuery.student != null) {
+                          await sendCode(_phoneNumberController.text);
+                          Navigator.pushReplacementNamed(
+                              context, CodeVerifyView.routeName,
+                              arguments: loginQuery.student);
                         }
+                      } else {
+                        setState(() {
+                          errorText = loginQuery.error +
+                              ".\nPor favor, tente novamente.";
+                          opacity = 1;
+                        });
                       }
                     },
                   ),
@@ -220,7 +213,8 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
   }
 
   //<====parametros(controller , texto inicial)====>
-  Widget inputWidget(TextEditingController phoneNumberController, String hintText, double screenWidth, double screenHeight) {
+  Widget inputWidget(TextEditingController phoneNumberController,
+      String hintText, double screenWidth, double screenHeight) {
     return Container(
       height: screenHeight < 823 ? 48 : 70,
       width: (303 / 411) * screenWidth,
@@ -233,7 +227,8 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
             height: 1,
             fontWeight: FontWeight.w700,
           ),
-          validator: (value) => value.length < 11 ? "Entre um número válido" : null,
+          validator: (value) =>
+              value.length < 11 ? "Entre um número válido" : null,
           onChanged: (value) {
             setState(() {
               phoneNumber = value;
