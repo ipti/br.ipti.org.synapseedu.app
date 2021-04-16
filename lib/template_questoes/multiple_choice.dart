@@ -1,6 +1,7 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
+import 'package:elesson/template_questoes/share/description_format.dart';
 import 'package:flutter/gestures.dart';
 import 'share/button_widgets.dart';
 import 'package:flutter/services.dart';
@@ -263,23 +264,27 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                             .questions[questionIndex]
                             .header["sound"]),
                         child: Center(
-                          child: Text(
-                            cobjectList[0]
-                                .questions[questionIndex]
-                                .header["text"]
-                                .toUpperCase(),
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: fonteDaLetra,
-                              fontFamily: 'Mulish',
-                            ),
-                            // recognizer: TapGestureRecognizer()
-                            //   ..onTap = () {
-                            //     ;
-                            //   },
-                            // ),
-                          ),
+                          child: formatDescription(cobjectList[0]
+                              .questions[questionIndex]
+                              .header["text"]
+                              .toUpperCase()),
+                          //     Text(
+                          //   cobjectList[0]
+                          //       .questions[questionIndex]
+                          //       .header["text"]
+                          //       .toUpperCase(),
+                          //   style: TextStyle(
+                          //     color: Colors.black,
+                          //     fontWeight: FontWeight.bold,
+                          //     fontSize: fonteDaLetra,
+                          //     fontFamily: 'Mulish',
+                          //   ),
+                          //   // recognizer: TapGestureRecognizer()
+                          //   //   ..onTap = () {
+                          //   //     ;
+                          //   //   },
+                          //   // ),
+                          // )
                         ),
                       ),
                     ),

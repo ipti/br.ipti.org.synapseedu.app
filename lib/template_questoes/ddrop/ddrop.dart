@@ -2,6 +2,7 @@ import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
+import 'package:elesson/template_questoes/share/description_format.dart';
 import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -134,15 +135,16 @@ class _DragAndDropState extends State<DragAndDrop> {
                     },
                     child: Container(
                       child: Center(
-                        child: Text(
-                          questionText.toUpperCase(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: fonteDaLetra,
-                            fontFamily: 'Mulish',
-                          ),
-                        ),
+                        child: formatDescription(questionText.toUpperCase()),
+                        // child: Text(
+                        //   questionText.toUpperCase(),
+                        //   textAlign: TextAlign.center,
+                        //   style: TextStyle(
+                        //     fontWeight: FontWeight.bold,
+                        //     fontSize: fonteDaLetra,
+                        //     fontFamily: 'Mulish',
+                        //   ),
+                        // ),
                       ),
                     ),
                   ),

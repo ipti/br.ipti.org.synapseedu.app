@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/google_api.dart';
+import 'package:elesson/template_questoes/share/description_format.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -213,14 +214,16 @@ class _PreImgIaState extends State<PreImgIa> {
                           },
                           child: Container(
                             padding: EdgeInsets.all(20),
-                            child: Text(
-                              questionText.toUpperCase(),
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: fonteDaLetra,
-                                fontFamily: 'Mulish',
-                              ),
-                            ),
+                            child:
+                                formatDescription(questionText.toUpperCase()),
+                            // child: Text(
+                            //   questionText.toUpperCase(),
+                            //   style: TextStyle(
+                            //     fontWeight: FontWeight.bold,
+                            //     fontSize: fonteDaLetra,
+                            //     fontFamily: 'Mulish',
+                            //   ),
+                            // ),
                           ),
                         ),
                       ),
