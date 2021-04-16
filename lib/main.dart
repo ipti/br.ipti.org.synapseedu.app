@@ -36,7 +36,7 @@ import 'webview/headless_webview.dart';
 import 'template_questoes/text_question.dart';
 import 'template_questoes/multiple_choice.dart';
 import 'template_questoes/ddrop/ddrop.dart';
-import './template_questoes/question_and_answer.dart';
+import 'template_questoes/pre_base.dart';
 
 import './login/auto_login.dart';
 
@@ -45,7 +45,9 @@ void main() async {
   //Força o modo retrato na inicialização do aplicativo
 
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) async {
+  SystemChrome.setPreferredOrientations(
+          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
+      .then((_) async {
     isLogged = await isUserConfirmed();
     runApp(ProviderScope(child: new Home()));
   });
@@ -129,7 +131,11 @@ class _HomeState extends State<Home> {
         fontFamily: 'Mulish',
         textTheme: GoogleFonts.muliTextTheme(),
       ),
-      initialRoute: isLogged && isAdmin? '/admin' : isLogged ? '/' : SpaceSelection.routeName,
+      initialRoute: isLogged && isAdmin
+          ? '/admin'
+          : isLogged
+              ? '/'
+              : SpaceSelection.routeName,
       // initialRoute: BlockSelection.routeName,
       // initialRoute: SettingsScreen.routeName,
       // initialRoute: isLogged ? '/' : SmsRegisterView.routeName,

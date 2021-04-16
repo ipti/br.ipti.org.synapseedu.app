@@ -2,6 +2,7 @@ import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
+import 'package:elesson/template_questoes/share/description_format.dart';
 import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,7 +33,7 @@ class _DragAndDropState extends State<DragAndDrop> {
     // TODO: implement initState
     super.initState();
     int aux;
-    randomNumber = [0,0,0];
+    randomNumber = [0, 0, 0];
     for (int i = 0; i < 3; i++) {
       aux = random.nextInt(3) + 1;
       print("$aux");
@@ -60,7 +61,8 @@ class _DragAndDropState extends State<DragAndDrop> {
     cobjectQuestionsLength = args.cobjectQuestionsLength;
     cobjectIdLength = args.cobjectIdLength;
 
-    String questionText = cobjectList[0].questions[questionIndex].header["text"];
+    String questionText =
+        cobjectList[0].questions[questionIndex].header["text"];
 
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height * 0.93;
@@ -74,17 +76,11 @@ class _DragAndDropState extends State<DragAndDrop> {
         cobjectIndex: cobjectIndex,
         cobjectQuestionsLength: cobjectQuestionsLength,
         cobjectList: cobjectList,
-        linkImage: cobjectList[0].questions[0].header['image'] != '' ? BASE_URL + '/image/' + cobjectList[0].questions[0].header['image'] : "",
+        linkImage: cobjectList[0].questions[0].header['image'] != ''
+            ? BASE_URL + '/image/' + cobjectList[0].questions[0].header['image']
+            : "",
         sound: cobjectList[0].questions[0].header["sound"],
-        title: Text(
-          cobjectList[0].description.toUpperCase(),
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: fonteDaLetra,
-            fontFamily: 'Mulish',
-          ),
-        ),
+        title: cobjectList[0].description.toUpperCase(),
         text: Text(
           cobjectList[0].questions[questionIndex].header["text"].toUpperCase(),
           textAlign: TextAlign.center,
@@ -94,14 +90,24 @@ class _DragAndDropState extends State<DragAndDrop> {
             fontFamily: 'Mulish',
           ),
         ),
-        activityScreen: activityScreen(heightScreen - 12, widthScreen, cobjectList[0].questions[questionIndex], questionText, chronometer,
-            cobjectIdList: cobjectIdList, cobjectList: cobjectList, questionIndex: questionIndex, cobjectQuestionsLength: cobjectQuestionsLength, cobjectIdLength: cobjectIdLength),
+        activityScreen: activityScreen(heightScreen - 12, widthScreen,
+            cobjectList[0].questions[questionIndex], questionText, chronometer,
+            cobjectIdList: cobjectIdList,
+            cobjectList: cobjectList,
+            questionIndex: questionIndex,
+            cobjectQuestionsLength: cobjectQuestionsLength,
+            cobjectIdLength: cobjectIdLength),
       ),
     );
   }
 
-  Widget activityScreen(double heightScreen, double widthScreen, Question question, String questionText, Stopwatch chronometer,
-      {List<String> cobjectIdList, List<Cobject> cobjectList, int questionIndex, int cobjectQuestionsLength, int cobjectIdLength}) {
+  Widget activityScreen(double heightScreen, double widthScreen,
+      Question question, String questionText, Stopwatch chronometer,
+      {List<String> cobjectIdList,
+      List<Cobject> cobjectList,
+      int questionIndex,
+      int cobjectQuestionsLength,
+      int cobjectIdLength}) {
     String pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
     return Container(
@@ -124,19 +130,22 @@ class _DragAndDropState extends State<DragAndDrop> {
                 child: Center(
                   child: GestureDetector(
                     onTap: () {
-                      playSound(cobjectList[0].questions[questionIndex].header["sound"]);
+                      playSound(cobjectList[0]
+                          .questions[questionIndex]
+                          .header["sound"]);
                     },
                     child: Container(
                       child: Center(
-                        child: Text(
-                          questionText.toUpperCase(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: fonteDaLetra,
-                            fontFamily: 'Mulish',
-                          ),
-                        ),
+                        child: formatDescription(questionText.toUpperCase()),
+                        // child: Text(
+                        //   questionText.toUpperCase(),
+                        //   textAlign: TextAlign.center,
+                        //   style: TextStyle(
+                        //     fontWeight: FontWeight.bold,
+                        //     fontSize: fonteDaLetra,
+                        //     fontFamily: 'Mulish',
+                        //   ),
+                        // ),
                       ),
                     ),
                   ),
@@ -147,7 +156,9 @@ class _DragAndDropState extends State<DragAndDrop> {
                 height: heightScreen * 0.85,
                 padding: EdgeInsets.only(top: 12, bottom: 12),
                 child: Stack(children: [
-                  Center(child: Image.asset('assets/img/divisoria.png', scale: .9)),
+                  Center(
+                      child:
+                          Image.asset('assets/img/divisoria.png', scale: .9)),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -199,7 +210,9 @@ class _DragAndDropState extends State<DragAndDrop> {
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              valueFirstReceiver != 0 && valueSecondReceiver != 0 && valueThirdReceiver != 0
+              valueFirstReceiver != 0 &&
+                      valueSecondReceiver != 0 &&
+                      valueThirdReceiver != 0
                   ? Center(
                       child: Padding(
                         padding: EdgeInsets.only(top: 3),
@@ -238,16 +251,32 @@ class _DragAndDropState extends State<DragAndDrop> {
               height: widthScreen / 2.6,
               child: Stack(
                 children: [
-                  box(index: 1, widthScreen: widthScreen, question: question,cor: valueFirstReceiver == 1 ? Color(0xFFBD00FF).withOpacity(0.2) : valueFirstReceiver == 3 ? Color(0xFF00CBFF).withOpacity(0.2) : valueFirstReceiver == 2 ? Color(0xFFFF8A00).withOpacity(0.2) : null),
+                  box(
+                      index: 1,
+                      widthScreen: widthScreen,
+                      question: question,
+                      cor: valueFirstReceiver == 1
+                          ? Color(0xFFBD00FF).withOpacity(0.2)
+                          : valueFirstReceiver == 3
+                              ? Color(0xFF00CBFF).withOpacity(0.2)
+                              : valueFirstReceiver == 2
+                                  ? Color(0xFFFF8A00).withOpacity(0.2)
+                                  : null),
                   LoadingGestureDetector(
                     enableMargin: true,
                     widthScreen: widthScreen,
                     definedPosition: posicao,
                     setState: setState,
                     onLongPress: () {
-                      if (question.pieces["${randomNumber[posicao - 4]}_1"]["image"].isNotEmpty)
-                        Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
-                            arguments: DetailScreenArguments(grouping: "${randomNumber[posicao - 4]}_1", question: question, heroString: 'box1'));
+                      if (question
+                          .pieces["${randomNumber[posicao - 4]}_1"]["image"]
+                          .isNotEmpty)
+                        Navigator.of(context).pushNamed(
+                            ImageDetailScreen.routeName,
+                            arguments: DetailScreenArguments(
+                                grouping: "${randomNumber[posicao - 4]}_1",
+                                question: question,
+                                heroString: 'box1'));
                     },
                     child: dragReceiverTemplate(1, widthScreen, question),
                   ),
@@ -266,7 +295,12 @@ class _DragAndDropState extends State<DragAndDrop> {
                     : Color.fromRGBO(0, 203, 255, 0.2);
             updateSender(data, setState);
             tradeValue(1, data, setState);
-            updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 1, question);
+            updateReceiver(
+                BASE_URL +
+                    '/image/' +
+                    question.pieces[data.toString()]["image"],
+                1,
+                question);
 
             sendMetaData(
                 isCorrect: data == 1 ? true : false,
@@ -295,16 +329,32 @@ class _DragAndDropState extends State<DragAndDrop> {
               height: widthScreen / 2.6,
               child: Stack(
                 children: [
-                  box(index: 2, widthScreen: widthScreen, question: question,cor: valueSecondReceiver == 1 ? Color(0xFFBD00FF).withOpacity(0.2) : valueSecondReceiver == 3 ? Color(0xFF00CBFF).withOpacity(0.2) : valueSecondReceiver == 2 ? Color(0xFFFF8A00).withOpacity(0.2) : null),
+                  box(
+                      index: 2,
+                      widthScreen: widthScreen,
+                      question: question,
+                      cor: valueSecondReceiver == 1
+                          ? Color(0xFFBD00FF).withOpacity(0.2)
+                          : valueSecondReceiver == 3
+                              ? Color(0xFF00CBFF).withOpacity(0.2)
+                              : valueSecondReceiver == 2
+                                  ? Color(0xFFFF8A00).withOpacity(0.2)
+                                  : null),
                   LoadingGestureDetector(
                     enableMargin: true,
                     widthScreen: widthScreen,
                     definedPosition: posicao,
                     setState: setState,
                     onLongPress: () {
-                      if (question.pieces["${randomNumber[posicao - 4]}_1"]["image"].isNotEmpty)
-                        Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
-                            arguments: DetailScreenArguments(grouping: "${randomNumber[posicao - 4]}_1", question: question, heroString: 'box2'));
+                      if (question
+                          .pieces["${randomNumber[posicao - 4]}_1"]["image"]
+                          .isNotEmpty)
+                        Navigator.of(context).pushNamed(
+                            ImageDetailScreen.routeName,
+                            arguments: DetailScreenArguments(
+                                grouping: "${randomNumber[posicao - 4]}_1",
+                                question: question,
+                                heroString: 'box2'));
                     },
                     child: dragReceiverTemplate(2, widthScreen, question),
                   ),
@@ -323,7 +373,12 @@ class _DragAndDropState extends State<DragAndDrop> {
                     : Color.fromRGBO(0, 203, 255, 0.2);
             updateSender(data, setState);
             tradeValue(2, data, setState);
-            updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 2, question);
+            updateReceiver(
+                BASE_URL +
+                    '/image/' +
+                    question.pieces[data.toString()]["image"],
+                2,
+                question);
             sendMetaData(
                 isCorrect: data == 2 ? true : false,
                 finalTime: 0,
@@ -350,16 +405,32 @@ class _DragAndDropState extends State<DragAndDrop> {
               height: widthScreen / 2.6,
               child: Stack(
                 children: [
-                  box(index: 3, widthScreen: widthScreen, question: question,cor: valueThirdReceiver == 1 ? Color(0xFFBD00FF).withOpacity(0.2) : valueThirdReceiver == 3 ? Color(0xFF00CBFF).withOpacity(0.2) : valueThirdReceiver == 2 ? Color(0xFFFF8A00).withOpacity(0.2) : null),
+                  box(
+                      index: 3,
+                      widthScreen: widthScreen,
+                      question: question,
+                      cor: valueThirdReceiver == 1
+                          ? Color(0xFFBD00FF).withOpacity(0.2)
+                          : valueThirdReceiver == 3
+                              ? Color(0xFF00CBFF).withOpacity(0.2)
+                              : valueThirdReceiver == 2
+                                  ? Color(0xFFFF8A00).withOpacity(0.2)
+                                  : null),
                   LoadingGestureDetector(
                     enableMargin: true,
                     widthScreen: widthScreen,
                     definedPosition: posicao,
                     setState: setState,
                     onLongPress: () {
-                      if (question.pieces["${randomNumber[posicao - 4]}_1"]["image"].isNotEmpty)
-                        Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
-                            arguments: DetailScreenArguments(grouping: "${randomNumber[posicao - 4]}_1", question: question, heroString: 'box3'));
+                      if (question
+                          .pieces["${randomNumber[posicao - 4]}_1"]["image"]
+                          .isNotEmpty)
+                        Navigator.of(context).pushNamed(
+                            ImageDetailScreen.routeName,
+                            arguments: DetailScreenArguments(
+                                grouping: "${randomNumber[posicao - 4]}_1",
+                                question: question,
+                                heroString: 'box3'));
                     },
                     child: dragReceiverTemplate(3, widthScreen, question),
                   ),
@@ -378,7 +449,12 @@ class _DragAndDropState extends State<DragAndDrop> {
                     : Color.fromRGBO(0, 203, 255, 0.2);
             updateSender(data, setState);
             tradeValue(3, data, setState);
-            updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 3, question);
+            updateReceiver(
+                BASE_URL +
+                    '/image/' +
+                    question.pieces[data.toString()]["image"],
+                3,
+                question);
             sendMetaData(
                 isCorrect: data == 3 ? true : false,
                 finalTime: 0,
@@ -514,7 +590,9 @@ class _DragAndDropState extends State<DragAndDrop> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           image: DecorationImage(
-            image: NetworkImage(BASE_URL + '/image/' + question.pieces['$index' + '_1']["image"]),
+            image: NetworkImage(BASE_URL +
+                '/image/' +
+                question.pieces['$index' + '_1']["image"]),
             fit: BoxFit.cover,
           ),
           border: Border.all(
@@ -542,7 +620,9 @@ class _DragAndDropState extends State<DragAndDrop> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             image: DecorationImage(
-              image: NetworkImage(BASE_URL + '/image/' + question.pieces[index.toString()]["image"]),
+              image: NetworkImage(BASE_URL +
+                  '/image/' +
+                  question.pieces[index.toString()]["image"]),
               fit: BoxFit.cover,
             ),
             border: Border.all(
@@ -557,12 +637,22 @@ class _DragAndDropState extends State<DragAndDrop> {
           width: widthScreen / 2.6,
           height: widthScreen / 2.6,
         ),
-        Material(type: MaterialType.transparency,child: Center(child: Container(color: Colors.white,child: Text(question.pieces[index.toString()]['text'],style: TextStyle(fontWeight: FontWeight.bold),),)))
+        Material(
+            type: MaterialType.transparency,
+            child: Center(
+                child: Container(
+              color: Colors.white,
+              child: Text(
+                question.pieces[index.toString()]['text'],
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            )))
       ],
     );
   }
 
-  Widget dragReceiverTemplate(int index, double widthScreen, Question question) {
+  Widget dragReceiverTemplate(
+      int index, double widthScreen, Question question) {
     String urlToThisReceiver = '';
     bool show = false;
     switch (index) {

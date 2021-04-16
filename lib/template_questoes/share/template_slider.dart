@@ -1,6 +1,6 @@
 import 'package:elesson/settings/settings_screen.dart';
 import 'package:elesson/share/question_widgets.dart';
-import 'package:elesson/template_questoes/ddrop/ddrop_function.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,7 +9,7 @@ import '../model.dart';
 // Classe que implementa o template geral de questões.
 
 class TemplateSlider extends StatefulWidget {
-  final Widget title;
+  final String title;
   final Widget text;
   final String linkImage;
   final String sound;
@@ -55,9 +55,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
   Color colorResponder = Color(0xFF0000FF);
   Color boxResponder = Colors.white;
   List<String> formattedTitle;
-  List<String> formattedDescription;
   bool isTitleFormatted = false;
-  bool isDescriptionFormatted = false;
 
   // bool showConfirmButton = false;
 
@@ -106,14 +104,14 @@ class _TemplateSliderState extends State<TemplateSlider> {
     timeStartIscaptured = false;
     timeStart = null;
     timeEnd = null;
-    // isTitleFormatted = formatTextTags(widget.title, true);
-    // isDescriptionFormatted = formatTextTags(widget.text ,false);
+    isTitleFormatted = formatTitle();
+
     super.initState();
   }
 
-  bool formatTextTags(String textToFormat, bool isTitle) {
-    if (!textToFormat.contains(RegExp("<[a-zA-Z]>"))) return false;
-    List<String> openingTagFormat = textToFormat.split(RegExp("<[a-zA-Z]>"));
+  bool formatTitle() {
+    if (!widget.title.contains(RegExp("<[a-zA-Z]>"))) return false;
+    List<String> openingTagFormat = widget.title.split(RegExp("<[a-zA-Z]>"));
     // print(openingTagFormat);
     formattedTitle = openingTagFormat[1].split(RegExp(r"<\/[a-zA-Z]>"));
     formattedTitle.insert(0, openingTagFormat[0]);
@@ -308,40 +306,39 @@ class _TemplateSliderState extends State<TemplateSlider> {
         child: Column(
           children: <Widget>[
             Container(
-              child: isAdmin
-                  ? Stack(
-                      children: [
-                        Positioned(
-                          right: 0,
-                          top: 0,
-                          child: Text(
-                            'MODO DEMONSTRAÇÃO',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Center(child: widget.title),
-                      ],
-                    )
-                  : Stack(
-                      children: [
-                        Positioned(
-                          right: 0,
-                          child: Text(
-                            isAdmin && cobjectIdList.length == 1
-                                ? cobjectIdList[0]
-                                : widget.currentId,
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Center(child: widget.title),
-                      ],
+              child: Center(
+                child: RichText(
+                  maxLines: 3,
+                  textAlign: TextAlign.justify,
+                  text: TextSpan(
+                    text: isTitleFormatted ? formattedTitle[0] : widget.title,
+                    // text: widget.title,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: fonteDaLetra,
+                      fontFamily: 'Mulish',
                     ),
+                    children: isTitleFormatted
+                        ? [
+                            TextSpan(
+                              text: formattedTitle[1],
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                            TextSpan(
+                              text: formattedTitle[2],
+                            ),
+                          ]
+                        : [],
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        playSound(cobjectList[0].descriptionSound);
+                      },
+                  ),
+                ),
+              ),
               height: (screenHeight * 0.145) - 12,
               padding: EdgeInsets.symmetric(horizontal: 16),
               margin: EdgeInsets.only(top: 12),
@@ -377,9 +374,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
                     playSound(widget.sound);
                   },
                   child: Container(
-                    padding: EdgeInsets.only(right: 20, left: 20),
-                    child: widget.text,
-                  ),
+                      padding: EdgeInsets.only(right: 20, left: 20),
+                      child: widget.text),
                 ),
               ),
               height: (screenHeight * 0.145),
