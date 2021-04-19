@@ -81,15 +81,19 @@ class _DragAndDropState extends State<DragAndDrop> {
             : "",
         sound: cobjectList[0].questions[0].header["sound"],
         title: cobjectList[0].description.toUpperCase(),
-        text: Text(
-          cobjectList[0].questions[questionIndex].header["text"].toUpperCase(),
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: fonteDaLetra,
-            fontFamily: 'Mulish',
-          ),
-        ),
+        text: formatDescription(cobjectList[0]
+            .questions[questionIndex]
+            .header["text"]
+            .toUpperCase()),
+        // text: Text(
+        //   cobjectList[0].questions[questionIndex].header["text"].toUpperCase(),
+        //   textAlign: TextAlign.center,
+        //   style: TextStyle(
+        //     fontWeight: FontWeight.bold,
+        //     fontSize: fonteDaLetra,
+        //     fontFamily: 'Mulish',
+        //   ),
+        // ),
         activityScreen: activityScreen(heightScreen - 12, widthScreen,
             cobjectList[0].questions[questionIndex], questionText, chronometer,
             cobjectIdList: cobjectIdList,
