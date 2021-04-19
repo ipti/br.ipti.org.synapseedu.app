@@ -214,6 +214,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   int cobjectQuestionsLength;
   List<int> pieceOrder = [0, 1, 2];
   bool pieceOrdered = false;
+  Widget questionDescriptionWidget;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -246,6 +247,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     if (!pieceOrdered) {
       pieceOrdered = true;
       pieceOrder.shuffle();
+      questionDescriptionWidget = formatDescription(
+          cobjectList[0].questions[questionIndex].header["text"].toUpperCase());
     }
 
     return Scaffold(
@@ -264,6 +267,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
         //   ),
         // ),
         title: questionDescription.toUpperCase(),
+        text: questionDescriptionWidget,
         linkImage: imageLink.isNotEmpty
             ? 'https://elesson.com.br/app/library/image/' + imageLink
             : null,
@@ -285,10 +289,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                             .questions[questionIndex]
                             .header["sound"]),
                         child: Center(
-                          child: formatDescription(cobjectList[0]
-                              .questions[questionIndex]
-                              .header["text"]
-                              .toUpperCase()),
+                          child: questionDescriptionWidget,
                           //     Text(
                           //   cobjectList[0]
                           //       .questions[questionIndex]

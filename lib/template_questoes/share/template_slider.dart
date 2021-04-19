@@ -30,25 +30,25 @@ class TemplateSlider extends StatefulWidget {
   final List<String> cobjectIdList;
   final String currentId;
 
-  TemplateSlider(
-      {Key key,
-      this.startTime,
-      this.title,
-      this.text,
-      this.sound,
-      this.showConfirmButton,
-      this.activityScreen,
-      this.isTextTemplate = false,
-      this.isPreTemplate = false,
-      this.questionIndex,
-      this.cobjectIndex,
-      this.linkImage,
-      this.cobjectIdListLength,
-      this.cobjectQuestionsLength,
-      this.cobjectList,
-      this.cobjectIdList,
-      this.currentId})
-      : super(key: key);
+  TemplateSlider({
+    Key key,
+    this.startTime,
+    this.title,
+    this.text,
+    this.sound,
+    this.showConfirmButton,
+    this.activityScreen,
+    this.isTextTemplate = false,
+    this.isPreTemplate = false,
+    this.questionIndex,
+    this.cobjectIndex,
+    this.linkImage,
+    this.cobjectIdListLength,
+    this.cobjectQuestionsLength,
+    this.cobjectList,
+    this.cobjectIdList,
+    this.currentId,
+  }) : super(key: key);
 
   @override
   _TemplateSliderState createState() => _TemplateSliderState();
