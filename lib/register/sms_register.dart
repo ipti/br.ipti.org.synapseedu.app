@@ -49,6 +49,8 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
   String errorText = "";
   double opacity = 0;
 
+  RegExp phoneRegExp = RegExp(r"\d{2}([9])\d*");
+
   //CRIAR TEXTCONTROLLERS PARA CADA ENTRADA
 
   //TwilioFlutter twilioFlutter;
@@ -134,7 +136,8 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                       AssetImage("assets/icons/chevron_right.png"),
                     ),
                     onPressed: () async {
-                      if (_phoneNumberController.text.length == 11) {
+                      if (_phoneNumberController.text.length == 11 &&
+                          _phoneNumberController.text.contains(phoneRegExp)) {
                         loginQuery = await LoginQuery().searchStudent(false,
                             phoneNumber: _phoneNumberController.text);
                         if (loginQuery.valid != false) {
