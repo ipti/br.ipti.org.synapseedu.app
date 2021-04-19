@@ -4,6 +4,7 @@ import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/register/code_verify_view.dart';
 import 'package:elesson/register/student_model.dart';
 import 'package:elesson/share/my_twillio.dart';
+import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -133,20 +134,27 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                       AssetImage("assets/icons/chevron_right.png"),
                     ),
                     onPressed: () async {
-                      loginQuery = await LoginQuery().searchStudent(false,
-                          phoneNumber: _phoneNumberController.text);
-                      if (loginQuery.valid != false) {
-                        if (_phoneNumberController.text.length == 11 &&
-                            loginQuery.student != null) {
-                          await sendCode(_phoneNumberController.text);
-                          Navigator.pushReplacementNamed(
-                              context, CodeVerifyView.routeName,
-                              arguments: loginQuery.student);
+                      if (_phoneNumberController.text.length == 11) {
+                        loginQuery = await LoginQuery().searchStudent(false,
+                            phoneNumber: _phoneNumberController.text);
+                        if (loginQuery.valid != false) {
+                          if (loginQuery.student != null) {
+                            await sendCode(_phoneNumberController.text);
+                            Navigator.pushReplacementNamed(
+                                context, CodeVerifyView.routeName,
+                                arguments: loginQuery.student);
+                          }
+                        } else {
+                          setState(() {
+                            errorText = loginQuery.error +
+                                ".\nPor favor, tente novamente.";
+                            opacity = 1;
+                          });
                         }
                       } else {
                         setState(() {
-                          errorText = loginQuery.error +
-                              ".\nPor favor, tente novamente.";
+                          errorText =
+                              "Está faltando algum dígito no número inserido.\nPor favor, tente novamente.";
                           opacity = 1;
                         });
                       }
@@ -232,6 +240,7 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
           onChanged: (value) {
             setState(() {
               phoneNumber = value;
+              opacity = 0;
             });
           },
           onSaved: (value) => phoneNumber = value,
@@ -241,6 +250,10 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
           textAlign: TextAlign.center,
           keyboardType: TextInputType.phone,
           decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(
+              bottom:
+                  (screenHeight < 823 ? 48 : 70) / 2, // HERE THE IMPORTANT PART
+            ),
             counterText: "",
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20.0),
@@ -252,10 +265,12 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
             ),
             // prefixIcon: Icon(Icons.phone),
             // labelText: "Número de celular",
-            labelStyle: const TextStyle(fontSize: 24, color: Colors.black),
+            // labelStyle: const TextStyle(fontSize: 24, color: Colors.black),
             // border: InputBorder,
-            // hintText: hintText,
-            hintStyle: const TextStyle(fontSize: 20),
+            hintText: hintText,
+            hintStyle: const TextStyle(
+              fontSize: 16,
+            ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20.0),
               borderSide: BorderSide(
