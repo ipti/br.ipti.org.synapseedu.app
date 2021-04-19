@@ -2,6 +2,7 @@ import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/share/description_format.dart';
+import 'package:elesson/share/snackbar_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'share/button_widgets.dart';
 import 'package:flutter/services.dart';
@@ -116,6 +117,25 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                         BASE_URL +
                             '/image/' +
                             question.pieces[grouping]["image"],
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          }
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes
+                                  : null,
+                            ),
+                          );
+                        },
+                        errorBuilder: (context, exception, stackTrace) {
+                          // print('erro');
+                          // callSnackBar(context);
+                          return Container();
+                        },
                       )
                     // ? Image.asset('assets/img/placeholder.jpg')
                     : Material(
@@ -155,7 +175,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                 question.pieces["correctAnswer"] == index + 1
                     ? isCorrect = true
                     : isCorrect = false;
-                print('Correto: ${question.pieces["correctAnswer"]}');
+                // print('Correto: ${question.pieces["correctAnswer"]}');
                 // setState(() {
                 //   for (int i = 0; i < 3; i++) {
                 //     if (_buttonPressed[i] == true && i != index)
@@ -209,13 +229,10 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     double textCardHeight = 0.0985 * screenHeight;
     double buttonHeight =
         48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
-    print(
-        'COBJECT LIST ID ${cobjectList[0]} e qindex ${cobjectList[0].questions[questionIndex]}');
+    // print(
+    //     'COBJECT LIST ID ${cobjectIdList[0]} e qindex ${cobjectList[0].questions[questionIndex]}');
 
     String imageLink = cobjectList[0].questions[questionIndex].header["image"];
-
-    // if (imageLink.isEmpty) print('O link tá vazio: "$imageLink"');
-    // if (imageLink == null) print('O link tá null: $imageLink');
 
     String pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
@@ -223,8 +240,8 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     SystemChrome.setEnabledSystemUIOverlays([]);
     String questionDescription = cobjectList[0].description;
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
-    // print(elapsedTimer.elapsed);
-    Stopwatch chronometer = Stopwatch();
+
+    // Stopwatch chronometer = Stopwatch();
 
     if (!pieceOrdered) {
       pieceOrdered = true;

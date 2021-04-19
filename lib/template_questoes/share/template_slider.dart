@@ -1,8 +1,12 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:elesson/settings/settings_screen.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:elesson/share/snackbar_widget.dart';
+import 'package:flutter/services.dart';
 
 import '../model.dart';
 
@@ -98,6 +102,10 @@ class _TemplateSliderState extends State<TemplateSlider> {
     );
   }
 
+  final Connectivity _connectivity = Connectivity();
+  StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  String _connectionStatus = 'Unknown';
+
   @override
   void initState() {
     // TODO: implement initState
@@ -106,6 +114,9 @@ class _TemplateSliderState extends State<TemplateSlider> {
     timeEnd = null;
     isTitleFormatted = formatTitle();
 
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     super.initState();
   }
 
@@ -117,6 +128,44 @@ class _TemplateSliderState extends State<TemplateSlider> {
     formattedTitle.insert(0, openingTagFormat[0]);
     // print(formattedTitle);
     return true;
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+    _connectivitySubscription.cancel();
+  }
+
+  Future<void> initConnectivity() async {
+    ConnectivityResult result = ConnectivityResult.none;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      print(e.toString());
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    switch (result) {
+      case ConnectivityResult.wifi:
+      case ConnectivityResult.mobile:
+      case ConnectivityResult.none:
+        setState(() => _connectionStatus = result.toString());
+        break;
+      default:
+        setState(() => _connectionStatus = 'Failed to get connectivity.');
+        break;
+    }
   }
 
   @override
@@ -132,6 +181,9 @@ class _TemplateSliderState extends State<TemplateSlider> {
 
     // print(
     //     'Template slider: ${widget.cobjectIdListLength} and ${widget.cobjectQuestionsLength}');
+
+    print('STATUS DA CONEXÃO: $_connectionStatus');
+
     return Scaffold(
       backgroundColor: Colors.white,
       floatingActionButton: Padding(
@@ -267,6 +319,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
         if (!widget.isTextTemplate) {
           if (timeStartIscaptured == false) {
             timeStart = DateTime.now().millisecondsSinceEpoch;
+            // print('timeStart na função topScreen: $timeStart');
             timeStartIscaptured = true;
           }
           if (details.delta.dy < 0) {
@@ -353,13 +406,66 @@ class _TemplateSliderState extends State<TemplateSlider> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(18),
                             border: Border.all(
-                                width: 2,
-                                color: Color.fromRGBO(110, 114, 145, 0.2)),
-                            image: DecorationImage(
-                              image: NetworkImage(widget.linkImage),
-                              fit: BoxFit.cover,
+                              width: 2,
+                              color: Color.fromRGBO(110, 114, 145, 0.2),
                             ),
+                            // image: DecorationImage(
+                            //   image: NetworkImage(widget.linkImage),
+                            //   fit: BoxFit.cover,
+                            // ),
                           ),
+                          child: Image.network(
+                            widget.linkImage,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, exception, stackTrace) {
+                              // print('erro');
+                              callSnackBar(context);
+                              return Container();
+                            },
+                            loadingBuilder: (BuildContext context, Widget child,
+                                ImageChunkEvent loadingProgress) {
+                              if (loadingProgress == null) {
+                                return child;
+                              }
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes !=
+                                          null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes
+                                      : null,
+                                ),
+                              );
+                            },
+                          ),
+                          // child: Container(
+                          //   alignment: Alignment.center,
+                          //   height: screenWidth,
+                          //   child: Image.network(
+                          //     widget.linkImage,
+
+                          //     frameBuilder: (context, image, frame,
+                          //         wasSynchronouslyLoaded) {
+                          //       return Container(
+                          //         decoration: BoxDecoration(
+                          //           borderRadius: BorderRadius.circular(18),
+                          //           border: Border.all(
+                          //               width: 2,
+                          //               color:
+                          //                   Color.fromRGBO(110, 114, 145, 0.2)),
+                          //           image: DecorationImage(
+                          //             image: image,
+                          //             fit: BoxFit.cover,
+                          //           ),
+                          //         ),
+                          //       );
+                          //     },
+                          //     // placeholder: (context, url) =>
+                          //     //     CircularProgressIndicator(),
+                          //     // errorWidget: (context, url, error) =>
+                          //     //     Icon(Icons.error),
+                          //   ),
+                          // ),
                         ),
                       ),
                       padding: EdgeInsets.only(left: 16, right: 16),

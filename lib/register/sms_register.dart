@@ -235,7 +235,7 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
             });
           },
           onSaved: (value) => phoneNumber = value,
-          maxLengthEnforced: true,
+          // maxLengthEnforced: true,
           maxLength: 11,
           controller: phoneNumberController,
           textAlign: TextAlign.center,
