@@ -129,7 +129,7 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
                         child: Icon(
                           soundButton(context, question) != null
                               ? Icons.volume_up
-                              : Icons.volume_off,
+                              : Icons.volume_off, 
                           size: 40,
                           color: Color(0xFF0000FF),
                         ),
