@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:elesson/settings/settings_screen.dart';
 import 'package:elesson/share/question_widgets.dart';
@@ -61,6 +62,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
   List<String> formattedTitle;
   bool isTitleFormatted = false;
 
+  AudioPlayer playerDescription;
+
   // bool showConfirmButton = false;
 
   Widget backButton(double buttonHeight) {
@@ -115,8 +118,10 @@ class _TemplateSliderState extends State<TemplateSlider> {
     isTitleFormatted = formatTitle();
 
     initConnectivity();
-    _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+
+    playerDescription = AudioPlayer();
+    playerDescription.setUrl(BASE_URL + '/sound/' + cobjectList[0].descriptionSound);
     super.initState();
   }
 
@@ -172,12 +177,10 @@ class _TemplateSliderState extends State<TemplateSlider> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    double buttonHeight =
-        48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+    double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
     // double buttonWidth =
     //     259 > screenWidth * 0.63017 ? 259 : screenWidth * 0.63017;
-    double buttonWidth =
-        150 > 0.3649 * screenWidth ? 150 : 0.3649 * screenWidth;
+    double buttonWidth = 150 > 0.3649 * screenWidth ? 150 : 0.3649 * screenWidth;
 
     // print(
     //     'Template slider: ${widget.cobjectIdListLength} and ${widget.cobjectQuestionsLength}');
@@ -217,8 +220,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
             ),
             Row(
               children: [
-                if (widget.isTextTemplate && widget.questionIndex > 0)
-                  backButton(buttonHeight),
+                if (widget.isTextTemplate && widget.questionIndex > 0) backButton(buttonHeight),
                 if (widget.isTextTemplate)
                   SizedBox(
                     width: 6,
@@ -241,9 +243,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                             // mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Text(
-                                widget.isTextTemplate
-                                    ? 'VER MAIS   '
-                                    : 'RESPONDER',
+                                widget.isTextTemplate ? 'VER MAIS   ' : 'RESPONDER',
                                 style: TextStyle(
                                   color: colorResponder,
                                   fontSize: fonteDaLetra,
@@ -261,13 +261,11 @@ class _TemplateSliderState extends State<TemplateSlider> {
                             if (timeStartIscaptured == false) {
                               print("capturou time start");
                               timeStart = DateTime.now().millisecondsSinceEpoch;
-                              print(
-                                  'timeStart na função topScreen: $timeStart');
+                              print('timeStart na função topScreen: $timeStart');
                               timeStartIscaptured = true;
                             }
                             if (widget.isTextTemplate) {
-                              print(
-                                  'Submit no template slider: ${widget.cobjectQuestionsLength} e ${widget.cobjectIdListLength}');
+                              print('Submit no template slider: ${widget.cobjectQuestionsLength} e ${widget.cobjectIdListLength}');
                               indexTextQuestion++;
                               submitLogic(
                                 context,
@@ -275,8 +273,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                                 widget.cobjectIndex,
                                 'TXT',
                                 cobjectIdListLength: widget.cobjectIdListLength,
-                                cobjectQuestionsLength:
-                                    widget.cobjectQuestionsLength,
+                                cobjectQuestionsLength: widget.cobjectQuestionsLength,
                                 cobjectList: cobjectList,
                                 cobjectIdList: widget.cobjectIdList,
                               );
@@ -387,7 +384,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                         : [],
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        playSound(cobjectList[0].descriptionSound);
+                        playerDescription.resume();
                       },
                   ),
                 ),
@@ -422,18 +419,13 @@ class _TemplateSliderState extends State<TemplateSlider> {
                               callSnackBar(context);
                               return Container();
                             },
-                            loadingBuilder: (BuildContext context, Widget child,
-                                ImageChunkEvent loadingProgress) {
+                            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
                               if (loadingProgress == null) {
                                 return child;
                               }
                               return Center(
                                 child: CircularProgressIndicator(
-                                  value: loadingProgress.expectedTotalBytes !=
-                                          null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes
-                                      : null,
+                                  value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes : null,
                                 ),
                               );
                             },
@@ -477,11 +469,10 @@ class _TemplateSliderState extends State<TemplateSlider> {
               child: Center(
                 child: GestureDetector(
                   onTap: () {
-                    playSound(widget.sound);
+                    //kevenny aqui
+                    playerTituloSegundaTela.resume();
                   },
-                  child: Container(
-                      padding: EdgeInsets.only(right: 20, left: 20),
-                      child: widget.text),
+                  child: Container(padding: EdgeInsets.only(right: 20, left: 20), child: widget.text),
                 ),
               ),
               height: (screenHeight * 0.145),
@@ -509,9 +500,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
       },
       child: AnimatedContainer(
         duration: Duration(milliseconds: 250),
-        margin: showSecondScreen == true
-            ? EdgeInsets.only(bottom: 0)
-            : EdgeInsets.only(top: screenHeight),
+        margin: showSecondScreen == true ? EdgeInsets.only(bottom: 0) : EdgeInsets.only(top: screenHeight),
         decoration: BoxDecoration(color: Colors.white),
         width: screenWidth,
         height: screenHeight,
