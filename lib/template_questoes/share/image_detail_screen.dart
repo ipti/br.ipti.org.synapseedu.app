@@ -16,6 +16,12 @@ class ImageDetailScreen extends StatefulWidget {
 // Tela de detalhes da imagem/texto.
 
 class _ImageDetailScreenState extends State<ImageDetailScreen> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final arguments =
@@ -29,6 +35,8 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
         48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
     double buttonWidth =
         133 > screenWidth * 0.3236 ? 133 : screenWidth * 0.3236;
+    player.setUrl(BASE_URL + '/sound/' + question.pieces[grouping]["sound"]);
+
 
     // if (question.pieces[grouping]["image"].isEmpty) print('IMAGEM É VAZIA:${question.pieces[grouping]["image"]}');
     // final loadedProduct = Provider.of<Products>(
@@ -121,7 +129,7 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
                         child: Icon(
                           soundButton(context, question) != null
                               ? Icons.volume_up
-                              : Icons.volume_off,
+                              : Icons.volume_off, 
                           size: 40,
                           color: Color(0xFF0000FF),
                         ),
@@ -131,8 +139,7 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
                               buttonBackground =
                                   Color(0xFF0000FF).withOpacity(0.2);
                             });
-                            playSoundDetailScreen(
-                                question.pieces[grouping]["sound"]);
+                            playSoundDetailScreen();
                           }
                         },
                       ),
@@ -184,8 +191,11 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
     );
   }
 
-  void playSoundDetailScreen(String sound) async {
-    await player.play(BASE_URL + '/sound/' + sound);
+  void playSoundDetailScreen() async {
+
+    await player.resume();
+    
+    // await player.play(BASE_URL + '/sound/' + sound);
     player.onPlayerCompletion.listen((event) {
       setState(() {
         buttonBackground = Colors.white;

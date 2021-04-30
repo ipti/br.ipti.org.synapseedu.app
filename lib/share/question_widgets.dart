@@ -35,6 +35,9 @@ List<String> questionListTest = [];
 //todo substituir o question list anterior por essa variavel
 
 AudioPlayer player = new AudioPlayer();
+AudioPlayer playerTituloSegundaTela = AudioPlayer();
+
+
 
 int indexTextQuestion = 0;
 
