@@ -1,0 +1,157 @@
+[
+    {
+        "valid": true,
+        "error": [],
+        "person": [
+            {
+                "id": null,
+                "name": null,
+                "login": null,
+                "email": null,
+                "password": null,
+                "mother_name": null,
+                "father_name": null,
+                "phone": null
+            }
+        ],
+        "actor": [
+            {
+                "id": null,
+                "person_id": null,
+                "personage_id": null,
+                "classroom_fk": null,
+                "fk_id": null,
+                "source": null,
+                "personId": null,
+                "personageId": null,
+                "classroomFk": null,
+                "fkId": null
+            }
+        ],
+        "personage": [
+            {
+                "id": null,
+                "name": null
+            }
+        ],
+        "actorAccess": [
+            {
+                "id": "96",
+                "uuid": "31eea5d6-ac44-11eb-9077-12e27f22e681",
+                "date": "2021-05-03 19:17:26",
+                "actor_fk": null,
+                "actorFk": null
+            }
+        ],
+        "actorAccessBlocks": [
+            {
+                "id": "236",
+                "actor_access_fk": "96",
+                "date": "2021-05-03 19:17:26",
+                "cobject_block_fk": "114",
+                "discipline_fk": "1",
+                "degree_fk": "1",
+                "actorAccessFk": "96",
+                "cobjectBlockFk": "114",
+                "disciplineFk": "1",
+                "degreeFk": "1"
+            },
+            {
+                "id": "237",
+                "actor_access_fk": "96",
+                "date": "2021-05-03 19:17:26",
+                "cobject_block_fk": "115",
+                "discipline_fk": "2",
+                "degree_fk": "1",
+                "actorAccessFk": "96",
+                "cobjectBlockFk": "115",
+                "disciplineFk": "2",
+                "degreeFk": "1"
+            },
+            {
+                "id": "238",
+                "actor_access_fk": "96",
+                "date": "2021-05-03 19:17:26",
+                "cobject_block_fk": "116",
+                "discipline_fk": "3",
+                "degree_fk": "1",
+                "actorAccessFk": "96",
+                "cobjectBlockFk": "116",
+                "disciplineFk": "3",
+                "degreeFk": "1"
+            },
+            {
+                "id": "239",
+                "actor_access_fk": "96",
+                "date": "2021-05-03 19:17:26",
+                "cobject_block_fk": "117",
+                "discipline_fk": "1",
+                "degree_fk": "2",
+                "actorAccessFk": "96",
+                "cobjectBlockFk": "117",
+                "disciplineFk": "1",
+                "degreeFk": "2"
+            },
+            {
+                "id": "240",
+                "actor_access_fk": "96",
+                "date": "2021-05-03 19:17:26",
+                "cobject_block_fk": "118",
+                "discipline_fk": "2",
+                "degree_fk": "2",
+                "actorAccessFk": "96",
+                "cobjectBlockFk": "118",
+                "disciplineFk": "2",
+                "degreeFk": "2"
+            },
+            {
+                "id": "241",
+                "actor_access_fk": "96",
+                "date": "2021-05-03 19:17:26",
+                "cobject_block_fk": "119",
+                "discipline_fk": "3",
+                "degree_fk": "2",
+                "actorAccessFk": "96",
+                "cobjectBlockFk": "119",
+                "disciplineFk": "3",
+                "degreeFk": "2"
+            },
+            {
+                "id": "242",
+                "actor_access_fk": "96",
+                "date": "2021-05-03 19:17:26",
+                "cobject_block_fk": "120",
+                "discipline_fk": "1",
+                "degree_fk": "3",
+                "actorAccessFk": "96",
+                "cobjectBlockFk": "120",
+                "disciplineFk": "1",
+                "degreeFk": "3"
+            },
+            {
+                "id": "243",
+                "actor_access_fk": "96",
+                "date": "2021-05-03 19:17:26",
+                "cobject_block_fk": "121",
+                "discipline_fk": "2",
+                "degree_fk": "3",
+                "actorAccessFk": "96",
+                "cobjectBlockFk": "121",
+                "disciplineFk": "2",
+                "degreeFk": "3"
+            },
+            {
+                "id": "244",
+                "actor_access_fk": "96",
+                "date": "2021-05-03 19:17:26",
+                "cobject_block_fk": "122",
+                "discipline_fk": "3",
+                "degree_fk": "3",
+                "actorAccessFk": "96",
+                "cobjectBlockFk": "122",
+                "disciplineFk": "3",
+                "degreeFk": "3"
+            }
+        ]
+    }
+]

@@ -1,0 +1,79 @@
+[
+    {
+        "valid": true,
+        "error": [],
+        "person": [
+            {
+                "id": "76",
+                "name": "Convidado",
+                "login": "79999466220",
+                "email": null,
+                "password": null,
+                "mother_name": null,
+                "father_name": null,
+                "phone": "79999466220"
+            }
+        ],
+        "actor": [
+            {
+                "id": "53754",
+                "person_id": "76",
+                "personage_id": "2",
+                "classroom_fk": null,
+                "fk_id": null,
+                "source": null,
+                "personId": "76",
+                "personageId": "2",
+                "classroomFk": null,
+                "fkId": null
+            }
+        ],
+        "personage": [
+            {
+                "id": "2",
+                "name": "Student"
+            }
+        ],
+        "actorAccess": [
+            {
+                "id": "62",
+                "uuid": "88dc325c-0881-4dcb-882e-c71b857f9477",
+                "date": "2021-04-22 17:53:50",
+                "actor_fk": "53754",
+                "actorFk": "53754"
+            }
+        ],
+        "actorAccessBlocks": [
+            {
+                "id": "13",
+                "actor_access_fk": "62",
+                "date": "2021-04-30 09:53:00",
+                "cobject_block_fk": "94",
+                "discipline_fk": "1",
+                "actorAccessFk": "62",
+                "cobjectBlockFk": "94",
+                "disciplineFk": "1"
+            },
+            {
+                "id": "14",
+                "actor_access_fk": "62",
+                "date": "2021-04-30 09:53:00",
+                "cobject_block_fk": "95",
+                "discipline_fk": "2",
+                "actorAccessFk": "62",
+                "cobjectBlockFk": "95",
+                "disciplineFk": "2"
+            },
+            {
+                "id": "15",
+                "actor_access_fk": "62",
+                "date": "2021-04-30 09:53:00",
+                "cobject_block_fk": "96",
+                "discipline_fk": "3",
+                "actorAccessFk": "62",
+                "cobjectBlockFk": "96",
+                "disciplineFk": "3"
+            }
+        ]
+    }
+]

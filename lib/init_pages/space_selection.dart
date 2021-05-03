@@ -1,4 +1,6 @@
+import 'package:elesson/degree_selection/degree_selection_view.dart';
 import 'package:elesson/register/sms_register.dart';
+import 'package:elesson/register/student_model.dart';
 import 'package:elesson/share/general_widgets.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +39,16 @@ class _SpaceSelectionState extends State<SpaceSelection> {
               screenWidth: widthScreen,
               onTap: (value) {
                 Navigator.of(context).pushNamed(SmsRegisterView.routeName);
+              },
+              context: context,
+            ),
+            elessonCard(
+              backgroundImage: "assets/img/cover.png",
+              text: "TESTAR APLICATIVO",
+              screenWidth: widthScreen,
+              onTap: (value) {
+                LoginQuery().getLoginTrial(context);
+                // Navigator.of(context).pushNamed(DegreeSelectionView.routeName);
               },
               context: context,
             ),
