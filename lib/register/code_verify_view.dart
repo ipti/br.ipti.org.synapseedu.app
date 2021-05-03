@@ -122,7 +122,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
 
       print("ActorId salvo: ${student.actorId}");
 
-      if (loginQuery.student.personage_id == 4) {
+      if (loginQuery.student.personageId == 4) {
         prefs.setBool('admin', true);
         Navigator.of(context).pushReplacementNamed('/admin');
       } else {

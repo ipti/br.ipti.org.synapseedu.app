@@ -1,4 +1,5 @@
 import 'package:elesson/activity_selection/block_selection_view.dart';
+import 'package:elesson/degree_selection/degree_selection_view.dart';
 import 'package:elesson/register/code_verify_view.dart';
 import 'package:elesson/settings/settings_screen.dart';
 import 'package:elesson/share/block_conclusion.dart';
@@ -143,7 +144,8 @@ class _HomeState extends State<Home> {
       routes: {
         '/': (context) => BlockSelection(),
         '/admin': (context) => AdminPage(),
-        SpaceSelection.routeName: (contet) => SpaceSelection(),
+        SpaceSelection.routeName: (context) => SpaceSelection(),
+        DegreeSelectionView.routeName: (context) => DegreeSelectionView(),
         BlockSelection.routeName: (context) => BlockSelection(),
         CountDownTimer.routeName: (context) => CountDownTimer(),
         RootPage.routeName: (context) => RootPage(),
