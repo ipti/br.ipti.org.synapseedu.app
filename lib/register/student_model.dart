@@ -76,6 +76,7 @@ class LoginQuery {
     Response response;
     ActorAccess actorAccess;
     Map<String, String> blocks = {};
+    String degreeFkBlock;
 
     if (isQrcode) {
       url = 'https://elesson.com.br/api/loginuuid';
@@ -114,8 +115,9 @@ class LoginQuery {
 
     if (studentUuid != null) {
       response.data[0]["actorAccessBlocks"].forEach((block) {
-        blocks.putIfAbsent(
-            block["discipline_fk"], () => block["cobjectBlockFk"]);
+        degreeFkBlock = block["degreeFk"];
+        blocks.putIfAbsent("${degreeFkBlock}_${block["discipline_fk"]}",
+            () => block["cobjectBlockFk"]);
         // print(block);
       });
       actorAccess = ActorAccess(
@@ -124,6 +126,7 @@ class LoginQuery {
         date: response.data[0]["actorAccess"][0]["date"],
         actorAcessBlocks: blocks,
       );
+      print('BLOCKS: $blocks');
     }
     // if (response.data[0]["valid"] != trye) print(student.name);
     LoginQuery loginQuery = LoginQuery(
@@ -166,6 +169,7 @@ class LoginQuery {
       prefs.setString('actor_id', loginQuery.student.actorId);
     if (loginQuery.actorAccess.actorAcessBlocks != null) {
       loginQuery.actorAccess.actorAcessBlocks.forEach((key, value) {
+        print('KEY: $key and $value');
         prefs.setString('block_$key', value);
       });
     }

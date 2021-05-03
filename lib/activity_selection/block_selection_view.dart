@@ -25,6 +25,7 @@ String studentUuid;
 String blockId = "";
 String studentName;
 String classroomFk;
+String blocke;
 
 class _BlockSelectionState extends State<BlockSelection>
     with ScreenLoader<BlockSelection> {
@@ -39,6 +40,8 @@ class _BlockSelectionState extends State<BlockSelection>
     studentUuid = prefs.getString('student_uuid');
     studentName = prefs.getString('student_name') ?? 'Aluno(a)';
     classroomFk = prefs.getString('classroomFk') ?? '-1';
+    blocke = prefs.getString("block_1");
+    print('BLOCK: $blocke');
     print("Recuperado: $studentName");
     setState(() {});
     super.didChangeDependencies();
@@ -140,15 +143,31 @@ class _BlockSelectionState extends State<BlockSelection>
                       //   callSnackBar(context);
                       // classroomFk é = -1 quando o usuário não possui turma definida.
                       if (classroomFk == "-1") {
-                        print('hello');
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (BuildContext context) =>
                                 DegreeSelectionView(
-                                    blockId: blockId,
-                                    cobjectIdIndex: 0,
-                                    discipline: 'Matemática',
-                                    disciplineId: '2')));
-                      } else {}
+                                  blockId: blockId,
+                                  cobjectIdIndex: 0,
+                                  discipline: 'Matemática',
+                                  disciplineId: '2',
+                                  studentUuid: studentUuid,
+                                )));
+                      } else {
+                        try {
+                          await this.performFuture(
+                              await BlockSelectionLogic().redirectToQuestion(
+                            blockId: blockId,
+                            cobjectIdIndex: 0,
+                            discipline: 'Matemática',
+                            disciplineId: '2',
+                            studentUuid: studentUuid,
+                            classroomFk: classroomFk,
+                            context: context,
+                          ));
+                        } catch (e) {
+                          callSnackBar(context);
+                        }
+                      }
                     },
                     context: context,
                   )
@@ -161,22 +180,47 @@ class _BlockSelectionState extends State<BlockSelection>
                     textModulo: 'MÓDULO 1',
                     screenWidth: widthScreen,
                     onTap: (value) async {
-                      // if (langOk == false)
-                      // redirectToQuestion(0, '1', 'Português', blockId);
-                      blockId = await ApiBlock.getBlockByDiscipline("1");
-                      if (blockId != "-1")
-                        try {
-                          await this.performFuture(await BlockSelectionLogic()
-                              .redirectToQuestion(
-                                  cobjectIdIndex: 0,
-                                  disciplineId: '1',
-                                  discipline: 'Português',
+                      // blockId = await ApiBlock.getBlockByDiscipline("1");
+                      // if (blockId != "-1")
+                      //   try {
+                      //     await this.performFuture(await BlockSelectionLogic()
+                      //         .redirectToQuestion(
+                      //             cobjectIdIndex: 0,
+                      //             disciplineId: '1',
+                      //             discipline: 'Português',
+                      //             blockId: blockId,
+                      //             studentUuid: studentUuid,
+                      //             context: context));
+                      //   } catch (e) {}
+                      // else
+                      //   callSnackBar(context);
+
+                      if (classroomFk == "-1") {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                DegreeSelectionView(
                                   blockId: blockId,
+                                  cobjectIdIndex: 0,
+                                  discipline: 'Português',
+                                  disciplineId: '1',
                                   studentUuid: studentUuid,
-                                  context: context));
-                        } catch (e) {}
-                      else
-                        callSnackBar(context);
+                                )));
+                      } else {
+                        try {
+                          await this.performFuture(
+                              await BlockSelectionLogic().redirectToQuestion(
+                            blockId: blockId,
+                            cobjectIdIndex: 0,
+                            discipline: 'Português',
+                            disciplineId: '1',
+                            studentUuid: studentUuid,
+                            classroomFk: classroomFk,
+                            context: context,
+                          ));
+                        } catch (e) {
+                          callSnackBar(context);
+                        }
+                      }
                     },
                     context: context,
                   )
@@ -194,20 +238,46 @@ class _BlockSelectionState extends State<BlockSelection>
                       // else
                       //   print("Você já fez essa tarefinha!");
                       // print("Este bloco estará disponível em breve!");
-                      blockId = await ApiBlock.getBlockByDiscipline("3");
-                      if (blockId != "-1")
-                        try {
-                          await this.performFuture(await BlockSelectionLogic()
-                              .redirectToQuestion(
-                                  cobjectIdIndex: 0,
-                                  disciplineId: '3',
-                                  discipline: 'Ciências',
+                      // blockId = await ApiBlock.getBlockByDiscipline("3");
+                      // if (blockId != "-1")
+                      //   try {
+                      //     await this.performFuture(await BlockSelectionLogic()
+                      //         .redirectToQuestion(
+                      //             cobjectIdIndex: 0,
+                      //             disciplineId: '3',
+                      //             discipline: 'Ciências',
+                      //             blockId: blockId,
+                      //             studentUuid: studentUuid,
+                      //             context: context));
+                      //   } catch (e) {}
+                      // else
+                      //   callSnackBar(context);
+                      if (classroomFk == "-1") {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                DegreeSelectionView(
                                   blockId: blockId,
+                                  cobjectIdIndex: 0,
+                                  discipline: 'Ciências',
+                                  disciplineId: '3',
                                   studentUuid: studentUuid,
-                                  context: context));
-                        } catch (e) {}
-                      else
-                        callSnackBar(context);
+                                )));
+                      } else {
+                        try {
+                          await this.performFuture(
+                              await BlockSelectionLogic().redirectToQuestion(
+                            blockId: blockId,
+                            cobjectIdIndex: 0,
+                            discipline: 'Ciências',
+                            disciplineId: '3',
+                            studentUuid: studentUuid,
+                            classroomFk: classroomFk,
+                            context: context,
+                          ));
+                        } catch (e) {
+                          callSnackBar(context);
+                        }
+                      }
                     },
                     context: context,
                   )

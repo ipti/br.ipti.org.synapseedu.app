@@ -10,12 +10,16 @@ class BlockSelectionLogic {
       String discipline,
       String blockId,
       String studentUuid,
-      BuildContext context}) async {
+      BuildContext context,
+      String classroomFk}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String studentUuid = prefs.getString('studentUuid');
+    String studentUuid = prefs.getString('student_uuid');
+    String hey = prefs.getString('block_${classroomFk}_$disciplineId');
+    print("$classroomFk e $disciplineId ou $hey e $studentUuid");
     var blockId = studentUuid != null
-        ? prefs.getString('block_$disciplineId')
+        ? prefs.getString('block_${classroomFk}_$disciplineId')
         : await ApiBlock.getBlockByDiscipline(disciplineId);
+    print('blockId: $blockId');
     var responseBlock = await ApiBlock.getBlock(blockId);
     ApiBlock.getBlock(blockId).then((value) {
       var responseBlock = value;

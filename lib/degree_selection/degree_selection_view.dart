@@ -1,18 +1,21 @@
+import 'package:elesson/activity_selection/block_selection.dart';
 import 'package:elesson/share/general_widgets.dart';
 import 'package:flutter/material.dart';
 
 class DegreeSelectionView extends StatefulWidget {
-  int cobjectIdIndex;
-  String disciplineId;
-  String discipline;
-  String blockId;
+  final int cobjectIdIndex;
+  final String disciplineId;
+  final String discipline;
+  final String blockId;
+  final String studentUuid;
 
   DegreeSelectionView(
       {Key key,
-      int cobjectIdIndex,
-      String disciplineId,
-      String discipline,
-      String blockId})
+      this.cobjectIdIndex,
+      this.disciplineId,
+      this.discipline,
+      this.blockId,
+      this.studentUuid})
       : super(key: key);
   static const routeName = '/degree-selection';
 
@@ -23,13 +26,15 @@ class DegreeSelectionView extends StatefulWidget {
 class _DegreeSelectionViewState extends State<DegreeSelectionView> {
   String dropdownYear = null;
 
-  void getTrialBlockByYear() {
+  void getTrialBlockByYear(String degreeFk) {
     print(widget.discipline);
     // redirectToQuestion();
   }
 
   @override
   Widget build(BuildContext context) {
+    print(
+        "${widget.blockId} cobjectIdIndex: ${widget.cobjectIdIndex} disciplineId: ${widget.disciplineId} discipline: ${widget.discipline}");
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
@@ -93,7 +98,15 @@ class _DegreeSelectionViewState extends State<DegreeSelectionView> {
                   ),
                 ),
                 onPressed: () {
-                  getTrialBlockByYear();
+                  BlockSelectionLogic().redirectToQuestion(
+                    blockId: widget.blockId,
+                    cobjectIdIndex: widget.cobjectIdIndex,
+                    discipline: widget.discipline,
+                    disciplineId: widget.disciplineId,
+                    studentUuid: widget.studentUuid,
+                    classroomFk: dropdownYear,
+                    context: context,
+                  );
                 },
               ),
             ),
