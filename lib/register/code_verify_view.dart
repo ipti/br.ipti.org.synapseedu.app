@@ -130,6 +130,8 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
         Navigator.of(context).pushReplacementNamed('/');
       }
 
+      // Variável utilizada para identificar se usuário é convidado ou não.
+      prefs.setBool('is_guest', false);
       print("Verificado com sucesso");
     } else {
       // error

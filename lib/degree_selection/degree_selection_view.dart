@@ -1,12 +1,12 @@
 import 'package:elesson/activity_selection/block_selection.dart';
 import 'package:elesson/share/general_widgets.dart';
+import 'package:elesson/share/snackbar_widget.dart';
 import 'package:flutter/material.dart';
 
 class DegreeSelectionView extends StatefulWidget {
   final int cobjectIdIndex;
   final String disciplineId;
   final String discipline;
-  final String blockId;
   final String studentUuid;
 
   DegreeSelectionView(
@@ -14,7 +14,6 @@ class DegreeSelectionView extends StatefulWidget {
       this.cobjectIdIndex,
       this.disciplineId,
       this.discipline,
-      this.blockId,
       this.studentUuid})
       : super(key: key);
   static const routeName = '/degree-selection';
@@ -26,15 +25,8 @@ class DegreeSelectionView extends StatefulWidget {
 class _DegreeSelectionViewState extends State<DegreeSelectionView> {
   String dropdownYear = null;
 
-  void getTrialBlockByYear(String degreeFk) {
-    print(widget.discipline);
-    // redirectToQuestion();
-  }
-
   @override
   Widget build(BuildContext context) {
-    print(
-        "${widget.blockId} cobjectIdIndex: ${widget.cobjectIdIndex} disciplineId: ${widget.disciplineId} discipline: ${widget.discipline}");
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
@@ -98,15 +90,18 @@ class _DegreeSelectionViewState extends State<DegreeSelectionView> {
                   ),
                 ),
                 onPressed: () {
-                  BlockSelectionLogic().redirectToQuestion(
-                    blockId: widget.blockId,
-                    cobjectIdIndex: widget.cobjectIdIndex,
-                    discipline: widget.discipline,
-                    disciplineId: widget.disciplineId,
-                    studentUuid: widget.studentUuid,
-                    classroomFk: dropdownYear,
-                    context: context,
-                  );
+                  if (dropdownYear != null) {
+                    BlockSelectionLogic().redirectToQuestion(
+                      cobjectIdIndex: widget.cobjectIdIndex,
+                      discipline: widget.discipline,
+                      disciplineId: widget.disciplineId,
+                      studentUuid: widget.studentUuid,
+                      classroomFk: dropdownYear,
+                      context: context,
+                    );
+                  } else
+                    callSnackBar(context,
+                        text: 'Escolha o ano antes de continuar.');
                 },
               ),
             ),

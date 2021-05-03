@@ -237,14 +237,15 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
             // print('DEU ESSE: $_connectionStatus');
             // print('tempo de intervalo: ${timeEnd - timeStart}');
 
-            Answer().sendAnswerToApi(
-              widget.pieceId,
-              widget.isCorrect,
-              timeEnd,
-              intervalResolution: (timeEnd - timeStart),
-              groupId: widget.groupId != null ? widget.groupId : "",
-              value: widget.value != null ? widget.value : "",
-            );
+            if (isGuest == false)
+              Answer().sendAnswerToApi(
+                widget.pieceId,
+                widget.isCorrect,
+                timeEnd,
+                intervalResolution: (timeEnd - timeStart),
+                groupId: widget.groupId != null ? widget.groupId : "",
+                value: widget.value != null ? widget.value : "",
+              );
 
             // ! O erro está vindo daqui, quando tenta subtrair timeStart do timeEnd. Motivo: timeStart vem null
             try {

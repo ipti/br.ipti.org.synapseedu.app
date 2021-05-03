@@ -24,6 +24,7 @@ class _AdminPageState extends State<AdminPage> {
   void didChangeDependencies() async {
     prefs = await SharedPreferences.getInstance();
     studentName = prefs.getString('student_name') ?? 'Aluno(a)';
+    isGuest = false;
     print("Recuperado: $studentName");
     setState(() {});
     super.didChangeDependencies();
@@ -53,7 +54,7 @@ class _AdminPageState extends State<AdminPage> {
   Widget build(BuildContext context) {
     double heightScreen = MediaQuery.of(context).size.height;
     double widthScreen = MediaQuery.of(context).size.width;
-
+    print('GUEST: $isGuest');
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(

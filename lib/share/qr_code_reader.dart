@@ -156,7 +156,7 @@ class _QrCodeReaderState extends State<QrCodeReader> {
           print('UID:' + studentUuid);
 
           var discipline = ApiBlock.getDiscipline(loginQuery.actorAccess.id);
-
+          prefs.setBool('is_guest', false);
           prefs.setBool('isConfirmed', true);
           prefs.setString('student_uuid', studentUuid);
           prefs.setString('student_name',

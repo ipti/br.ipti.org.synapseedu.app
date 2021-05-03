@@ -51,6 +51,9 @@ Color iconBackground = Color(0xFF0000FF);
 double fonteDaLetra;
 double headerFontSize;
 
+// Variáveis de login
+bool isGuest = true;
+
 // Variáveis do botão de confirmar
 
 bool confirmButtonColor = true;
@@ -229,9 +232,10 @@ void submitLogic(BuildContext context, int questionIndex, int cobjectIndex,
   print('$questionIndex e $cobjectQuestionsLength');
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String discipline = cobjectList[0].discipline;
-  prefs.setInt('last_cobject_$discipline', cobjectIndex);
+  if (isGuest == false) prefs.setInt('last_cobject_$discipline', cobjectIndex);
 
-  prefs.setInt('last_question_$discipline', questionIndex);
+  if (isGuest == false)
+    prefs.setInt('last_question_$discipline', questionIndex);
 
   print("$questionIndex // $cobjectQuestionsLength");
   if (questionIndex < cobjectQuestionsLength && questionType != 'TXT') {
@@ -303,21 +307,26 @@ void submitLogic(BuildContext context, int questionIndex, int cobjectIndex,
   } else {
     if (questionType == 'TXT') {
       //todo enviar como correto
-      Answer().sendAnswerToApi(pieceId, true, 0,
-          intervalResolution: 0, groupId: "", value: "");
+      if (isGuest == false)
+        Answer().sendAnswerToApi(pieceId, true, 0,
+            intervalResolution: 0, groupId: "", value: "");
     }
 
     // Alterei o if(++cobjectIndex para o atual, inclusive alterando o endereço do getCobject. Caso tenha problema de não alterar o cobject, é isso);
     if (cobjectIndex + 1 < cobjectIdListLength) {
       print('no if: $cobjectIndex e $cobjectIdList');
-      prefs.setInt('last_question_$discipline', 0);
-      prefs.setInt('last_cobject_$discipline', cobjectIndex + 1);
+      if (isGuest == false) {
+        prefs.setInt('last_question_$discipline', 0);
+        prefs.setInt('last_cobject_$discipline', cobjectIndex + 1);
+      }
       getCobject(cobjectIndex + 1, context, cobjectIdList);
     } else {
       // String discipline = cobjectList[0].discipline;
       String year = cobjectList[0].year;
-      prefs.setInt('last_cobject_$discipline', 0);
-      prefs.setInt('last_question_$discipline', 0);
+      if (isGuest == false) {
+        prefs.setInt('last_cobject_$discipline', 0);
+        prefs.setInt('last_question_$discipline', 0);
+      }
 
       // SharedPreferences prefs;
       // prefs = await SharedPreferences.getInstance();
@@ -401,10 +410,11 @@ Widget submitAnswer(
 
           print('tempo de diferença ${timeEnd - timeStart}');
           // modifiquei para funcionar.
-          Answer().sendAnswerToApi(pieceId, isCorrect, timeEnd,
-              intervalResolution: timeEnd - timeStart,
-              groupId: groupId != null ? groupId : "",
-              value: value != null ? value : "");
+          if (isGuest == false)
+            Answer().sendAnswerToApi(pieceId, isCorrect, timeEnd,
+                intervalResolution: timeEnd - timeStart,
+                groupId: groupId != null ? groupId : "",
+                value: value != null ? value : "");
           // Answer().sendAnswerToApi(
           //   pieceId,
           //   isCorrect,

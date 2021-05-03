@@ -306,13 +306,14 @@ class _DragAndDropState extends State<DragAndDrop> {
                 1,
                 question);
 
-            sendMetaData(
-                isCorrect: data == 1 ? true : false,
-                finalTime: 0,
-                groupId: "1",
-                intervalResolution: 1 - DateTime.now().millisecondsSinceEpoch,
-                value: "",
-                pieceId: pieceId.toString());
+            if (isGuest == false)
+              sendMetaData(
+                  isCorrect: data == 1 ? true : false,
+                  finalTime: 0,
+                  groupId: "1",
+                  intervalResolution: 1 - DateTime.now().millisecondsSinceEpoch,
+                  value: "",
+                  pieceId: pieceId.toString());
 
             verifyIsCorrect();
             print("""
@@ -383,13 +384,14 @@ class _DragAndDropState extends State<DragAndDrop> {
                     question.pieces[data.toString()]["image"],
                 2,
                 question);
-            sendMetaData(
-                isCorrect: data == 2 ? true : false,
-                finalTime: 0,
-                groupId: "2",
-                intervalResolution: 1 - DateTime.now().millisecondsSinceEpoch,
-                value: "",
-                pieceId: pieceId.toString());
+            if (isGuest == false)
+              sendMetaData(
+                  isCorrect: data == 2 ? true : false,
+                  finalTime: 0,
+                  groupId: "2",
+                  intervalResolution: 1 - DateTime.now().millisecondsSinceEpoch,
+                  value: "",
+                  pieceId: pieceId.toString());
             verifyIsCorrect();
             print("""
                             1_1: $valueFirstReceiver
@@ -459,13 +461,14 @@ class _DragAndDropState extends State<DragAndDrop> {
                     question.pieces[data.toString()]["image"],
                 3,
                 question);
-            sendMetaData(
-                isCorrect: data == 3 ? true : false,
-                finalTime: 0,
-                groupId: "3",
-                intervalResolution: 1 - DateTime.now().millisecondsSinceEpoch,
-                value: "",
-                pieceId: pieceId.toString());
+            if (isGuest == false)
+              sendMetaData(
+                  isCorrect: data == 3 ? true : false,
+                  finalTime: 0,
+                  groupId: "3",
+                  intervalResolution: 1 - DateTime.now().millisecondsSinceEpoch,
+                  value: "",
+                  pieceId: pieceId.toString());
             verifyIsCorrect();
             print("""
                             1_1: $valueFirstReceiver

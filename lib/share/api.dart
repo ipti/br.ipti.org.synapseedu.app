@@ -78,7 +78,7 @@ class ApiBlock {
     try {
       return await dio.get(url);
     } catch (e) {
-      print(e.message);
+      return "-1";
     }
   }
 }
