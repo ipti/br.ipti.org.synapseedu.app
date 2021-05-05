@@ -95,15 +95,16 @@ class _PreImgIaState extends State<PreImgIa> {
     return Scaffold(
       body: TemplateSlider(
         title: questionDescription.toUpperCase(),
-        text: Text(
-          questionText.toUpperCase(),
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: fonteDaLetra,
-            fontFamily: 'Mulish',
-          ),
-        ),
+        text: formatDescription(questionText.toUpperCase()),
+        // text: Text(
+        //   questionText.toUpperCase(),
+        //   textAlign: TextAlign.center,
+        //   style: TextStyle(
+        //     fontWeight: FontWeight.bold,
+        //     fontSize: fonteDaLetra,
+        //     fontFamily: 'Mulish',
+        //   ),
+        // ),
         sound: cobjectList[0].questions[questionIndex].header["sound"],
         linkImage: 'https://elesson.com.br/app/library/image/' +
             cobjectList[0].questions[0].header["image"],

@@ -156,20 +156,7 @@ class _QrCodeReaderState extends State<QrCodeReader> {
           print('UID:' + studentUuid);
 
           var discipline = ApiBlock.getDiscipline(loginQuery.actorAccess.id);
-
-          // var responseBlock =
-          //     await ApiBlock.getBlock(loginQuery.actorAccess.cobjectBlockId);
-
-          // List<String> cobjectIdList = [];
-
-          // int cobjectId = prefs.getInt('last_cobject_$discipline') ?? 0;
-
-          // int questionIndex = prefs.getInt('last_question_$discipline') ?? 0;
-
-          // responseBlock.data[0]["cobject"].forEach((cobject) {
-          //   cobjectIdList.add(cobject["id"]);
-          // });
-
+          prefs.setBool('is_guest', false);
           prefs.setBool('isConfirmed', true);
           prefs.setString('student_uuid', studentUuid);
           prefs.setString('student_name',
@@ -184,6 +171,10 @@ class _QrCodeReaderState extends State<QrCodeReader> {
             loginQuery.actorAccess.actorAcessBlocks.forEach((key, value) {
               prefs.setString('block_$key', value);
             });
+          }
+          if (loginQuery.student.classroomFk != null) {
+            prefs.setString('classroomFk', loginQuery.student.classroomFk);
+            print('salvou');
           }
 
           // getCobject(cobjectId, context, cobjectIdList,

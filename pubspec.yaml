@@ -52,6 +52,9 @@ dependencies:
   percent_indicator: ^2.1.8
   googleapis_auth: any
   googleapis: ^0.56.1
+  cached_network_image: ^2.5.1
+  screen_loader: ^2.0.1
+  connectivity: ^3.0.3
   #
 
 dev_dependencies:
@@ -75,6 +78,7 @@ flutter:
     - assets/icons/
     - assets/animations/
     - assets/audio/
+    - assets/json/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

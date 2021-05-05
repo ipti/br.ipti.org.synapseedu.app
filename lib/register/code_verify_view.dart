@@ -122,7 +122,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
 
       print("ActorId salvo: ${student.actorId}");
 
-      if (loginQuery.student.personage_id == 4) {
+      if (loginQuery.student.personageId == 4) {
         prefs.setBool('admin', true);
         Navigator.of(context).pushReplacementNamed('/admin');
       } else {
@@ -130,6 +130,8 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
         Navigator.of(context).pushReplacementNamed('/');
       }
 
+      // Variável utilizada para identificar se usuário é convidado ou não.
+      prefs.setBool('is_guest', false);
       print("Verificado com sucesso");
     } else {
       // error

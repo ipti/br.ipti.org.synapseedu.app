@@ -81,15 +81,19 @@ class _DragAndDropState extends State<DragAndDrop> {
             : "",
         sound: cobjectList[0].questions[0].header["sound"],
         title: cobjectList[0].description.toUpperCase(),
-        text: Text(
-          cobjectList[0].questions[questionIndex].header["text"].toUpperCase(),
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: fonteDaLetra,
-            fontFamily: 'Mulish',
-          ),
-        ),
+        text: formatDescription(cobjectList[0]
+            .questions[questionIndex]
+            .header["text"]
+            .toUpperCase()),
+        // text: Text(
+        //   cobjectList[0].questions[questionIndex].header["text"].toUpperCase(),
+        //   textAlign: TextAlign.center,
+        //   style: TextStyle(
+        //     fontWeight: FontWeight.bold,
+        //     fontSize: fonteDaLetra,
+        //     fontFamily: 'Mulish',
+        //   ),
+        // ),
         activityScreen: activityScreen(heightScreen - 12, widthScreen,
             cobjectList[0].questions[questionIndex], questionText, chronometer,
             cobjectIdList: cobjectIdList,
@@ -302,13 +306,14 @@ class _DragAndDropState extends State<DragAndDrop> {
                 1,
                 question);
 
-            sendMetaData(
-                isCorrect: data == 1 ? true : false,
-                finalTime: 0,
-                groupId: "1",
-                intervalResolution: 1 - DateTime.now().millisecondsSinceEpoch,
-                value: "",
-                pieceId: pieceId.toString());
+            if (isGuest == false)
+              sendMetaData(
+                  isCorrect: data == 1 ? true : false,
+                  finalTime: 0,
+                  groupId: "1",
+                  intervalResolution: 1 - DateTime.now().millisecondsSinceEpoch,
+                  value: "",
+                  pieceId: pieceId.toString());
 
             verifyIsCorrect();
             print("""
@@ -379,13 +384,14 @@ class _DragAndDropState extends State<DragAndDrop> {
                     question.pieces[data.toString()]["image"],
                 2,
                 question);
-            sendMetaData(
-                isCorrect: data == 2 ? true : false,
-                finalTime: 0,
-                groupId: "2",
-                intervalResolution: 1 - DateTime.now().millisecondsSinceEpoch,
-                value: "",
-                pieceId: pieceId.toString());
+            if (isGuest == false)
+              sendMetaData(
+                  isCorrect: data == 2 ? true : false,
+                  finalTime: 0,
+                  groupId: "2",
+                  intervalResolution: 1 - DateTime.now().millisecondsSinceEpoch,
+                  value: "",
+                  pieceId: pieceId.toString());
             verifyIsCorrect();
             print("""
                             1_1: $valueFirstReceiver
@@ -455,13 +461,14 @@ class _DragAndDropState extends State<DragAndDrop> {
                     question.pieces[data.toString()]["image"],
                 3,
                 question);
-            sendMetaData(
-                isCorrect: data == 3 ? true : false,
-                finalTime: 0,
-                groupId: "3",
-                intervalResolution: 1 - DateTime.now().millisecondsSinceEpoch,
-                value: "",
-                pieceId: pieceId.toString());
+            if (isGuest == false)
+              sendMetaData(
+                  isCorrect: data == 3 ? true : false,
+                  finalTime: 0,
+                  groupId: "3",
+                  intervalResolution: 1 - DateTime.now().millisecondsSinceEpoch,
+                  value: "",
+                  pieceId: pieceId.toString());
             verifyIsCorrect();
             print("""
                             1_1: $valueFirstReceiver
@@ -617,14 +624,10 @@ class _DragAndDropState extends State<DragAndDrop> {
     return Stack(
       children: [
         Container(
+          width: widthScreen / 2.6,
+          height: widthScreen / 2.6,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            image: DecorationImage(
-              image: NetworkImage(BASE_URL +
-                  '/image/' +
-                  question.pieces[index.toString()]["image"]),
-              fit: BoxFit.cover,
-            ),
             border: Border.all(
               color: index == 1
                   ? Color.fromRGBO(189, 0, 255, 0.2)
@@ -634,8 +637,29 @@ class _DragAndDropState extends State<DragAndDrop> {
               width: 2,
             ),
           ),
-          width: widthScreen / 2.6,
-          height: widthScreen / 2.6,
+          child: Image.network(
+            BASE_URL + '/image/' + question.pieces[index.toString()]["image"],
+            fit: BoxFit.cover,
+            errorBuilder: (context, exception, stackTrace) {
+              // print('erro');
+              // callSnackBar(context);
+              return Container();
+            },
+            loadingBuilder: (BuildContext context, Widget child,
+                ImageChunkEvent loadingProgress) {
+              if (loadingProgress == null) {
+                return child;
+              }
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes
+                      : null,
+                ),
+              );
+            },
+          ),
         ),
         Material(
             type: MaterialType.transparency,
@@ -649,6 +673,27 @@ class _DragAndDropState extends State<DragAndDrop> {
             )))
       ],
     );
+    // return Container(
+    //   decoration: BoxDecoration(
+    //     borderRadius: BorderRadius.circular(12),
+    //     image: DecorationImage(
+    //       image: NetworkImage(BASE_URL +
+    //           '/image/' +
+    //           question.pieces[index.toString()]["image"]),
+    //       fit: BoxFit.cover,
+    //     ),
+    //     border: Border.all(
+    //       color: index == 1
+    //           ? Color.fromRGBO(189, 0, 255, 0.2)
+    //           : index == 2
+    //               ? Color.fromRGBO(255, 138, 0, 0.2)
+    //               : Color.fromRGBO(0, 203, 255, 0.2),
+    //       width: 2,
+    //     ),
+    //   ),
+    //   width: widthScreen / 2.6,
+    //   height: widthScreen / 2.6,
+    // );
   }
 
   Widget dragReceiverTemplate(
@@ -676,15 +721,33 @@ class _DragAndDropState extends State<DragAndDrop> {
         break;
     }
     return show != false
+        // ? Container(
+        //     //margin: EdgeInsets.only(right: 0),
+        //     decoration: BoxDecoration(
+        //       color: Colors.grey,
+        //       borderRadius: BorderRadius.circular(12),
+        //       image: DecorationImage(
+        //         image: NetworkImage(urlToThisReceiver),
+        //         fit: BoxFit.cover,
+        //       ),
+        //       border: Border.all(
+        //         color: index == 1
+        //             ? colorFirstReceiverAccepted
+        //             : index == 2
+        //                 ? colorSecondReceiverAccepted
+        //                 : colorThirdReceiverAccepted,
+        //         width: 2,
+        //       ),
+        //     ),
+        //     width: widthScreen / 2.6,
+        //     height: widthScreen / 2.6,
+        //   )
         ? Container(
-            //margin: EdgeInsets.only(right: 0),
+            width: widthScreen / 2.6,
+            height: widthScreen / 2.6,
             decoration: BoxDecoration(
               color: Colors.grey,
               borderRadius: BorderRadius.circular(12),
-              image: DecorationImage(
-                image: NetworkImage(urlToThisReceiver),
-                fit: BoxFit.cover,
-              ),
               border: Border.all(
                 color: index == 1
                     ? colorFirstReceiverAccepted
@@ -694,8 +757,29 @@ class _DragAndDropState extends State<DragAndDrop> {
                 width: 2,
               ),
             ),
-            width: widthScreen / 2.6,
-            height: widthScreen / 2.6,
+            child: Image.network(
+              urlToThisReceiver,
+              fit: BoxFit.cover,
+              errorBuilder: (context, exception, stackTrace) {
+                // print('erro');
+                // callSnackBar(context);
+                return Container();
+              },
+              loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent loadingProgress) {
+                if (loadingProgress == null) {
+                  return child;
+                }
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes
+                        : null,
+                  ),
+                );
+              },
+            ),
           )
         : dragSenderInvisible(widthScreen);
   }
