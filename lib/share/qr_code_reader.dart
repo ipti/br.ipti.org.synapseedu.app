@@ -172,6 +172,10 @@ class _QrCodeReaderState extends State<QrCodeReader> {
               prefs.setString('block_$key', value);
             });
           }
+          if (loginQuery.student.classroomFk != null) {
+            prefs.setString('classroomFk', loginQuery.student.classroomFk);
+            print('salvou');
+          }
 
           // getCobject(cobjectId, context, cobjectIdList,
           //     piecesetIndex: questionIndex);
