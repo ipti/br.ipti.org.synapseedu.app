@@ -121,19 +121,27 @@ class _BlockSelectionState extends State<BlockSelection>
                                   studentUuid: studentUuid,
                                 )));
                       } else {
-                        try {
-                          await this.performFuture(
-                              await BlockSelectionLogic().redirectToQuestion(
-                            cobjectIdIndex: 0,
-                            discipline: 'Matemática',
-                            disciplineId: '2',
-                            studentUuid: studentUuid,
-                            classroomFk: classroomFk,
-                            context: context,
-                          ));
-                        } catch (e) {
-                          callSnackBar(context);
-                        }
+                        await BlockSelectionLogic().redirectToQuestion(
+                          cobjectIdIndex: 0,
+                          discipline: 'Matemática',
+                          disciplineId: '2',
+                          studentUuid: studentUuid,
+                          classroomFk: classroomFk,
+                          context: context,
+                        );
+                        // try {
+                        //   await this.performFuture(
+                        //       await BlockSelectionLogic().redirectToQuestion(
+                        //     cobjectIdIndex: 0,
+                        //     discipline: 'Matemática',
+                        //     disciplineId: '2',
+                        //     studentUuid: studentUuid,
+                        //     classroomFk: classroomFk,
+                        //     context: context,
+                        //   ));
+                        // } catch (e) {
+                        //   callSnackBar(context);
+                        // }
                       }
                     },
                     context: context,
@@ -157,15 +165,23 @@ class _BlockSelectionState extends State<BlockSelection>
                                   studentUuid: studentUuid,
                                 )));
                       } else {
-                        await this.performFuture(
-                            await BlockSelectionLogic().redirectToQuestion(
+                        // await this.performFuture(
+                        //     await BlockSelectionLogic().redirectToQuestion(
+                        //   cobjectIdIndex: 0,
+                        //   discipline: 'Português',
+                        //   disciplineId: '1',
+                        //   studentUuid: studentUuid,
+                        //   classroomFk: classroomFk,
+                        //   context: context,
+                        // ));
+                        await BlockSelectionLogic().redirectToQuestion(
                           cobjectIdIndex: 0,
                           discipline: 'Português',
                           disciplineId: '1',
                           studentUuid: studentUuid,
                           classroomFk: classroomFk,
                           context: context,
-                        ));
+                        );
                       }
                     },
                     context: context,
@@ -203,15 +219,24 @@ class _BlockSelectionState extends State<BlockSelection>
                                   studentUuid: studentUuid,
                                 )));
                       } else {
-                        await this.performFuture(
-                            await BlockSelectionLogic().redirectToQuestion(
+                        // await this.performFuture(
+                        //     await BlockSelectionLogic().redirectToQuestion(
+                        //   cobjectIdIndex: 0,
+                        //   discipline: 'Ciências',
+                        //   disciplineId: '3',
+                        //   studentUuid: studentUuid,
+                        //   classroomFk: classroomFk,
+                        //   context: context,
+                        // ));
+
+                        await BlockSelectionLogic().redirectToQuestion(
                           cobjectIdIndex: 0,
                           discipline: 'Ciências',
                           disciplineId: '3',
                           studentUuid: studentUuid,
                           classroomFk: classroomFk,
                           context: context,
-                        ));
+                        );
                       }
                     },
                     context: context,
