@@ -163,7 +163,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
             const SizedBox(height: 42),
             Text(
               'Insira o código enviado por SMS',
-              style: TextStyle(fontSize: screenHeight < 823 ? 16 : 28),
+              style: TextStyle(fontSize: screenHeight < 823 ? 16 : 22),
             ),
             const SizedBox(height: 24),
             Form(
@@ -193,8 +193,10 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
                         : Color.fromRGBO(0, 0, 255, 0.4),
                     inactiveColor: const Color.fromRGBO(0, 0, 255, 0.4),
                     shape: PinCodeFieldShape.box,
-                    fieldHeight: screenHeight < 823 ? 48 : 72,
-                    fieldWidth: screenHeight < 823 ? 48 : 72,
+                    // fieldHeight: screenHeight < 823 ? 48 : 72,
+                    // fieldWidth: screenHeight < 823 ? 48 : 72,
+                    fieldHeight: 48,
+                    fieldWidth: 48,
                     borderRadius: BorderRadius.circular(18.0),
                     activeFillColor: hasError ? Colors.orange : Colors.white,
                   ),

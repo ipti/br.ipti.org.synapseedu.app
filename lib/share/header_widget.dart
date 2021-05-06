@@ -19,7 +19,7 @@ Widget header(double screenHeight, String headerText) {
       child: Text(
         headerText,
         style: TextStyle(
-          fontSize: screenHeight < 823 ? 22 : 32,
+          fontSize: screenHeight < 823 ? 22 : 26,
           fontWeight: FontWeight.w800,
           color: const Color.fromRGBO(
             0,
