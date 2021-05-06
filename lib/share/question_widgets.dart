@@ -37,8 +37,6 @@ List<String> questionListTest = [];
 AudioPlayer player = new AudioPlayer();
 AudioPlayer playerTituloSegundaTela = AudioPlayer();
 
-
-
 int indexTextQuestion = 0;
 
 int timeStart;
@@ -240,7 +238,8 @@ void submitLogic(BuildContext context, int questionIndex, int cobjectIndex,
   if (isGuest == false)
     prefs.setInt('last_question_$discipline', questionIndex);
 
-  print("$questionIndex // $cobjectQuestionsLength");
+  print(
+      "No submitLogic: $questionIndex // $cobjectQuestionsLength cobjectIdList: $cobjectIdList");
   if (questionIndex < cobjectQuestionsLength && questionType != 'TXT') {
     switch (questionType) {
       case 'PRE':
@@ -316,8 +315,10 @@ void submitLogic(BuildContext context, int questionIndex, int cobjectIndex,
     }
 
     // Alterei o if(++cobjectIndex para o atual, inclusive alterando o endereço do getCobject. Caso tenha problema de não alterar o cobject, é isso);
+
     if (cobjectIndex + 1 < cobjectIdListLength) {
-      print('no if: $cobjectIndex e $cobjectIdList');
+      print(
+          'no if: $cobjectIndex e $cobjectIdList cobjectIdListLength: $cobjectIdListLength');
       if (isGuest == false) {
         prefs.setInt('last_question_$discipline', 0);
         prefs.setInt('last_cobject_$discipline', cobjectIndex + 1);
@@ -411,7 +412,7 @@ Widget submitAnswer(
         onPressed: () {
           timeEnd = DateTime.now().millisecondsSinceEpoch;
 
-          print('tempo de diferença ${timeEnd - timeStart}');
+          // print('tempo de diferença ${timeEnd - timeStart}');
           // modifiquei para funcionar.
           if (isGuest == false)
             Answer().sendAnswerToApi(pieceId, isCorrect, timeEnd,
@@ -600,10 +601,8 @@ Future<void> sendMetaData(
     }, headers: {
       HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
     });
-    print('foi');
   } catch (e) {
-    print("ERROR:");
-    print(e.message);
+    print('"ERROR:" ${e.message}');
   }
 
   //BASE DO FABIO

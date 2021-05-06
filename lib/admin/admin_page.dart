@@ -178,7 +178,7 @@ class _AdminPageState extends State<AdminPage> {
             ElessonCardWidget(
               blockDone: false,
               backgroundImage: "assets/img/ling.png",
-              text: "LINGUAGEM",
+              text: "LINGUAGENS",
               textModulo: 'MÓDULO 1',
               screenWidth: widthScreen,
               onTap: (value) {

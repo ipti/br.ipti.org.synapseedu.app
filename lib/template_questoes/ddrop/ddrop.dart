@@ -36,14 +36,12 @@ class _DragAndDropState extends State<DragAndDrop> {
     randomNumber = [0, 0, 0];
     for (int i = 0; i < 3; i++) {
       aux = random.nextInt(3) + 1;
-      print("$aux");
       if (!randomNumber.contains(aux)) {
         randomNumber[i] = aux;
       } else {
         i--;
       }
     }
-    print("lista de sorteados: $randomNumber");
   }
 
   String pieceId = "";

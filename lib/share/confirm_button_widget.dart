@@ -133,8 +133,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
     double buttonHeight =
         48 > deviceSize.height * 0.0656 ? 48 : deviceSize.height * 0.0656;
     double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
-    print(
-        '$minButtonWidth e $buttonHeight ${deviceSize.aspectRatio} ou ${deviceSize.width} e ${deviceSize.height}');
+
     return MaterialButton(
       elevation: 0,
       height: buttonHeight,
@@ -216,7 +215,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
             });
           });
         } else {
-          print('tempo de intervalo: ${timeEnd - timeStart}');
+          // print('tempo de intervalo: ${timeEnd - timeStart}');
           nextQuestionTimer.cancel();
 
           if (widget.questionType == "DDROP") {
@@ -236,9 +235,6 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
 
           if (_connectionStatus != 'ConnectivityResult.none' &&
               _connectionStatus != 'ConnectivityResult.waiting') {
-            // print('DEU ESSE: $_connectionStatus');
-            // print('tempo de intervalo: ${timeEnd - timeStart}');
-
             if (isGuest == false)
               Answer().sendAnswerToApi(
                 widget.pieceId,
@@ -261,9 +257,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
                   cobjectIdList: widget.cobjectIdList,
                   cobjectIdListLength: widget.cobjectIdListLength,
                   cobjectQuestionsLength: widget.cobjectQuestionsLength);
-            } catch (e) {
-              // print('FOI AQUI');
-            }
+            } catch (e) {}
           } else
             callSnackBar(context);
         }

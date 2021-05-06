@@ -347,28 +347,23 @@ class _PreSomIaState extends State<PreSomIa> {
                       //   if (_currentStatus == RecordingStatus.Initialized) {
                       //     print("File path of the record: ${_current?.path}");
                       //     print("Format: ${_current?.audioFormat}");
-                      //     print("começou");
                       //
                       //     // * _start e _stop são métodos da gravação pela api do Azure.
                       //     // _start();
                       //   }
                       //   if (_currentStatus == RecordingStatus.Recording) {
-                      //     print("parou");
                       //     // _stop();
                       //     // ConversorVoiceToText().conversorVoice(_current?.path);
                       //   }
                       // },
                       // onLongPressStart: (details) {
                       //   if (_currentStatus == RecordingStatus.Stopped) {
-                      //     print('Tá parado no long start');
                       //   }
                       //   if (_currentStatus == RecordingStatus.Initialized) {
                       //     print("File path of the record: ${_current?.path}");
                       //     print("Format: ${_current?.audioFormat}");
-                      //     print("começou");
                       //     _startAzure();
                       //   }
-                      //   print('Gravou');
                       // },
                       // onLongPressEnd: (details) {
                       //   print("parou");
@@ -378,11 +373,8 @@ class _PreSomIaState extends State<PreSomIa> {
                       //   }
                       //   // initar();
                       //   if (_currentStatus == RecordingStatus.Stopped) {
-                      //     print('Tá parado no long end');
                       //   }
-                      //   print("passou após gravar");
                       //   if (_currentStatus == RecordingStatus.Initialized)
-                      //     print("Inicializou no long end");
                       // },
                       child: Container(
                         margin: EdgeInsets.only(
@@ -494,7 +486,6 @@ class _PreSomIaState extends State<PreSomIa> {
   _initAzure() async {
     try {
       if (await FlutterAudioRecorder.hasPermissions) {
-        print("INITOU");
         String customPath = '/flutter_audio_recorder_';
         io.Directory appDocDirectory;
 //        io.Directory appDocDirectory = await getApplicationDocumentsDirectory();

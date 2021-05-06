@@ -151,7 +151,7 @@ class _BlockSelectionState extends State<BlockSelection>
                 ? ElessonCardWidget(
                     blockDone: langOk,
                     backgroundImage: "assets/img/ling.png",
-                    text: "LINGUAGEM",
+                    text: "LINGUAGENS",
                     textModulo: 'MÓDULO 1',
                     screenWidth: widthScreen,
                     onTap: (value) async {
@@ -271,7 +271,7 @@ class _BlockSelectionState extends State<BlockSelection>
                 ? ElessonCardWidget(
                     blockDone: langOk,
                     backgroundImage: "assets/img/ling.png",
-                    text: "LINGUAGEM",
+                    text: "LINGUAGENS",
                     textModulo: 'MÓDULO 1',
                     screenWidth: widthScreen,
                     onTap: (value) {
