@@ -164,7 +164,7 @@ class _AdminPageState extends State<AdminPage> {
             ElessonCardWidget(
               blockDone: false,
               backgroundImage: "assets/img/mate.png",
-              text: "MATEMÁTICA 1º ANO",
+              text: "MATEMÁTICA",
               textModulo: 'MÓDULO 1',
               screenWidth: widthScreen,
               onTap: (value) {
@@ -178,7 +178,7 @@ class _AdminPageState extends State<AdminPage> {
             ElessonCardWidget(
               blockDone: false,
               backgroundImage: "assets/img/ling.png",
-              text: "LINGUAGENS 1º ANO",
+              text: "LINGUAGENS",
               textModulo: 'MÓDULO 1',
               screenWidth: widthScreen,
               onTap: (value) {
@@ -192,7 +192,7 @@ class _AdminPageState extends State<AdminPage> {
             ElessonCardWidget(
               blockDone: false,
               backgroundImage: "assets/img/cien.png",
-              text: "CIÊNCIAS 1º ANO",
+              text: "CIÊNCIAS",
               textModulo: 'MÓDULO 1',
               screenWidth: widthScreen,
               onTap: (value) {

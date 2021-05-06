@@ -25,30 +25,24 @@ class _HeadlessWebViewState extends State<HeadlessWebView> {
           debuggingEnabled: true,
         ),
       ),
-      onWebViewCreated: (controller) {
-        print('HeadlessInAppWebView created!');
-      },
+      onWebViewCreated: (controller) {},
       onConsoleMessage: (controller, consoleMessage) {
-        print("CONSOLE MESSAGE: " + consoleMessage.message);
         setState(() {
           consoleText = consoleMessage.message;
         });
       },
       onLoadStart: (controller, url) async {
-        print("onLoadStart $url");
         setState(() {
           this.url = url;
         });
       },
       onLoadStop: (controller, url) async {
-        print("onLoadStop $url");
         setState(() {
           this.url = url;
         });
       },
       onUpdateVisitedHistory: (InAppWebViewController controller, String url,
           bool androidIsReload) {
-        print("onUpdateVisitedHistory $url");
         setState(() {
           this.url = url;
         });
