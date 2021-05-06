@@ -29,13 +29,13 @@ class _SpaceSelectionState extends State<SpaceSelection> {
             SizedBox(height: 36.0),
             elessonCard(
                 backgroundImage: "assets/img/cover.png",
-                text: "USAR QR CODE",
+                text: "ACESSO COM QR CODE",
                 screenWidth: widthScreen,
                 onTap: scan,
                 context: context),
             elessonCard(
               backgroundImage: "assets/img/cover.png",
-              text: "DIGITAR CÓDIGO",
+              text: "ACESSO POR TELEFONE CELULAR",
               screenWidth: widthScreen,
               onTap: (value) {
                 Navigator.of(context).pushNamed(SmsRegisterView.routeName);
