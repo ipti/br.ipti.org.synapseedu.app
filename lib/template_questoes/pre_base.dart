@@ -102,10 +102,12 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
     String pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
     correctAnswer = cobjectList[0].questions[0].pieces["1"]["text"];
-
+    Size deviceSize = MediaQuery.of(context).size;
     double widthScreen = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height * 0.93;
-
+    double minButtonWidth = deviceSize.width < 411 ? 180 : 259;
+    double confirmButtonPadding =
+        deviceSize.width < 411 ? deviceSize.width / 2 : 259;
     SystemChrome.setEnabledSystemUIOverlays([]);
 
     return Scaffold(
@@ -277,35 +279,22 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                 ),
                 SizedBox(height: 15),
                 // Aciona o botão de confirmar apenas quando algum texto é digitado na tela.
-
                 if (_textController.text.isNotEmpty)
-                  ConfirmButtonWidget(
-                    context: context,
-                    cobjectList: cobjectList,
-                    cobjectIdList: cobjectIdList,
-                    questionType: 'PRE',
-                    questionIndex: ++questionIndex,
-                    cobjectIndex: cobjectIndex,
-                    cobjectIdListLength: cobjectIdListLength,
-                    cobjectQuestionsLength: cobjectQuestionsLength,
-                    pieceId: pieceId,
-                    isCorrect: isCorrect,
-                    value: _textController.text,
+                  Center(
+                    child: ConfirmButtonWidget(
+                      context: context,
+                      cobjectList: cobjectList,
+                      cobjectIdList: cobjectIdList,
+                      questionType: 'PRE',
+                      questionIndex: ++questionIndex,
+                      cobjectIndex: cobjectIndex,
+                      cobjectIdListLength: cobjectIdListLength,
+                      cobjectQuestionsLength: cobjectQuestionsLength,
+                      pieceId: pieceId,
+                      isCorrect: isCorrect,
+                      value: _textController.text,
+                    ),
                   ),
-                // if (_textController.text.isNotEmpty)
-                //   Padding(
-                //     padding: const EdgeInsets.only(top: 3.0),
-                //     child: submitAnswer(
-                //       context,
-                //       cobjectList,
-                //       'PRE',
-                //       ++questionIndex,
-                //       cobjectIndex,
-                //       pieceId,
-                //       isCorrect,
-                //       value: _textController.text,
-                //     ),
-                //   ),
               ],
             ),
           ),

@@ -129,10 +129,12 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
+    Size deviceSize = MediaQuery.of(context).size;
     double buttonHeight =
-        48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+        48 > deviceSize.height * 0.0656 ? 48 : deviceSize.height * 0.0656;
     double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
+    print(
+        '$minButtonWidth e $buttonHeight ${deviceSize.aspectRatio} ou ${deviceSize.width} e ${deviceSize.height}');
     return MaterialButton(
       elevation: 0,
       height: buttonHeight,
