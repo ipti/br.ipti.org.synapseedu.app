@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/register/code_verify_view.dart';
 import 'package:elesson/register/student_model.dart';
@@ -49,7 +50,7 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
   String errorText = "";
   double opacity = 0;
 
-  RegExp phoneRegExp = RegExp(r"\d{2}([9])\d*");
+  // RegExp phoneRegExp = RegExp(r"\d{2}([9])\d*");
 
   //CRIAR TEXTCONTROLLERS PARA CADA ENTRADA
 
@@ -135,14 +136,15 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                     child: ImageIcon(
                       AssetImage("assets/icons/chevron_right.png"),
                     ),
+                    // removido _phoneNumberController.text.contains(phoneRegExp)
                     onPressed: () async {
-                      if (_phoneNumberController.text.length == 11 &&
-                          _phoneNumberController.text.contains(phoneRegExp)) {
+                      String numero_final = "${_phoneNumberController.text[1]}${_phoneNumberController.text[2]}${_phoneNumberController.text[5]}${_phoneNumberController.text[6]}${_phoneNumberController.text[7]}${_phoneNumberController.text[8]}${_phoneNumberController.text[9]}${_phoneNumberController.text[11]}${_phoneNumberController.text[12]}${_phoneNumberController.text[13]}${_phoneNumberController.text[14]}";
+                      if (_phoneNumberController.text.length == 15) {
                         loginQuery = await LoginQuery().searchStudent(false,
-                            phoneNumber: _phoneNumberController.text);
+                            phoneNumber: numero_final);
                         if (loginQuery.valid != false) {
                           if (loginQuery.student != null) {
-                            await sendCode(_phoneNumberController.text);
+                            await sendCode(numero_final);
                             Navigator.pushReplacementNamed(
                                 context, CodeVerifyView.routeName,
                                 arguments: loginQuery.student);
@@ -246,9 +248,13 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
               opacity = 0;
             });
           },
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+            TelefoneInputFormatter(),
+          ],
           onSaved: (value) => phoneNumber = value,
           // maxLengthEnforced: true,
-          maxLength: 11,
+          maxLength: 15,
           controller: phoneNumberController,
           textAlign: TextAlign.center,
           keyboardType: TextInputType.phone,

@@ -63,36 +63,38 @@ class _QrCodeReaderState extends State<QrCodeReader> {
     return Scaffold(
       body: Stack(
         children: [
-          Column(
-            children: <Widget>[
-              Container(
-                height: heightScreen * 0.77,
-                child: QRView(
-                  key: qrKey,
-                  onQRViewCreated: _onQRViewCreated,
-                  overlay: QrScannerOverlayShape(
-                    borderColor: Colors.white,
-                    borderRadius: 10,
-                    borderWidth: 0,
-                    cutOutSize: 200,
+          SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: heightScreen * 0.77,
+                  child: QRView(
+                    key: qrKey,
+                    onQRViewCreated: _onQRViewCreated,
+                    overlay: QrScannerOverlayShape(
+                      borderColor: Colors.white,
+                      borderRadius: 10,
+                      borderWidth: 0,
+                      cutOutSize: 200,
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                color: Colors.black,
-                height: MediaQuery.of(context).size.height * 0.23,
-                width: MediaQuery.of(context).size.width,
-                child: Container(
-                  margin: EdgeInsets.only(top: 24),
-                  child: Text(
-                    textToTimeout,
-                    style: TextStyle(
-                        color: colorToTimerOut, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
+                Container(
+                  color: Colors.black,
+                  height: MediaQuery.of(context).size.height * 0.23,
+                  width: MediaQuery.of(context).size.width,
+                  child: Container(
+                    margin: EdgeInsets.only(top: 24),
+                    child: Text(
+                      textToTimeout,
+                      style: TextStyle(
+                          color: colorToTimerOut, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
           GestureDetector(
             onTap: () => Navigator.pop(context),

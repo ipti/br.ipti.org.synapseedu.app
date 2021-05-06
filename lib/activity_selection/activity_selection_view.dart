@@ -283,10 +283,11 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   Widget build(BuildContext context) {
     double heightScreen = MediaQuery.of(context).size.height;
     double widthScreen = MediaQuery.of(context).size.width;
-    if (heightScreen > 990) {
-      fonteDaLetra = 28;
-      headerFontSize = 24;
-    } else if (heightScreen > 822 && heightScreen <= 990) {
+    // if (heightScreen > 1081) {
+    //   fonteDaLetra = 28;
+    //   headerFontSize = 24;
+    // } else if (heightScreen > 822 && heightScreen <= 990) {
+    if (heightScreen > 822) {
       fonteDaLetra = 22;
       headerFontSize = 18;
     } else if (heightScreen < 639) {
