@@ -189,6 +189,10 @@ getCobject(int cobjectIndex, BuildContext context, List<String> cobjectIdList,
                 'TXT',
                 cobjectIndex));
         break;
+      default:
+        print('CObject possui um tipo não reconhecido');
+        cobjectIndex = ++cobjectIndex;
+        getCobject(cobjectIndex, context,cobjectIdList);
     }
   });
 }
