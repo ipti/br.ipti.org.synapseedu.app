@@ -54,7 +54,7 @@ class _AdminPageState extends State<AdminPage> {
   Widget build(BuildContext context) {
     double heightScreen = MediaQuery.of(context).size.height;
     double widthScreen = MediaQuery.of(context).size.width;
-    print('GUEST: $isGuest');
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(

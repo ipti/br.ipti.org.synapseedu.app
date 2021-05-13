@@ -37,8 +37,6 @@ List<String> questionListTest = [];
 AudioPlayer player = new AudioPlayer();
 AudioPlayer playerTituloSegundaTela = AudioPlayer();
 
-
-
 int indexTextQuestion = 0;
 
 int timeStart;
@@ -104,7 +102,7 @@ getCobject(int cobjectIndex, BuildContext context, List<String> cobjectIdList,
     var questionType = cobject[0]["cobjects"][0]["template_code"];
     context.read(cobjectProvider).fetchCobjects(cobject);
     cobjectList = context.read(cobjectProvider).items;
-    print('PiecesetIndex: $piecesetIndex');
+
     print('ID ATUAL: ${cobjectIdList[cobjectIndex]}');
     // print('cobjectQuestionLength ${cobjectList[0].questions.length}');
 
@@ -317,7 +315,6 @@ void submitLogic(BuildContext context, int questionIndex, int cobjectIndex,
 
     // Alterei o if(++cobjectIndex para o atual, inclusive alterando o endereço do getCobject. Caso tenha problema de não alterar o cobject, é isso);
     if (cobjectIndex + 1 < cobjectIdListLength) {
-      print('no if: $cobjectIndex e $cobjectIdList');
       if (isGuest == false) {
         prefs.setInt('last_question_$discipline', 0);
         prefs.setInt('last_cobject_$discipline', cobjectIndex + 1);

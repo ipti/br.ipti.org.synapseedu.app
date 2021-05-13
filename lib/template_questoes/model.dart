@@ -12,7 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 // Modelo para os cobjects e questões, além dos métodos para serialização do json recebido do servidor.
 
 class Answer {
-  Future<dynamic> sendAnswerToApi(String pieceId, bool isCorrect, int finalTime, {int intervalResolution, String groupId, String value}) async {
+  Future<dynamic> sendAnswerToApi(String pieceId, bool isCorrect, int finalTime,
+      {int intervalResolution, String groupId, String value}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String actor_id = await prefs.getString('actor_id');
 
@@ -38,19 +39,6 @@ class Answer {
     // } catch (e) {
     //   print(e.toString());
     // }
-    print('======');
-    print("value:" +value);
-    print("""{
-        "mode": "evaluation",
-        "piece_id": "$pieceId",
-        "group_id": "$groupId",
-        "actor_id": "$actor_id",
-        "final_time": "$finalTime",
-        "interval_resolution": "$intervalResolution",
-        "iscorrect": "$isCorrect"
-      }""");
-
-
 
     try {
       var response = await http.post("${API_URL}performance/actor/save", body: {
@@ -65,10 +53,10 @@ class Answer {
       }, headers: {
         HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
       });
-      print("response: ${response.statusCode}");
-      print("Enviado: $value and $groupId");
-      print("STATUS_CODE: ${response.statusCode}");
-      print("BODY: ${response.body}");
+      // print("response: ${response.statusCode}");
+      // print("Enviado: $value and $groupId");
+      // print("STATUS_CODE: ${response.statusCode}");
+      // print("BODY: ${response.body}");
     } catch (e) {
       print(e);
     }
@@ -80,7 +68,10 @@ class ConversorVoiceToText {
     print("solicitação");
     final bytes = file.readAsBytesSync();
 
-    var headers = {'Ocp-Apim-Subscription-Key': 'b21db0729fc14cc7b6de72e1f44322dd', 'Content-Type': 'audio/wav'};
+    var headers = {
+      'Ocp-Apim-Subscription-Key': 'b21db0729fc14cc7b6de72e1f44322dd',
+      'Content-Type': 'audio/wav'
+    };
 
     var response;
     Map<String, dynamic> responseBody;
@@ -108,11 +99,15 @@ class ConversorVoiceToText {
   Future<dynamic> conversorVoice(String audioPath, context) async {
     //Response response;
 
-    ByteData audioBytes = await DefaultAssetBundle.of(context).load('assets/audio/audio.wav');
+    ByteData audioBytes =
+        await DefaultAssetBundle.of(context).load('assets/audio/audio.wav');
 
     print("CAMINHO ENVIADO: $audioPath ${audioBytes.toString()}");
 
-    var headers = {'Ocp-Apim-Subscription-Key': 'b21db0729fc14cc7b6de72e1f44322dd', 'Content-Type': 'audio/wav'};
+    var headers = {
+      'Ocp-Apim-Subscription-Key': 'b21db0729fc14cc7b6de72e1f44322dd',
+      'Content-Type': 'audio/wav'
+    };
     String retorno;
     try {
       // var response = await http.post(
@@ -154,7 +149,9 @@ class ConversorVoiceToText {
           "data-binary": audioBytes,
         },
         options: Options(
-            headers: {"Ocp-Apim-Subscription-Key": "b21db0729fc14cc7b6de72e1f44322dd"},
+            headers: {
+              "Ocp-Apim-Subscription-Key": "b21db0729fc14cc7b6de72e1f44322dd"
+            },
             //{HttpHeaders.authorizationHeader: {"Ocp-Apim-Subscription-Key": "b21db0729fc14cc7b6de72e1f44322dd"}},
             contentType: "audio/wav"),
       );
@@ -224,7 +221,8 @@ class Question {
     //A implementação mudará quando tiver um exemplo sem bugs do json
     json.forEach((key, value) {
       if (value["elements"][0]["generalProperties"].length > 2) {
-        questionImages.add(value["elements"][0]["generalProperties"][7]["value"]);
+        questionImages
+            .add(value["elements"][0]["generalProperties"][7]["value"]);
       }
     });
     return questionImages;
@@ -256,7 +254,8 @@ class Question {
         });
         // break;
       } else if (elements["type"] == "text") {
-        srcMap.update("text", (value) => elements["generalProperties"][1]["value"]);
+        srcMap.update(
+            "text", (value) => elements["generalProperties"][1]["value"]);
         // src = "Não funcionou";
       }
     }
@@ -300,15 +299,18 @@ class Question {
       elements.forEach((element, elementProperty) {
         for (var value in elementProperty) {
           if (value["pieceElement_Properties"]["layertype"] == "Acerto") {
-            itemsMap["correctAnswer"] = int.parse(value["pieceElement_Properties"]["grouping"]);
+            itemsMap["correctAnswer"] =
+                int.parse(value["pieceElement_Properties"]["grouping"]);
           }
           // A parte abaixo começa a testar o tipo do item presente em elements para atribuir o caminho do item
           // na respectiva chave. Assim que encontrar determinado tipo de elemento, ele também atualiza a
           // chave que indica a composição da questão para verdadeiro.
 
           if (value["type"] == "text") {
-            item[index].update("text", (val) => value["generalProperties"][1]["value"]);
-            if (itemsMap["composition"]["text"] == false) itemsMap["composition"]["text"] = true;
+            item[index].update(
+                "text", (val) => value["generalProperties"][1]["value"]);
+            if (itemsMap["composition"]["text"] == false)
+              itemsMap["composition"]["text"] = true;
           } else if (value["type"] == "multimidia") {
             // O pair abaixo representa o par com chaves 'name' e 'value' característicos do generalProperties.
             for (var pair in value["generalProperties"]) {
@@ -316,10 +318,12 @@ class Question {
                 if (pair["value"].endsWith(".mp3")) {
                   // print('MP3: ${pair["value"]}');
                   item[index].update("sound", (val) => pair["value"]);
-                  if (itemsMap["composition"]["sound"] == false) itemsMap["composition"]["sound"] = true;
+                  if (itemsMap["composition"]["sound"] == false)
+                    itemsMap["composition"]["sound"] = true;
                 } else {
                   item[index].update("image", (val) => pair["value"]);
-                  if (itemsMap["composition"]["image"] == false) itemsMap["composition"]["image"] = true;
+                  if (itemsMap["composition"]["image"] == false)
+                    itemsMap["composition"]["image"] = true;
                 }
               }
             }
@@ -336,8 +340,9 @@ class Question {
   // factory Question.fromJson(Map<String, dynamic> json) => Question(
 
   String descriptionSound(Map<String, dynamic> elements) {
-    if (elements["type"] == 'multimidia' && elements['generalProperties'].length == 5 && elements['generalProperties'][2]['name'] == 'src') {
-      print('HEY SOM: ${elements['generalProperties'][2]['value']}');
+    if (elements["type"] == 'multimidia' &&
+        elements['generalProperties'].length == 5 &&
+        elements['generalProperties'][2]['name'] == 'src') {
       return elements['generalProperties'][2]['value'];
     }
     return '';
@@ -349,7 +354,8 @@ class Question {
       questionList.add(Question(
         pieceId: screens['piecesets'][0]['pieces'][0]['id'],
         header: Question().questionMultimediaSearch(screens),
-        pieces: Question().questionItemSearch(screens["piecesets"][0]["pieces"][0]["groups"]),
+        pieces: Question()
+            .questionItemSearch(screens["piecesets"][0]["pieces"][0]["groups"]),
       ));
     });
     return questionList;
@@ -362,7 +368,9 @@ class Question {
 
     return Cobject(
       description: json["description"],
-      descriptionSound: json['elements'].isNotEmpty ? Question().descriptionSound(json['elements'][0]) : '',
+      descriptionSound: json['elements'].isNotEmpty
+          ? Question().descriptionSound(json['elements'][0])
+          : '',
       discipline: json["discipline"],
       totalPieces: json["total_pieces"],
       questions: Question().insertQuestionList(json),

@@ -119,6 +119,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
       prefs.setInt('student_id', student.id);
       prefs.setString('student_phone', student.phone);
       prefs.setString('actor_id', student.actorId);
+      prefs.setString('classroomFk', student.classroomFk);
 
       print("ActorId salvo: ${student.actorId}");
 

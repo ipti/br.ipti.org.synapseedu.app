@@ -85,7 +85,7 @@ class _BlockSelectionState extends State<BlockSelection>
   Widget screen(BuildContext context) {
     double heightScreen = MediaQuery.of(context).size.height;
     double widthScreen = MediaQuery.of(context).size.width;
-    print('ISGUEST: $isGuest');
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Colors.white,
