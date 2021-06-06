@@ -74,6 +74,8 @@ class _BlockSelectionState extends State<BlockSelection>
   //         piecesetIndex: questionIndex);
   //   });
   // }
+  @override
+  loadingBgBlur() => 0.0;
 
   @override
   loader() {
