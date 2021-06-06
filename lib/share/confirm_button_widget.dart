@@ -133,8 +133,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
     double buttonHeight =
         48 > deviceSize.height * 0.0656 ? 48 : deviceSize.height * 0.0656;
     double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
-    print(
-        '$minButtonWidth e $buttonHeight ${deviceSize.aspectRatio} ou ${deviceSize.width} e ${deviceSize.height}');
+
     return MaterialButton(
       elevation: 0,
       height: buttonHeight,
@@ -193,19 +192,12 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
               confirmButtonTextColor = true;
               confirmButtonText = 'VOCÊ ACERTOU!';
               audioCache.play('audio/positiva.wav');
-              // confirmButtonColor = Color.fromARGB(51, 0, 220, 140);
-              // confirmButtonBorder = Color.fromRGBO(0, 220, 140, 1);
-              // confirmButtonTextColor = Color.fromRGBO(0, 220, 140, 1);
-
             } else {
               confirmButtonColor = false;
               confirmButtonBorder = false;
               confirmButtonTextColor = false;
               confirmButtonText = 'NÃO ERA ESSA :(';
               audioCache.play('audio/negativa.wav');
-              // confirmButtonColor = Color.fromRGBO(255, 51, 0, 0.2);
-              // confirmButtonBorder = Color.fromRGBO(255, 51, 0, 1);
-              // confirmButtonTextColor = Color.fromRGBO(255, 51, 0, 1);
             }
             confirmButtonBackgroundOpacity = 0.2;
           });
@@ -216,7 +208,6 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
             });
           });
         } else {
-          print('tempo de intervalo: ${timeEnd - timeStart}');
           nextQuestionTimer.cancel();
 
           if (widget.questionType == "DDROP") {

@@ -59,7 +59,6 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
     ApiClass.getClasses(schoolId).then((response) {
       setState(() {
         classes = response.data[0]["classroom"];
-        //print('EXIBINDO: $turmas');
       });
     });
   }

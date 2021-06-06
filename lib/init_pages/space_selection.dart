@@ -42,16 +42,20 @@ class _SpaceSelectionState extends State<SpaceSelection> {
               },
               context: context,
             ),
-            elessonCard(
-              backgroundImage: "assets/img/cover.png",
-              text: "TESTAR APLICATIVO",
-              screenWidth: widthScreen,
-              onTap: (value) {
-                LoginQuery().getLoginTrial(context);
-                // Navigator.of(context).pushNamed(DegreeSelectionView.routeName);
-              },
-              context: context,
-            ),
+            SizedBox(height: heightScreen*0.05,),
+            GestureDetector(
+              onTap: () => LoginQuery().getLoginTrial(context),
+                child: Text("USAR COMO CONVIDADO",style: TextStyle(decoration: TextDecoration.underline,color: Colors.blue,fontWeight: FontWeight.bold),)),
+            // elessonCard(
+            //   backgroundImage: "assets/img/cover.png",
+            //   text: "TESTAR APLICATIVO",
+            //   screenWidth: widthScreen,
+            //   onTap: (value) {
+            //     LoginQuery().getLoginTrial(context);
+            //     // Navigator.of(context).pushNamed(DegreeSelectionView.routeName);
+            //   },
+            //   context: context,
+            // ),
           ],
         ),
       ),
