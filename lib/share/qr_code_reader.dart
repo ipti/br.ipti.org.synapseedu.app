@@ -130,7 +130,7 @@ class _QrCodeReaderState extends State<QrCodeReader> {
     );
     // RegExp exp = new RegExp(r"([0-9])\d{10}");
     // RegExp exp = new RegExp(r"(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})");
-    RegExp exp = new RegExp(r"(\w|-){36}");
+    //RegExp exp = new RegExp(r"(\w|-){36}");
 
     String studentUuid = "";
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -140,12 +140,12 @@ class _QrCodeReaderState extends State<QrCodeReader> {
       print(scanData);
       // setState(() async{
       qrText = scanData;
-      if (exp.hasMatch(qrText)) {
+      if (qrText != null) {
         setState(() {
           showLoading = !showLoading;
         });
         _timer.cancel();
-        studentUuid = exp.stringMatch(qrText);
+        studentUuid = qrText;
         print(studentUuid);
         controller.dispose();
 
