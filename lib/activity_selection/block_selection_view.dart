@@ -7,7 +7,7 @@ import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/share/snackbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:screen_loader/screen_loader.dart';
+// import 'package:screen_loader/screen_loader.dart';
 
 import 'block_selection.dart';
 
@@ -26,8 +26,7 @@ String blockId = "";
 String studentName;
 String classroomFk;
 
-class _BlockSelectionState extends State<BlockSelection>
-    with ScreenLoader<BlockSelection> {
+class _BlockSelectionState extends State<BlockSelection> {
   SharedPreferences prefs;
 
   @override
@@ -74,8 +73,8 @@ class _BlockSelectionState extends State<BlockSelection>
   //         piecesetIndex: questionIndex);
   //   });
   // }
-  @override
-  loadingBgBlur() => 0.0;
+  // @override
+  // loadingBgBlur() => 0.0;
 
   @override
   loader() {
@@ -84,7 +83,7 @@ class _BlockSelectionState extends State<BlockSelection>
 
   Key scaffoldKey;
   @override
-  Widget screen(BuildContext context) {
+  Widget build(BuildContext context) {
     double heightScreen = MediaQuery.of(context).size.height;
     double widthScreen = MediaQuery.of(context).size.width;
 
