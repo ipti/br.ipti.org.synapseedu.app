@@ -78,7 +78,7 @@ class _DragAndDropState extends State<DragAndDrop> {
         cobjectList: cobjectList,
         linkImage: cobjectList[0].questions[0].header['image'] != ''
             ? BASE_URL + '/image/' + cobjectList[0].questions[0].header['image']
-            : "",
+            : null,
         sound: cobjectList[0].questions[0].header["sound"],
         title: cobjectList[0].description.toUpperCase(),
         text: formatDescription(cobjectList[0]
