@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:audioplayers/audioplayers.dart';
+// import 'package:audioplayers/audioplayers.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:elesson/settings/settings_screen.dart';
 import 'package:elesson/share/question_widgets.dart';
@@ -62,7 +62,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
   List<String> formattedTitle;
   bool isTitleFormatted = false;
 
-  AudioPlayer playerDescription;
+  // AudioPlayer playerDescription;
 
   // bool showConfirmButton = false;
 
@@ -121,9 +121,9 @@ class _TemplateSliderState extends State<TemplateSlider> {
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
 
-    playerDescription = AudioPlayer();
-    playerDescription
-        .setUrl(BASE_URL + '/sound/' + cobjectList[0].descriptionSound);
+    // playerDescription = AudioPlayer();
+    // playerDescription
+    //     .setUrl(BASE_URL + '/sound/' + cobjectList[0].descriptionSound);
     super.initState();
   }
 
@@ -394,7 +394,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                         : [],
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        playerDescription.resume();
+                        // playerDescription.resume();
                       },
                   ),
                 ),
@@ -485,7 +485,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                 child: GestureDetector(
                   onTap: () {
                     //kevenny aqui
-                    playerTituloSegundaTela.resume();
+                    // playerTituloSegundaTela.resume();
                   },
                   child: Container(
                       padding: EdgeInsets.only(right: 20, left: 20),

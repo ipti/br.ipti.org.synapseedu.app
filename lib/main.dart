@@ -8,12 +8,9 @@ import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
 import 'package:elesson/template_questoes/PRE_SOM_IA.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import './register/countdown.dart';
-
 import 'admin/admin_page.dart';
 import 'init_pages/space_selection.dart';
-
 import './root/poc.dart';
 import 'package:elesson/register/sms_register.dart';
 import 'package:elesson/template_questoes/share/image_detail_screen.dart';
@@ -22,23 +19,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import './register/sms_register.dart';
-
 import 'activity_selection/activity_selection_view.dart';
-
-// import 'login/login_view.dart';
-// import 'recover_password/recover_password_view.dart';
-// import 'register/register_view.dart';
-// import 'webview/base.dart';
-// import 'webview/models/webview_modelo.dart';
 import 'webview/headless_webview.dart';
-
 import 'template_questoes/text_question.dart';
 import 'template_questoes/multiple_choice.dart';
 import 'template_questoes/ddrop/ddrop.dart';
 import 'template_questoes/pre_base.dart';
-
 import './login/auto_login.dart';
 
 void main() async {

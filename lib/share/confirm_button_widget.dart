@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:audioplayers/audio_cache.dart';
+// import 'package:audioplayers/audio_cache.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/ddrop/ddrop_function.dart';
@@ -65,7 +65,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
 
   // bool isCorrect = true;
 
-  AudioCache audioCache = AudioCache();
+  // AudioCache audioCache = AudioCache();
 
   bool isSecondClick = false;
 
@@ -79,9 +79,9 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
   void initState() {
     // TODO: implement initState
     if (Platform.isIOS) {
-      if (audioCache.fixedPlayer != null) {
-        audioCache.fixedPlayer.startHeadlessService();
-      }
+      // if (audioCache.fixedPlayer != null) {
+      //   audioCache.fixedPlayer.startHeadlessService();
+      // }
     }
     initConnectivity();
     _connectivitySubscription =
@@ -191,13 +191,13 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
               confirmButtonBorder = true;
               confirmButtonTextColor = true;
               confirmButtonText = 'VOCÊ ACERTOU!';
-              audioCache.play('audio/positiva.wav');
+              // audioCache.play('audio/positiva.wav');
             } else {
               confirmButtonColor = false;
               confirmButtonBorder = false;
               confirmButtonTextColor = false;
               confirmButtonText = 'NÃO ERA ESSA :(';
-              audioCache.play('audio/negativa.wav');
+              // audioCache.play('audio/negativa.wav');
             }
             confirmButtonBackgroundOpacity = 0.2;
           });

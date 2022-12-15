@@ -245,9 +245,9 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     String questionDescription = cobjectList[0].description;
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
 
-    playerTituloSegundaTela.setUrl(BASE_URL +
-        '/sound/' +
-        cobjectList[0].questions[questionIndex].header["sound"]);
+    // playerTituloSegundaTela.setUrl(BASE_URL +
+    //     '/sound/' +
+    //     cobjectList[0].questions[questionIndex].header["sound"]);
 
     if (!pieceOrdered) {
       pieceOrdered = true;
@@ -280,7 +280,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                           EdgeInsets.symmetric(horizontal: 16, vertical: 0),
                       height: textCardHeight + 32,
                       child: GestureDetector(
-                        onTap: () => playerTituloSegundaTela.resume(),
+                        // onTap: () => playerTituloSegundaTela.resume(),
                         child: Center(
                           child: questionDescriptionWidget,
                         ),

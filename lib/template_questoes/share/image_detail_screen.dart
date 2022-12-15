@@ -35,7 +35,7 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
         48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
     double buttonWidth =
         133 > screenWidth * 0.3236 ? 133 : screenWidth * 0.3236;
-    player.setUrl(BASE_URL + '/sound/' + question.pieces[grouping]["sound"]);
+    // player.setUrl(BASE_URL + '/sound/' + question.pieces[grouping]["sound"]);
 
 
     // if (question.pieces[grouping]["image"].isEmpty) print('IMAGEM É VAZIA:${question.pieces[grouping]["image"]}');
@@ -176,7 +176,7 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
                           ],
                         ),
                         onPressed: () => {
-                          player.stop(),
+                          // player.stop(),
                           Navigator.of(context).pop(),
                         },
                       ),
@@ -193,14 +193,14 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
 
   void playSoundDetailScreen() async {
 
-    await player.resume();
+    // await player.resume();
     
     // await player.play(BASE_URL + '/sound/' + sound);
-    player.onPlayerCompletion.listen((event) {
-      setState(() {
-        buttonBackground = Colors.white;
-      });
-    });
+    // player.onPlayerCompletion.listen((event) {
+    //   setState(() {
+    //     buttonBackground = Colors.white;
+    //   });
+    // });
   }
 }
 

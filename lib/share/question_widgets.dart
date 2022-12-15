@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:audioplayers/audioplayers.dart';
+// import 'package:audioplayers/audioplayers.dart';
 import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/share/qr_code_reader.dart';
@@ -34,8 +34,8 @@ List<String> questionListTest = [];
 // esse aqui será a lista que já está recebendo a lista de CObject
 //todo substituir o question list anterior por essa variavel
 
-AudioPlayer player = new AudioPlayer();
-AudioPlayer playerTituloSegundaTela = AudioPlayer();
+// AudioPlayer player = new AudioPlayer();
+// AudioPlayer playerTituloSegundaTela = AudioPlayer();
 
 int indexTextQuestion = 0;
 
@@ -65,7 +65,7 @@ String confirmButtonText = 'CONFIRMAR';
 double confirmButtonBackgroundOpacity = 0;
 
 void playSound(String sound) async {
-  await player.play(BASE_URL + '/sound/' + sound);
+  // await player.play(BASE_URL + '/sound/' + sound);
 }
 
 var cobjectList = new List<Cobject>();

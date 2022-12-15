@@ -11,7 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:flutter_riverpod/all.dart';
 
-import 'package:audioplayers/audioplayers.dart';
+// import 'package:audioplayers/audioplayers.dart';
 import 'package:file/file.dart';
 import 'package:file/local.dart';
 import 'package:path_provider/path_provider.dart';
@@ -581,7 +581,7 @@ class _PreSomIaState extends State<PreSomIa> {
   }
 
   void onPlayAudio() async {
-    AudioPlayer audioPlayer = AudioPlayer();
-    await audioPlayer.play(_current.path, isLocal: true);
+    // AudioPlayer audioPlayer = AudioPlayer();
+    // await audioPlayer.play(_current.path, isLocal: true);
   }
 }
