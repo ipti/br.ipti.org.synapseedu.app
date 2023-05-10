@@ -114,7 +114,7 @@ class _PreSomIaState extends State<PreSomIa> {
 
   //isCorrect
 
-  void initar() async {
+  void recorderInit() async {
     await _recorder.initialized;
     // after initialization
     var current = await _recorder.current(channel: 0);
@@ -151,23 +151,17 @@ class _PreSomIaState extends State<PreSomIa> {
     double screenHeight = MediaQuery.of(context).size.height * 0.93;
 
     SystemChrome.setEnabledSystemUIOverlays([]);
-
+    print(
+        '\n\n OLHA A IMAGEM AQUIIII: ${cobjectList[0].questions[0].header["image"]}---------\n\n\n');
     return Scaffold(
       body: TemplateSlider(
         title: questionDescription.toUpperCase(),
         text: formatDescription(questionText.toUpperCase()),
-        // text: Text(
-        //   questionText.toUpperCase(),
-        //   textAlign: TextAlign.center,
-        //   style: TextStyle(
-        //     fontWeight: FontWeight.bold,
-        //     fontSize: fonteDaLetra,
-        //     fontFamily: 'Mulish',
-        //   ),
-        // ),
         sound: cobjectList[0].questions[questionIndex].header["sound"],
-        linkImage: 'https://elesson.com.br/app/library/image/' +
-            cobjectList[0].questions[0].header["image"],
+        linkImage: cobjectList[0].questions[0].header["image"].isNotEmpty
+            ? 'https://elesson.com.br/app/library/image/' +
+                cobjectList[0].questions[0].header["image"]
+            : null,
         isPreTemplate: true,
         activityScreen: Form(
           key: _formKey,
@@ -376,7 +370,7 @@ class _PreSomIaState extends State<PreSomIa> {
                       //     _stopAzure();
                       //     _initAzure();
                       //   }
-                      //   // initar();
+                      //   // recorderInit();
                       //   if (_currentStatus == RecordingStatus.Stopped) {
                       //     print('Tá parado no long end');
                       //   }

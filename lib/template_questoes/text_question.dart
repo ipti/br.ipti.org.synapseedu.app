@@ -53,8 +53,10 @@ class TextQuestion extends ConsumerWidget {
         //   ),
         // ),
         sound: cobjectList[0].questions[questionIndex].header["sound"],
-        linkImage: 'https://elesson.com.br/app/library/image/' +
-            cobjectList[0].questions[questionIndex].header["image"],
+        linkImage: cobjectList[0].questions[0].header["image"].isNotEmpty
+            ? 'https://elesson.com.br/app/library/image/' +
+                cobjectList[0].questions[0].header["image"]
+            : null,
         text: Text(
           headerText,
           style: TextStyle(

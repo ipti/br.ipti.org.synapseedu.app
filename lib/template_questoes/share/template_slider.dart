@@ -479,7 +479,9 @@ class _TemplateSliderState extends State<TemplateSlider> {
                       height: screenHeight * 0.70,
                     ),
                   )
-                : Container(),
+                : Container(
+                    height: screenWidth,
+                  ),
             Container(
               child: Center(
                 child: GestureDetector(
