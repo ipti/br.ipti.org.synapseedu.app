@@ -331,12 +331,12 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    OutlineButton(
-                      highlightElevation: 5.0,
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(width: 24, color: Colors.red),
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
+                    OutlinedButton(
+                    //   highlightElevation: 5.0,
+                    //   shape: RoundedRectangleBorder(
+                    //     side: BorderSide(width: 24, color: Colors.red),
+                    //     borderRadius: BorderRadius.circular(5.0),
+                    //   ),
                       onPressed: () {
                         setState(() {
                           checkDiscipline = true;
@@ -345,13 +345,13 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                       },
                       child: Text('Português'),
                     ),
-                    OutlineButton(
-                      color: Colors.amber,
-                      highlightedBorderColor: Colors.red,
-                      highlightElevation: 5.0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
+                    OutlinedButton(
+                      // color: Colors.amber,
+                      // highlightedBorderColor: Colors.red,
+                      // highlightElevation: 5.0,
+                      // shape: RoundedRectangleBorder(
+                      //   borderRadius: BorderRadius.circular(5.0),
+                      // ),
                       onPressed: () {
                         setState(() {
                           checkDiscipline = true;
