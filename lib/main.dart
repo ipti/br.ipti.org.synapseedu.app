@@ -1,4 +1,5 @@
 import 'package:elesson/activity_selection/block_selection_view.dart';
+import 'package:elesson/app/feature/providers/userProvider.dart';
 import 'package:elesson/degree_selection/degree_selection_view.dart';
 import 'package:elesson/register/code_verify_view.dart';
 import 'package:elesson/settings/settings_screen.dart';
@@ -7,9 +8,11 @@ import 'package:elesson/share/qr_code_reader.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
 import 'package:elesson/template_questoes/PRE_SOM_IA.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './register/countdown.dart';
 import 'admin/admin_page.dart';
+import 'app/feature/auth/auth_module.dart';
 import 'init_pages/space_selection.dart';
 import './root/poc.dart';
 import 'package:elesson/register/sms_register.dart';
@@ -17,8 +20,6 @@ import 'package:elesson/template_questoes/share/image_detail_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:google_fonts/google_fonts.dart';
 import 'activity_selection/activity_selection_view.dart';
 import 'webview/headless_webview.dart';
 import 'template_questoes/text_question.dart';
@@ -32,11 +33,18 @@ void main() async {
   //Força o modo retrato na inicialização do aplicativo
 
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations(
-          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
-      .then((_) async {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) async {
     isLogged = await isUserConfirmed();
-    runApp(ProviderScope(child: new Home()));
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => UserProvider(),
+          ),
+        ],
+        child: Home(),
+      ),
+    );
   });
 
   LicenseRegistry.addLicense(() async* {
@@ -106,31 +114,20 @@ class _HomeState extends State<Home> {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         buttonTheme: ButtonThemeData(
           textTheme: ButtonTextTheme.accent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
-            side: BorderSide(color: Color(0xFF00004C), width: 1),
-          ),
-          // splashColor: Colors.amber[900],
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18), side: BorderSide(color: Color(0xFF00004C), width: 1)),
           minWidth: 0,
-          // hoverColor: Colors.red,
         ),
-        // primaryTextTheme: GoogleFonts.muliTextTheme(),
         fontFamily: 'Mulish',
-        // textTheme: GoogleFonts.muliTextTheme(),
       ),
       initialRoute: isLogged && isAdmin
           ? '/admin'
           : isLogged
               ? '/'
-              : SpaceSelection.routeName,
-      // initialRoute: BlockSelection.routeName,
-      // initialRoute: SettingsScreen.routeName,
-      // initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
-      // initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName,
-      // alterado para apresentação
+              : AuthModule.routeName,
       routes: {
         '/': (context) => BlockSelection(),
         '/admin': (context) => AdminPage(),
+        AuthModule.routeName: (context) => AuthModule(),
         SpaceSelection.routeName: (context) => SpaceSelection(),
         DegreeSelectionView.routeName: (context) => DegreeSelectionView(),
         BlockSelection.routeName: (context) => BlockSelection(),
@@ -141,7 +138,6 @@ class _HomeState extends State<Home> {
         HeadlessWebView.routeName: (context) => HeadlessWebView(),
         PreImgIa.routeName: (context) => PreImgIa(),
         PreSomIa.routeName: (context) => PreSomIa(),
-        // PreSomIa.routeName: (context) => PreSomIa(),
         //----------------------------rotas fora de fluxo---------------------------
         ActivitySelectionForm.routeName: (context) => ActivitySelectionForm(),
         SettingsScreen.routeName: (context) => SettingsScreen(),

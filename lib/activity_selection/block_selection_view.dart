@@ -1,10 +1,10 @@
+import 'package:elesson/app/feature/shared/widgets/card_widget.dart';
+import 'package:elesson/app/feature/shared/widgets/init_title.dart';
 import 'package:elesson/degree_selection/degree_selection_view.dart';
 import 'package:elesson/share/api.dart';
-import 'package:elesson/share/general_widgets.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:screen_loader/screen_loader.dart';
 
 import 'block_selection.dart';
 

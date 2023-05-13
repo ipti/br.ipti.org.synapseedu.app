@@ -15,7 +15,7 @@ class BlockSelectionLogic {
       BuildContext? context,
       String? classroomFk}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String studentUuid = prefs.getString('student_uuid')!;
+    String studentUuid = prefs.getString('student_uuid')??'';
 
     var blockId = studentUuid != null
         ? prefs.getString('block_${classroomFk}_$disciplineId')
@@ -23,7 +23,7 @@ class BlockSelectionLogic {
     print('blockId: $blockId');
     // var responseBlock = await ApiBlock.getBlock(blockId);
     // print('responseblock: $responseBlock');
-    ApiBlock.getBlock(blockId!).then((value) {
+    ApiBlock.getBlock(blockId).then((value) {
       var responseBlock = value;
       if (responseBlock != "-1") {
         List<String?> cobjectIdList = [];

@@ -17,10 +17,10 @@ class AuthController extends ChangeNotifier {
 
   AuthEntity _webAppAuthEntity = AuthEntity(username: "editor", password: "iptisynpaseeditor2022");
   LoginEntity _authLoginEntity = LoginEntity.empty();
-
   LoginEntity get authLoginEntity => _authLoginEntity;
 
   getAcessToken(BuildContext context) async {
+
     _showLoading = true;
     notifyListeners();
     await authUseCase.getAccessToken(_webAppAuthEntity).then((value) {

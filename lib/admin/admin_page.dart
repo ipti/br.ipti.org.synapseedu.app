@@ -1,6 +1,8 @@
 // import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'dart:async';
 
+import 'package:elesson/app/feature/shared/widgets/card_widget.dart';
+import 'package:elesson/app/feature/shared/widgets/init_title.dart';
 import 'package:elesson/share/api.dart';
 import 'package:elesson/share/general_widgets.dart';
 import 'package:elesson/share/question_widgets.dart';
