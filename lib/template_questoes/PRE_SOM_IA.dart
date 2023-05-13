@@ -1,5 +1,4 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
-import 'package:elesson/share/api.dart';
 import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/model.dart';
@@ -8,7 +7,7 @@ import 'package:elesson/template_questoes/share/description_format.dart';
 import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
+import 'package:flutter_audio_recorder2/flutter_audio_recorder2.dart';
 import 'package:flutter_riverpod/all.dart';
 
 // import 'package:audioplayers/audioplayers.dart';
@@ -41,11 +40,11 @@ class PreSomIa extends StatefulWidget {
 
 class _PreSomIaState extends State<PreSomIa> {
   // ignore: non_constant_identifier_names
-  var cobjectList = new List<Cobject>();
-  int questionIndex;
-  int cobjectIndex;
-  int cobjectIdListLength;
-  int cobjectQuestionsLength;
+  List<Cobject> cobjectList = [];
+  late int questionIndex;
+  int? cobjectIndex;
+  int? cobjectIdListLength;
+  int? cobjectQuestionsLength;
 
   String alertMessage = "FALE AGORA...";
   String naoEndendivel =
@@ -57,15 +56,15 @@ class _PreSomIaState extends State<PreSomIa> {
   Color colorAlertMessage = Colors.red;
   bool isCorrect = false;
 
-  String correctAnswer;
+  String? correctAnswer;
   bool firstRecording = true;
 
   final _formKey = GlobalKey<FormState>();
   final _textController = TextEditingController();
 
-  FlutterAudioRecorder _recorder;
-  Recording _current;
-  RecordingStatus _currentStatus = RecordingStatus.Unset;
+  late FlutterAudioRecorder2 _recorder;
+  Recording? _current;
+  RecordingStatus? _currentStatus = RecordingStatus.Unset;
 
   @override
   // ignore: override_on_non_overriding_member
@@ -120,7 +119,7 @@ class _PreSomIaState extends State<PreSomIa> {
     var current = await _recorder.current(channel: 0);
     setState(() {
       _current = current;
-      _currentStatus = current.status;
+      _currentStatus = current!.status;
       print(_currentStatus);
       // print("hey hou");
     });
@@ -128,7 +127,7 @@ class _PreSomIaState extends State<PreSomIa> {
 
   @override
   Widget build(BuildContext context) {
-    final ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    final ScreenArguments args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     //_getPermission(); não precisa disso, se pedir ele buga e crasha
     // _initializeRecorder();
 
@@ -140,10 +139,10 @@ class _PreSomIaState extends State<PreSomIa> {
     cobjectIdListLength = args.cobjectIdLength;
     cobjectQuestionsLength = args.cobjectQuestionsLength;
 
-    String questionDescription = cobjectList[0].description;
+    String questionDescription = cobjectList[0].description!;
     String questionText =
-        cobjectList[0].questions[questionIndex].header["text"];
-    String pieceId = cobjectList[0].questions[questionIndex].pieceId;
+        cobjectList[0].questions[questionIndex].header["text"]!;
+    String? pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
     correctAnswer = cobjectList[0].questions[0].pieces["1"]["text"];
 
@@ -158,9 +157,9 @@ class _PreSomIaState extends State<PreSomIa> {
         title: questionDescription.toUpperCase(),
         text: formatDescription(questionText.toUpperCase()),
         sound: cobjectList[0].questions[questionIndex].header["sound"],
-        linkImage: cobjectList[0].questions[0].header["image"].isNotEmpty
-            ? 'https://elesson.com.br/app/library/image/' +
-                cobjectList[0].questions[0].header["image"]
+        linkImage: cobjectList[0].questions[0].header["image"]!.isNotEmpty
+            ? 'https://apielesson.azurewebsites.net/app/library/image/' +
+                cobjectList[0].questions[0].header["image"]!
             : null,
         isPreTemplate: true,
         activityScreen: Form(
@@ -222,7 +221,7 @@ class _PreSomIaState extends State<PreSomIa> {
                           // apenas uma vez enquanto o texto estiver sendo digitado.
                           onChanged: (val) {
                             verificarResposta(
-                                    respostasCorretas: correctAnswer,
+                                    respostasCorretas: correctAnswer!,
                                     respostaUsuario:
                                         _textController.text.toString())
                                 // correctAnswer == _textController.text.toString()
@@ -236,7 +235,7 @@ class _PreSomIaState extends State<PreSomIa> {
                             }
                           },
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value!.isEmpty) {
                               return 'Não se esqueça de digitar a resposta!';
                             }
                             return null;
@@ -437,7 +436,7 @@ class _PreSomIaState extends State<PreSomIa> {
     );
   }
 
-  stt.SpeechToText _speech;
+  late stt.SpeechToText _speech;
   bool _isListening = false;
   String _text = 'Press the button and start speaking';
   double _confidence = 1.0;
@@ -487,7 +486,7 @@ class _PreSomIaState extends State<PreSomIa> {
 
   _initAzure() async {
     try {
-      if (await FlutterAudioRecorder.hasPermissions) {
+      if (await (FlutterAudioRecorder2.hasPermissions as FutureOr<bool>)) {
         print("INITOU");
         String customPath = '/flutter_audio_recorder_';
         io.Directory appDocDirectory;
@@ -495,7 +494,7 @@ class _PreSomIaState extends State<PreSomIa> {
         if (io.Platform.isIOS) {
           appDocDirectory = await getApplicationDocumentsDirectory();
         } else {
-          appDocDirectory = await getExternalStorageDirectory();
+          appDocDirectory = (await getExternalStorageDirectory())!;
         }
 
         customPath = appDocDirectory.path +
@@ -503,7 +502,7 @@ class _PreSomIaState extends State<PreSomIa> {
             DateTime.now().millisecondsSinceEpoch.toString();
 
         _recorder =
-            FlutterAudioRecorder(customPath, audioFormat: AudioFormat.WAV);
+            FlutterAudioRecorder2(customPath, audioFormat: AudioFormat.WAV);
 
         await _recorder.initialized;
         // after initialization
@@ -511,7 +510,7 @@ class _PreSomIaState extends State<PreSomIa> {
         // should be "Initialized", if all working fine
         setState(() {
           _current = current;
-          _currentStatus = current.status;
+          _currentStatus = current!.status;
           print(_currentStatus);
         });
       } else {
@@ -541,7 +540,7 @@ class _PreSomIaState extends State<PreSomIa> {
         // print(current.status);
         setState(() {
           _current = current;
-          _currentStatus = _current.status;
+          _currentStatus = _current!.status;
         });
       });
     } catch (e) {
@@ -556,16 +555,16 @@ class _PreSomIaState extends State<PreSomIa> {
   }
 
   _stopAzure() async {
-    var result = await _recorder.stop();
+    var result = await (_recorder.stop() as FutureOr<Recording>);
     print("Stop recording: ${result.path}");
     print("Stop recording: ${result.duration}");
     File file = widget.localFileSystem.file(result.path);
     print("File length: ${await file.length()}");
     setState(() {
       _current = result;
-      _currentStatus = _current.status;
+      _currentStatus = _current!.status;
     });
-    _textController.text = await ConversorVoiceToText().speechToTextAzure(file);
+    _textController.text = await (ConversorVoiceToText().speechToTextAzure(file) as FutureOr<String>);
     // Future.delayed(Duration(seconds: 2), () async {
     //   // ConversorVoiceToText().conversorVoice(_current?.path, context);
     //   _textController.text =

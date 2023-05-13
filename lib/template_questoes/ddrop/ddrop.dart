@@ -7,7 +7,7 @@ import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/all.dart';
-import 'package:fdottedline/fdottedline.dart';
+import 'package:fdottedline_nullsafety/fdottedline__nullsafety.dart';
 import '../share/image_detail_screen.dart';
 import '../model.dart';
 import 'ddrop_function.dart';
@@ -24,8 +24,8 @@ class DragAndDrop extends StatefulWidget {
 }
 
 class _DragAndDropState extends State<DragAndDrop> {
-  var cobjectList = new List<Cobject>();
-  var cobjectIdList = new List<String>();
+  List<Cobject> cobjectList = [];
+  List<String?>? cobjectIdList = [];
   var cobjectIndex;
 
   @override
@@ -47,13 +47,13 @@ class _DragAndDropState extends State<DragAndDrop> {
   }
 
   String pieceId = "";
-  int cobjectQuestionsLength;
-  int cobjectIdLength;
+  int? cobjectQuestionsLength;
+  int? cobjectIdLength;
 
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIOverlays([]);
-    final ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    final ScreenArguments args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     cobjectList = args.cobjectList;
     cobjectIdList = args.cobjectIdList;
     questionIndex = args.questionIndex;
@@ -62,7 +62,7 @@ class _DragAndDropState extends State<DragAndDrop> {
     cobjectIdLength = args.cobjectIdLength;
 
     String questionText =
-        cobjectList[0].questions[questionIndex].header["text"];
+        cobjectList[0].questions[questionIndex!].header["text"]!;
 
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height * 0.93;
@@ -77,13 +77,13 @@ class _DragAndDropState extends State<DragAndDrop> {
         cobjectQuestionsLength: cobjectQuestionsLength,
         cobjectList: cobjectList,
         linkImage: cobjectList[0].questions[0].header['image'] != ''
-            ? BASE_URL + '/image/' + cobjectList[0].questions[0].header['image']
+            ? BASE_URL + '/image/' + cobjectList[0].questions[0].header['image']!
             : null,
         sound: cobjectList[0].questions[0].header["sound"],
-        title: cobjectList[0].description.toUpperCase(),
+        title: cobjectList[0].description!.toUpperCase(),
         text: formatDescription(cobjectList[0]
-            .questions[questionIndex]
-            .header["text"]
+            .questions[questionIndex!]
+            .header["text"]!
             .toUpperCase()),
         // text: Text(
         //   cobjectList[0].questions[questionIndex].header["text"].toUpperCase(),
@@ -95,10 +95,10 @@ class _DragAndDropState extends State<DragAndDrop> {
         //   ),
         // ),
         activityScreen: activityScreen(heightScreen - 12, widthScreen,
-            cobjectList[0].questions[questionIndex], questionText, chronometer,
+            cobjectList[0].questions[questionIndex!], questionText, chronometer,
             cobjectIdList: cobjectIdList,
             cobjectList: cobjectList,
-            questionIndex: questionIndex,
+            questionIndex: questionIndex!,
             cobjectQuestionsLength: cobjectQuestionsLength,
             cobjectIdLength: cobjectIdLength),
       ),
@@ -107,12 +107,12 @@ class _DragAndDropState extends State<DragAndDrop> {
 
   Widget activityScreen(double heightScreen, double widthScreen,
       Question question, String questionText, Stopwatch chronometer,
-      {List<String> cobjectIdList,
-      List<Cobject> cobjectList,
-      int questionIndex,
-      int cobjectQuestionsLength,
-      int cobjectIdLength}) {
-    String pieceId = cobjectList[0].questions[questionIndex].pieceId;
+      {List<String?>? cobjectIdList,
+      required List<Cobject> cobjectList,
+      required int questionIndex,
+      int? cobjectQuestionsLength,
+      int? cobjectIdLength}) {
+    String? pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
     return Container(
       margin: EdgeInsets.only(bottom: 12),
@@ -248,7 +248,7 @@ class _DragAndDropState extends State<DragAndDrop> {
     switch (wret) {
       case 1:
         return DragTarget(
-          builder: (context, List<int> candidateData, rejectedData) {
+          builder: (context, List<int?> candidateData, rejectedData) {
             return Container(
               margin: EdgeInsets.only(right: 16),
               width: widthScreen / 2.35,
@@ -288,10 +288,10 @@ class _DragAndDropState extends State<DragAndDrop> {
               ),
             );
           },
-          onWillAccept: (data) {
+          onWillAccept: (dynamic data) {
             return true;
           },
-          onAccept: (data) {
+          onAccept: (dynamic data) {
             colorFirstReceiverAccepted = data == 1
                 ? Color.fromRGBO(189, 0, 255, 0.4)
                 : data == 2
@@ -327,7 +327,7 @@ class _DragAndDropState extends State<DragAndDrop> {
         break;
       case 2:
         return DragTarget(
-          builder: (context, List<int> candidateData, rejectedData) {
+          builder: (context, List<int?> candidateData, rejectedData) {
             return Container(
               margin: EdgeInsets.only(right: 16),
               width: widthScreen / 2.35,
@@ -367,10 +367,10 @@ class _DragAndDropState extends State<DragAndDrop> {
               ),
             );
           },
-          onWillAccept: (data) {
+          onWillAccept: (dynamic data) {
             return true;
           },
-          onAccept: (data) {
+          onAccept: (dynamic data) {
             colorSecondReceiverAccepted = data == 1
                 ? Color.fromRGBO(189, 0, 255, 0.4)
                 : data == 2
@@ -404,7 +404,7 @@ class _DragAndDropState extends State<DragAndDrop> {
         break;
       case 3:
         return DragTarget(
-          builder: (context, List<int> candidateData, rejectedData) {
+          builder: (context, List<int?> candidateData, rejectedData) {
             return Container(
               margin: EdgeInsets.only(right: 16),
               width: widthScreen / 2.35,
@@ -444,10 +444,10 @@ class _DragAndDropState extends State<DragAndDrop> {
               ),
             );
           },
-          onWillAccept: (data) {
+          onWillAccept: (dynamic data) {
             return true;
           },
-          onAccept: (data) {
+          onAccept: (dynamic data) {
             colorThirdReceiverAccepted = data == 1
                 ? Color.fromRGBO(189, 0, 255, 0.4)
                 : data == 2
@@ -479,6 +479,9 @@ class _DragAndDropState extends State<DragAndDrop> {
           },
         );
         break;
+
+      default:
+        return Container();
     }
   }
 
@@ -496,10 +499,10 @@ class _DragAndDropState extends State<DragAndDrop> {
           definedPosition: index,
           setState: setState,
           onLongPress: () {
-            if (question.pieces["${index}"]["image"].isNotEmpty)
+            if (question.pieces["$index"]["image"].isNotEmpty)
               Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
                   arguments: DetailScreenArguments(
-                      grouping: "${index}",
+                      grouping: "$index",
                       question: question,
                       heroString: index == 1
                           ? 'sender1'
@@ -585,7 +588,7 @@ class _DragAndDropState extends State<DragAndDrop> {
     );
   }
 
-  Widget box({int index, double widthScreen, Question question, Color cor}) {
+  Widget box({int? index, required double widthScreen, required Question question, Color? cor}) {
     return Hero(
       tag: index == 1
           ? 'box1'
@@ -646,7 +649,7 @@ class _DragAndDropState extends State<DragAndDrop> {
               return Container();
             },
             loadingBuilder: (BuildContext context, Widget child,
-                ImageChunkEvent loadingProgress) {
+                ImageChunkEvent? loadingProgress) {
               if (loadingProgress == null) {
                 return child;
               }
@@ -654,7 +657,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                 child: CircularProgressIndicator(
                   value: loadingProgress.expectedTotalBytes != null
                       ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes
+                          loadingProgress.expectedTotalBytes!
                       : null,
                 ),
               );
@@ -766,7 +769,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                 return Container();
               },
               loadingBuilder: (BuildContext context, Widget child,
-                  ImageChunkEvent loadingProgress) {
+                  ImageChunkEvent? loadingProgress) {
                 if (loadingProgress == null) {
                   return child;
                 }
@@ -774,7 +777,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                   child: CircularProgressIndicator(
                     value: loadingProgress.expectedTotalBytes != null
                         ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes
+                            loadingProgress.expectedTotalBytes!
                         : null,
                   ),
                 );

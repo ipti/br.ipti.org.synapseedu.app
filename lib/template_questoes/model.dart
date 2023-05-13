@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
 import 'package:dio/dio.dart';
 import 'package:elesson/share/question_widgets.dart';
 
@@ -12,14 +11,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 // Modelo para os cobjects e questões, além dos métodos para serialização do json recebido do servidor.
 
 class Answer {
-  Future<dynamic> sendAnswerToApi(String pieceId, bool isCorrect, int finalTime,
-      {int intervalResolution, String groupId, String value}) async {
+  Future<dynamic> sendAnswerToApi(String? pieceId, bool isCorrect, int? finalTime,
+      {int? intervalResolution, String? groupId, String? value}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String actor_id = await prefs.getString('actor_id');
+    String actorId = prefs.getString('actor_id')!;
 
     // Response response;
     // BaseOptions options =
-    //     BaseOptions(baseUrl: "http://app.elesson.com.br/api-synapse");
+    //     BaseOptions(baseUrl: "http://app.apielesson.azurewebsites.net/api-synapse");
     // var dio = Dio(options);
     // FormData form = FormData.fromMap({
     //   "mode": "proficiency",
@@ -41,11 +40,11 @@ class Answer {
     // }
 
     try {
-      var response = await http.post("${API_URL}performance/actor/save", body: {
+      var response = await http.post(Uri(path: "${API_URL}performance/actor/save"), body: {
         "mode": "evaluation",
         "piece_id": "$pieceId",
         "group_id": "$groupId",
-        "actor_id": "$actor_id",
+        "actor_id": "$actorId",
         "final_time": "$finalTime",
         "interval_resolution": "$intervalResolution",
         "value": value != null ? value : "",
@@ -74,19 +73,19 @@ class ConversorVoiceToText {
     };
 
     var response;
-    Map<String, dynamic> responseBody;
+    Map<String, dynamic>? responseBody;
     var recognizedVoiceText;
 
     try {
       response = await http.post(
-        "https://brazilsouth.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR",
+        Uri(path: "https://brazilsouth.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=pt-BR"),
         body: bytes,
         headers: headers,
       );
 
       // The response body is a string that needs to be decoded as a json in order to get the extract the text.
       responseBody = jsonDecode(response.body);
-      recognizedVoiceText = responseBody["DisplayText"];
+      recognizedVoiceText = responseBody!["DisplayText"];
       print(recognizedVoiceText);
     } catch (e) {
       print('Error: ${e.toString()}');
@@ -178,12 +177,12 @@ class ConversorVoiceToText {
 }
 
 class Cobject {
-  String description;
-  String descriptionSound;
-  String discipline;
-  String totalPieces;
+  String? description;
+  String? descriptionSound;
+  String? discipline;
+  String? totalPieces;
   List<Question> questions;
-  String year;
+  String? year;
 
   Cobject({
     this.description,
@@ -196,8 +195,8 @@ class Cobject {
 }
 
 class Question {
-  String pieceId;
-  Map<String, String> header;
+  String? pieceId;
+  Map<String, String?> header;
   Map<String, dynamic> pieces;
 
   Question({
@@ -206,10 +205,10 @@ class Question {
     this.pieces = const {},
   });
 
-  List<String> questionItems = [];
-  List<String> questionImages = [];
+  List<String?> questionItems = [];
+  List<String?> questionImages = [];
 
-  List<String> addTextItems(Map<String, dynamic> json) {
+  List<String?> addTextItems(Map<String, dynamic> json) {
     //A implementação mudará quando tiver um exemplo sem bugs do json
     json.forEach((key, value) {
       questionItems.add(value["elements"][0]["generalProperties"][1]["value"]);
@@ -228,10 +227,10 @@ class Question {
     return questionImages;
   }
 
-  String src;
+  String? src;
 
-  Map<String, String> questionMultimediaSearch(Map<String, dynamic> json) {
-    Map<String, String> srcMap = {
+  Map<String, String?> questionMultimediaSearch(Map<String, dynamic> json) {
+    Map<String, String?> srcMap = {
       "image": "",
       "sound": "",
       "text": "",
@@ -285,7 +284,7 @@ class Question {
       }
     };
 
-    List<Map<String, String>> item = [
+    List<Map<String, String?>> item = [
       {"text": "", "sound": "", "image": ""},
       {"text": "", "sound": "", "image": ""},
       {"text": "", "sound": "", "image": ""},
@@ -339,7 +338,7 @@ class Question {
 
   // factory Question.fromJson(Map<String, dynamic> json) => Question(
 
-  String descriptionSound(Map<String, dynamic> elements) {
+  String? descriptionSound(Map<String, dynamic> elements) {
     if (elements["type"] == 'multimidia' &&
         elements['generalProperties'].length == 5 &&
         elements['generalProperties'][2]['name'] == 'src') {

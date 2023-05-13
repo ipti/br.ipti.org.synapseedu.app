@@ -1,10 +1,7 @@
 import 'package:elesson/degree_selection/degree_selection_view.dart';
-import 'package:elesson/register/sms_register.dart';
-import 'package:elesson/register/student_model.dart';
 import 'package:elesson/share/api.dart';
 import 'package:elesson/share/general_widgets.dart';
 import 'package:elesson/share/question_widgets.dart';
-import 'package:elesson/share/snackbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:screen_loader/screen_loader.dart';
@@ -21,13 +18,13 @@ class BlockSelection extends StatefulWidget {
 bool langOk = false;
 bool mathOk = false;
 bool sciOk = false;
-String studentUuid;
-String blockId = "";
-String studentName;
-String classroomFk;
+String? studentUuid;
+String? blockId = "";
+String? studentName;
+String? classroomFk;
 
 class _BlockSelectionState extends State<BlockSelection> {
-  SharedPreferences prefs;
+  late SharedPreferences prefs;
 
   @override
   void didChangeDependencies() async {
@@ -81,7 +78,7 @@ class _BlockSelectionState extends State<BlockSelection> {
     return CircularProgressIndicator();
   }
 
-  Key scaffoldKey;
+  Key? scaffoldKey;
   @override
   Widget build(BuildContext context) {
     double heightScreen = MediaQuery.of(context).size.height;

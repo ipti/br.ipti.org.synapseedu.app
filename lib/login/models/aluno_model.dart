@@ -1,9 +1,9 @@
 class AlunoData {
-  bool valid;
-  List<String> error;
-  List<Person> person;
-  List<Actor> actor;
-  List<Personage> personage;
+  bool? valid;
+  List<String>? error;
+  List<Person>? person;
+  List<Actor>? actor;
+  List<Personage>? personage;
 
   AlunoData({this.valid, this.error, this.person, this.actor, this.personage});
 
@@ -13,14 +13,14 @@ class AlunoData {
 }
 
 class Person {
-  String id;
-  String name;
-  String login;
-  String email;
-  String password;
-  String mother_name;
-  String father_name;
-  String phone;
+  String? id;
+  String? name;
+  String? login;
+  String? email;
+  String? password;
+  String? mother_name;
+  String? father_name;
+  String? phone;
 
   Person({this.id, this.name, this.login, this.email, this.password, this.mother_name, this.father_name, this.phone});
 
@@ -38,16 +38,16 @@ class Person {
 }
 
 class Actor {
-  String id;
-  String person_id;
-  String personage_id;
-  String classroom_fk;
-  String fk_id;
-  String source;
-  String personId;
-  String personageId;
-  String classroomFk;
-  String fkId;
+  String? id;
+  String? person_id;
+  String? personage_id;
+  String? classroom_fk;
+  String? fk_id;
+  String? source;
+  String? personId;
+  String? personageId;
+  String? classroomFk;
+  String? fkId;
 
   Actor({this.id, this.person_id, this.personage_id, this.classroom_fk, this.fk_id, this.source, this.personId, this.personageId, this.classroomFk, this.fkId});
 
@@ -68,8 +68,8 @@ class Actor {
 }
 
 class Personage {
-  String id;
-  String name;
+  String? id;
+  String? name;
 
   Personage({this.id, this.name});
 

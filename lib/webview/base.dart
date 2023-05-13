@@ -6,7 +6,7 @@ import 'webview_pagina.dart';
 import 'models/webview_modelo.dart';
 
 class Base extends StatefulWidget {
-  Base({Key key}) : super(key: key);
+  Base({Key? key}) : super(key: key);
 
   @override
   _BaseState createState() => _BaseState();

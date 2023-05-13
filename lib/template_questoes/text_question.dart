@@ -8,16 +8,16 @@ import 'package:flutter_riverpod/all.dart';
 class TextQuestion extends ConsumerWidget {
   static const routeName = '/TXT';
 
-  var cobjectList = new List<Cobject>();
-  var cobjectIdList = new List<String>();
-  int questionIndex;
-  int cobjectIndex;
-  int cobjectIdListLength;
-  int cobjectQuestionsLength;
+  List<Cobject> cobjectList = [];
+  List<String?>? cobjectIdList = [];
+  int? questionIndex;
+  int? cobjectIndex;
+  int? cobjectIdListLength;
+  int? cobjectQuestionsLength;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    final ScreenArguments args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     cobjectList = args.cobjectList;
     cobjectIdList = args.cobjectIdList;
     questionIndex = args.questionIndex;
@@ -25,17 +25,17 @@ class TextQuestion extends ConsumerWidget {
     cobjectIdListLength = args.cobjectIdLength;
     cobjectQuestionsLength = args.cobjectQuestionsLength;
 
-    String questionDescription = cobjectList[0].description;
-    String headerText = cobjectList[0].questions[questionIndex].header["text"];
+    String questionDescription = cobjectList[0].description!;
+    String headerText = cobjectList[0].questions[questionIndex!].header["text"]!;
 
     String questionText =
-        cobjectList[0].questions[questionIndex].pieces['1']['text'];
-    String pieceId = cobjectList[0].questions[questionIndex].pieceId;
+        cobjectList[0].questions[questionIndex!].pieces['1']['text'];
+    String? pieceId = cobjectList[0].questions[questionIndex!].pieceId;
     Stopwatch chronometer = Stopwatch();
 
     return Scaffold(
       body: TemplateSlider(
-        currentId: cobjectIdList[cobjectIndex],
+        currentId: cobjectIdList![cobjectIndex!],
         cobjectIdList: cobjectIdList,
         cobjectIdListLength: cobjectIdListLength,
         cobjectQuestionsLength: cobjectQuestionsLength,
@@ -52,10 +52,10 @@ class TextQuestion extends ConsumerWidget {
         //     fontFamily: 'Mulish',
         //   ),
         // ),
-        sound: cobjectList[0].questions[questionIndex].header["sound"],
-        linkImage: cobjectList[0].questions[0].header["image"].isNotEmpty
-            ? 'https://elesson.com.br/app/library/image/' +
-                cobjectList[0].questions[0].header["image"]
+        sound: cobjectList[0].questions[questionIndex!].header["sound"],
+        linkImage: cobjectList[0].questions[0].header["image"]!.isNotEmpty
+            ? 'https://apielesson.azurewebsites.net/app/library/image/' +
+                cobjectList[0].questions[0].header["image"]!
             : null,
         text: Text(
           headerText,
@@ -76,7 +76,7 @@ class TextQuestion extends ConsumerWidget {
                   fontFamily: 'Mulish',
                 ),
               ),
-              submitAnswer(context, cobjectList, 'TXT', ++questionIndex,
+              submitAnswer(context, cobjectList, 'TXT', questionIndex!+1,
                   cobjectIndex, pieceId, true,
                   cobjectIdListLength: cobjectIdListLength,
                   cobjectQuestionsLength: cobjectQuestionsLength,

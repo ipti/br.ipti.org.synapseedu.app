@@ -5,9 +5,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 
 class TwilioPhoneVerify{
-  String accountSid, serviceSid, authToken, baseUrl;
+  String? accountSid, serviceSid, authToken, baseUrl;
 
-  TwilioPhoneVerify({@required this.accountSid, @required this.authToken, @required this.serviceSid}){
+  TwilioPhoneVerify({required this.accountSid, required this.authToken, required this.serviceSid}){
     baseUrl = 'https://verify.twilio.com/v2/Services/$serviceSid';
   }
 
@@ -16,7 +16,7 @@ class TwilioPhoneVerify{
     var authn = 'Basic ' + base64Encode(utf8.encode('$accountSid:$authToken'));
     String url = '$baseUrl/Verifications';
     var response = await http.post(
-        url, body: {'To': phone, 'Channel': 'sms'},
+        Uri(path: url), body: {'To': phone, 'Channel': 'sms'},
         headers: {'Authorization': authn});
 
     if (response.statusCode == 200||response.statusCode == 201) {
@@ -30,7 +30,7 @@ class TwilioPhoneVerify{
     var authn = 'Basic ' + base64Encode(utf8.encode('$accountSid:$authToken'));
     String url = '$baseUrl/VerificationCheck';
     var response = await http.post(
-        url, body: {'To': phone, 'Code': code},
+        Uri(path: url), body: {'To': phone, 'Code': code},
         headers: {'Authorization': authn});
 
     if ((response.statusCode == 200||response.statusCode == 201) &&(jsonDecode(response.body)['valid'] == true)) {

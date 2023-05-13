@@ -18,8 +18,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
-import './register/sms_register.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'activity_selection/activity_selection_view.dart';
 import 'webview/headless_webview.dart';
 import 'template_questoes/text_question.dart';
@@ -82,9 +81,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   var questionType;
 
-  var cobject = new List<dynamic>();
+  var cobject = [];
 
-  Future<bool> isUserConfirmed() async {
+  Future<void> isUserConfirmed() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // setState(() {
     isLogged = prefs.getBool('isConfirmed') ?? false;
@@ -115,9 +114,9 @@ class _HomeState extends State<Home> {
           minWidth: 0,
           // hoverColor: Colors.red,
         ),
-        primaryTextTheme: GoogleFonts.muliTextTheme(),
+        // primaryTextTheme: GoogleFonts.muliTextTheme(),
         fontFamily: 'Mulish',
-        textTheme: GoogleFonts.muliTextTheme(),
+        // textTheme: GoogleFonts.muliTextTheme(),
       ),
       initialRoute: isLogged && isAdmin
           ? '/admin'
@@ -127,7 +126,8 @@ class _HomeState extends State<Home> {
       // initialRoute: BlockSelection.routeName,
       // initialRoute: SettingsScreen.routeName,
       // initialRoute: isLogged ? '/' : SmsRegisterView.routeName,
-      // initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName, // alterado para apresentação
+      // initialRoute: isLogged ? '/' : ActivitySelectionForm.routeName,
+      // alterado para apresentação
       routes: {
         '/': (context) => BlockSelection(),
         '/admin': (context) => AdminPage(),

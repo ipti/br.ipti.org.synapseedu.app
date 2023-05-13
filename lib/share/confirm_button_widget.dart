@@ -14,17 +14,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ConfirmButtonWidget extends StatefulWidget {
   const ConfirmButtonWidget({
-    Key key,
+    Key? key,
     // @required this.buttonHeight,
     // @required this.minButtonWidth,
-    @required this.context,
-    @required this.cobjectList,
-    @required this.cobjectIdList,
-    @required this.questionType,
-    @required this.questionIndex,
-    @required this.cobjectIndex,
+    required this.context,
+    required this.cobjectList,
+    required this.cobjectIdList,
+    required this.questionType,
+    required this.questionIndex,
+    required this.cobjectIndex,
     this.pieceId,
-    @required this.isCorrect,
+    required this.isCorrect,
     this.groupId,
     this.value,
     this.cobjectIdListLength,
@@ -35,16 +35,16 @@ class ConfirmButtonWidget extends StatefulWidget {
   // final double minButtonWidth;
   final BuildContext context;
   final List<Cobject> cobjectList;
-  final List<String> cobjectIdList;
+  final List<String?>? cobjectIdList;
   final String questionType;
   final int questionIndex;
-  final int cobjectIndex;
-  final String pieceId;
+  final int? cobjectIndex;
+  final String? pieceId;
   final bool isCorrect;
-  final String groupId;
-  final String value;
-  final int cobjectIdListLength;
-  final int cobjectQuestionsLength;
+  final String? groupId;
+  final String? value;
+  final int? cobjectIdListLength;
+  final int? cobjectQuestionsLength;
 
   @override
   _ConfirmButtonWidgetState createState() => _ConfirmButtonWidgetState();
@@ -61,7 +61,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
 
   double confirmButtonBackgroundOpacity = 0;
 
-  SharedPreferences prefs;
+  SharedPreferences? prefs;
 
   // bool isCorrect = true;
 
@@ -69,10 +69,10 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
 
   bool isSecondClick = false;
 
-  Timer nextQuestionTimer;
+  late Timer nextQuestionTimer;
 
   final Connectivity _connectivity = Connectivity();
-  StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  StreamSubscription<ConnectivityResult>? _connectivitySubscription;
   String _connectionStatus = 'Unknown';
 
   @override
@@ -235,7 +235,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
                 widget.pieceId,
                 widget.isCorrect,
                 timeEnd,
-                intervalResolution: (timeEnd - timeStart),
+                intervalResolution: (timeEnd! - timeStart!),
                 groupId: widget.groupId != null ? widget.groupId : "",
                 value: widget.value != null ? widget.value : "",
               );
@@ -251,7 +251,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
                   cobjectList: widget.cobjectList,
                   cobjectIdList: widget.cobjectIdList,
                   cobjectIdListLength: widget.cobjectIdListLength,
-                  cobjectQuestionsLength: widget.cobjectQuestionsLength);
+                  cobjectQuestionsLength: widget.cobjectQuestionsLength!);
             } catch (e) {
               // print('FOI AQUI');
             }

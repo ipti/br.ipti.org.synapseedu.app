@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
+// import 'package:lottie/lottie.dart';
 import 'elesson_icon_lib_icons.dart';
 import 'global_variables.dart';
 
 Widget elessonCard(
-    {String backgroundImage,
-    String text,
-    double screenWidth,
-    Function onTap,
-    BuildContext context,
-    bool blockDone}) {
+    {required String backgroundImage,
+    required String text,
+    double? screenWidth,
+    Function? onTap,
+    BuildContext? context,
+    bool? blockDone}) {
   return GestureDetector(
     onTap: () {
-      Future<String> retorno = onTap(context);
+      Future<String>? retorno = onTap!(context);
     },
     child: Container(
       margin: EdgeInsets.all(2),
@@ -80,16 +80,16 @@ Widget loadingAnimation() {
   return Container(
     height: 100,
     width: 100,
-    child: Lottie.asset(
-      'assets/animations/loading.json',
-      width: 100,
-      height: 100,
-      fit: BoxFit.fill,
-    ),
+    // child: Lottie.asset(
+    //   'assets/animations/loading.json',
+    //   width: 100,
+    //   height: 100,
+    //   fit: BoxFit.fill,
+    // ),
   );
 }
 
-Widget initTitle({String text, double heightScreen, double bottomMargin}) {
+Widget initTitle({String? text, required double heightScreen, double? bottomMargin}) {
   return Container(
     height: heightScreen * 0.12,
     margin: EdgeInsets.only(bottom: bottomMargin == null ? 0 : bottomMargin),
@@ -118,7 +118,7 @@ Widget initTitle({String text, double heightScreen, double bottomMargin}) {
               ),
               Center(
                 child: Text(
-                  text,
+                  text!,
                   style: TextStyle(
                     color: Color(0XFF00004C),
                     fontWeight: FontWeight.bold,
@@ -131,7 +131,7 @@ Widget initTitle({String text, double heightScreen, double bottomMargin}) {
           )
         : Center(
             child: Text(
-              text,
+              text!,
               style: TextStyle(
                 color: Color(0XFF00004C),
                 fontWeight: FontWeight.bold,

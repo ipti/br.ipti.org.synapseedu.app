@@ -8,16 +8,16 @@ abstract class Bloc {
 class DeepLinkBloc extends Bloc {
 
   //Event Channel creation
-  static const stream = const EventChannel('app.elesson.com.br/events');
+  static const stream = const EventChannel('app.apielesson.azurewebsites.net/events');
 
   //Method channel creation
-  static const platform = const MethodChannel('app.elesson.com.br/channel');
+  static const platform = const MethodChannel('app.apielesson.azurewebsites.net/channel');
 
-  StreamController<String> _stateController = StreamController();
+  StreamController<String?> _stateController = StreamController();
 
-  Stream<String> get state => _stateController.stream;
+  Stream<String?> get state => _stateController.stream;
 
-  Sink<String> get stateSink => _stateController.sink;
+  Sink<String?> get stateSink => _stateController.sink;
 
 
   DeepLinkBloc() {
@@ -27,7 +27,7 @@ class DeepLinkBloc extends Bloc {
   }
 
 
-  _onRedirected(String uri) {
+  _onRedirected(String? uri) {
     stateSink.add(uri);
   }
 
@@ -38,7 +38,7 @@ class DeepLinkBloc extends Bloc {
   }
 
 
-  Future<String> startUri() async {
+  Future<String?> startUri() async {
     try {
       return platform.invokeMethod('initialLink');
     } on PlatformException catch (e) {

@@ -14,25 +14,25 @@ import '../model.dart';
 // Classe que implementa o template geral de questões.
 
 class TemplateSlider extends StatefulWidget {
-  final String title;
-  final Widget text;
-  final String linkImage;
-  final String sound;
-  bool showConfirmButton;
+  final String? title;
+  final Widget? text;
+  final String? linkImage;
+  final String? sound;
+  bool? showConfirmButton;
   final bool isTextTemplate;
   final bool isPreTemplate;
-  int questionIndex;
-  int cobjectIndex;
-  DateTime startTime;
-  final Widget activityScreen;
-  final int cobjectIdListLength;
-  final int cobjectQuestionsLength;
-  final List<Cobject> cobjectList;
-  final List<String> cobjectIdList;
-  final String currentId;
+  int? questionIndex;
+  int? cobjectIndex;
+  DateTime? startTime;
+  final Widget? activityScreen;
+  final int? cobjectIdListLength;
+  final int? cobjectQuestionsLength;
+  final List<Cobject>? cobjectList;
+  final List<String?>? cobjectIdList;
+  final String? currentId;
 
   TemplateSlider({
-    Key key,
+    Key? key,
     this.startTime,
     this.title,
     this.text,
@@ -59,7 +59,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
   bool showSecondScreen = false;
   Color colorResponder = Color(0xFF0000FF);
   Color boxResponder = Colors.white;
-  List<String> formattedTitle;
+  late List<String> formattedTitle;
   bool isTitleFormatted = false;
 
   // AudioPlayer playerDescription;
@@ -106,7 +106,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
   }
 
   final Connectivity _connectivity = Connectivity();
-  StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
   String _connectionStatus = 'Unknown';
 
   @override
@@ -128,8 +128,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
   }
 
   bool formatTitle() {
-    if (!widget.title.contains(RegExp("<[a-zA-Z]>"))) return false;
-    List<String> openingTagFormat = widget.title.split(RegExp("<[a-zA-Z]>"));
+    if (!widget.title!.contains(RegExp("<[a-zA-Z]>"))) return false;
+    List<String> openingTagFormat = widget.title!.split(RegExp("<[a-zA-Z]>"));
     // print(openingTagFormat);
     formattedTitle = openingTagFormat[1].split(RegExp(r"<\/[a-zA-Z]>"));
     formattedTitle.insert(0, openingTagFormat[0]);
@@ -224,7 +224,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
             ),
             Row(
               children: [
-                if (widget.isTextTemplate && widget.questionIndex > 0)
+                if (widget.isTextTemplate && widget.questionIndex! > 0)
                   backButton(buttonHeight),
                 if (widget.isTextTemplate)
                   SizedBox(
@@ -278,12 +278,12 @@ class _TemplateSliderState extends State<TemplateSlider> {
                               indexTextQuestion++;
                               submitLogic(
                                 context,
-                                ++widget.questionIndex,
+                                widget.questionIndex! +1,
                                 widget.cobjectIndex,
                                 'TXT',
                                 cobjectIdListLength: widget.cobjectIdListLength,
                                 cobjectQuestionsLength:
-                                    widget.cobjectQuestionsLength,
+                                    widget.cobjectQuestionsLength!,
                                 cobjectList: cobjectList,
                                 cobjectIdList: widget.cobjectIdList,
                               );
@@ -347,9 +347,9 @@ class _TemplateSliderState extends State<TemplateSlider> {
             indexTextQuestion++;
             submitLogic(
               context,
-              ++widget.questionIndex,
+              widget.questionIndex! +1,
               widget.cobjectIndex,
-              'TXT',
+              'TXT', cobjectList: [], cobjectQuestionsLength: 0,
             );
           } else if (details.delta.dy > 0) {
             if (indexTextQuestion > 0) {
@@ -422,7 +422,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                             // ),
                           ),
                           child: Image.network(
-                            widget.linkImage,
+                            widget.linkImage!,
                             fit: BoxFit.cover,
                             errorBuilder: (context, exception, stackTrace) {
                               // print('erro');
@@ -430,7 +430,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                               return Container();
                             },
                             loadingBuilder: (BuildContext context, Widget child,
-                                ImageChunkEvent loadingProgress) {
+                                ImageChunkEvent? loadingProgress) {
                               if (loadingProgress == null) {
                                 return child;
                               }
@@ -439,7 +439,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
                                   value: loadingProgress.expectedTotalBytes !=
                                           null
                                       ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes
+                                          loadingProgress.expectedTotalBytes!
                                       : null,
                                 ),
                               );

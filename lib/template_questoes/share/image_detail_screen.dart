@@ -25,9 +25,9 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final arguments =
-        ModalRoute.of(context).settings.arguments as DetailScreenArguments;
+        ModalRoute.of(context)!.settings.arguments as DetailScreenArguments;
     final grouping = arguments.grouping;
-    Question question = arguments.question;
+    Question question = arguments.question!;
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
@@ -69,9 +69,9 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
                 ),
                 child: Hero(
                   tag: arguments.heroString != null
-                      ? arguments.heroString
-                      : grouping,
-                  child: question.pieces[grouping]["image"].isNotEmpty
+                      ? arguments.heroString!
+                      : grouping!,
+                  child: question.pieces[grouping!]["image"].isNotEmpty
                       ? Image.network(
                           BASE_URL +
                               '/image/' +
@@ -79,7 +79,7 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
                           fit: BoxFit.fill,
                           width: screenWidth,
                           loadingBuilder: (BuildContext context, Widget child,
-                              ImageChunkEvent loadingProgress) {
+                              ImageChunkEvent? loadingProgress) {
                             if (loadingProgress == null) {
                               return child;
                             }
@@ -88,7 +88,7 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
                                 value: loadingProgress.expectedTotalBytes !=
                                         null
                                     ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes
+                                        loadingProgress.expectedTotalBytes!
                                     : null,
                               ),
                             );
@@ -205,9 +205,9 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
 }
 
 class DetailScreenArguments {
-  Question question;
-  String grouping;
-  String heroString;
+  Question? question;
+  String? grouping;
+  String? heroString;
 
   DetailScreenArguments({this.question, this.grouping, this.heroString});
 }

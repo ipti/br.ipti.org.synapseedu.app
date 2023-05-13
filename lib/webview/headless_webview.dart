@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -10,7 +9,7 @@ class HeadlessWebView extends StatefulWidget {
 }
 
 class _HeadlessWebViewState extends State<HeadlessWebView> {
-  HeadlessInAppWebView headlessWebView;
+  late HeadlessInAppWebView headlessWebView;
   String url = "";
   String consoleText = "Mensagem do console: ";
 
@@ -19,41 +18,41 @@ class _HeadlessWebViewState extends State<HeadlessWebView> {
     super.initState();
 
     headlessWebView = new HeadlessInAppWebView(
-      initialUrl: "https://flutter.dev/",
-      initialOptions: InAppWebViewGroupOptions(
-        crossPlatform: InAppWebViewOptions(
-          debuggingEnabled: true,
-        ),
-      ),
-      onWebViewCreated: (controller) {
-        print('HeadlessInAppWebView created!');
-      },
-      onConsoleMessage: (controller, consoleMessage) {
-        print("CONSOLE MESSAGE: " + consoleMessage.message);
-        setState(() {
-          consoleText = consoleMessage.message;
-        });
-      },
-      onLoadStart: (controller, url) async {
-        print("onLoadStart $url");
-        setState(() {
-          this.url = url;
-        });
-      },
-      onLoadStop: (controller, url) async {
-        print("onLoadStop $url");
-        setState(() {
-          this.url = url;
-        });
-      },
-      onUpdateVisitedHistory: (InAppWebViewController controller, String url,
-          bool androidIsReload) {
-        print("onUpdateVisitedHistory $url");
-        setState(() {
-          this.url = url;
-        });
-      },
-    );
+      initialUrlRequest: URLRequest(url: Uri.parse("https://flutter.dev/"),
+      // initialOptions: InAppWebViewGroupOptions(
+      //   // crossPlatform: InAppWebViewOptions(
+      //   //   debuggingEnabled: true,
+      //   // ),
+      // ),
+      // onWebViewCreated: (controller) {
+      //   print('HeadlessInAppWebView created!');
+      // },
+      // onConsoleMessage: (controller, consoleMessage) {
+      //   print("CONSOLE MESSAGE: " + consoleMessage.message);
+      //   setState(() {
+      //     consoleText = consoleMessage.message;
+      //   });
+      // },
+      // onLoadStart: (controller, url) async {
+      //   print("onLoadStart $url");
+      //   setState(() {
+      //     this.url = url!.host;
+      //   });
+      // },
+      // onLoadStop: (controller, url) async {
+      //   print("onLoadStop $url");
+      //   setState(() {
+      //     this.url = url!.path;
+      //   });
+      // },
+      // onUpdateVisitedHistory: (InAppWebViewController controller, String url,
+      //     bool androidIsReload) {
+      //   print("onUpdateVisitedHistory $url");
+      //   setState(() {
+      //     this.url = url;
+      //   });
+      // },
+    ));
   }
 
   @override
@@ -93,7 +92,7 @@ class _HeadlessWebViewState extends State<HeadlessWebView> {
                           .evaluateJavascript(
                               source:
                                   """console.log('Mensagem do console!');""");
-                    } on MissingPluginException catch (e) {
+                    } on MissingPluginException {
                       print(
                           "HeadlessInAppWebView is not running. Click on \"Run HeadlessInAppWebView\"!");
                     }

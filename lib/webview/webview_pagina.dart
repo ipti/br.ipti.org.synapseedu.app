@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -8,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'models/webview_modelo.dart';
 
 class WebViewPagina extends StatefulWidget {
-  WebViewPagina({@required this.webViewModel});
+  WebViewPagina({required this.webViewModel});
 
   final WebViewModel webViewModel;
 
@@ -25,7 +24,7 @@ class WebViewPaginaState extends State<WebViewPagina> {
 
   InAppWebView _buildWebView() {
     //Propriedades do WebView pra ambas as plataformas
-    var initialOptions = widget.webViewModel.options;
+    var initialOptions = widget.webViewModel.options!;
     initialOptions.crossPlatform.useOnDownloadStart = true;
     initialOptions.crossPlatform.useOnLoadResource = true;
     initialOptions.crossPlatform.useShouldOverrideUrlLoading = true;
@@ -41,7 +40,7 @@ class WebViewPaginaState extends State<WebViewPagina> {
     initialOptions.ios.isFraudulentWebsiteWarningEnabled = true;
 
     return InAppWebView(
-      initialUrl: 'http://elesson.com.br/login.html',
+      initialUrlRequest: URLRequest(url: Uri.parse('http://apielesson.azurewebsites.net/login.html')),
       initialOptions: initialOptions,
       onWebViewCreated: (controller) async {
         if (Platform.isAndroid) {
@@ -50,29 +49,24 @@ class WebViewPaginaState extends State<WebViewPagina> {
         widget.webViewModel.options = await controller.getOptions();
       },
 
-      shouldOverrideUrlLoading:
-          (controller, shouldOverrideUrlLoadingRequest) async {
-        var url = shouldOverrideUrlLoadingRequest.url;
-        var uri = Uri.parse(url);
-
-        // vai garantir que o webview seja capaz de rodar o site e as demandas dele, dentro do proprio app ( se remover ele vai pedir pra rodar o site no navegador do dispositivo)
-        if (!["http", "https", "file", "chrome", "data", "javascript", "about"]
-            .contains(uri.scheme)) {
-          if (await canLaunch(url)) {
-            // carrega a URL
-            await launch(url);
-            return ShouldOverrideUrlLoadingAction.CANCEL;
-          }
-        }
-        return ShouldOverrideUrlLoadingAction.ALLOW;
-      },
+      // shouldOverrideUrlLoading: (controller, shouldOverrideUrlLoadingRequest) async {
+      //   var url = shouldOverrideUrlLoadingRequest.url;
+      //   var uri = Uri.parse(url);
+      //
+      //   // vai garantir que o webview seja capaz de rodar o site e as demandas dele, dentro do proprio app ( se remover ele vai pedir pra rodar o site no navegador do dispositivo)
+      //   if (!["http", "https", "file", "chrome", "data", "javascript", "about"].contains(uri.scheme)) {
+      //     if (await canLaunch(url)) {
+      //       // carrega a URL
+      //       await launch(url);
+      //       return ShouldOverrideUrlLoadingAction.CANCEL;
+      //     }
+      //   }
+      //   return ShouldOverrideUrlLoadingAction.ALLOW;
+      // },
 
       // Permissões
-      androidOnPermissionRequest: (InAppWebViewController controller,
-          String origin, List<String> resources) async {
-        return PermissionRequestResponse(
-            resources: resources,
-            action: PermissionRequestResponseAction.GRANT);
+      androidOnPermissionRequest: (InAppWebViewController controller, String origin, List<String> resources) async {
+        return PermissionRequestResponse(resources: resources, action: PermissionRequestResponseAction.GRANT);
       },
     );
   }

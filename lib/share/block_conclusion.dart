@@ -1,18 +1,16 @@
-import 'package:elesson/share/colors.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/block_conclusion_arguments_model.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class BlockConclusionScreen extends StatelessWidget {
   static const routeName = '/block_conclusion';
 
-  String studentName;
+  String? studentName;
   final String module = '1';
 
   // final String discipline = 'LINGUAGENS';
-  String discipline;
-  String year;
+  String? discipline;
+  String? year;
 
   Widget disciplineCharacter() {
     Widget imageAsset;
@@ -31,7 +29,7 @@ class BlockConclusionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BlockConclusionArguments args = ModalRoute.of(context).settings.arguments;
+    final BlockConclusionArguments args = ModalRoute.of(context)!.settings.arguments as BlockConclusionArguments;
     discipline = args.discipline;
     studentName = args.studentName ?? 'Aluno(a)';
     year = args.year;

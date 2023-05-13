@@ -1,4 +1,3 @@
-import 'package:elesson/degree_selection/degree_selection_view.dart';
 import 'package:elesson/register/sms_register.dart';
 import 'package:elesson/register/student_model.dart';
 import 'package:elesson/share/general_widgets.dart';

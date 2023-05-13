@@ -1,16 +1,13 @@
-import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-/**
- * Tela de configuração do aplicativo. No momento, é apenas uma tela sem funções lógicas, apenas implementada para o aplicativo entrar na playstore. *
- *
- */
+/// Tela de configuração do aplicativo. No momento, é apenas uma tela sem funções lógicas, apenas implementada para o aplicativo entrar na playstore. *
+///
 
 class SettingsScreen extends StatefulWidget {
-  SettingsScreen({Key key}) : super(key: key);
+  SettingsScreen({Key? key}) : super(key: key);
   static const routeName = '/settings';
 
   @override
@@ -63,7 +60,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return prefs.getBool('termos') ?? false;
   }
 
-  Future<bool> setTermState(bool value) async {
+  Future<void> setTermState(bool value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('termos', value);
   }
@@ -153,7 +150,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               text: TextSpan(
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    launch("https://www.elesson.com.br/privacidade/");
+                    launch("https://www.apielesson.azurewebsites.net/privacidade/");
                   },
                 text: 'Políticas de privacidade',
                 style: TextStyle(

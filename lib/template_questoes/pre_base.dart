@@ -1,5 +1,4 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
-import 'package:elesson/share/api.dart';
 import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/model.dart';
@@ -8,21 +7,15 @@ import 'package:elesson/template_questoes/share/description_format.dart';
 import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:flutter_riverpod/all.dart';
 
 // import 'package:audioplayers/audioplayers.dart';
-import 'package:file/file.dart';
 import 'package:file/local.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 
 // O pacote que está em testes. O Dart/Flutter está com problemas de integração com a API da Azure.
 
-import 'package:speech_to_text/speech_to_text.dart' as stt;
 
-import 'dart:async';
-import 'dart:io' as io;
 
 final cobjectProvider = Provider<Cobjects>((ref) {
   return Cobjects();
@@ -43,12 +36,12 @@ class SingleLineTextQuestion extends StatefulWidget {
 
 class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
   // ignore: non_constant_identifier_names
-  var cobjectList = new List<Cobject>();
-  var cobjectIdList = new List<String>();
-  int questionIndex;
-  int cobjectIndex;
-  int cobjectIdListLength;
-  int cobjectQuestionsLength;
+  List<Cobject> cobjectList = [];
+  List<String> cobjectIdList = [];
+  late int questionIndex;
+  int? cobjectIndex;
+  int? cobjectIdListLength;
+  int? cobjectQuestionsLength;
 
   String alertMessage = "FALE AGORA...";
   String naoEndendivel =
@@ -60,7 +53,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
   Color colorAlertMessage = Colors.red;
   bool isCorrect = false;
 
-  String correctAnswer;
+  String? correctAnswer;
   bool firstRecording = true;
 
   final _formKey = GlobalKey<FormState>();
@@ -88,7 +81,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
 
   @override
   Widget build(BuildContext context) {
-    final ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    final ScreenArguments args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
 
     cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
@@ -96,10 +89,10 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
     cobjectIdListLength = args.cobjectIdLength;
     cobjectQuestionsLength = args.cobjectQuestionsLength;
 
-    String questionDescription = cobjectList[0].description;
+    String questionDescription = cobjectList[0].description!;
     String questionText =
-        cobjectList[0].questions[questionIndex].header["text"];
-    String pieceId = cobjectList[0].questions[questionIndex].pieceId;
+        cobjectList[0].questions[questionIndex].header["text"]!;
+    String? pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
     correctAnswer = cobjectList[0].questions[0].pieces["1"]["text"];
     Size deviceSize = MediaQuery.of(context).size;
@@ -123,9 +116,9 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
           ),
         ),
         sound: cobjectList[0].questions[questionIndex].header["sound"],
-        linkImage: cobjectList[0].questions[0].header["image"].isNotEmpty
-            ? 'https://elesson.com.br/app/library/image/' +
-                cobjectList[0].questions[0].header["image"]
+        linkImage: cobjectList[0].questions[0].header["image"]!.isNotEmpty
+            ? 'https://apielesson.azurewebsites.net/app/library/image/' +
+                cobjectList[0].questions[0].header["image"]!
             : null,
         isPreTemplate: true,
         activityScreen: Form(
@@ -183,7 +176,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                           ),
                           onChanged: (val) {
                             verificarResposta(
-                                    respostasCorretas: correctAnswer,
+                                    respostasCorretas: correctAnswer!,
                                     respostaUsuario:
                                         _textController.text.toString())
                                 ? isCorrect = true
@@ -196,7 +189,7 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
                             }
                           },
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value!.isEmpty) {
                               return 'Não se esqueça de digitar a resposta!';
                             }
                             return null;

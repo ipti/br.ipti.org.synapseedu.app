@@ -9,16 +9,12 @@ import '../share/question_widgets.dart';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 // import 'package:twilio_phone_verify/twilio_phone_verify.dart';
 import '../share/header_widget.dart';
 
-/**
- * * Tela de verificação de pin que aparece após o envio do número de celular.
- * ? A verificação é feita através da api do Twilio.
- */
+/// * Tela de verificação de pin que aparece após o envio do número de celular.
+/// ? A verificação é feita através da api do Twilio.
 
 class CodeVerifyView extends StatefulWidget {
   static const routeName = "/code-verify";
@@ -29,22 +25,22 @@ class CodeVerifyView extends StatefulWidget {
 
 class _CodeVerifyViewState extends State<CodeVerifyView>
     with TickerProviderStateMixin {
-  String _code;
-  StreamController<ErrorAnimationType> errorController;
+  String? _code;
+  late StreamController<ErrorAnimationType> errorController;
   TextEditingController _pinCodeController = TextEditingController();
   final FocusNode _pinPutFocusNode = FocusNode();
 
-  Student student;
+  Student? student;
 
-  TwilioPhoneVerify _twilioPhoneVerify;
+  late TwilioPhoneVerify _twilioPhoneVerify;
 
   bool hasError = false;
   bool resendCode = false;
 
-  AnimationController countdownAnimationController;
+  late AnimationController countdownAnimationController;
 
   String get timerString {
-    Duration duration = countdownAnimationController.duration *
+    Duration duration = countdownAnimationController.duration! *
         countdownAnimationController.value;
     return duration.inSeconds < 10
         ? '${((duration.inSeconds % 60) + 1).toString().padLeft(1, '0')}'
@@ -108,22 +104,22 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
 
   Future<void> verifyCode(Student student, String code) async {
     var result =
-        await _twilioPhoneVerify.verifySmsCode('+55' + student.phone, code);
+        await _twilioPhoneVerify.verifySmsCode('+55' + student.phone!, code);
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     print("Enviado $code");
 
     if (result['message'] == 'approved') {
       prefs.setBool('isConfirmed', true);
-      prefs.setString('student_name', student.name.split(" ")[0].toUpperCase());
+      prefs.setString('student_name', student.name!.split(" ")[0].toUpperCase());
       prefs.setInt('student_id', student.id);
-      prefs.setString('student_phone', student.phone);
-      prefs.setString('actor_id', student.actorId);
-      prefs.setString('classroomFk', student.classroomFk);
+      prefs.setString('student_phone', student.phone!);
+      prefs.setString('actor_id', student.actorId!);
+      prefs.setString('classroomFk', student.classroomFk!);
 
       print("ActorId salvo: ${student.actorId}");
 
-      if (loginQuery.student.personageId == 4) {
+      if (loginQuery.student!.personageId == 4) {
         prefs.setBool('admin', true);
         Navigator.of(context).pushReplacementNamed('/admin');
       } else {
@@ -141,11 +137,11 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
   }
 
   String currentText = "";
-  GlobalKey<FormState> formKey;
+  GlobalKey<FormState>? formKey;
 
   @override
   Widget build(BuildContext context) {
-    student = ModalRoute.of(context).settings.arguments;
+    student = ModalRoute.of(context)!.settings.arguments as Student?;
 
     double screenHeight = MediaQuery.of(context).size.height;
     double buttonHeight =
@@ -153,7 +149,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
     double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
     double screenWidth = MediaQuery.of(context).size.width;
 
-    print('Telefone: ${student.phone}');
+    print('Telefone: ${student!.phone}');
 
     return Scaffold(
       body: Center(
@@ -204,7 +200,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
                   cursorColor: Colors.black,
                   animationDuration: const Duration(milliseconds: 300),
                   textStyle: const TextStyle(fontSize: 20, height: 1.6),
-                  backgroundColor: Colors.grey[50],
+                  backgroundColor: Colors.grey[50]!,
                   // enableActiveFill: true,
                   errorAnimationController: errorController,
                   controller: _pinCodeController,
@@ -218,7 +214,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
                   // ],
                   onCompleted: (v) {
                     print("Completed. Code: ${_pinCodeController.text}");
-                    verifyCode(student, _pinCodeController.text);
+                    verifyCode(student!, _pinCodeController.text);
                     setState(() {
                       hasError = true;
                     });
@@ -248,7 +244,7 @@ class _CodeVerifyViewState extends State<CodeVerifyView>
                     text: TextSpan(
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          sendCode(student.phone);
+                          sendCode(student!.phone!);
                           setState(() {
                             resendCode = false;
                           });

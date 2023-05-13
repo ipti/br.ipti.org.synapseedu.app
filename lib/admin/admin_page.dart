@@ -1,4 +1,6 @@
 // import 'package:elesson/activity_selection/block_selection_view.dart';
+import 'dart:async';
+
 import 'package:elesson/share/api.dart';
 import 'package:elesson/share/general_widgets.dart';
 import 'package:elesson/share/question_widgets.dart';
@@ -14,8 +16,8 @@ class _AdminPageState extends State<AdminPage> {
   TextEditingController cobjectId = TextEditingController();
   TextEditingController blockIdController = TextEditingController();
 
-  SharedPreferences prefs;
-  String studentName;
+  late SharedPreferences prefs;
+  String? studentName;
   bool langOk = false;
   bool mathOk = false;
   bool sciOk = false;
@@ -32,13 +34,13 @@ class _AdminPageState extends State<AdminPage> {
 
   void redirectToQuestion(
       int cobjectIdIndex, String disciplineId, String discipline,
-      {String blockChosen}) async {
+      {String? blockChosen}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     var blockId =
-        blockChosen ?? await ApiBlock.getBlockByDiscipline(disciplineId);
+        blockChosen ?? await (ApiBlock.getBlockByDiscipline(disciplineId) as FutureOr<String>);
     var responseBlock = await ApiBlock.getBlock(blockId);
-    List<String> cobjectIdList = [];
+    List<String?> cobjectIdList = [];
     int cobjectId = prefs.getInt('last_cobject_$discipline') ?? 0;
     int questionIndex = prefs.getInt('last_question_$discipline') ?? 0;
     responseBlock.data[0]["cobject"].forEach((cobject) {

@@ -2,12 +2,8 @@ import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/share/description_format.dart';
-import 'package:elesson/share/snackbar_widget.dart';
-import 'package:flutter/gestures.dart';
-import 'share/button_widgets.dart';
 import 'package:flutter/services.dart';
 
-import 'dart:math';
 
 import 'share/template_slider.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'model.dart';
 import 'share/image_detail_screen.dart';
 
-// const String BASE_URL = 'https://elesson.com.br/app/library';
+// const String BASE_URL = 'https://apielesson.azurewebsites.net/app/library';
 
 final cobjectProvider = Provider<Cobjects>((ref) {
   return Cobjects();
@@ -26,11 +22,11 @@ final cobjectProvider = Provider<Cobjects>((ref) {
 class MultipleChoiceQuestion extends ConsumerWidget {
   static const routeName = '/MTE';
 
-  var cobjectList = new List<Cobject>();
-  int questionIndex;
-  String questionType;
+  List<Cobject> cobjectList = [];
+  late int questionIndex;
+  String? questionType;
   bool isCorrect = false;
-  DateTime startTime;
+  DateTime? startTime;
 
   List<bool> _buttonPressed = [false, false, false];
   int _selectedButton = 3;
@@ -118,7 +114,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                             '/image/' +
                             question.pieces[grouping]["image"],
                         loadingBuilder: (BuildContext context, Widget child,
-                            ImageChunkEvent loadingProgress) {
+                            ImageChunkEvent? loadingProgress) {
                           if (loadingProgress == null) {
                             return child;
                           }
@@ -126,7 +122,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                             child: CircularProgressIndicator(
                               value: loadingProgress.expectedTotalBytes != null
                                   ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes
+                                      loadingProgress.expectedTotalBytes!
                                   : null,
                             ),
                           );
@@ -212,23 +208,23 @@ class MultipleChoiceQuestion extends ConsumerWidget {
 
   Stopwatch elapsedTimer = Stopwatch();
   bool timer = false;
-  List<String> cobjectIdList;
-  int cobjectIdListLength;
-  int cobjectQuestionsLength;
+  List<String?>? cobjectIdList;
+  int? cobjectIdListLength;
+  int? cobjectQuestionsLength;
   List<int> pieceOrder = [0, 1, 2];
   bool pieceOrdered = false;
-  Widget questionDescriptionWidget;
+  Widget? questionDescriptionWidget;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    final ScreenArguments args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     // elapsedTimer.start();
     cobjectList = args.cobjectList;
     cobjectIdList = args.cobjectIdList;
     questionIndex = args.questionIndex;
     cobjectIdListLength = args.cobjectIdLength;
     cobjectQuestionsLength = args.cobjectQuestionsLength;
-    var cobjectIndex = args.cobjectIndex;
+    var cobjectIndex = args.cobjectIndex!;
     double screenHeight = MediaQuery.of(context).size.height;
     double textCardHeight = 0.0985 * screenHeight;
     double buttonHeight =
@@ -236,13 +232,13 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     // print(
     //     'COBJECT LIST ID ${cobjectIdList[0]} e qindex ${cobjectList[0].questions[questionIndex]}');
 
-    String imageLink = cobjectList[0].questions[questionIndex].header["image"];
+    String imageLink = cobjectList[0].questions[questionIndex].header["image"]!;
 
-    String pieceId = cobjectList[0].questions[questionIndex].pieceId;
+    String? pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
     // final cobjectProvidersState = watch(cobjectProvider.state);
     SystemChrome.setEnabledSystemUIOverlays([]);
-    String questionDescription = cobjectList[0].description;
+    String questionDescription = cobjectList[0].description!;
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
 
     // playerTituloSegundaTela.setUrl(BASE_URL +
@@ -253,18 +249,18 @@ class MultipleChoiceQuestion extends ConsumerWidget {
       pieceOrdered = true;
       pieceOrder.shuffle();
       questionDescriptionWidget = formatDescription(
-          cobjectList[0].questions[questionIndex].header["text"].toUpperCase());
+          cobjectList[0].questions[questionIndex].header["text"]!.toUpperCase());
     }
 
     return Scaffold(
       // bottomNavigationBar: bottomNavBar(context),
       body: TemplateSlider(
-        currentId: cobjectIdList[cobjectIndex],
+        currentId: cobjectIdList![cobjectIndex],
         showConfirmButton: showConfirmButton,
         title: questionDescription.toUpperCase(),
         text: questionDescriptionWidget,
         linkImage: imageLink.isNotEmpty
-            ? 'https://elesson.com.br/app/library/image/' + imageLink
+            ? 'https://apielesson.azurewebsites.net/app/library/image/' + imageLink
             : null,
         activityScreen: Container(
           child: Wrap(

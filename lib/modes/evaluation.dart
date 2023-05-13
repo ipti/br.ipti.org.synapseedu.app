@@ -1,9 +1,9 @@
 import 'package:elesson/template_questoes/model.dart';
 
 class Evaluation {
-  int cobjectBlockId;
-  int currentCobjectId;
-  List<Cobject> blockCobjects;
+  int? cobjectBlockId;
+  int? currentCobjectId;
+  List<Cobject>? blockCobjects;
   //int evaluationSelectedLevel;
   //bool isFinalBlock;
 

@@ -4,8 +4,8 @@ import 'dart:ui';
 
 import '../model.dart';
 
-int questionIndex;
-int cobjectIndex;
+int? questionIndex;
+int? cobjectIndex;
 
 bool isCorrect = false;
 bool accepted = false;
@@ -26,9 +26,9 @@ String urlSecondBox = '';
 String urlThirdBox = '';
 
 //<========colorReceiver========>
-Color colorFirstReceiverAccepted;
-Color colorSecondReceiverAccepted;
-Color colorThirdReceiverAccepted;
+late Color colorFirstReceiverAccepted;
+late Color colorSecondReceiverAccepted;
+late Color colorThirdReceiverAccepted;
 
 Random random = new Random();
 var randomNumber = [0, 0, 0];

@@ -17,11 +17,11 @@ class Cobjects extends StateNotifier<List<Cobject>> {
   readFile() async {
     var dio = Dio();
     Response response = await dio.get(
-        'http://app.elesson.com.br/api-synapse/synapse/offline/cobject/1471');
+        'http://app.apielesson.azurewebsites.net/api-synapse/synapse/offline/cobject/1471');
     print(response.data);
   }
 
-  void fetchCobjects(List<dynamic> cobjectData) {
+  void fetchCobjects(List<dynamic>? cobjectData) {
     _items.clear();
 
     try {

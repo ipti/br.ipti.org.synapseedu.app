@@ -13,7 +13,6 @@ import 'package:elesson/template_questoes/model.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:flutter_riverpod/all.dart';
 
 final cobjectProvider = Provider<Cobjects>((ref) {
@@ -29,14 +28,14 @@ class PreImgIa extends StatefulWidget {
 }
 
 class _PreImgIaState extends State<PreImgIa> {
-  String base64Image;
-  Response retorno;
+  String? base64Image;
+  Response? retorno;
 
-  var cobjectList = new List<Cobject>();
+  List<Cobject> cobjectList = [];
   int questionIndex = 0;
-  int cobjectIndex;
-  int cobjectIdListLength;
-  int cobjectQuestionsLength;
+  int? cobjectIndex;
+  int? cobjectIdListLength;
+  int? cobjectQuestionsLength;
 
   double opacityFaleAgora = 0;
   double opacityNaoEntendivel = 0;
@@ -44,7 +43,7 @@ class _PreImgIaState extends State<PreImgIa> {
   Color colorAlertMessage = Colors.red;
   bool isCorrect = false;
 
-  String correctAnswer;
+  String? correctAnswer;
   bool firstRecording = true;
 
   final _formKey = GlobalKey<FormState>();
@@ -72,7 +71,7 @@ class _PreImgIaState extends State<PreImgIa> {
 
   @override
   Widget build(BuildContext context) {
-    final ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    final ScreenArguments args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
 
     cobjectList = args.cobjectList;
     questionIndex = args.questionIndex;
@@ -80,10 +79,10 @@ class _PreImgIaState extends State<PreImgIa> {
     cobjectIdListLength = args.cobjectIdLength;
     cobjectQuestionsLength = args.cobjectQuestionsLength;
 
-    String questionDescription = cobjectList[0].description;
+    String questionDescription = cobjectList[0].description!;
     String questionText =
-        cobjectList[0].questions[questionIndex].header["text"];
-    String pieceId = cobjectList[0].questions[questionIndex].pieceId;
+        cobjectList[0].questions[questionIndex].header["text"]!;
+    String? pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
     correctAnswer = cobjectList[0].questions[0].pieces["1"]["text"];
 
@@ -106,9 +105,9 @@ class _PreImgIaState extends State<PreImgIa> {
         //   ),
         // ),
         sound: cobjectList[0].questions[questionIndex].header["sound"],
-        linkImage: cobjectList[0].questions[0].header["image"].isNotEmpty
-            ? 'https://elesson.com.br/app/library/image/' +
-                cobjectList[0].questions[0].header["image"]
+        linkImage: cobjectList[0].questions[0].header["image"]!.isNotEmpty
+            ? 'https://apielesson.azurewebsites.net/app/library/image/' +
+                cobjectList[0].questions[0].header["image"]!
             : null,
         isPreTemplate: true,
         activityScreen: Form(
@@ -166,7 +165,7 @@ class _PreImgIaState extends State<PreImgIa> {
                           ),
                           onChanged: (val) {
                             verificarResposta(
-                                    respostasCorretas: correctAnswer,
+                                    respostasCorretas: correctAnswer!,
                                     respostaUsuario:
                                         _textController.text.toString())
                                 // correctAnswer == _textController.text.toString()
@@ -180,7 +179,7 @@ class _PreImgIaState extends State<PreImgIa> {
                             }
                           },
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value!.isEmpty) {
                               return 'Não se esqueça de digitar a resposta!';
                             }
                             return null;
@@ -270,7 +269,7 @@ class _PreImgIaState extends State<PreImgIa> {
                         await loadingLocalAlertDialog(context);
                         if (retorno != null) {
                           setState(() {
-                            _textController.text = retorno.data["responses"][0]
+                            _textController.text = retorno!.data["responses"][0]
                                 ['textAnnotations'][0]['description'];
                           });
                         }
@@ -408,12 +407,12 @@ class _PreImgIaState extends State<PreImgIa> {
       preferredCameraDevice: CameraDevice.front,
     );
 
-    imageFile = File(pickedFile.path);
+    imageFile = File(pickedFile!.path);
 
     base64Image = await converter();
   }
 
-  File imageFile;
+  late File imageFile;
 
   final picker = ImagePicker();
 

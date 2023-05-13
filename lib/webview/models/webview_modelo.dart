@@ -7,7 +7,7 @@ import '../webview_pagina.dart';
 
 class BaseModel extends ChangeNotifier {
   final List<WebViewPagina> _webViewPaginas = [];
-  WebViewModel _currentWebViewModel;
+  WebViewModel? _currentWebViewModel;
 
   BaseModel(currentWebViewModel) {
     this._currentWebViewModel = currentWebViewModel;
@@ -22,7 +22,7 @@ class BaseModel extends ChangeNotifier {
 }
 
 class WebViewModel extends ChangeNotifier {
-  InAppWebViewGroupOptions options;
+  InAppWebViewGroupOptions? options;
 
   WebViewModel({
     this.options,

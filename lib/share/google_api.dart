@@ -12,13 +12,13 @@ final _credentials = new ServiceAccountCredentials.fromJson(r'''
   }
   ''');
 
-const _SCOPES = const [VisionApi.CloudVisionScope];
+const _SCOPES = const [VisionApi.cloudVisionScope];
 
-String googleApiToken;
+String? googleApiToken;
 
-Future<String> getGoogleApiToken() async {
-  await clientViaServiceAccount(_credentials, _SCOPES).then((http_client) {
+Future<void> getGoogleApiToken() async {
+  await clientViaServiceAccount(_credentials, _SCOPES).then((httpClient) {
     // print(http_client.credentials.accessToken.data);
-    googleApiToken = "Bearer ${http_client.credentials.accessToken.data}";
+    googleApiToken = "Bearer ${httpClient.credentials.accessToken.data}";
   });
 }

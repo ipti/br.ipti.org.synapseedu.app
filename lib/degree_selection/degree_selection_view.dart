@@ -4,13 +4,13 @@ import 'package:elesson/share/snackbar_widget.dart';
 import 'package:flutter/material.dart';
 
 class DegreeSelectionView extends StatefulWidget {
-  final int cobjectIdIndex;
-  final String disciplineId;
-  final String discipline;
-  final String studentUuid;
+  final int? cobjectIdIndex;
+  final String? disciplineId;
+  final String? discipline;
+  final String? studentUuid;
 
   DegreeSelectionView(
-      {Key key,
+      {Key? key,
       this.cobjectIdIndex,
       this.disciplineId,
       this.discipline,
@@ -23,7 +23,7 @@ class DegreeSelectionView extends StatefulWidget {
 }
 
 class _DegreeSelectionViewState extends State<DegreeSelectionView> {
-  String dropdownYear = null;
+  String? dropdownYear;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class _DegreeSelectionViewState extends State<DegreeSelectionView> {
                 height: 2,
                 color: Color.fromRGBO(0, 0, 255, 0.4),
               ),
-              onChanged: (String newValue) {
+              onChanged: (String? newValue) {
                 setState(() {
                   dropdownYear = newValue;
                 });

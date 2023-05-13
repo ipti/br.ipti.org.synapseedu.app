@@ -22,7 +22,7 @@ class PocWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DeepLinkBloc _bloc = Provider.of<DeepLinkBloc>(context);
-    return StreamBuilder<String>(
+    return StreamBuilder<String?>(
       stream: _bloc.state,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
@@ -33,7 +33,7 @@ class PocWidget extends StatelessWidget {
             child: Center(
               child: Padding(
                 padding: EdgeInsets.all(20.0),
-                child: Text('Redirected: ${snapshot.data}', style: Theme.of(context).textTheme.title),
+                child: Text('Redirected: ${snapshot.data}', style: Theme.of(context).textTheme.headline6),
               ),
             ),
           );
