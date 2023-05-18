@@ -11,6 +11,8 @@ import 'package:elesson/template_questoes/ddrop/ddrop.dart';
 import 'package:elesson/template_questoes/multiple_choice.dart';
 import 'package:elesson/template_questoes/pre_base.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
+
+// import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/text_question.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -43,7 +45,6 @@ int? timeStart;
 bool timeStartIscaptured = false;
 int? timeEnd = 0;
 
-bool isLogged = false;
 bool isAdmin = false;
 
 Color buttonBackground = Colors.white;
@@ -87,66 +88,64 @@ getCobjectList(String disciplineId) async {
   // return cobjectIdList;
 }
 
-getCobject(int cobjectIndex, BuildContext? context, List<String?> cobjectIdList, {int piecesetIndex = 0}) async {
-  int cobjectIdListLength = cobjectIdList.length;
-  cobjectList.clear();
-  // piecesetIndex pode substituir o questionIndex
-  //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
-
-  ApiCobject.getQuestao(cobjectIdList[cobjectIndex]!).then((response) {
-    cobject = response.data;
-
-    // O problema está sendo aqui. Corrigir para pegar todos os cobjects.
-
-    var questionType = cobject![0]["cobjects"][0]["template_code"];
-    context!.read(cobjectProvider).fetchCobjects(cobject);
-    cobjectList = context.read(cobjectProvider).items;
-
-    print('ID ATUAL: ${cobjectIdList[cobjectIndex]}');
-    // print('cobjectQuestionLength ${cobjectList[0].questions.length}');
-
-    switch (questionType) {
-      case "PRE_VISION":
-        Navigator.of(context).pushNamedAndRemoveUntil(PreImgIa.routeName, ModalRoute.withName(BlockSelection.routeName),
-            arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'PRE_VISION', cobjectIndex));
-        break;
-      case "PRE_EAR":
-        Navigator.of(context).pushNamedAndRemoveUntil(PreSomIa.routeName, ModalRoute.withName(BlockSelection.routeName),
-            arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'PRE_EAR', cobjectIndex));
-        break;
-      case 'PRE':
-        // //todo voltar ao normal depois aqui
-        // Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName(StartAndSendTest.routeName),
-        //     arguments: ScreenArguments(cobjectList, 0, 'PRE', cobjectIndex));
-        // //todo aqui temos o novaigator levando para o PRE usando IA de imagem
-        // Navigator.of(context)
-        //     .pushNamedAndRemoveUntil(PreImgIa.routeName, ModalRoute.withName(StartAndSendTest.routeName), arguments: ScreenArguments(cobjectList, 0, 'PRE', cobjectIndex));
-        Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName(BlockSelection.routeName),
-            arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'PRE', cobjectIndex));
-        break;
-      case 'DDROP':
-        Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, ModalRoute.withName(BlockSelection.routeName),
-            arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'DDROP', cobjectIndex));
-        break;
-      case 'MTE':
-        Navigator.of(context).pushNamedAndRemoveUntil(MultipleChoiceQuestion.routeName, ModalRoute.withName(BlockSelection.routeName),
-            arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'MTE', cobjectIndex));
-        break;
-      case 'TXT':
-        Navigator.of(context).pushNamedAndRemoveUntil(TextQuestion.routeName, ModalRoute.withName(BlockSelection.routeName),
-            arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'TXT', cobjectIndex));
-        break;
-      default:
-        print('CObject possui um tipo não reconhecido');
-        cobjectIndex = ++cobjectIndex;
-        getCobject(cobjectIndex, context, cobjectIdList);
-    }
-  });
+getCobject(int cobjectIndex, BuildContext context, List<String?> cobjectIdList, {int piecesetIndex = 0}) async {
+  // int cobjectIdListLength = cobjectIdList.length;
+  // cobjectList.clear();
+  // // piecesetIndex pode substituir o questionIndex
+  // //<======ENVIAR COMO PARAMETRO, O ID DA ESCOLA======>
+  //
+  // ApiCobject.getQuestao(cobjectIdList[cobjectIndex]!).then((response) {
+  //   cobject = response.data;
+  //
+  //   // O problema está sendo aqui. Corrigir para pegar todos os cobjects.
+  //
+  //   String questionType = cobject![0]["cobjects"][0]["template_code"];
+  //   print("QUESTION TYPE: $questionType");
+  //   Cobjects cobjects = Cobjects();
+  //   cobjects.fetchCobjects(cobject);
+  //   // context!.read(cobjectProvider).fetchCobjects(cobject);
+  //   // cobjectList = context.read(cobjectProvider).items;
+  //   cobjectList = cobjects.items;
+  //
+  //   print('ID ATUAL: ${cobjectIdList[cobjectIndex]}');
+  //   // print('cobjectQuestionLength ${cobjectList[0].questions.length}');
+  //
+  //   switch (questionType) {
+  //     case "PRE_VISION":
+  //       Navigator.of(context).pushNamedAndRemoveUntil(PreImgIa.routeName, ModalRoute.withName(BlockSelection.routeName),
+  //           arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'PRE_VISION', cobjectIndex));
+  //       break;
+  //     case "PRE_EAR":
+  //       Navigator.of(context).pushNamedAndRemoveUntil(PreSomIa.routeName, ModalRoute.withName(BlockSelection.routeName),
+  //           arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'PRE_EAR', cobjectIndex));
+  //       break;
+  //     case 'PRE':
+  //       Navigator.of(context).pushNamedAndRemoveUntil(SingleLineTextQuestion.routeName, ModalRoute.withName(BlockSelection.routeName),
+  //           arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'PRE', cobjectIndex));
+  //       break;
+  //     case 'DDROP':
+  //       Navigator.of(context).pushNamedAndRemoveUntil(DragAndDrop.routeName, ModalRoute.withName(BlockSelection.routeName),
+  //           arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'DDROP', cobjectIndex));
+  //       break;
+  //     case 'MTE':
+  //       Navigator.of(context).pushNamedAndRemoveUntil(MultipleChoiceQuestion.routeName, ModalRoute.withName(BlockSelection.routeName),
+  //           arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'MTE', cobjectIndex));
+  //       break;
+  //     case 'TXT':
+  //       Navigator.of(context).pushNamedAndRemoveUntil(TextQuestion.routeName, ModalRoute.withName(BlockSelection.routeName),
+  //           arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectList[0].questions.length, piecesetIndex, 'TXT', cobjectIndex));
+  //       break;
+  //     default:
+  //       print('CObject possui um tipo não reconhecido');
+  //       cobjectIndex = ++cobjectIndex;
+  //       getCobject(cobjectIndex, context, cobjectIdList);
+  //   }
+  // });
 }
 
-final cobjectProvider = Provider<Cobjects>((ref) {
-  return Cobjects();
-});
+// final cobjectProvider = Provider<Cobjects>((ref) {
+//   return Cobjects();
+// });
 
 Widget? soundButton(BuildContext context, Question question) {
   return question.header["sound"]!.isNotEmpty
@@ -181,95 +180,95 @@ void submitLogic(BuildContext context, int questionIndex, int? cobjectIndex, Str
     List<String?>? cobjectIdList,
     int? cobjectIdListLength,
     required int cobjectQuestionsLength}) async {
-  timeStartIscaptured = false; // resetando
-  print('$questionIndex e $cobjectQuestionsLength');
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? discipline = cobjectList[0].discipline;
-  if (isGuest == false) prefs.setInt('last_cobject_$discipline', cobjectIndex!);
-
-  if (isGuest == false) prefs.setInt('last_question_$discipline', questionIndex);
-
-  print("$questionIndex // $cobjectQuestionsLength");
-  if (questionIndex < cobjectQuestionsLength && questionType != 'TXT') {
-    switch (questionType) {
-      case 'PRE':
-        Navigator.of(context).pushReplacementNamed(SingleLineTextQuestion.routeName,
-            arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectQuestionsLength, questionIndex, 'PRE', cobjectIndex));
-        break;
-      case 'DDROP':
-        Navigator.of(context).pushReplacementNamed(DragAndDrop.routeName,
-            arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectQuestionsLength, questionIndex, 'DDROP', cobjectIndex));
-        break;
-      case 'MTE':
-        Navigator.of(context).pushReplacementNamed(MultipleChoiceQuestion.routeName,
-            arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectQuestionsLength, questionIndex, 'MTE', cobjectIndex));
-        break;
-    }
-  } else if (questionType == 'TXT' && indexTextQuestion < cobjectQuestionsLength) {
-    // Para resolver o problema de pop na questão de texto tem que reavaliar a lógica
-    // do botão de voltar na questão de texto
-    // prefs.setInt('last_question_$discipline', indexTextQuestion);
-    if (questionIndex == 0) {
-      indexTextQuestion = 0;
-      Navigator.of(context).pushReplacementNamed(TextQuestion.routeName,
-          arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectQuestionsLength, questionIndex, 'TXT', cobjectIndex));
-    } else {
-      print('Índice da questão: $indexTextQuestion');
-      Navigator.of(context).pushNamed(TextQuestion.routeName,
-          arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectQuestionsLength, indexTextQuestion, 'TXT', cobjectIndex));
-    }
-  } else {
-    if (questionType == 'TXT') {
-      //todo enviar como correto
-      if (isGuest == false) Answer().sendAnswerToApi(pieceId, true, 0, intervalResolution: 0, groupId: "", value: "");
-    }
-
-    // Alterei o if(++cobjectIndex para o atual, inclusive alterando o endereço do getCobject. Caso tenha problema de não alterar o cobject, é isso);
-    if (cobjectIndex! + 1 < cobjectIdListLength!) {
-      if (isGuest == false) {
-        prefs.setInt('last_question_$discipline', 0);
-        prefs.setInt('last_cobject_$discipline', cobjectIndex + 1);
-      }
-      getCobject(cobjectIndex + 1, context, cobjectIdList!);
-    } else {
-      // String discipline = cobjectList[0].discipline;
-      String? year = cobjectList[0].year;
-      if (isGuest == false) {
-        prefs.setInt('last_cobject_$discipline', 0);
-        prefs.setInt('last_question_$discipline', 0);
-      }
-
-      // SharedPreferences prefs;
-      // prefs = await SharedPreferences.getInstance();
-      // String studentName =
-      //     prefs.getString('student_name').split(" ")[0] ?? 'Aluno(a)';
-
-      prefs.setBool(discipline!, true);
-      indexTextQuestion = 0;
-      cobjectList.clear();
-      cobjectIdList!.clear();
-      cobjectIndex = 0;
-      questionIndex = 0;
-
-      switch (discipline) {
-        case "Português":
-          langOk = true;
-          break;
-        case "Matemática":
-          mathOk = true;
-          break;
-        case "Ciências":
-          sciOk = true;
-          break;
-        default:
-      }
-
-      // Navigator.of(context).pushReplacementNamed("/");
-      Navigator.of(context).pushReplacementNamed(BlockConclusionScreen.routeName,
-          arguments: BlockConclusionArguments(discipline: discipline.toUpperCase(), year: year, studentName: studentName ?? 'Name'));
-      // }
-    }
-  }
+  // timeStartIscaptured = false; // resetando
+  // print('$questionIndex e $cobjectQuestionsLength');
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String? discipline = cobjectList[0].discipline;
+  // if (isGuest == false) prefs.setInt('last_cobject_$discipline', cobjectIndex!);
+  //
+  // if (isGuest == false) prefs.setInt('last_question_$discipline', questionIndex);
+  //
+  // print("$questionIndex // $cobjectQuestionsLength");
+  // if (questionIndex < cobjectQuestionsLength && questionType != 'TXT') {
+  //   switch (questionType) {
+  //     case 'PRE':
+  //       Navigator.of(context).pushReplacementNamed(SingleLineTextQuestion.routeName,
+  //           arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectQuestionsLength, questionIndex, 'PRE', cobjectIndex));
+  //       break;
+  //     case 'DDROP':
+  //       Navigator.of(context).pushReplacementNamed(DragAndDrop.routeName,
+  //           arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectQuestionsLength, questionIndex, 'DDROP', cobjectIndex));
+  //       break;
+  //     case 'MTE':
+  //       Navigator.of(context).pushReplacementNamed(MultipleChoiceQuestion.routeName,
+  //           arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectQuestionsLength, questionIndex, 'MTE', cobjectIndex));
+  //       break;
+  //   }
+  // } else if (questionType == 'TXT' && indexTextQuestion < cobjectQuestionsLength) {
+  //   // Para resolver o problema de pop na questão de texto tem que reavaliar a lógica
+  //   // do botão de voltar na questão de texto
+  //   // prefs.setInt('last_question_$discipline', indexTextQuestion);
+  //   if (questionIndex == 0) {
+  //     indexTextQuestion = 0;
+  //     Navigator.of(context).pushReplacementNamed(TextQuestion.routeName,
+  //         arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectQuestionsLength, questionIndex, 'TXT', cobjectIndex));
+  //   } else {
+  //     print('Índice da questão: $indexTextQuestion');
+  //     Navigator.of(context).pushNamed(TextQuestion.routeName,
+  //         arguments: ScreenArguments(cobjectList, cobjectIdList, cobjectIdListLength, cobjectQuestionsLength, indexTextQuestion, 'TXT', cobjectIndex));
+  //   }
+  // } else {
+  //   if (questionType == 'TXT') {
+  //     //todo enviar como correto
+  //     if (isGuest == false) Answer().sendAnswerToApi(pieceId, true, 0, intervalResolution: 0, groupId: "", value: "");
+  //   }
+  //
+  //   // Alterei o if(++cobjectIndex para o atual, inclusive alterando o endereço do getCobject. Caso tenha problema de não alterar o cobject, é isso);
+  //   if (cobjectIndex! + 1 < cobjectIdListLength!) {
+  //     if (isGuest == false) {
+  //       prefs.setInt('last_question_$discipline', 0);
+  //       prefs.setInt('last_cobject_$discipline', cobjectIndex + 1);
+  //     }
+  //     getCobject(cobjectIndex + 1, context, cobjectIdList!);
+  //   } else {
+  //     // String discipline = cobjectList[0].discipline;
+  //     String? year = cobjectList[0].year;
+  //     if (isGuest == false) {
+  //       prefs.setInt('last_cobject_$discipline', 0);
+  //       prefs.setInt('last_question_$discipline', 0);
+  //     }
+  //
+  //     // SharedPreferences prefs;
+  //     // prefs = await SharedPreferences.getInstance();
+  //     // String studentName =
+  //     //     prefs.getString('student_name').split(" ")[0] ?? 'Aluno(a)';
+  //
+  //     prefs.setBool(discipline!, true);
+  //     indexTextQuestion = 0;
+  //     cobjectList.clear();
+  //     cobjectIdList!.clear();
+  //     cobjectIndex = 0;
+  //     questionIndex = 0;
+  //
+  //     switch (discipline) {
+  //       case "Português":
+  //         langOk = true;
+  //         break;
+  //       case "Matemática":
+  //         mathOk = true;
+  //         break;
+  //       case "Ciências":
+  //         sciOk = true;
+  //         break;
+  //       default:
+  //     }
+  //
+  //     // Navigator.of(context).pushReplacementNamed("/");
+  //     Navigator.of(context).pushReplacementNamed(BlockConclusionScreen.routeName,
+  //         arguments: BlockConclusionArguments(discipline: discipline.toUpperCase(), year: year, studentName: studentName ?? 'Name'));
+  //     // }
+  //   }
+  // }
 }
 
 Widget submitAnswer(BuildContext context, List<Cobject> cobjectList, String questionType, int questionIndex, int? cobjectIndex, String? pieceId, bool isCorrect,
@@ -337,7 +336,6 @@ Widget submitAnswer(BuildContext context, List<Cobject> cobjectList, String ques
     ),
   );
 }
-
 
 Future<String?> scan(BuildContext context) async {
   String? returnedValue = await Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => new QrCodeReader()));

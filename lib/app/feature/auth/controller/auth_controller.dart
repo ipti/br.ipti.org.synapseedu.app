@@ -4,7 +4,8 @@ import 'package:elesson/app/core/auth/data/model/user_model.dart';
 import 'package:elesson/app/core/auth/domain/entity/auth_entity.dart';
 import 'package:elesson/app/core/auth/domain/entity/login_response_entity.dart';
 import 'package:elesson/app/core/auth/domain/usecases/auth_usecase.dart';
-import 'package:elesson/app/feature/providers/userProvider.dart';
+import 'package:elesson/app/feature/task/task_module.dart';
+import 'package:elesson/app/providers/userProvider.dart';
 import 'package:elesson/app/util/failures/failures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +21,6 @@ class AuthController extends ChangeNotifier {
   LoginEntity get authLoginEntity => _authLoginEntity;
 
   getAcessToken(BuildContext context) async {
-
     _showLoading = true;
     notifyListeners();
     await authUseCase.getAccessToken(_webAppAuthEntity).then((value) {
@@ -31,7 +31,6 @@ class AuthController extends ChangeNotifier {
         notifyListeners();
       }, (r) async {
         Either<Failure, LoginResponseEntity> res = await login();
-        //TODO: remover isso quando deixar tudo padronizado, apenas uma solução temporaria já que existem outras classes ainda fora do padrão de arquitetura que usam esse recurso
         if (res.isRight()) {
           LoginResponseEntity loginResponseEntity = res.getOrElse(() => LoginResponseEntity.empty());
           UserModel userModel = UserModel(
@@ -41,7 +40,7 @@ class AuthController extends ChangeNotifier {
             user_type_id: loginResponseEntity.user_type_id,
           );
           context.read<UserProvider>().setUser(userModel);
-          Navigator.of(context).pushNamedAndRemoveUntil(BlockSelection.routeName, (route) => false);
+          Navigator.of(context).pushNamedAndRemoveUntil(TaskModule.routeName, (route) => false);
         }
       });
     });

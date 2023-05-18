@@ -432,21 +432,4 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   }
 }
 
-class ScreenArguments {
-  List<Cobject> cobjectList;
-  List<String?>? cobjectIdList;
-  final int? cobjectIdLength;
-  final int cobjectQuestionsLength;
-  final int questionIndex;
-  final String questionType;
-  final int? cobjectIndex;
 
-  ScreenArguments(
-      this.cobjectList,
-      this.cobjectIdList,
-      this.cobjectIdLength,
-      this.cobjectQuestionsLength,
-      this.questionIndex,
-      this.questionType,
-      this.cobjectIndex);
-}

@@ -1,10 +1,13 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
+import 'package:elesson/app/core/task/data/model/container_model.dart';
+import 'package:elesson/app/feature/task/controller/TaskViewController.dart';
+import 'package:elesson/app/feature/task/widgets/header_view.dart';
 import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/model.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/share/description_format.dart';
-import 'package:elesson/template_questoes/share/template_slider.dart';
+import 'package:elesson/app/feature/task/widgets/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_audio_recorder2/flutter_audio_recorder2.dart';
@@ -32,8 +35,8 @@ class PreSomIa extends StatefulWidget {
   static const routeName = '/PRE_SOM_IA';
   final LocalFileSystem localFileSystem;
 
-  PreSomIa({localFileSystem})
-      : this.localFileSystem = localFileSystem ?? LocalFileSystem();
+  PreSomIa({localFileSystem}) : this.localFileSystem = localFileSystem ?? LocalFileSystem();
+
   @override
   _PreSomIaState createState() => new _PreSomIaState();
 }
@@ -47,8 +50,7 @@ class _PreSomIaState extends State<PreSomIa> {
   int? cobjectQuestionsLength;
 
   String alertMessage = "FALE AGORA...";
-  String naoEndendivel =
-      "Não entendemos o que você quis dizer...\nTente Novamente!";
+  String naoEndendivel = "Não entendemos o que você quis dizer...\nTente Novamente!";
 
   double opacityFaleAgora = 0;
   double opacityNaoEntendivel = 0;
@@ -127,21 +129,20 @@ class _PreSomIaState extends State<PreSomIa> {
 
   @override
   Widget build(BuildContext context) {
-    final ScreenArguments args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+    // final ScreenArguments args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     //_getPermission(); não precisa disso, se pedir ele buga e crasha
     // _initializeRecorder();
 
     // final path = _localPath;
 
-    cobjectList = args.cobjectList;
-    questionIndex = args.questionIndex;
-    cobjectIndex = args.cobjectIndex;
-    cobjectIdListLength = args.cobjectIdLength;
-    cobjectQuestionsLength = args.cobjectQuestionsLength;
+    cobjectList = [];
+    questionIndex = 1;
+    cobjectIndex = 1;
+    cobjectIdListLength = 1;
+    cobjectQuestionsLength = 1;
 
     String questionDescription = cobjectList[0].description!;
-    String questionText =
-        cobjectList[0].questions[questionIndex].header["text"]!;
+    String questionText = cobjectList[0].questions[questionIndex].header["text"]!;
     String? pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
     correctAnswer = cobjectList[0].questions[0].pieces["1"]["text"];
@@ -149,20 +150,18 @@ class _PreSomIaState extends State<PreSomIa> {
     double widthScreen = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height * 0.93;
 
-    SystemChrome.setEnabledSystemUIOverlays([]);
-    print(
-        '\n\n OLHA A IMAGEM AQUIIII: ${cobjectList[0].questions[0].header["image"]}---------\n\n\n');
     return Scaffold(
       body: TemplateSlider(
-        title: questionDescription.toUpperCase(),
-        text: formatDescription(questionText.toUpperCase()),
-        sound: cobjectList[0].questions[questionIndex].header["sound"],
-        linkImage: cobjectList[0].questions[0].header["image"]!.isNotEmpty
-            ? 'https://apielesson.azurewebsites.net/app/library/image/' +
-                cobjectList[0].questions[0].header["image"]!
-            : null,
-        isPreTemplate: true,
-        activityScreen: Form(
+        headerView: HeaderView(containerModel: ContainerModel.empty()),
+        taskViewController: TaskViewController(),
+        // title: questionDescription.toUpperCase(),
+        // text: formatDescription(questionText.toUpperCase()),
+        // sound: cobjectList[0].questions[questionIndex].header["sound"],
+        // linkImage: cobjectList[0].questions[0].header["image"]!.isNotEmpty
+        //     ? 'https://apielesson.azurewebsites.net/app/library/image/' + cobjectList[0].questions[0].header["image"]!
+        //     : null,
+        // isPreTemplate: true,
+        bodyView: Form(
           key: _formKey,
           child: SingleChildScrollView(
             reverse: false,
@@ -220,16 +219,12 @@ class _PreSomIaState extends State<PreSomIa> {
                           // receber um texto, acionando o botão. O condicional faz com que a UI seja renderizada
                           // apenas uma vez enquanto o texto estiver sendo digitado.
                           onChanged: (val) {
-                            verificarResposta(
-                                    respostasCorretas: correctAnswer!,
-                                    respostaUsuario:
-                                        _textController.text.toString())
+                            verificarResposta(respostasCorretas: correctAnswer!, respostaUsuario: _textController.text.toString())
                                 // correctAnswer == _textController.text.toString()
                                 ? isCorrect = true
                                 : isCorrect = false;
 
-                            print(
-                                "CORRETA: $correctAnswer , DIGITADA: ${_textController.text.toString()} ");
+                            print("CORRETA: $correctAnswer , DIGITADA: ${_textController.text.toString()} ");
                             if (_textController.text.length == 1) {
                               submitButton(context);
                             }
@@ -246,13 +241,7 @@ class _PreSomIaState extends State<PreSomIa> {
                     Container(
                       //padding: EdgeInsets.only(left: 16, right: 16, bottom: 0),
                       margin: EdgeInsets.only(
-                          bottom: _textController.text.isNotEmpty
-                              ? (screenHeight * 0.93) -
-                                  18 -
-                                  (48 > screenHeight * 0.0656
-                                      ? 48
-                                      : screenHeight * 0.0656)
-                              : screenHeight * 0.92),
+                          bottom: _textController.text.isNotEmpty ? (screenHeight * 0.93) - 18 - (48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656) : screenHeight * 0.92),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         boxShadow: [
@@ -267,14 +256,11 @@ class _PreSomIaState extends State<PreSomIa> {
                       child: Center(
                         child: GestureDetector(
                           onTap: () {
-                            playSound(cobjectList[0]
-                                .questions[questionIndex]
-                                .header["sound"]);
+                            playSound(cobjectList[0].questions[questionIndex].header["sound"]);
                           },
                           child: Container(
                             padding: EdgeInsets.all(20),
-                            child:
-                                formatDescription(questionText.toUpperCase()),
+                            child: formatDescription(questionText.toUpperCase()),
                             // child: Text(
                             //   questionText.toUpperCase(),
                             //   style: TextStyle(
@@ -299,8 +285,7 @@ class _PreSomIaState extends State<PreSomIa> {
                               style: TextStyle(
                                 fontSize: widthScreen * 0.05,
                                 fontWeight: FontWeight.bold,
-                                color: colorAlertMessage
-                                    .withOpacity(opacityNaoEntendivel),
+                                color: colorAlertMessage.withOpacity(opacityNaoEntendivel),
                               ),
                             ),
                             Text(
@@ -308,8 +293,7 @@ class _PreSomIaState extends State<PreSomIa> {
                               style: TextStyle(
                                 fontSize: widthScreen * 0.05,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF0000FF)
-                                    .withOpacity(opacityFaleAgora),
+                                color: Color(0xFF0000FF).withOpacity(opacityFaleAgora),
                               ),
                             ),
                           ],
@@ -384,8 +368,7 @@ class _PreSomIaState extends State<PreSomIa> {
                         ),
                         padding: EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          border:
-                              Border.all(color: Color.fromRGBO(0, 0, 255, 1)),
+                          border: Border.all(color: Color.fromRGBO(0, 0, 255, 1)),
                           color: buttonBackground,
                           borderRadius: BorderRadius.circular(18.0),
                         ),
@@ -456,11 +439,8 @@ class _PreSomIaState extends State<PreSomIa> {
       _speech.listen(
         onResult: (val) => setState(() {
           _text = val.recognizedWords;
-          _textController.text = _text
-              .toUpperCase(); // se quiser acrescentar no lugar de substituir é só usar um += no lugar do =
-          correctAnswer == _textController.text.toString()
-              ? isCorrect = true
-              : isCorrect = false;
+          _textController.text = _text.toUpperCase(); // se quiser acrescentar no lugar de substituir é só usar um += no lugar do =
+          correctAnswer == _textController.text.toString() ? isCorrect = true : isCorrect = false;
           if (val.hasConfidenceRating && val.confidence > 0) {
             _confidence = val.confidence;
           }
@@ -497,12 +477,9 @@ class _PreSomIaState extends State<PreSomIa> {
           appDocDirectory = (await getExternalStorageDirectory())!;
         }
 
-        customPath = appDocDirectory.path +
-            customPath +
-            DateTime.now().millisecondsSinceEpoch.toString();
+        customPath = appDocDirectory.path + customPath + DateTime.now().millisecondsSinceEpoch.toString();
 
-        _recorder =
-            FlutterAudioRecorder2(customPath, audioFormat: AudioFormat.WAV);
+        _recorder = FlutterAudioRecorder2(customPath, audioFormat: AudioFormat.WAV);
 
         await _recorder.initialized;
         // after initialization
@@ -514,8 +491,7 @@ class _PreSomIaState extends State<PreSomIa> {
           print(_currentStatus);
         });
       } else {
-        Scaffold.of(context).showSnackBar(
-            new SnackBar(content: new Text("You must accept permissions")));
+        Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("You must accept permissions")));
       }
     } catch (e) {
       print(e);

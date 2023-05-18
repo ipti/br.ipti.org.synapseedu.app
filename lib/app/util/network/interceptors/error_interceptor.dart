@@ -10,7 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ErrorInterceptor extends InterceptorsWrapper {
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  // final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Future onError(DioError err, ErrorInterceptorHandler handler) async {
@@ -37,7 +37,9 @@ class ErrorInterceptor extends InterceptorsWrapper {
       );
 
       //TODO: alterar pra realizar navegação em caso de erros
-      navigatorKey.currentState!.setState(() {});
+      // navigatorKey.currentState!.setState(() {});
     }
+
+    super.onError(err, handler);
   }
 }

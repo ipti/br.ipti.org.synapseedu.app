@@ -1,17 +1,17 @@
 import 'package:elesson/activity_selection/block_selection_view.dart';
-import 'package:elesson/app/feature/providers/userProvider.dart';
 import 'package:elesson/degree_selection/degree_selection_view.dart';
 import 'package:elesson/register/code_verify_view.dart';
 import 'package:elesson/settings/settings_screen.dart';
 import 'package:elesson/share/block_conclusion.dart';
 import 'package:elesson/share/qr_code_reader.dart';
-import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
 import 'package:elesson/template_questoes/PRE_SOM_IA.dart';
 import 'package:provider/provider.dart';
 import './register/countdown.dart';
 import 'app/core/auth/data/model/user_model.dart';
 import 'app/feature/auth/auth_module.dart';
+import 'app/feature/task/task_module.dart';
+import 'app/providers/userProvider.dart';
 import 'init_pages/space_selection.dart';
 import './root/poc.dart';
 import 'package:elesson/register/sms_register.dart';
@@ -33,7 +33,6 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) async {
-    isLogged = await isUserConfirmed();
     runApp(
       MultiProvider(
         providers: [
@@ -54,16 +53,11 @@ void main() async {
               minWidth: 0,
             ),
           ),
-          // initialRoute: '/admin',
-          // home: VerifyLogin(),
-          // initialRoute: isLogged && isAdmin
-          //     ? '/admin'
-          //     : isLogged
-          //         ? '/'
-          //         : AuthModule.routeName,
+          initialRoute: '/',
           routes: {
             '/': (context) => VerifyLogin(),
             AuthModule.routeName: (context) => AuthModule(),
+            TaskModule.routeName: (context) => TaskModule(),
             SpaceSelection.routeName: (context) => SpaceSelection(),
             DegreeSelectionView.routeName: (context) => DegreeSelectionView(),
             BlockSelection.routeName: (context) => BlockSelection(),
@@ -107,7 +101,6 @@ class _VerifyLoginState extends State<VerifyLogin> {
   bool initialized = false;
 
   Future<UserModel?> verifyLogin() async {
-    // globalUserProvider = Provider.of<UserProvider>(context);
     initialized = true;
     return await Provider.of<UserProvider>(context).recoverUser();
   }
@@ -119,7 +112,8 @@ class _VerifyLoginState extends State<VerifyLogin> {
       builder: (context, snapshot) {
         print((snapshot.data as UserModel?)?.user_type_id);
         if (snapshot.connectionState != ConnectionState.waiting) {
-          return snapshot.data != null ? BlockSelection() : AuthModule();
+          return AuthModule();
+          // return snapshot.data != null ? TaskModule() : AuthModule();
         } else {
           return Center(
             child: CircularProgressIndicator(),
@@ -129,26 +123,3 @@ class _VerifyLoginState extends State<VerifyLogin> {
     );
   }
 }
-
-
-// class Home extends StatefulWidget {
-//   @override
-//   _HomeState createState() => _HomeState();
-// }
-//
-// class _HomeState extends State<Home> {
-//
-//   Future<void> isUserConfirmed() async {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     // setState(() {
-//     isLogged = prefs.getBool('isConfirmed') ?? false;
-//     isAdmin = prefs.getBool('admin') ?? false;
-//     // });
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//
-//     return
-//   }
-// }

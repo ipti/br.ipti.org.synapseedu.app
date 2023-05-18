@@ -1,11 +1,11 @@
 import 'package:elesson/app/core/auth/data/model/user_model.dart';
-import 'package:elesson/app/feature/providers/userController.dart';
+import 'package:elesson/app/providers/userController.dart';
 import 'package:flutter/material.dart';
 
 class UserProvider extends ChangeNotifier {
-  UserModel? _user = UserModel();
+  UserModel _user = UserModel.empty();
 
-  UserModel? get user => _user;
+  UserModel get user => _user;
 
   UserController _userController = UserController();
 
@@ -15,13 +15,12 @@ class UserProvider extends ChangeNotifier {
 
   Future<UserModel?>recoverUser() async {
     _user = await _userController.recoverUser();
-    // FeaturePermission().setUserType(_user?.user_type_id ?? 0);
-    notifyListeners();
+    // notifyListeners();
     return _user;
   }
 
   Future<void> logout() async {
-    _user = null;
+    _user = UserModel.empty();
     await _userController.logout();
     return;
   }

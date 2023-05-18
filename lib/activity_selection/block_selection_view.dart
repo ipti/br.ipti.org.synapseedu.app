@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:elesson/app/feature/providers/userProvider.dart';
 import 'package:elesson/app/feature/shared/widgets/card_widget.dart';
 import 'package:elesson/app/feature/shared/widgets/init_title.dart';
+import 'package:elesson/app/providers/userProvider.dart';
 import 'package:elesson/degree_selection/degree_selection_view.dart';
 import 'package:elesson/share/api.dart';
 import 'package:elesson/share/question_widgets.dart';
@@ -11,6 +11,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'block_selection.dart';
+
+//TODO: VAI DE BASE
 
 class BlockSelection extends StatefulWidget {
   static const routeName = '/block-selection';
@@ -48,43 +50,6 @@ class _BlockSelectionState extends State<BlockSelection> {
     super.didChangeDependencies();
   }
 
-  // void redirectToQuestion(
-  //     int cobjectIdIndex, String disciplineId, String discipline) async {
-  // Future<Function> redirectToQuestion(
-  //     {int cobjectIdIndex,
-  //     String disciplineId,
-  //     String discipline,
-  //     String blockId,
-  //     BuildContext context}) async {
-  //   print('Classroom fk: $classroomFk');
-  //   var blockId = studentUuid != null
-  //       ? prefs.getString('block_$disciplineId')
-  //       : await ApiBlock.getBlockByDiscipline(disciplineId);
-  //   var responseBlock = await ApiBlock.getBlock(blockId);
-  //   ApiBlock.getBlock(blockId).then((value) {
-  //     var responseBlock = value;
-  //     List<String> cobjectIdList = [];
-  //     int cobjectId = prefs.getInt('last_cobject_$discipline') ?? 0;
-  //     int questionIndex = prefs.getInt('last_question_$discipline') ?? 0;
-  //     responseBlock.data[0]["cobject"].forEach((cobject) {
-  //       // print(cobject["id"]);
-  //       cobjectIdList.add(cobject["id"]);
-  //     });
-  //     print(cobjectIdList);
-
-  //     getCobject(cobjectId, context, cobjectIdList,
-  //         piecesetIndex: questionIndex);
-  //   });
-  // }
-  // @override
-  // loadingBgBlur() => 0.0;
-
-  @override
-  loader() {
-    return CircularProgressIndicator();
-  }
-
-  Key? scaffoldKey;
 
   TextEditingController cobjectId = TextEditingController();
   TextEditingController blockIdController = TextEditingController();
@@ -108,30 +73,28 @@ class _BlockSelectionState extends State<BlockSelection> {
 
   @override
   Widget build(BuildContext context) {
-    double heightScreen = MediaQuery.of(context).size.height;
-    double widthScreen = MediaQuery.of(context).size.width;
+    Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      key: scaffoldKey,
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            initTitle(text: "Oi, ${userProvider?.user?.name ?? "Aluno(a)"}", heightScreen: heightScreen, bottomMargin: 20),
+            initTitle(text: "Oi, ${userProvider?.user.name ?? "Aluno(a)"}", heightScreen: size.height, bottomMargin: 20),
             Text('INICIAR AVALIAÇÕES', style: TextStyle(color: Color(0XFF6E7291), fontWeight: FontWeight.bold, fontFamily: "ElessonIconLib", fontSize: 18)),
             SizedBox(height: 36.0),
-            userProvider?.user?.user_type_id != 3
+            userProvider?.user.user_type_id != 3
                 ? Column(
                     children: [
                       Container(
-                        width: widthScreen * 0.8,
-                        height: heightScreen * 0.1,
+                        width: size.width * 0.8,
+                        height: size.height * 0.1,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
                               decoration: BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                              width: widthScreen * 0.55,
+                              width: size.width * 0.55,
                               child: TextFormField(
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(hintText: 'Digite o ID do CObject', border: InputBorder.none),
@@ -148,8 +111,8 @@ class _BlockSelectionState extends State<BlockSelection> {
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.red,
                                 ),
-                                width: widthScreen * 0.2,
-                                height: heightScreen * 0.05,
+                                width: size.width * 0.2,
+                                height: size.height * 0.05,
                                 child: Center(
                                   child: Text(
                                     'BUSCAR',
@@ -162,14 +125,14 @@ class _BlockSelectionState extends State<BlockSelection> {
                         ),
                       ),
                       Container(
-                        width: widthScreen * 0.8,
-                        height: heightScreen * 0.1,
+                        width: size.width * 0.8,
+                        height: size.height * 0.1,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
                               decoration: BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                              width: widthScreen * 0.55,
+                              width: size.width * 0.55,
                               child: TextFormField(
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(hintText: 'Digite o ID do bloco', border: InputBorder.none),
@@ -186,8 +149,8 @@ class _BlockSelectionState extends State<BlockSelection> {
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.red,
                                 ),
-                                width: widthScreen * 0.2,
-                                height: heightScreen * 0.05,
+                                width: size.width * 0.2,
+                                height: size.height * 0.05,
                                 child: Center(
                                   child: Text(
                                     'BUSCAR',
@@ -209,16 +172,19 @@ class _BlockSelectionState extends State<BlockSelection> {
                     backgroundImage: "assets/img/mate.png",
                     text: "MATEMÁTICA",
                     textModulo: 'MÓDULO 1',
-                    screenWidth: widthScreen,
+                    screenWidth: size.width,
                     onTap: (value) async {
                       if (classroomFk == "-1") {
-                        Navigator.of(context).push(MaterialPageRoute(
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
                             builder: (BuildContext context) => DegreeSelectionView(
-                                  cobjectIdIndex: 0,
-                                  discipline: 'Matemática',
-                                  disciplineId: '2',
-                                  studentUuid: studentUuid,
-                                )));
+                              cobjectIdIndex: 0,
+                              discipline: 'Matemática',
+                              disciplineId: '2',
+                              studentUuid: studentUuid,
+                            ),
+                          ),
+                        );
                       } else {
                         await BlockSelectionLogic().redirectToQuestion(
                           cobjectIdIndex: 0,
@@ -228,19 +194,6 @@ class _BlockSelectionState extends State<BlockSelection> {
                           classroomFk: classroomFk,
                           context: context,
                         );
-                        // try {
-                        //   await this.performFuture(
-                        //       await BlockSelectionLogic().redirectToQuestion(
-                        //     cobjectIdIndex: 0,
-                        //     discipline: 'Matemática',
-                        //     disciplineId: '2',
-                        //     studentUuid: studentUuid,
-                        //     classroomFk: classroomFk,
-                        //     context: context,
-                        //   ));
-                        // } catch (e) {
-                        //   callSnackBar(context);
-                        // }
                       }
                     },
                     context: context,
@@ -252,26 +205,20 @@ class _BlockSelectionState extends State<BlockSelection> {
                     backgroundImage: "assets/img/ling.png",
                     text: "LINGUAGEM",
                     textModulo: 'MÓDULO 1',
-                    screenWidth: widthScreen,
+                    screenWidth: size.width,
                     onTap: (value) async {
                       if (classroomFk == "-1") {
-                        Navigator.of(context).push(MaterialPageRoute(
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
                             builder: (BuildContext context) => DegreeSelectionView(
-                                  cobjectIdIndex: 0,
-                                  discipline: 'Português',
-                                  disciplineId: '1',
-                                  studentUuid: studentUuid,
-                                )));
+                              cobjectIdIndex: 0,
+                              discipline: 'Português',
+                              disciplineId: '1',
+                              studentUuid: studentUuid,
+                            ),
+                          ),
+                        );
                       } else {
-                        // await this.performFuture(
-                        //     await BlockSelectionLogic().redirectToQuestion(
-                        //   cobjectIdIndex: 0,
-                        //   discipline: 'Português',
-                        //   disciplineId: '1',
-                        //   studentUuid: studentUuid,
-                        //   classroomFk: classroomFk,
-                        //   context: context,
-                        // ));
                         await BlockSelectionLogic().redirectToQuestion(
                           cobjectIdIndex: 0,
                           discipline: 'Português',
@@ -291,41 +238,21 @@ class _BlockSelectionState extends State<BlockSelection> {
                     backgroundImage: "assets/img/cien.png",
                     text: "CIÊNCIAS",
                     textModulo: 'MÓDULO 1',
-                    screenWidth: widthScreen,
+                    screenWidth: size.width,
                     onTap: (value) async {
                       blockId = await ApiBlock.getBlockByDiscipline("3");
-                      // if (blockId != "-1")
-                      //   try {
-                      //     await this.performFuture(await BlockSelectionLogic()
-                      //         .redirectToQuestion(
-                      //             cobjectIdIndex: 0,
-                      //             disciplineId: '3',
-                      //             discipline: 'Ciências',
-                      //             blockId: blockId,
-                      //             studentUuid: studentUuid,
-                      //             context: context));
-                      //   } catch (e) {}
-                      // else
-                      //   callSnackBar(context);
                       if (classroomFk == "-1") {
-                        Navigator.of(context).push(MaterialPageRoute(
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
                             builder: (BuildContext context) => DegreeSelectionView(
-                                  cobjectIdIndex: 0,
-                                  discipline: 'Ciências',
-                                  disciplineId: '3',
-                                  studentUuid: studentUuid,
-                                )));
+                              cobjectIdIndex: 0,
+                              discipline: 'Ciências',
+                              disciplineId: '3',
+                              studentUuid: studentUuid,
+                            ),
+                          ),
+                        );
                       } else {
-                        // await this.performFuture(
-                        //     await BlockSelectionLogic().redirectToQuestion(
-                        //   cobjectIdIndex: 0,
-                        //   discipline: 'Ciências',
-                        //   disciplineId: '3',
-                        //   studentUuid: studentUuid,
-                        //   classroomFk: classroomFk,
-                        //   context: context,
-                        // ));
-
                         await BlockSelectionLogic().redirectToQuestion(
                           cobjectIdIndex: 0,
                           discipline: 'Ciências',
@@ -349,7 +276,7 @@ class _BlockSelectionState extends State<BlockSelection> {
                     backgroundImage: "assets/img/mate.png",
                     text: "MATEMÁTICA",
                     textModulo: 'MÓDULO 1',
-                    screenWidth: widthScreen,
+                    screenWidth: size.width,
                     onTap: (value) {
                       // if (mathOk == false)
                       // redirectToQuestion(0, '2', 'Matemática');
@@ -365,7 +292,7 @@ class _BlockSelectionState extends State<BlockSelection> {
                     backgroundImage: "assets/img/ling.png",
                     text: "LINGUAGEM",
                     textModulo: 'MÓDULO 1',
-                    screenWidth: widthScreen,
+                    screenWidth: size.width,
                     onTap: (value) {
                       // if (langOk == false)
                       //   redirectToQuestion(0, '1', 'Português');
@@ -381,7 +308,7 @@ class _BlockSelectionState extends State<BlockSelection> {
                     backgroundImage: "assets/img/cien.png",
                     text: "CIÊNCIAS",
                     textModulo: 'MÓDULO 1',
-                    screenWidth: widthScreen,
+                    screenWidth: size.width,
                     onTap: (value) {
                       // if (sciOk == false) redirectToQuestion(0, '3','Ciências');
                       // else print("Você já fez essa tarefinha!");

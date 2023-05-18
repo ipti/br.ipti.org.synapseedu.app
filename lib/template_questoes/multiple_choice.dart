@@ -1,25 +1,25 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
+import 'package:elesson/app/core/task/data/model/container_model.dart';
+import 'package:elesson/app/feature/task/controller/TaskViewController.dart';
+import 'package:elesson/app/feature/task/widgets/header_view.dart';
 import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/share/description_format.dart';
 import 'package:flutter/services.dart';
-
-
-import 'share/template_slider.dart';
+import '../app/feature/task/widgets/template_slider.dart';
 import 'package:flutter/material.dart';
-import 'question_provider.dart';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'question_provider.dart';
 import 'model.dart';
 import 'share/image_detail_screen.dart';
 
 // const String BASE_URL = 'https://apielesson.azurewebsites.net/app/library';
 
-final cobjectProvider = Provider<Cobjects>((ref) {
-  return Cobjects();
-});
+// final cobjectProvider = Provider<Cobjects>((ref) {
+//   return Cobjects();
+// });
 
-class MultipleChoiceQuestion extends ConsumerWidget {
+class MultipleChoiceQuestion extends StatelessWidget{
   static const routeName = '/MTE';
 
   List<Cobject> cobjectList = [];
@@ -31,53 +31,41 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   List<bool> _buttonPressed = [false, false, false];
   int _selectedButton = 3;
 
-  final buttonStateProvider = StateProvider<bool>((ref) {
-    return false;
-  });
+  // final buttonStateProvider = StateProvider<bool>((ref) {
+  //   return false;
+  // });
 
   void changeButtonColor(BuildContext context, index) {
     for (int i = 0; i < 3; i++) {
       if (_buttonPressed[i] == true && i != index) {
         _buttonPressed[i] = false;
-        context.read(buttonStateProvider).state = false;
+        // context.read(buttonStateProvider).state = false;
       }
     }
     if (_buttonPressed[index] == false) {
       _buttonPressed[index] = !_buttonPressed[index];
-      context.read(buttonStateProvider).state = true;
+      // context.read(buttonStateProvider).state = true;
     }
     _selectedButton = index;
   }
 
   // Widget que retorna o quadro que representa o piece, seja ele uma imagem ou texto.
-  Widget piece(
-      int index,
-      BuildContext context,
-      ScopedReader watch,
-      Question question,
-      double buttonHeight,
-      double screenHeight,
-      double textCardHeight) {
-    final buttonState = watch(buttonStateProvider).state;
+  Widget piece(int index, BuildContext context, Question question, double buttonHeight, double screenHeight, double textCardHeight) {
+    // final buttonState = watch(buttonStateProvider).state;
 
     String grouping = (index + 1).toString();
     // double cardHeight = 158.29;
 
     // Define o tamanho do card com base nas dimensões do dispositivo, seguindo as proporções presentes no Figma.
-    double availableSpaceForCards =
-        screenHeight - textCardHeight - buttonHeight - 12 - 32;
+    double availableSpaceForCards = screenHeight - textCardHeight - buttonHeight - 12 - 32;
     double marginBetweenCards = 0.0147 * availableSpaceForCards;
-    double cardHeight =
-        (availableSpaceForCards - 24 - 2 * marginBetweenCards) / 3;
-    double cardWidth = question.pieces[grouping]["image"].isNotEmpty
-        ? cardHeight
-        : double.infinity;
+    double cardHeight = (availableSpaceForCards - 24 - 2 * marginBetweenCards) / 3;
+    double cardWidth = question.pieces[grouping]["image"].isNotEmpty ? cardHeight : double.infinity;
 
     bool audio = false;
 
     return Card(
-      margin: EdgeInsets.only(
-          bottom: index < 2 ? marginBetweenCards : 0, left: 12, right: 12),
+      margin: EdgeInsets.only(bottom: index < 2 ? marginBetweenCards : 0, left: 12, right: 12),
       clipBehavior: Clip.hardEdge,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -87,19 +75,13 @@ class MultipleChoiceQuestion extends ConsumerWidget {
         alignment: Alignment.bottomLeft,
         children: [
           ConstrainedBox(
-            constraints: BoxConstraints(
-                maxHeight: cardHeight,
-                maxWidth: cardWidth,
-                minHeight: cardHeight,
-                minWidth: cardWidth),
+            constraints: BoxConstraints(maxHeight: cardHeight, maxWidth: cardWidth, minHeight: cardHeight, minWidth: cardWidth),
             child: MaterialButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
                 side: BorderSide(
                   // Define a cor das bordas do card dependendo se ele estiver selecionado ou não.
-                  color: _buttonPressed[index]
-                      ? Color(0xFF00DC8C)
-                      : Color(0x6E729166),
+                  color: _buttonPressed[index] ? Color(0xFF00DC8C) : Color(0x6E729166),
                   width: 3,
                 ),
               ),
@@ -110,20 +92,14 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                 tag: grouping,
                 child: question.pieces[grouping]["image"].isNotEmpty
                     ? Image.network(
-                        BASE_URL +
-                            '/image/' +
-                            question.pieces[grouping]["image"],
-                        loadingBuilder: (BuildContext context, Widget child,
-                            ImageChunkEvent? loadingProgress) {
+                        BASE_URL + '/image/' + question.pieces[grouping]["image"],
+                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                           if (loadingProgress == null) {
                             return child;
                           }
                           return Center(
                             child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                  : null,
+                              value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
                             ),
                           );
                         },
@@ -143,9 +119,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                               type: MaterialType.transparency,
                               child: Text(
                                 question.pieces[grouping]["text"].toUpperCase(),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: fonteDaLetra),
+                                style: TextStyle(fontWeight: FontWeight.w800, fontSize: fonteDaLetra),
                               ),
                             ),
                           ),
@@ -162,8 +136,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                 // if (question.pieces[grouping]["image"].isNotEmpty)
                 Navigator.of(context).pushNamed(
                   ImageDetailScreen.routeName,
-                  arguments: DetailScreenArguments(
-                      grouping: grouping, question: question),
+                  arguments: DetailScreenArguments(grouping: grouping, question: question),
                 );
               },
               onPressed: () {
@@ -171,9 +144,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                 if (showConfirmButton == false) showConfirmButton = true;
                 // Muda a flag isCorrect com base na resposta correta fornecida pela questão. Se a resposta atual selecionada for a certa,
                 // a flag receberá true. Ao pressionar o botão de confirmar, ela será enviada como parâmetro.
-                question.pieces["correctAnswer"] == index + 1
-                    ? isCorrect = true
-                    : isCorrect = false;
+                question.pieces["correctAnswer"] == index + 1 ? isCorrect = true : isCorrect = false;
                 // print('Correto: ${question.pieces["correctAnswer"]}');
                 // setState(() {
                 //   for (int i = 0; i < 3; i++) {
@@ -216,19 +187,18 @@ class MultipleChoiceQuestion extends ConsumerWidget {
   Widget? questionDescriptionWidget;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final ScreenArguments args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+  Widget build(BuildContext context) {
+    // final ScreenArguments args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     // elapsedTimer.start();
-    cobjectList = args.cobjectList;
-    cobjectIdList = args.cobjectIdList;
-    questionIndex = args.questionIndex;
-    cobjectIdListLength = args.cobjectIdLength;
-    cobjectQuestionsLength = args.cobjectQuestionsLength;
-    var cobjectIndex = args.cobjectIndex!;
+    cobjectList = [];
+    cobjectIdList =[];
+    questionIndex = 1;
+    cobjectIdListLength = 1;
+    cobjectQuestionsLength = 1;
+    var cobjectIndex = 1;
     double screenHeight = MediaQuery.of(context).size.height;
     double textCardHeight = 0.0985 * screenHeight;
-    double buttonHeight =
-        48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
+    double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
     // print(
     //     'COBJECT LIST ID ${cobjectIdList[0]} e qindex ${cobjectList[0].questions[questionIndex]}');
 
@@ -237,7 +207,6 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     String? pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
     // final cobjectProvidersState = watch(cobjectProvider.state);
-    SystemChrome.setEnabledSystemUIOverlays([]);
     String questionDescription = cobjectList[0].description!;
     // final questionChangeNotifier = watch(questionChangeNotifierProvider);
 
@@ -248,21 +217,20 @@ class MultipleChoiceQuestion extends ConsumerWidget {
     if (!pieceOrdered) {
       pieceOrdered = true;
       pieceOrder.shuffle();
-      questionDescriptionWidget = formatDescription(
-          cobjectList[0].questions[questionIndex].header["text"]!.toUpperCase());
+      questionDescriptionWidget = formatDescription(cobjectList[0].questions[questionIndex].header["text"]!.toUpperCase());
     }
 
     return Scaffold(
       // bottomNavigationBar: bottomNavBar(context),
       body: TemplateSlider(
-        currentId: cobjectIdList![cobjectIndex],
-        showConfirmButton: showConfirmButton,
-        title: questionDescription.toUpperCase(),
-        text: questionDescriptionWidget,
-        linkImage: imageLink.isNotEmpty
-            ? 'https://apielesson.azurewebsites.net/app/library/image/' + imageLink
-            : null,
-        activityScreen: Container(
+        headerView: HeaderView(containerModel: ContainerModel.empty()),
+        taskViewController: TaskViewController(),
+        // currentId: cobjectIdList![cobjectIndex],
+        // showConfirmButton: showConfirmButton,
+        // title: questionDescription.toUpperCase(),
+        // text: questionDescriptionWidget,
+        // linkImage: imageLink.isNotEmpty ? 'https://apielesson.azurewebsites.net/app/library/image/' + imageLink : null,
+        bodyView: Container(
           child: Wrap(
             alignment: WrapAlignment.center,
             children: [
@@ -272,8 +240,7 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
                       height: textCardHeight + 32,
                       child: GestureDetector(
                         // onTap: () => playerTituloSegundaTela.resume(),
@@ -283,35 +250,13 @@ class MultipleChoiceQuestion extends ConsumerWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 0, vertical: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 12),
                       child: Column(
                         children: [
                           // Monta as escolhas em uma coluna, com base na função que retorna um Widget de piece unitário.
-                          piece(
-                              pieceOrder[0],
-                              context,
-                              watch,
-                              cobjectList[0].questions[questionIndex],
-                              buttonHeight,
-                              screenHeight,
-                              textCardHeight),
-                          piece(
-                              pieceOrder[1],
-                              context,
-                              watch,
-                              cobjectList[0].questions[questionIndex],
-                              buttonHeight,
-                              screenHeight,
-                              textCardHeight),
-                          piece(
-                              pieceOrder[2],
-                              context,
-                              watch,
-                              cobjectList[0].questions[questionIndex],
-                              buttonHeight,
-                              screenHeight,
-                              textCardHeight),
+                          piece(pieceOrder[0], context, cobjectList[0].questions[questionIndex], buttonHeight, screenHeight, textCardHeight),
+                          piece(pieceOrder[1], context, cobjectList[0].questions[questionIndex], buttonHeight, screenHeight, textCardHeight),
+                          piece(pieceOrder[2], context, cobjectList[0].questions[questionIndex], buttonHeight, screenHeight, textCardHeight),
                         ],
                       ),
                     ),

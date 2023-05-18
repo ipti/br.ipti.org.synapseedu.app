@@ -26,7 +26,7 @@ class Student {
 // 79999466220
   //   Future<Student> searchForStudent({String phoneNumber = '79999466220'}) async {
   Future<Student> searchForStudent({String? phoneNumber}) async {
-    // final url = 'https://apielesson.azurewebsites.net/api/student/' + phoneNumber;
+    // final url = '${BaseUrl}/student/' + phoneNumber;
 
     final stringsStudent =
         await rootBundle.loadString('assets/json/students.json');
@@ -79,14 +79,14 @@ class LoginQuery {
     String? degreeFkBlock;
 
     if (isQrcode) {
-      url = 'https://apielesson.azurewebsites.net/api/loginuuid';
+      url = '${BaseUrl}/loginuuid';
       response = await Dio().post(
         url,
         options: Options(contentType: 'application/x-www-form-urlencoded'),
         data: {'uuid': studentUuid},
       );
     } else {
-      url = 'https://apielesson.azurewebsites.net/api/login';
+      url = '${BaseUrl}/login';
       response = await Dio().post(
         url,
         options: Options(contentType: 'application/x-www-form-urlencoded'),
@@ -140,7 +140,7 @@ class LoginQuery {
   }
 
   void getLoginTrial(BuildContext context) async {
-    String url = "https://apielesson.azurewebsites.net/api/logintrial";
+    String url = "BaseUrl/logintrial";
     Response response = await Dio().post(url);
 
     String trialUuid = response.data[0]["uuid"];

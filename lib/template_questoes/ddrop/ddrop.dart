@@ -1,9 +1,12 @@
 import 'package:elesson/activity_selection/activity_selection_view.dart';
+import 'package:elesson/app/core/task/data/model/container_model.dart';
+import 'package:elesson/app/feature/task/controller/TaskViewController.dart';
+import 'package:elesson/app/feature/task/widgets/header_view.dart';
 import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/share/description_format.dart';
-import 'package:elesson/template_questoes/share/template_slider.dart';
+import 'package:elesson/app/feature/task/widgets/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/all.dart';
@@ -52,14 +55,13 @@ class _DragAndDropState extends State<DragAndDrop> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIOverlays([]);
-    final ScreenArguments args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
-    cobjectList = args.cobjectList;
-    cobjectIdList = args.cobjectIdList;
-    questionIndex = args.questionIndex;
-    cobjectIndex = args.cobjectIndex;
-    cobjectQuestionsLength = args.cobjectQuestionsLength;
-    cobjectIdLength = args.cobjectIdLength;
+    // final ScreenArguments args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+    cobjectList = [];
+    cobjectIdList = [];
+    questionIndex = 1;
+    cobjectIndex = 1;
+    cobjectQuestionsLength = 1;
+    cobjectIdLength = 1;
 
     String questionText =
         cobjectList[0].questions[questionIndex!].header["text"]!;
@@ -70,21 +72,23 @@ class _DragAndDropState extends State<DragAndDrop> {
     return Scaffold(
       // resizeToAvoidBottomPadding: false,
       body: TemplateSlider(
-        cobjectIdList: cobjectIdList,
-        cobjectIdListLength: cobjectIdLength,
-        questionIndex: questionIndex,
-        cobjectIndex: cobjectIndex,
-        cobjectQuestionsLength: cobjectQuestionsLength,
-        cobjectList: cobjectList,
-        linkImage: cobjectList[0].questions[0].header['image'] != ''
-            ? BASE_URL + '/image/' + cobjectList[0].questions[0].header['image']!
-            : null,
-        sound: cobjectList[0].questions[0].header["sound"],
-        title: cobjectList[0].description!.toUpperCase(),
-        text: formatDescription(cobjectList[0]
-            .questions[questionIndex!]
-            .header["text"]!
-            .toUpperCase()),
+        headerView: HeaderView(containerModel: ContainerModel.empty()),
+        taskViewController: TaskViewController(),
+        // cobjectIdList: cobjectIdList,
+        // cobjectIdListLength: cobjectIdLength,
+        // questionIndex: questionIndex,
+        // cobjectIndex: cobjectIndex,
+        // cobjectQuestionsLength: cobjectQuestionsLength,
+        // cobjectList: cobjectList,
+        // linkImage: cobjectList[0].questions[0].header['image'] != ''
+        //     ? BASE_URL + '/image/' + cobjectList[0].questions[0].header['image']!
+        //     : null,
+        // sound: cobjectList[0].questions[0].header["sound"],
+        // title: cobjectList[0].description!.toUpperCase(),
+        // text: formatDescription(cobjectList[0]
+        //     .questions[questionIndex!]
+        //     .header["text"]!
+        //     .toUpperCase()),
         // text: Text(
         //   cobjectList[0].questions[questionIndex].header["text"].toUpperCase(),
         //   textAlign: TextAlign.center,
@@ -94,7 +98,7 @@ class _DragAndDropState extends State<DragAndDrop> {
         //     fontFamily: 'Mulish',
         //   ),
         // ),
-        activityScreen: activityScreen(heightScreen - 12, widthScreen,
+        bodyView: activityScreen(heightScreen - 12, widthScreen,
             cobjectList[0].questions[questionIndex!], questionText, chronometer,
             cobjectIdList: cobjectIdList,
             cobjectList: cobjectList,

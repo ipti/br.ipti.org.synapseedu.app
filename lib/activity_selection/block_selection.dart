@@ -7,23 +7,18 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BlockSelectionLogic {
-  Future<void> redirectToQuestion(
-      {int? cobjectIdIndex,
-      String? disciplineId,
-      String? discipline,
-      String? studentUuid,
-      BuildContext? context,
-      String? classroomFk}) async {
+  Future<void> redirectToQuestion({int? cobjectIdIndex, String? disciplineId, String? discipline, String? studentUuid, required BuildContext context, String? classroomFk}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String studentUuid = prefs.getString('student_uuid')??'';
+    String studentUuid = prefs.getString('student_uuid') ?? '';
 
-    var blockId = studentUuid != ''
+    print(disciplineId);
+    var blockId = false //studentUuid != ''
         ? prefs.getString('block_${classroomFk}_$disciplineId')
-        : await (ApiBlock.getBlockByDiscipline(disciplineId!) as FutureOr<String>);
+        : await (ApiBlock.getBlockByDiscipline(disciplineId!));
     print('blockId: $blockId');
     // var responseBlock = await ApiBlock.getBlock(blockId);
     // print('responseblock: $responseBlock');
-    ApiBlock.getBlock(blockId!).then((value) {
+    ApiBlock.getBlock("94").then((value) {
       var responseBlock = value;
       if (responseBlock != "-1") {
         List<String?> cobjectIdList = [];
@@ -35,10 +30,9 @@ class BlockSelectionLogic {
         });
         print(cobjectIdList);
 
-        getCobject(cobjectId, context, cobjectIdList,
-            piecesetIndex: questionIndex);
+        getCobject(cobjectId, context, cobjectIdList, piecesetIndex: questionIndex);
       } else
-        callSnackBar(context!);
+        callSnackBar(context);
     });
   }
 }
