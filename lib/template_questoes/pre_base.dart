@@ -7,7 +7,7 @@ import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/model.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/share/description_format.dart';
-import 'package:elesson/app/feature/task/widgets/template_slider.dart';
+import 'package:elesson/app/feature/task/widgets/template_slider/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_riverpod/all.dart';
@@ -100,181 +100,181 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
     SystemChrome.setEnabledSystemUIOverlays([]);
 
     return Scaffold(
-      body: TemplateSlider(
-        headerView: HeaderView(containerModel: ContainerModel.empty()),
-        taskViewController: TaskViewController(),
-        // title: questionDescription.toUpperCase(),
-        // text: Text(
-        //   questionText.toUpperCase(),
-        //   textAlign: TextAlign.center,
-        //   style: TextStyle(
-        //     fontWeight: FontWeight.bold,
-        //     fontSize: fonteDaLetra,
-        //     fontFamily: 'Mulish',
-        //   ),
-        // ),
-        // sound: cobjectList[0].questions[questionIndex].header["sound"],
-        // linkImage: cobjectList[0].questions[0].header["image"]!.isNotEmpty
-        //     ? 'https://apielesson.azurewebsites.net/app/library/image/' + cobjectList[0].questions[0].header["image"]!
-        //     : null,
-        // isPreTemplate: true,
-        bodyView: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            reverse: false,
-            child: Wrap(
-              children: <Widget>[
-                Stack(
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(
-                        right: 16,
-                        left: 16,
-                        top: screenHeight * 0.2,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: Color.fromRGBO(189, 0, 255, 0.2),
-                          width: 2,
-                        ),
-                      ),
-                      height: screenHeight / 3,
-                      child: Center(
-                        child: TextFormField(
-                          textCapitalization: TextCapitalization.characters,
-                          autocorrect: false,
-                          maxLines: 3,
-                          minLines: 1,
-                          enableSuggestions: false,
-                          keyboardType: TextInputType.visiblePassword,
-                          controller: _textController,
-                          autofocus: false,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Color(0xFF0000FF),
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Mulish',
-                          ),
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            hintText: 'Digite a resposta aqui',
-                            contentPadding: const EdgeInsets.all(8.0),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.circular(25.7),
-                            ),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.circular(25.7),
-                            ),
-                          ),
-                          onChanged: (val) {
-                            verificarResposta(respostasCorretas: correctAnswer!, respostaUsuario: _textController.text.toString()) ? isCorrect = true : isCorrect = false;
-
-                            print("CORRETA: $correctAnswer , DIGITADA: ${_textController.text.toString()} ");
-                            if (_textController.text.length == 1) {
-                              submitButton(context);
-                            }
-                          },
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Não se esqueça de digitar a resposta!';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                    ),
-                    Container(
-                      //padding: EdgeInsets.only(left: 16, right: 16, bottom: 0),
-                      margin: EdgeInsets.only(
-                          bottom: _textController.text.isNotEmpty ? (screenHeight * 0.93) - 18 - (48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656) : screenHeight * 0.92),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color.fromRGBO(0, 0, 76, 0.1),
-                            spreadRadius: 1,
-                          ),
-                        ],
-                      ),
-                      height: screenHeight * 0.15,
-                      width: widthScreen,
-                      child: Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            playSound(cobjectList[0].questions[questionIndex].header["sound"]);
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(20),
-                            child: formatDescription(questionText.toUpperCase()),
-                            // child: Text(
-                            //   questionText.toUpperCase(),
-                            //   style: TextStyle(
-                            //     fontWeight: FontWeight.bold,
-                            //     fontSize: fonteDaLetra,
-                            //     fontFamily: 'Mulish',
-                            //   ),
-                            // ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: widthScreen,
-                      margin: EdgeInsets.only(top: screenHeight * 0.65),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Text(
-                              naoEndendivel,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: widthScreen * 0.05,
-                                fontWeight: FontWeight.bold,
-                                color: colorAlertMessage.withOpacity(opacityNaoEntendivel),
-                              ),
-                            ),
-                            Text(
-                              alertMessage,
-                              style: TextStyle(
-                                fontSize: widthScreen * 0.05,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF0000FF).withOpacity(opacityFaleAgora),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 15),
-                // Aciona o botão de confirmar apenas quando algum texto é digitado na tela.
-                if (_textController.text.isNotEmpty)
-                  Center(
-                    child: ConfirmButtonWidget(
-                      context: context,
-                      cobjectList: cobjectList,
-                      cobjectIdList: cobjectIdList,
-                      questionType: 'PRE',
-                      questionIndex: ++questionIndex,
-                      cobjectIndex: cobjectIndex,
-                      cobjectIdListLength: cobjectIdListLength,
-                      cobjectQuestionsLength: cobjectQuestionsLength,
-                      pieceId: pieceId,
-                      isCorrect: isCorrect,
-                      value: _textController.text,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      // body: TemplateSlider(
+      //   headerView: HeaderView(containerModel: ContainerModel.empty()),
+      //   // taskViewController: TaskViewController(),
+      //   // title: questionDescription.toUpperCase(),
+      //   // text: Text(
+      //   //   questionText.toUpperCase(),
+      //   //   textAlign: TextAlign.center,
+      //   //   style: TextStyle(
+      //   //     fontWeight: FontWeight.bold,
+      //   //     fontSize: fonteDaLetra,
+      //   //     fontFamily: 'Mulish',
+      //   //   ),
+      //   // ),
+      //   // sound: cobjectList[0].questions[questionIndex].header["sound"],
+      //   // linkImage: cobjectList[0].questions[0].header["image"]!.isNotEmpty
+      //   //     ? 'https://apielesson.azurewebsites.net/app/library/image/' + cobjectList[0].questions[0].header["image"]!
+      //   //     : null,
+      //   // isPreTemplate: true,
+      //   bodyView: Form(
+      //     key: _formKey,
+      //     child: SingleChildScrollView(
+      //       reverse: false,
+      //       child: Wrap(
+      //         children: <Widget>[
+      //           Stack(
+      //             children: <Widget>[
+      //               Container(
+      //                 margin: EdgeInsets.only(
+      //                   right: 16,
+      //                   left: 16,
+      //                   top: screenHeight * 0.2,
+      //                 ),
+      //                 decoration: BoxDecoration(
+      //                   borderRadius: BorderRadius.circular(12),
+      //                   border: Border.all(
+      //                     color: Color.fromRGBO(189, 0, 255, 0.2),
+      //                     width: 2,
+      //                   ),
+      //                 ),
+      //                 height: screenHeight / 3,
+      //                 child: Center(
+      //                   child: TextFormField(
+      //                     textCapitalization: TextCapitalization.characters,
+      //                     autocorrect: false,
+      //                     maxLines: 3,
+      //                     minLines: 1,
+      //                     enableSuggestions: false,
+      //                     keyboardType: TextInputType.visiblePassword,
+      //                     controller: _textController,
+      //                     autofocus: false,
+      //                     textAlign: TextAlign.center,
+      //                     style: TextStyle(
+      //                       color: Color(0xFF0000FF),
+      //                       fontSize: 18,
+      //                       fontWeight: FontWeight.bold,
+      //                       fontFamily: 'Mulish',
+      //                     ),
+      //                     decoration: InputDecoration(
+      //                       filled: true,
+      //                       fillColor: Colors.white,
+      //                       hintText: 'Digite a resposta aqui',
+      //                       contentPadding: const EdgeInsets.all(8.0),
+      //                       focusedBorder: OutlineInputBorder(
+      //                         borderSide: BorderSide(color: Colors.white),
+      //                         borderRadius: BorderRadius.circular(25.7),
+      //                       ),
+      //                       enabledBorder: UnderlineInputBorder(
+      //                         borderSide: BorderSide(color: Colors.white),
+      //                         borderRadius: BorderRadius.circular(25.7),
+      //                       ),
+      //                     ),
+      //                     onChanged: (val) {
+      //                       verificarResposta(respostasCorretas: correctAnswer!, respostaUsuario: _textController.text.toString()) ? isCorrect = true : isCorrect = false;
+      //
+      //                       print("CORRETA: $correctAnswer , DIGITADA: ${_textController.text.toString()} ");
+      //                       if (_textController.text.length == 1) {
+      //                         submitButton(context);
+      //                       }
+      //                     },
+      //                     validator: (value) {
+      //                       if (value!.isEmpty) {
+      //                         return 'Não se esqueça de digitar a resposta!';
+      //                       }
+      //                       return null;
+      //                     },
+      //                   ),
+      //                 ),
+      //               ),
+      //               Container(
+      //                 //padding: EdgeInsets.only(left: 16, right: 16, bottom: 0),
+      //                 margin: EdgeInsets.only(
+      //                     bottom: _textController.text.isNotEmpty ? (screenHeight * 0.93) - 18 - (48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656) : screenHeight * 0.92),
+      //                 decoration: BoxDecoration(
+      //                   color: Colors.white,
+      //                   boxShadow: [
+      //                     BoxShadow(
+      //                       color: Color.fromRGBO(0, 0, 76, 0.1),
+      //                       spreadRadius: 1,
+      //                     ),
+      //                   ],
+      //                 ),
+      //                 height: screenHeight * 0.15,
+      //                 width: widthScreen,
+      //                 child: Center(
+      //                   child: GestureDetector(
+      //                     onTap: () {
+      //                       playSound(cobjectList[0].questions[questionIndex].header["sound"]);
+      //                     },
+      //                     child: Container(
+      //                       padding: EdgeInsets.all(20),
+      //                       child: formatDescription(questionText.toUpperCase()),
+      //                       // child: Text(
+      //                       //   questionText.toUpperCase(),
+      //                       //   style: TextStyle(
+      //                       //     fontWeight: FontWeight.bold,
+      //                       //     fontSize: fonteDaLetra,
+      //                       //     fontFamily: 'Mulish',
+      //                       //   ),
+      //                       // ),
+      //                     ),
+      //                   ),
+      //                 ),
+      //               ),
+      //               Container(
+      //                 width: widthScreen,
+      //                 margin: EdgeInsets.only(top: screenHeight * 0.65),
+      //                 child: Center(
+      //                   child: Column(
+      //                     children: [
+      //                       Text(
+      //                         naoEndendivel,
+      //                         textAlign: TextAlign.center,
+      //                         style: TextStyle(
+      //                           fontSize: widthScreen * 0.05,
+      //                           fontWeight: FontWeight.bold,
+      //                           color: colorAlertMessage.withOpacity(opacityNaoEntendivel),
+      //                         ),
+      //                       ),
+      //                       Text(
+      //                         alertMessage,
+      //                         style: TextStyle(
+      //                           fontSize: widthScreen * 0.05,
+      //                           fontWeight: FontWeight.bold,
+      //                           color: Color(0xFF0000FF).withOpacity(opacityFaleAgora),
+      //                         ),
+      //                       ),
+      //                     ],
+      //                   ),
+      //                 ),
+      //               ),
+      //             ],
+      //           ),
+      //           SizedBox(height: 15),
+      //           // Aciona o botão de confirmar apenas quando algum texto é digitado na tela.
+      //           if (_textController.text.isNotEmpty)
+      //             Center(
+      //               child: ConfirmButtonWidget(
+      //                 context: context,
+      //                 cobjectList: cobjectList,
+      //                 cobjectIdList: cobjectIdList,
+      //                 questionType: 'PRE',
+      //                 questionIndex: ++questionIndex,
+      //                 cobjectIndex: cobjectIndex,
+      //                 cobjectIdListLength: cobjectIdListLength,
+      //                 cobjectQuestionsLength: cobjectQuestionsLength,
+      //                 pieceId: pieceId,
+      //                 isCorrect: isCorrect,
+      //                 value: _textController.text,
+      //               ),
+      //             ),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
+      // ),
     );
   }
 

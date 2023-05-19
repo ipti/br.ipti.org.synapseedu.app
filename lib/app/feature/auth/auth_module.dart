@@ -29,7 +29,6 @@ class _AuthModuleState extends State<AuthModule> {
     super.initState();
     dio = Dio();
     dio.options.baseUrl = URLBASE;
-    dio.interceptors.add(PrettyDioLogger(requestHeader: true, requestBody: true, responseBody: true, responseHeader: true, error: true, compact: true, maxWidth: 90));
 
     AuthRemoteDataSource authRemoteDatasourceImpl = AuthRemoteDatasourceImpl(dio: dio);
     authLocalDatasourceImpl = AuthLocalDatasourceImpl();

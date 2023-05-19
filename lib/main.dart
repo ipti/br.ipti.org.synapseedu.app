@@ -107,19 +107,21 @@ class _VerifyLoginState extends State<VerifyLogin> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: initialized ? null : verifyLogin(),
-      builder: (context, snapshot) {
-        print((snapshot.data as UserModel?)?.user_type_id);
-        if (snapshot.connectionState != ConnectionState.waiting) {
-          return AuthModule();
-          // return snapshot.data != null ? TaskModule() : AuthModule();
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
+    return SafeArea(
+      child: FutureBuilder(
+        future: initialized ? null : verifyLogin(),
+        builder: (context, snapshot) {
+          print((snapshot.data as UserModel?)?.user_type_id);
+          if (snapshot.connectionState != ConnectionState.waiting) {
+            // return AuthModule();
+            return snapshot.data != null ? TaskModule() : AuthModule();
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
     );
   }
 }

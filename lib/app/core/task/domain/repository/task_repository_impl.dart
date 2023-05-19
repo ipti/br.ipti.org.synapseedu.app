@@ -4,8 +4,8 @@ import 'package:elesson/app/core/task/data/model/task_model.dart';
 import 'package:elesson/app/core/task/data/repository/task_repository_interface.dart';
 import 'package:elesson/app/util/failures/failures.dart';
 
-class TaskRepositoryImpl extends TaskRepositoryInterface {
-  final TaskRemoteDataSource taskRemoteDataSource;
+class TaskRepositoryImpl extends ITaskRepository {
+  final ITaskRemoteDataSource taskRemoteDataSource;
 
   TaskRepositoryImpl({required this.taskRemoteDataSource});
 
@@ -13,7 +13,6 @@ class TaskRepositoryImpl extends TaskRepositoryInterface {
   Future<Either<Failure, TaskModel>> getTaskById(int id) async {
     try {
       final result = await taskRemoteDataSource.getTaskById(id);
-      print("AAAAAAAA: $result");
       if (result != null) return Right(result);
     } on Exception catch (e) {
       return Left(Failure("Erro ao buscar tarefa"));

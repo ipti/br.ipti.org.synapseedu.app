@@ -2,6 +2,7 @@ import 'package:elesson/app/core/task/data/model/component_model.dart';
 import 'package:elesson/app/core/task/data/model/element_model.dart';
 import 'package:elesson/app/core/task/data/model/task_model.dart';
 import 'package:elesson/app/core/task/domain/entity/screen_entity.dart';
+import 'package:elesson/app/core/task/domain/usecase/get_multimedia_usecase.dart';
 import 'package:elesson/app/feature/task/widgets/audio_multimedia.dart';
 import 'package:elesson/app/feature/task/widgets/image_multimedia.dart';
 import 'package:elesson/app/feature/task/widgets/text_multimedia.dart';
@@ -10,6 +11,10 @@ import 'package:elesson/app/util/enums/multimedia_types.dart';
 import 'package:flutter/material.dart';
 
 class TaskViewController extends ChangeNotifier {
+  final GetMultimediaUseCase getMultimediaUseCase;
+
+  TaskViewController({required this.getMultimediaUseCase});
+
   SubmitButtonStatus _submitButtonStatus = SubmitButtonStatus.Idle;
 
   SubmitButtonStatus get buttonStatus => _submitButtonStatus;
@@ -46,7 +51,7 @@ class TaskViewController extends ChangeNotifier {
       case 1:
         if (componentModel.elements!.length == 1) {
           element.mainElement = true;
-          return [TextMultimedia(elementModel: element,), SizedBox(height: 20)];
+          return [TextMultimedia(elementModel: element, getMultimediaUseCase: getMultimediaUseCase)];
         }
         return [];
       case 2:
@@ -54,19 +59,21 @@ class TaskViewController extends ChangeNotifier {
         element.mainElement = true;
         if (existText) {
           return [
-            TextMultimedia(elementModel: componentModel.elements!.singleWhere((element) => element.type_id == MultimediaTypes.text.type_id)),
-            SizedBox(height: 20),
-            ImageMultimedia(elementModel: element),
-            SizedBox(height: 20)
+            TextMultimedia(
+                elementModel: componentModel.elements!.singleWhere((element) => element.type_id == MultimediaTypes.text.type_id), getMultimediaUseCase: getMultimediaUseCase),
+            ImageMultimedia(elementModel: element, getMultimediaUseCase: getMultimediaUseCase),
           ];
         }
         ElementModel textElement = ElementModel(type_id: MultimediaTypes.text.type_id, position: 1, description: "Elemento de Texto");
-        return [TextMultimedia(elementModel: textElement), SizedBox(height: 20), ImageMultimedia(elementModel: element), SizedBox(height: 20)];
+        return [
+          TextMultimedia(elementModel: textElement, getMultimediaUseCase: getMultimediaUseCase),
+          ImageMultimedia(elementModel: element, getMultimediaUseCase: getMultimediaUseCase),
+        ];
       case 3:
         bool onlyAudioElement = componentModel.elements!.length == 1;
         if (onlyAudioElement) {
           element.mainElement = true;
-          return [AudioMultimedia(elementModel: element), SizedBox(height: 20)];
+          return [AudioMultimedia(elementModel: element, getMultimediaUseCase: getMultimediaUseCase)];
         }
         return [];
       default:

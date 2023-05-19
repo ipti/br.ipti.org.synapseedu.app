@@ -4,7 +4,7 @@ import 'package:elesson/app/core/task/data/repository/task_repository_interface.
 import 'package:elesson/app/util/failures/failures.dart';
 
 class GetTaskUseCase {
-  final TaskRepositoryInterface taskRepository;
+  final ITaskRepository taskRepository;
 
   GetTaskUseCase({required this.taskRepository});
 

@@ -3,12 +3,12 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:elesson/app/core/task/data/model/task_model.dart';
 
-abstract class TaskRemoteDataSource {
+abstract class ITaskRemoteDataSource {
   Future<TaskModel?> getTaskById(int id);
 
 }
 
-class TaskRemoteDataSourceImpl extends TaskRemoteDataSource {
+class TaskRemoteDataSourceImpl extends ITaskRemoteDataSource {
   final Dio dio;
 
   TaskRemoteDataSourceImpl({required this.dio});

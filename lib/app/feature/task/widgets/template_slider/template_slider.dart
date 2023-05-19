@@ -7,14 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:elesson/share/snackbar_widget.dart';
 import 'package:flutter/services.dart';
 
-import 'header_view.dart';
-
 class TemplateSlider extends StatefulWidget {
   final TaskViewController taskViewController;
-  final HeaderView headerView;
-  final Widget? bodyView;
 
-  TemplateSlider({Key? key,required this.headerView,  this.bodyView, required this.taskViewController}) : super(key: key);
+  TemplateSlider({Key? key, required this.taskViewController}) : super(key: key);
 
   @override
   _TemplateSliderState createState() => _TemplateSliderState();
@@ -100,95 +96,88 @@ class _TemplateSliderState extends State<TemplateSlider> {
     }
   }
 
+  double maxScreenHeight = 0;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    double buttonHeight = 48 > screenHeight * 0.0656 ? 48 : screenHeight * 0.0656;
-    double buttonWidth = 150 > 0.3649 * screenWidth ? 150 : 0.3649 * screenWidth;
-    print('STATUS DA CONEXÃO: $_connectionStatus');
+    double bottonPadding = 65;
+    maxScreenHeight = size.height - 24 - bottonPadding ;
+    double buttonHeight = 48 > size.height * 0.0656 ? 48 : size.height * 0.0656;
+    double buttonWidth = 150 > 0.3649 * size.width ? 150 : 0.3649 * size.width;
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          topScreen(size),
-          bottomScreen(size),
-        ],
-      ),
-      floatingActionButton: Padding(
-        padding: EdgeInsets.all(12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Container(
+        height: maxScreenHeight,
+        child: Stack(
           children: [
-            ButtonTheme(
-              minWidth: buttonHeight,
-              height: buttonHeight,
-              child: MaterialButton(
-                padding: EdgeInsets.all(8),
-                color: Colors.white,
-                textColor: Color(0xFF0000FF),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                  side: BorderSide(
-                    color: Color.fromRGBO(0, 0, 255, 0.2),
+            topScreen(size),
+            bottomScreen(size),
+          ],
+        ),
+      ),
+      floatingActionButton: SizedBox(
+        height: bottonPadding,
+        child: Padding(
+          padding: EdgeInsets.only(right: 10, left: 10, bottom: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ButtonTheme(
+                minWidth: buttonHeight,
+                height: buttonHeight,
+                child: MaterialButton(
+                  padding: EdgeInsets.all(8),
+                  color: Colors.white,
+                  textColor: Color(0xFF0000FF),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                    side: BorderSide(color: Color.fromRGBO(0, 0, 255, 0.2)),
                   ),
+                  child: Icon(Icons.settings, size: 32, color: Color(0xFF0000FF)),
+                  onPressed: () => Navigator.of(context).pushNamed(SettingsScreen.routeName),
                 ),
-                child: Icon(
-                  Icons.settings,
-                  size: 32,
-                  color: Color(0xFF0000FF),
-                ),
-                onPressed: () => {
-                  Navigator.of(context).pushNamed(SettingsScreen.routeName),
-                },
               ),
-            ),
-            Row(
-              children: [
-                showSecondScreen == false
-                    ? ButtonTheme(
-                        minWidth: buttonWidth,
-                        height: buttonHeight,
-                        child: MaterialButton(
-                          padding: EdgeInsets.zero,
-                          color: boxResponder,
-                          textColor: Color(0xFF0000FF),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: Color.fromRGBO(0, 0, 255, 0.2)),
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                "ver isso",
-                                // widget.isTextTemplate ? 'VER MAIS   ' : 'RESPONDER',
-                                style: TextStyle(color: colorResponder, fontSize: fonteDaLetra, fontWeight: FontWeight.w900),
-                              ),
-                              Icon(Icons.keyboard_arrow_down, size: 40, color: colorResponder),
-                            ],
-                          ),
-                          onPressed: () {
-                            if (timeStartIscaptured == false) {
-                              print("capturou time start");
-                              timeStart = DateTime.now().millisecondsSinceEpoch;
-                              print('timeStart na função topScreen: $timeStart');
-                              timeStartIscaptured = true;
-                            } else {
+              Row(
+                children: [
+                  //TODO: mover botão de confirmar aqui
+                  showSecondScreen == false
+                      ? ButtonTheme(
+                          minWidth: buttonWidth,
+                          height: buttonHeight,
+                          child: MaterialButton(
+                            padding: EdgeInsets.zero,
+                            color: boxResponder,
+                            textColor: Color(0xFF0000FF),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: Color.fromRGBO(0, 0, 255, 0.2)),
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "ver isso",
+                                  // widget.isTextTemplate ? 'VER MAIS   ' : 'RESPONDER',
+                                  style: TextStyle(color: colorResponder, fontSize: fonteDaLetra, fontWeight: FontWeight.w900),
+                                ),
+                                Icon(Icons.keyboard_arrow_down, size: 40, color: colorResponder),
+                              ],
+                            ),
+                            onPressed: () {
                               setState(() {
                                 boxResponder = Color(0xFF0000FF);
                                 colorResponder = Colors.white;
                                 showSecondScreen = !showSecondScreen;
                               });
-                            }
-                          },
-                        ),
-                      )
-                    : backButton(buttonHeight)
-              ],
-            ),
-          ],
+                            },
+                          ),
+                        )
+                      : backButton(buttonHeight)
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -277,8 +266,10 @@ class _TemplateSliderState extends State<TemplateSlider> {
     return Container(
       decoration: BoxDecoration(color: Colors.white),
       width: size.width,
-      height: size.height - 24,
-      child: widget.headerView,
+      height: size.height - 64,
+      child: Column(
+        children: widget.taskViewController.screenEntity.headerWidgets,
+      ),
     );
   }
 
@@ -299,7 +290,9 @@ class _TemplateSliderState extends State<TemplateSlider> {
         decoration: BoxDecoration(color: Colors.white),
         width: size.width,
         height: size.height,
-        child: widget.bodyView,
+        child: Column(
+          children: widget.taskViewController.screenEntity.bodyWidgets,
+        ),
       ),
     );
   }

@@ -6,7 +6,7 @@ import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/share/description_format.dart';
 import 'package:flutter/services.dart';
-import '../app/feature/task/widgets/template_slider.dart';
+import '../app/feature/task/widgets/template_slider/template_slider.dart';
 import 'package:flutter/material.dart';
 
 // import 'question_provider.dart';
@@ -222,67 +222,67 @@ class MultipleChoiceQuestion extends StatelessWidget{
 
     return Scaffold(
       // bottomNavigationBar: bottomNavBar(context),
-      body: TemplateSlider(
-        headerView: HeaderView(containerModel: ContainerModel.empty()),
-        taskViewController: TaskViewController(),
-        // currentId: cobjectIdList![cobjectIndex],
-        // showConfirmButton: showConfirmButton,
-        // title: questionDescription.toUpperCase(),
-        // text: questionDescriptionWidget,
-        // linkImage: imageLink.isNotEmpty ? 'https://apielesson.azurewebsites.net/app/library/image/' + imageLink : null,
-        bodyView: Container(
-          child: Wrap(
-            alignment: WrapAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 48),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                      height: textCardHeight + 32,
-                      child: GestureDetector(
-                        // onTap: () => playerTituloSegundaTela.resume(),
-                        child: Center(
-                          child: questionDescriptionWidget,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 12),
-                      child: Column(
-                        children: [
-                          // Monta as escolhas em uma coluna, com base na função que retorna um Widget de piece unitário.
-                          piece(pieceOrder[0], context, cobjectList[0].questions[questionIndex], buttonHeight, screenHeight, textCardHeight),
-                          piece(pieceOrder[1], context, cobjectList[0].questions[questionIndex], buttonHeight, screenHeight, textCardHeight),
-                          piece(pieceOrder[2], context, cobjectList[0].questions[questionIndex], buttonHeight, screenHeight, textCardHeight),
-                        ],
-                      ),
-                    ),
-                    // Caso nenhuma opção esteja selecionada, _selectedButton = 3. Conforme uma resposta é selecionada, ele mudará para
-                    // 0, 1 ou 2, fazendo o botão aparecer.
-                    if (_selectedButton < 3)
-                      ConfirmButtonWidget(
-                        context: context,
-                        cobjectList: cobjectList,
-                        cobjectIdList: cobjectIdList,
-                        questionType: 'MTE',
-                        questionIndex: ++questionIndex,
-                        cobjectIndex: cobjectIndex,
-                        cobjectIdListLength: cobjectIdListLength,
-                        cobjectQuestionsLength: cobjectQuestionsLength,
-                        pieceId: pieceId,
-                        isCorrect: isCorrect,
-                        groupId: (_selectedButton + 1).toString(),
-                      ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      // body: TemplateSlider(
+      //   headerView: HeaderView(containerModel: ContainerModel.empty()),
+      //   // taskViewController: TaskViewController(),
+      //   // currentId: cobjectIdList![cobjectIndex],
+      //   // showConfirmButton: showConfirmButton,
+      //   // title: questionDescription.toUpperCase(),
+      //   // text: questionDescriptionWidget,
+      //   // linkImage: imageLink.isNotEmpty ? 'https://apielesson.azurewebsites.net/app/library/image/' + imageLink : null,
+      //   bodyView: Container(
+      //     child: Wrap(
+      //       alignment: WrapAlignment.center,
+      //       children: [
+      //         Padding(
+      //           padding: const EdgeInsets.only(bottom: 48),
+      //           child: Column(
+      //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //             children: [
+      //               Container(
+      //                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+      //                 height: textCardHeight + 32,
+      //                 child: GestureDetector(
+      //                   // onTap: () => playerTituloSegundaTela.resume(),
+      //                   child: Center(
+      //                     child: questionDescriptionWidget,
+      //                   ),
+      //                 ),
+      //               ),
+      //               Padding(
+      //                 padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 12),
+      //                 child: Column(
+      //                   children: [
+      //                     // Monta as escolhas em uma coluna, com base na função que retorna um Widget de piece unitário.
+      //                     piece(pieceOrder[0], context, cobjectList[0].questions[questionIndex], buttonHeight, screenHeight, textCardHeight),
+      //                     piece(pieceOrder[1], context, cobjectList[0].questions[questionIndex], buttonHeight, screenHeight, textCardHeight),
+      //                     piece(pieceOrder[2], context, cobjectList[0].questions[questionIndex], buttonHeight, screenHeight, textCardHeight),
+      //                   ],
+      //                 ),
+      //               ),
+      //               // Caso nenhuma opção esteja selecionada, _selectedButton = 3. Conforme uma resposta é selecionada, ele mudará para
+      //               // 0, 1 ou 2, fazendo o botão aparecer.
+      //               if (_selectedButton < 3)
+      //                 ConfirmButtonWidget(
+      //                   context: context,
+      //                   cobjectList: cobjectList,
+      //                   cobjectIdList: cobjectIdList,
+      //                   questionType: 'MTE',
+      //                   questionIndex: ++questionIndex,
+      //                   cobjectIndex: cobjectIndex,
+      //                   cobjectIdListLength: cobjectIdListLength,
+      //                   cobjectQuestionsLength: cobjectQuestionsLength,
+      //                   pieceId: pieceId,
+      //                   isCorrect: isCorrect,
+      //                   groupId: (_selectedButton + 1).toString(),
+      //                 ),
+      //             ],
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
     );
   }
 }

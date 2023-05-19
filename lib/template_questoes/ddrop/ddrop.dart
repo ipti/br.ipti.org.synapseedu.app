@@ -6,7 +6,7 @@ import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/share/description_format.dart';
-import 'package:elesson/app/feature/task/widgets/template_slider.dart';
+import 'package:elesson/app/feature/task/widgets/template_slider/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/all.dart';
@@ -71,41 +71,41 @@ class _DragAndDropState extends State<DragAndDrop> {
     Stopwatch chronometer = Stopwatch();
     return Scaffold(
       // resizeToAvoidBottomPadding: false,
-      body: TemplateSlider(
-        headerView: HeaderView(containerModel: ContainerModel.empty()),
-        taskViewController: TaskViewController(),
-        // cobjectIdList: cobjectIdList,
-        // cobjectIdListLength: cobjectIdLength,
-        // questionIndex: questionIndex,
-        // cobjectIndex: cobjectIndex,
-        // cobjectQuestionsLength: cobjectQuestionsLength,
-        // cobjectList: cobjectList,
-        // linkImage: cobjectList[0].questions[0].header['image'] != ''
-        //     ? BASE_URL + '/image/' + cobjectList[0].questions[0].header['image']!
-        //     : null,
-        // sound: cobjectList[0].questions[0].header["sound"],
-        // title: cobjectList[0].description!.toUpperCase(),
-        // text: formatDescription(cobjectList[0]
-        //     .questions[questionIndex!]
-        //     .header["text"]!
-        //     .toUpperCase()),
-        // text: Text(
-        //   cobjectList[0].questions[questionIndex].header["text"].toUpperCase(),
-        //   textAlign: TextAlign.center,
-        //   style: TextStyle(
-        //     fontWeight: FontWeight.bold,
-        //     fontSize: fonteDaLetra,
-        //     fontFamily: 'Mulish',
-        //   ),
-        // ),
-        bodyView: activityScreen(heightScreen - 12, widthScreen,
-            cobjectList[0].questions[questionIndex!], questionText, chronometer,
-            cobjectIdList: cobjectIdList,
-            cobjectList: cobjectList,
-            questionIndex: questionIndex!,
-            cobjectQuestionsLength: cobjectQuestionsLength,
-            cobjectIdLength: cobjectIdLength),
-      ),
+      // body: TemplateSlider(
+      //   headerView: HeaderView(containerModel: ContainerModel.empty()),
+      //   // taskViewController: TaskViewController(),
+      //   // cobjectIdList: cobjectIdList,
+      //   // cobjectIdListLength: cobjectIdLength,
+      //   // questionIndex: questionIndex,
+      //   // cobjectIndex: cobjectIndex,
+      //   // cobjectQuestionsLength: cobjectQuestionsLength,
+      //   // cobjectList: cobjectList,
+      //   // linkImage: cobjectList[0].questions[0].header['image'] != ''
+      //   //     ? BASE_URL + '/image/' + cobjectList[0].questions[0].header['image']!
+      //   //     : null,
+      //   // sound: cobjectList[0].questions[0].header["sound"],
+      //   // title: cobjectList[0].description!.toUpperCase(),
+      //   // text: formatDescription(cobjectList[0]
+      //   //     .questions[questionIndex!]
+      //   //     .header["text"]!
+      //   //     .toUpperCase()),
+      //   // text: Text(
+      //   //   cobjectList[0].questions[questionIndex].header["text"].toUpperCase(),
+      //   //   textAlign: TextAlign.center,
+      //   //   style: TextStyle(
+      //   //     fontWeight: FontWeight.bold,
+      //   //     fontSize: fonteDaLetra,
+      //   //     fontFamily: 'Mulish',
+      //   //   ),
+      //   // ),
+      //   bodyView: activityScreen(heightScreen - 12, widthScreen,
+      //       cobjectList[0].questions[questionIndex!], questionText, chronometer,
+      //       cobjectIdList: cobjectIdList,
+      //       cobjectList: cobjectList,
+      //       questionIndex: questionIndex!,
+      //       cobjectQuestionsLength: cobjectQuestionsLength,
+      //       cobjectIdLength: cobjectIdLength),
+      // ),
     );
   }
 
