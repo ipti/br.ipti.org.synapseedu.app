@@ -1,5 +1,5 @@
 import 'package:elesson/app/core/auth/data/model/user_model.dart';
-import 'package:elesson/app/providers/userController.dart';
+import 'package:elesson/app/feature/user/controller/userController.dart';
 import 'package:flutter/material.dart';
 
 class UserProvider extends ChangeNotifier {

@@ -4,7 +4,7 @@ import 'package:elesson/app/feature/task/controller/TaskViewController.dart';
 import 'package:elesson/app/feature/task/widgets/header_view.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/model.dart';
-import 'package:elesson/app/feature/task/widgets/template_slider/template_slider.dart';
+import 'package:elesson/app/feature/task/widgets/template_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 

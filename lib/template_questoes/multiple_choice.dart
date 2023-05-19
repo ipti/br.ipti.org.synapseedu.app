@@ -6,7 +6,7 @@ import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/share/description_format.dart';
 import 'package:flutter/services.dart';
-import '../app/feature/task/widgets/template_slider/template_slider.dart';
+import '../app/feature/task/widgets/template_slider.dart';
 import 'package:flutter/material.dart';
 
 // import 'question_provider.dart';
@@ -49,14 +49,8 @@ class MultipleChoiceQuestion extends StatelessWidget{
     _selectedButton = index;
   }
 
-  // Widget que retorna o quadro que representa o piece, seja ele uma imagem ou texto.
   Widget piece(int index, BuildContext context, Question question, double buttonHeight, double screenHeight, double textCardHeight) {
-    // final buttonState = watch(buttonStateProvider).state;
-
     String grouping = (index + 1).toString();
-    // double cardHeight = 158.29;
-
-    // Define o tamanho do card com base nas dimensões do dispositivo, seguindo as proporções presentes no Figma.
     double availableSpaceForCards = screenHeight - textCardHeight - buttonHeight - 12 - 32;
     double marginBetweenCards = 0.0147 * availableSpaceForCards;
     double cardHeight = (availableSpaceForCards - 24 - 2 * marginBetweenCards) / 3;
@@ -80,14 +74,12 @@ class MultipleChoiceQuestion extends StatelessWidget{
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
                 side: BorderSide(
-                  // Define a cor das bordas do card dependendo se ele estiver selecionado ou não.
                   color: _buttonPressed[index] ? Color(0xFF00DC8C) : Color(0x6E729166),
                   width: 3,
                 ),
               ),
               minWidth: 200,
               padding: const EdgeInsets.all(0),
-              // color: _buttonPressed[index] ? Colors.amber : Colors.green[300],
               child: Hero(
                 tag: grouping,
                 child: question.pieces[grouping]["image"].isNotEmpty
@@ -109,7 +101,6 @@ class MultipleChoiceQuestion extends StatelessWidget{
                           return Container();
                         },
                       )
-                    // ? Image.asset('assets/img/placeholder.jpg')
                     : Material(
                         type: MaterialType.transparency,
                         child: Container(
@@ -127,11 +118,8 @@ class MultipleChoiceQuestion extends StatelessWidget{
                         ),
                       ),
               ),
-              // height: cardHeight,
-              // minWidth: cardHeight,
               highlightColor: Color(0xFF00DC8C),
               splashColor: Color(0xFF00DC8C),
-
               onLongPress: () {
                 // if (question.pieces[grouping]["image"].isNotEmpty)
                 Navigator.of(context).pushNamed(

@@ -6,7 +6,7 @@ class ComponentModel extends Equatable{
   int? position;
   int? head_id;
   int? body_id;
-  List<ElementModel>? elements;
+  List<ElementModel>?  elements;
 
   ComponentModel({this.id, this.position, this.head_id, this.body_id, this.elements});
 

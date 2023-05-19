@@ -1,6 +1,6 @@
 import 'package:elesson/app/core/task/data/model/task_model.dart';
 import 'package:elesson/app/feature/task/controller/TaskViewController.dart';
-import 'package:elesson/app/feature/task/widgets/template_slider/template_slider.dart';
+import 'package:elesson/app/feature/task/widgets/template_slider.dart';
 import 'package:flutter/material.dart';
 
 class TaskViewPage extends StatefulWidget {

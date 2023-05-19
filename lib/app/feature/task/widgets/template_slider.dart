@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:elesson/share/snackbar_widget.dart';
 import 'package:flutter/services.dart';
 
+import 'text_multimedia.dart';
+
 class TemplateSlider extends StatefulWidget {
   final TaskViewController taskViewController;
 
@@ -102,7 +104,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double bottonPadding = 65;
-    maxScreenHeight = size.height - 24 - bottonPadding ;
+    maxScreenHeight = size.height - 24 - bottonPadding;
     double buttonHeight = 48 > size.height * 0.0656 ? 48 : size.height * 0.0656;
     double buttonWidth = 150 > 0.3649 * size.width ? 150 : 0.3649 * size.width;
 
@@ -268,6 +270,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
       width: size.width,
       height: size.height - 64,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: widget.taskViewController.screenEntity.headerWidgets,
       ),
     );
@@ -290,9 +293,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
         decoration: BoxDecoration(color: Colors.white),
         width: size.width,
         height: size.height,
-        child: Column(
-          children: widget.taskViewController.screenEntity.bodyWidgets,
-        ),
+        child: widget.taskViewController.screenEntity.bodyWidget,
       ),
     );
   }
