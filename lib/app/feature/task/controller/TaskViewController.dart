@@ -83,7 +83,9 @@ class TaskViewController extends ChangeNotifier {
     taskModel.body!.components.forEach((component) => component.elements!.first.mainElement = true);
     TemplateTypes templateType = TemplateTypes.values[taskModel.template_id! - 1];
 
-    TextMultimedia subTitulo = TextMultimedia(elementModel: taskModel.header!.components.last.elements!.last, getMultimediaUseCase: getMultimediaUseCase);
+    Widget subTitulo = taskModel.header!.components.last.elements!.last.type_id == MultimediaTypes.text.type_id
+        ? TextMultimedia(elementModel: taskModel.header!.components.last.elements!.last, getMultimediaUseCase: getMultimediaUseCase)
+        : Container();
     Widget activityBody = Container();
 
     switch (templateType) {
@@ -109,6 +111,7 @@ class TaskViewController extends ChangeNotifier {
       case TemplateTypes.AEL: // AEL
         activityBody = Container(
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,

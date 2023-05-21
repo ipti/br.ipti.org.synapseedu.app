@@ -1,6 +1,5 @@
 import 'package:elesson/activity_selection/block_selection.dart';
 import 'package:elesson/app/feature/shared/widgets/init_title.dart';
-import 'package:elesson/share/general_widgets.dart';
 import 'package:elesson/share/snackbar_widget.dart';
 import 'package:flutter/material.dart';
 

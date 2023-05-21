@@ -1,6 +1,4 @@
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:elesson/app/util/failures/failures.dart';
 
 abstract class IMultimediaRemoteDatasource {
   Future<String> getImageMultimediaReference(int multimediaId);

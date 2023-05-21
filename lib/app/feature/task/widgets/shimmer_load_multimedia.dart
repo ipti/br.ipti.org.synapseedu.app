@@ -16,7 +16,7 @@ class ShimmerLoadMultimedia extends StatelessWidget {
       enabled: true,
       direction: ShimmerDirection.fromLTRB(),
       child: Container(
-        decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(18)),
+        decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(18)),
         width: width,
         height: height,
       ),

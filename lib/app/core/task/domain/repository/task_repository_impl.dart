@@ -14,7 +14,7 @@ class TaskRepositoryImpl extends ITaskRepository {
     try {
       final result = await taskRemoteDataSource.getTaskById(id);
       if (result != null) return Right(result);
-    } on Exception catch (e) {
+    } on Exception {
       return Left(Failure("Erro ao buscar tarefa"));
     }
     return Left(Failure("Erro desconhecido"));

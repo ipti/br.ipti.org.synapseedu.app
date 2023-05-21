@@ -1,30 +1,16 @@
 import 'dart:io';
 
 // import 'package:audioplayers/audioplayers.dart';
-import 'package:elesson/activity_selection/activity_selection_view.dart';
-import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/share/qr_code_reader.dart';
-import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
-import 'package:elesson/template_questoes/PRE_SOM_IA.dart';
-import 'package:elesson/template_questoes/block_conclusion_arguments_model.dart';
-import 'package:elesson/template_questoes/ddrop/ddrop.dart';
-import 'package:elesson/template_questoes/multiple_choice.dart';
-import 'package:elesson/template_questoes/pre_base.dart';
-import 'package:elesson/template_questoes/question_provider.dart';
 
 // import 'package:elesson/template_questoes/question_provider.dart';
-import 'package:elesson/template_questoes/text_question.dart';
-import 'package:flutter_riverpod/all.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../template_questoes/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../share/elesson_icon_lib_icons.dart';
 
 import 'api.dart';
-import 'block_conclusion.dart';
 
 // Contém alguns métodos e variáveis globais necessárias para as questões.
 

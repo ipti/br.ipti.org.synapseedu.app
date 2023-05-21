@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/app/core/auth/data/model/user_model.dart';
 import 'package:elesson/app/core/auth/domain/entity/auth_entity.dart';
 import 'package:elesson/app/core/auth/domain/entity/login_response_entity.dart';

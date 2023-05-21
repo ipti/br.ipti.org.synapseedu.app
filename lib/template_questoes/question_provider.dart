@@ -1,7 +1,5 @@
 import './model.dart';
 
-import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/all.dart';
 
 // template code, disciplina, texto da questão, alternativas e qual é a certa
 // tem áudio? tem imagem? <- perguntas e respostas

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:lottie/lottie.dart';
 import 'elesson_icon_lib_icons.dart';
-import 'global_variables.dart';
 
 Widget elessonCard(
     {required String backgroundImage,

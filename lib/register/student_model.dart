@@ -79,14 +79,14 @@ class LoginQuery {
     String? degreeFkBlock;
 
     if (isQrcode) {
-      url = '${BaseUrl}/loginuuid';
+      url = '$BaseUrl/loginuuid';
       response = await Dio().post(
         url,
         options: Options(contentType: 'application/x-www-form-urlencoded'),
         data: {'uuid': studentUuid},
       );
     } else {
-      url = '${BaseUrl}/login';
+      url = '$BaseUrl/login';
       response = await Dio().post(
         url,
         options: Options(contentType: 'application/x-www-form-urlencoded'),

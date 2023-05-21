@@ -1,9 +1,9 @@
 import 'package:elesson/activity_selection/block_selection_view.dart';
-import 'package:elesson/degree_selection/degree_selection_view.dart';
 import 'package:elesson/register/code_verify_view.dart';
 import 'package:elesson/settings/settings_screen.dart';
 import 'package:elesson/share/block_conclusion.dart';
 import 'package:elesson/share/qr_code_reader.dart';
+import 'package:elesson/splashscreen/degree_selection_view.dart';
 import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
 import 'package:elesson/template_questoes/PRE_SOM_IA.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +12,6 @@ import 'app/core/auth/data/model/user_model.dart';
 import 'app/feature/auth/auth_module.dart';
 import 'app/feature/task/task_module.dart';
 import 'app/providers/userProvider.dart';
-import 'init_pages/space_selection.dart';
 import './root/poc.dart';
 import 'package:elesson/register/sms_register.dart';
 import 'package:elesson/template_questoes/share/image_detail_screen.dart';
@@ -25,7 +24,6 @@ import 'template_questoes/text_question.dart';
 import 'template_questoes/multiple_choice.dart';
 import 'template_questoes/ddrop/ddrop.dart';
 import 'template_questoes/pre_base.dart';
-import './login/auto_login.dart';
 
 void main() async {
   //usando pra iniciar em outra tela
@@ -58,7 +56,6 @@ void main() async {
             '/': (context) => VerifyLogin(),
             AuthModule.routeName: (context) => AuthModule(),
             TaskModule.routeName: (context) => TaskModule(),
-            SpaceSelection.routeName: (context) => SpaceSelection(),
             DegreeSelectionView.routeName: (context) => DegreeSelectionView(),
             BlockSelection.routeName: (context) => BlockSelection(),
             CountDownTimer.routeName: (context) => CountDownTimer(),

@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:elesson/share/snackbar_widget.dart';
 import 'package:flutter/services.dart';
 
-import 'text_multimedia.dart';
 
 class TemplateSlider extends StatefulWidget {
   final TaskViewController taskViewController;

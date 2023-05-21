@@ -7,7 +7,6 @@ import 'package:elesson/app/core/auth/domain/repository/auth_repository_impl.dar
 import 'package:elesson/app/core/auth/domain/usecases/auth_usecase.dart';
 import 'package:elesson/app/util/network/constants.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 
 class ErrorInterceptor extends InterceptorsWrapper {
   // final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

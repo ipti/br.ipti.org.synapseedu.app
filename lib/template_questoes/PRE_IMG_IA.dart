@@ -1,20 +1,12 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:elesson/app/core/task/data/model/container_model.dart';
-import 'package:elesson/app/feature/task/controller/TaskViewController.dart';
-import 'package:elesson/app/feature/task/widgets/header_view.dart';
-import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/google_api.dart';
-import 'package:elesson/template_questoes/share/description_format.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:elesson/activity_selection/activity_selection_view.dart';
-import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/model.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
-import 'package:elesson/app/feature/task/widgets/template_slider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/all.dart';
 

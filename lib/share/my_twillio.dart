@@ -2,7 +2,6 @@ library twilio_phone_verify;
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter/cupertino.dart';
 
 class TwilioPhoneVerify{
   String? accountSid, serviceSid, authToken, baseUrl;

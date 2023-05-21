@@ -1,8 +1,6 @@
-import 'package:elesson/app/core/auth/domain/entity/login_entity.dart';
 import 'package:elesson/app/feature/auth/controller/auth_controller.dart';
 import 'package:elesson/app/feature/shared/widgets/init_title.dart';
 import 'package:elesson/register/sms_register.dart';
-import 'package:elesson/register/student_model.dart';
 import 'package:elesson/share/general_widgets.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
