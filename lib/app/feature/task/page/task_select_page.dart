@@ -1,6 +1,6 @@
 import 'package:elesson/app/feature/shared/widgets/card_widget.dart';
 import 'package:elesson/app/feature/shared/widgets/init_title.dart';
-import 'package:elesson/app/feature/task/controller/TaskViewController.dart';
+import 'package:elesson/app/feature/task/controller/task_view_controller.dart';
 import 'package:elesson/app/feature/task/controller/task_select_controller.dart';
 import 'package:elesson/app/providers/userProvider.dart';
 import 'package:elesson/app/util/enums/button_status.dart';

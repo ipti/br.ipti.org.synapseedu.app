@@ -3,7 +3,7 @@ import 'package:elesson/app/feature/task/page/task_view_page.dart';
 import 'package:elesson/app/util/enums/button_status.dart';
 import 'package:flutter/material.dart';
 
-import 'TaskViewController.dart';
+import 'task_view_controller.dart';
 
 class TaskSelectController extends ChangeNotifier {
   final GetTaskUseCase getTaskUseCase;

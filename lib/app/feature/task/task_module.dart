@@ -13,7 +13,7 @@ import 'package:elesson/app/providers/userProvider.dart';
 import 'package:elesson/app/util/network/dio_authed/dio_authed.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'controller/TaskViewController.dart';
+import 'controller/task_view_controller.dart';
 
 class TaskModule extends StatefulWidget {
   static const routeName = '/task-module';

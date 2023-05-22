@@ -4,6 +4,7 @@ import 'package:elesson/app/core/task/data/model/task_model.dart';
 import 'package:elesson/app/core/task/domain/entity/screen_entity.dart';
 import 'package:elesson/app/core/task/domain/usecase/get_multimedia_usecase.dart';
 import 'package:elesson/app/feature/task/widgets/audio_multimedia.dart';
+import 'package:elesson/app/feature/task/widgets/ddrop_sender_undo.dart';
 import 'package:elesson/app/feature/task/widgets/image_multimedia.dart';
 import 'package:elesson/app/feature/task/widgets/text_multimedia.dart';
 import 'package:elesson/app/util/enums/button_status.dart';
@@ -57,7 +58,6 @@ class TaskViewController extends ChangeNotifier {
         }
         return [];
       case 2:
-        print("AAAAAAAAAAAAAAAAAA: ");
         // element.mainElement = true;
         if (componentModel.elements!.any((element) => element.type_id == MultimediaTypes.text.type_id)) {
           return [
@@ -86,7 +86,8 @@ class TaskViewController extends ChangeNotifier {
     Widget subTitulo = taskModel.header!.components.last.elements!.last.type_id == MultimediaTypes.text.type_id
         ? TextMultimedia(elementModel: taskModel.header!.components.last.elements!.last, getMultimediaUseCase: getMultimediaUseCase)
         : Container();
-    Widget activityBody = Container();
+
+    late Widget activityBody;
 
     switch (templateType) {
       case TemplateTypes.MTE:
@@ -108,7 +109,7 @@ class TaskViewController extends ChangeNotifier {
           child: TextMultimedia(elementModel: taskModel.body!.components[0].elements!.first, getMultimediaUseCase: getMultimediaUseCase),
         );
         break;
-      case TemplateTypes.AEL: // AEL
+      case TemplateTypes.AEL:
         activityBody = Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -116,17 +117,23 @@ class TaskViewController extends ChangeNotifier {
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  ImageMultimedia(elementModel: taskModel.body!.components[0].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
-                  ImageMultimedia(elementModel: taskModel.body!.components[1].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
-                  ImageMultimedia(elementModel: taskModel.body!.components[2].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
+                  DdropSenderUndo(),
+                  DdropSenderUndo(),
+                  DdropSenderUndo(),
+                  // ImageMultimedia(elementModel: taskModel.body!.components[0].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
+                  // ImageMultimedia(elementModel: taskModel.body!.components[1].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
+                  // ImageMultimedia(elementModel: taskModel.body!.components[2].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
                 ],
               ),
               SizedBox(height: 100),
-              Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                ImageMultimedia(elementModel: taskModel.body!.components[3].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
-                ImageMultimedia(elementModel: taskModel.body!.components[4].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
-                ImageMultimedia(elementModel: taskModel.body!.components[5].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
-              ]),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ImageMultimedia(elementModel: taskModel.body!.components[3].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
+                  ImageMultimedia(elementModel: taskModel.body!.components[4].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
+                  ImageMultimedia(elementModel: taskModel.body!.components[5].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
+                ],
+              ),
             ],
           ),
         );
@@ -137,6 +144,9 @@ class TaskViewController extends ChangeNotifier {
         );
         break;
       default:
+        activityBody = Center(
+          child: Text("Ocorreu um erro ao renderizar atividade!"),
+        );
         break;
     }
 
