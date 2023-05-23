@@ -3,6 +3,7 @@ import 'package:elesson/app/core/auth/data/model/user_model.dart';
 import 'package:elesson/app/core/auth/domain/entity/auth_entity.dart';
 import 'package:elesson/app/core/auth/domain/entity/login_response_entity.dart';
 import 'package:elesson/app/core/auth/domain/usecases/auth_usecase.dart';
+import 'package:elesson/app/feature/home/home_module.dart';
 import 'package:elesson/app/feature/task/task_module.dart';
 import 'package:elesson/app/providers/userProvider.dart';
 import 'package:elesson/app/util/failures/failures.dart';
@@ -17,6 +18,7 @@ class AuthController extends ChangeNotifier {
 
   AuthEntity _webAppAuthEntity = AuthEntity(username: "editor", password: "iptisynpaseeditor2022");
   LoginEntity _authLoginEntity = LoginEntity.empty();
+
   LoginEntity get authLoginEntity => _authLoginEntity;
 
   getAcessToken(BuildContext context) async {
@@ -32,6 +34,8 @@ class AuthController extends ChangeNotifier {
         Either<Failure, LoginResponseEntity> res = await login();
         if (res.isRight()) {
           LoginResponseEntity loginResponseEntity = res.getOrElse(() => LoginResponseEntity.empty());
+          // if (loginResponseEntity == LoginResponseEntity.empty()) return Left(RestFailure("Erro ao logar"));
+
           UserModel userModel = UserModel(
             id: loginResponseEntity.id,
             user_name: loginResponseEntity.user_name,
@@ -39,7 +43,7 @@ class AuthController extends ChangeNotifier {
             user_type_id: loginResponseEntity.user_type_id,
           );
           context.read<UserProvider>().setUser(userModel);
-          Navigator.of(context).pushNamedAndRemoveUntil(TaskModule.routeName, (route) => false);
+          Navigator.of(context).pushNamedAndRemoveUntil(HomeModule.routeName, (route) => false);
         }
       });
     });

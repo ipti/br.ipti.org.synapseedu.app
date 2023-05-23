@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import './register/countdown.dart';
 import 'app/core/auth/data/model/user_model.dart';
 import 'app/feature/auth/auth_module.dart';
+import 'app/feature/home/home_module.dart';
 import 'app/feature/task/task_module.dart';
 import 'app/providers/userProvider.dart';
 import './root/poc.dart';
@@ -51,11 +52,11 @@ void main() async {
               minWidth: 0,
             ),
           ),
-          initialRoute: '/',
+          // initialRoute: '/',
           routes: {
             '/': (context) => VerifyLogin(),
             AuthModule.routeName: (context) => AuthModule(),
-            TaskModule.routeName: (context) => TaskModule(),
+            HomeModule.routeName: (context) => HomeModule(),
             DegreeSelectionView.routeName: (context) => DegreeSelectionView(),
             BlockSelection.routeName: (context) => BlockSelection(),
             CountDownTimer.routeName: (context) => CountDownTimer(),
@@ -111,7 +112,7 @@ class _VerifyLoginState extends State<VerifyLogin> {
           print((snapshot.data as UserModel?)?.user_type_id);
           if (snapshot.connectionState != ConnectionState.waiting) {
             // return AuthModule();
-            return snapshot.data != null ? TaskModule() : AuthModule();
+            return snapshot.data != null ? HomeModule() : AuthModule();
           } else {
             return Center(
               child: CircularProgressIndicator(),

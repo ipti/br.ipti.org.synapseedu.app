@@ -12,6 +12,7 @@ class GetMultimediaUseCase{
   }
 
   Future<Either<Failure, List<int>>> getBytesByMultimediaId(int id) async {
+    print("GetMultimedia ID");
     return await multimediaRepository.getBytesByMultimediaId(id);
   }
 

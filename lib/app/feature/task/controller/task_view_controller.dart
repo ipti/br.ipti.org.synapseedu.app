@@ -1,10 +1,13 @@
 import 'package:elesson/app/core/task/data/model/component_model.dart';
 import 'package:elesson/app/core/task/data/model/element_model.dart';
 import 'package:elesson/app/core/task/data/model/task_model.dart';
+import 'package:elesson/app/core/task/domain/entity/ddrop_option_entity.dart';
 import 'package:elesson/app/core/task/domain/entity/screen_entity.dart';
 import 'package:elesson/app/core/task/domain/usecase/get_multimedia_usecase.dart';
 import 'package:elesson/app/feature/task/widgets/audio_multimedia.dart';
-import 'package:elesson/app/feature/task/widgets/ddrop_sender_undo.dart';
+import 'package:elesson/app/feature/task/widgets/ddrop/ddrop_sender.dart';
+import 'package:elesson/app/feature/task/widgets/ddrop/ddrop_sender_undo.dart';
+import 'package:elesson/app/feature/task/widgets/ddrop/ddrop_target.dart';
 import 'package:elesson/app/feature/task/widgets/image_multimedia.dart';
 import 'package:elesson/app/feature/task/widgets/text_multimedia.dart';
 import 'package:elesson/app/util/enums/button_status.dart';
@@ -25,9 +28,28 @@ class TaskViewController extends ChangeNotifier {
 
   ScreenEntity screenEntity = ScreenEntity(bodyWidget: Container(), headerWidgets: []);
 
+  ValueNotifier<List<DdropOptionEntity>> ddropOptions = ValueNotifier([]);
+
+  void addDdropOptions(DdropOptionEntity options) {
+    print("added");
+    ddropOptions.value.add(options);
+    ddropOptions.notifyListeners();
+  }
+
+  void removeDdropOptions(DdropOptionEntity optionEntity) {
+    print("removed");
+    ddropOptions.value.remove(optionEntity);
+    print(ddropOptions.value.map((e) => e.elementModel!.toMap()).toList());
+    ddropOptions.notifyListeners();
+  }
+
+  bool searchDdropOptionsByElement(ElementModel element) {
+    return ddropOptions.value.any((DdropOptionEntity option) => option.elementModel == element);
+  }
+
   void resetSubmitStatusButton() {
     _submitButtonStatus = SubmitButtonStatus.Idle;
-    notifyListeners();
+    ddropOptions.notifyListeners();
   }
 
   void renderTaskJson(TaskModel taskToRender) {
@@ -36,7 +58,6 @@ class TaskViewController extends ChangeNotifier {
       renderComponent(componentModel: component, widgetsList: screenEntity.headerWidgets);
     });
 
-    // taskToRender.body!.components.sort((a, b) => a.position!.compareTo(b.position!));
     renderTemplateBodyTask(taskToRender);
   }
 
@@ -110,31 +131,30 @@ class TaskViewController extends ChangeNotifier {
         );
         break;
       case TemplateTypes.AEL:
-        activityBody = Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  DdropSenderUndo(),
-                  DdropSenderUndo(),
-                  DdropSenderUndo(),
-                  // ImageMultimedia(elementModel: taskModel.body!.components[0].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
-                  // ImageMultimedia(elementModel: taskModel.body!.components[1].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
-                  // ImageMultimedia(elementModel: taskModel.body!.components[2].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
-                ],
-              ),
-              SizedBox(height: 100),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ImageMultimedia(elementModel: taskModel.body!.components[3].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
-                  ImageMultimedia(elementModel: taskModel.body!.components[4].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
-                  ImageMultimedia(elementModel: taskModel.body!.components[5].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
-                ],
-              ),
-            ],
+        activityBody = Expanded(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    DdropSender(element: taskModel.body!.components[0].elements!.first, getMultimediaUseCase: getMultimediaUseCase, taskController: this),
+                    DdropSender(element: taskModel.body!.components[1].elements!.first, getMultimediaUseCase: getMultimediaUseCase, taskController: this),
+                    DdropSender(element: taskModel.body!.components[2].elements!.first, getMultimediaUseCase: getMultimediaUseCase, taskController: this),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    DdropTarget(element: taskModel.body!.components[3].elements!.first, getMultimediaUseCase: getMultimediaUseCase, taskController: this),
+                    DdropTarget(element: taskModel.body!.components[4].elements!.first, getMultimediaUseCase: getMultimediaUseCase, taskController: this),
+                    DdropTarget(element: taskModel.body!.components[5].elements!.first, getMultimediaUseCase: getMultimediaUseCase, taskController: this),
+                  ],
+                ),
+              ],
+            ),
           ),
         );
         break;
@@ -151,9 +171,15 @@ class TaskViewController extends ChangeNotifier {
     }
 
     screenEntity.bodyWidget = Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        subTitulo,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            subTitulo,
+            Divider(),
+          ],
+        ),
         activityBody,
       ],
     );

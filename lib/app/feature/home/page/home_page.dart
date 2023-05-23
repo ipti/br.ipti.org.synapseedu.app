@@ -1,17 +1,17 @@
 import 'package:elesson/app/feature/shared/widgets/card_widget.dart';
 import 'package:elesson/app/feature/shared/widgets/init_title.dart';
 import 'package:elesson/app/feature/task/controller/task_view_controller.dart';
-import 'package:elesson/app/feature/task/controller/task_select_controller.dart';
+import 'package:elesson/app/feature/home/controller/home_controller.dart';
 import 'package:elesson/app/providers/userProvider.dart';
 import 'package:elesson/app/util/enums/button_status.dart';
 import 'package:flutter/material.dart';
 
-class TaskSelectPage extends StatelessWidget {
-  final TaskSelectController taskSelectController;
+class HomePage extends StatelessWidget {
+  final HomeController taskSelectController;
   final TaskViewController taskViewController;
   final UserProvider userProvider;
 
-  const TaskSelectPage({Key? key, required this.taskSelectController, required this.taskViewController, required this.userProvider}) : super(key: key);
+  const HomePage({Key? key, required this.taskSelectController, required this.taskViewController, required this.userProvider}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

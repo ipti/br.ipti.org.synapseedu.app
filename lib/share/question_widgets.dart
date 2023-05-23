@@ -375,7 +375,9 @@ double double3LoadingPercent = 0;
 double double4LoadingPercent = 0;
 double double5LoadingPercent = 0;
 double double6LoadingPercent = 0;
+
 double current = 0;
+
 // ignore: non_constant_identifier_names, missing_return
 Widget LoadingGestureDetector({Widget? child, Function? onLongPress, Function? setState, int? definedPosition, double? widthScreen, bool? enableMargin}) {
   switch (definedPosition) {
