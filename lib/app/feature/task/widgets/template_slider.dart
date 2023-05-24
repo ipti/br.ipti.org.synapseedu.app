@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 import 'package:elesson/app/feature/task/controller/task_view_controller.dart';
+import 'package:elesson/app/feature/task/widgets/confirm_button.dart';
 import 'package:elesson/settings/settings_screen.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:elesson/share/snackbar_widget.dart';
 import 'package:flutter/services.dart';
-
 
 class TemplateSlider extends StatefulWidget {
   final TaskViewController taskViewController;
@@ -118,7 +118,8 @@ class _TemplateSliderState extends State<TemplateSlider> {
           ],
         ),
       ),
-      floatingActionButton: SizedBox(
+      floatingActionButton: Container(
+        color: Colors.white,
         height: bottonPadding,
         child: Padding(
           padding: EdgeInsets.only(right: 10, left: 10, bottom: 10),
@@ -140,43 +141,41 @@ class _TemplateSliderState extends State<TemplateSlider> {
                   onPressed: () => Navigator.of(context).pushNamed(SettingsScreen.routeName),
                 ),
               ),
-              Row(
-                children: [
-                  //TODO: mover botão de confirmar aqui
-                  showSecondScreen == false
-                      ? ButtonTheme(
-                          minWidth: buttonWidth,
-                          height: buttonHeight,
-                          child: MaterialButton(
-                            padding: EdgeInsets.zero,
-                            color: boxResponder,
-                            textColor: Color(0xFF0000FF),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: Color.fromRGBO(0, 0, 255, 0.2)),
+              // SizedBox(width: 10),
+              // ConfirmButtonWidget(),
+              // SizedBox(width: 10),
+              showSecondScreen == false
+                  ? ButtonTheme(
+                      minWidth: buttonWidth,
+                      height: buttonHeight,
+                      child: MaterialButton(
+                        padding: EdgeInsets.zero,
+                        color: boxResponder,
+                        textColor: Color(0xFF0000FF),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                          side: BorderSide(color: Color.fromRGBO(0, 0, 255, 0.2)),
+                        ),
+                        child: Row(
+                          children: [
+                            Text(
+                              "RESPONDER",
+                              // widget.isTextTemplate ? 'VER MAIS   ' : 'RESPONDER',
+                              style: TextStyle(color: colorResponder, fontSize: fonteDaLetra, fontWeight: FontWeight.w900),
                             ),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "ver isso",
-                                  // widget.isTextTemplate ? 'VER MAIS   ' : 'RESPONDER',
-                                  style: TextStyle(color: colorResponder, fontSize: fonteDaLetra, fontWeight: FontWeight.w900),
-                                ),
-                                Icon(Icons.keyboard_arrow_down, size: 40, color: colorResponder),
-                              ],
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                boxResponder = Color(0xFF0000FF);
-                                colorResponder = Colors.white;
-                                showSecondScreen = !showSecondScreen;
-                              });
-                            },
-                          ),
-                        )
-                      : backButton(buttonHeight)
-                ],
-              ),
+                            Icon(Icons.keyboard_arrow_down, size: 40, color: colorResponder),
+                          ],
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            boxResponder = Color(0xFF0000FF);
+                            colorResponder = Colors.white;
+                            showSecondScreen = !showSecondScreen;
+                          });
+                        },
+                      ),
+                    )
+                  : backButton(buttonHeight),
             ],
           ),
         ),
@@ -267,7 +266,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
     return Container(
       decoration: BoxDecoration(color: Colors.white),
       width: size.width,
-      height: size.height - 64,
+      height: size.height,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: widget.taskViewController.screenEntity.headerWidgets,
@@ -276,23 +275,26 @@ class _TemplateSliderState extends State<TemplateSlider> {
   }
 
   Widget bottomScreen(Size size) {
-    return GestureDetector(
-      onPanUpdate: (details) {
-        if (details.delta.dy > 0) {
-          setState(() {
-            boxResponder = Colors.white;
-            colorResponder = Color(0xFF0000FF);
-            showSecondScreen = false;
-          });
-        }
-      },
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 250),
-        margin: showSecondScreen == true ? EdgeInsets.only(bottom: 0) : EdgeInsets.only(top: size.height),
-        decoration: BoxDecoration(color: Colors.white),
-        width: size.width,
-        height: size.height,
-        child: widget.taskViewController.screenEntity.bodyWidget,
+    return SingleChildScrollView(
+      physics: NeverScrollableScrollPhysics(),
+      child: GestureDetector(
+        onPanUpdate: (details) {
+          if (details.delta.dy > 0) {
+            setState(() {
+              boxResponder = Colors.white;
+              colorResponder = Color(0xFF0000FF);
+              showSecondScreen = false;
+            });
+          }
+        },
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 250),
+          margin: showSecondScreen == true ? EdgeInsets.only(bottom: 0) : EdgeInsets.only(top: size.height),
+          decoration: BoxDecoration(color: Colors.white),
+          width: size.width,
+          height: size.height - 87,
+          child: widget.taskViewController.screenEntity.bodyWidget,
+        ),
       ),
     );
   }

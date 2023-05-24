@@ -84,8 +84,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
       // }
     }
     initConnectivity();
-    _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     super.initState();
   }
 
@@ -130,8 +129,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
-    double buttonHeight =
-        48 > deviceSize.height * 0.0656 ? 48 : deviceSize.height * 0.0656;
+    double buttonHeight = 48 > deviceSize.height * 0.0656 ? 48 : deviceSize.height * 0.0656;
     double minButtonWidth = MediaQuery.of(context).size.width < 411 ? 180 : 259;
 
     return MaterialButton(
@@ -139,24 +137,18 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
       height: buttonHeight,
       minWidth: minButtonWidth,
       padding: EdgeInsets.all(8),
-      color: confirmButtonColor
-          ? Color.fromRGBO(0, 220, 140, confirmButtonBackgroundOpacity)
-          : Color.fromRGBO(255, 51, 0, confirmButtonBackgroundOpacity),
+      color: confirmButtonColor ? Color.fromRGBO(0, 220, 140, confirmButtonBackgroundOpacity) : Color.fromRGBO(255, 51, 0, confirmButtonBackgroundOpacity),
       // textColor: Color.fromRGBO(0, 220, 140, 1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
         side: BorderSide(
-          color: confirmButtonBorder
-              ? Color.fromRGBO(0, 220, 140, 1)
-              : Color.fromRGBO(255, 51, 0, 1),
+          color: confirmButtonBorder ? Color.fromRGBO(0, 220, 140, 1) : Color.fromRGBO(255, 51, 0, 1),
         ),
       ),
       child: Text(
         confirmButtonText,
         style: TextStyle(
-          color: confirmButtonTextColor
-              ? Color.fromRGBO(0, 220, 140, 1)
-              : Color.fromRGBO(255, 51, 0, 1),
+          color: confirmButtonTextColor ? Color.fromRGBO(0, 220, 140, 1) : Color.fromRGBO(255, 51, 0, 1),
           fontWeight: FontWeight.w900,
           // fontSize: fonteDaLetra,
           fontSize: 16,
@@ -225,8 +217,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
             urlThirdBox = '';
           }
 
-          if (_connectionStatus != 'ConnectivityResult.none' &&
-              _connectionStatus != 'ConnectivityResult.waiting') {
+          if (_connectionStatus != 'ConnectivityResult.none' && _connectionStatus != 'ConnectivityResult.waiting') {
             // print('DEU ESSE: $_connectionStatus');
             // print('tempo de intervalo: ${timeEnd - timeStart}');
 
@@ -242,8 +233,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
 
             // ! O erro está vindo daqui, quando tenta subtrair timeStart do timeEnd. Motivo: timeStart vem null
             try {
-              submitLogic(context, widget.questionIndex, widget.cobjectIndex,
-                  widget.questionType,
+              submitLogic(context, widget.questionIndex, widget.cobjectIndex, widget.questionType,
                   pieceId: widget.pieceId,
                   isCorrect: widget.isCorrect,
                   finalTime: 22,

@@ -47,9 +47,6 @@ class DdropSender extends StatelessWidget {
                         ),
                         feedback: DdropModalImage(bytesImage: bytesImage!),
                         childWhenDragging: DdropModalInvisible(),
-                        onDragCompleted: () {
-                          print('drag completed');
-                        },
                       );
               },
             );

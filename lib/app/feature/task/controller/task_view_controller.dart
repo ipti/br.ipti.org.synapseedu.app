@@ -9,6 +9,7 @@ import 'package:elesson/app/feature/task/widgets/ddrop/ddrop_sender.dart';
 import 'package:elesson/app/feature/task/widgets/ddrop/ddrop_sender_undo.dart';
 import 'package:elesson/app/feature/task/widgets/ddrop/ddrop_target.dart';
 import 'package:elesson/app/feature/task/widgets/image_multimedia.dart';
+import 'package:elesson/app/feature/task/widgets/text_modal_invible.dart';
 import 'package:elesson/app/feature/task/widgets/text_multimedia.dart';
 import 'package:elesson/app/util/enums/button_status.dart';
 import 'package:elesson/app/util/enums/multimedia_types.dart';
@@ -49,13 +50,15 @@ class TaskViewController extends ChangeNotifier {
   void renderTaskJson(TaskModel taskToRender) {
     taskToRender.header!.components.sort((a, b) => a.position!.compareTo(b.position!));
     taskToRender.header!.components.forEach((ComponentModel component) {
-      renderComponent(componentModel: component, widgetsList: screenEntity.headerWidgets);
+      renderHeaderComponent(componentModel: component, widgetsList: screenEntity.headerWidgets);
     });
-
+    if(screenEntity.headerWidgets.length == 2){
+      screenEntity.headerWidgets.insert(2, TextModalInvisible());
+    }
     renderTemplateBodyTask(taskToRender);
   }
 
-  void renderComponent({required ComponentModel componentModel, required List<Widget> widgetsList}) {
+  void renderHeaderComponent({required ComponentModel componentModel, required List<Widget> widgetsList}) {
     componentModel.elements!.sort((a, b) => a.position!.compareTo(b.position!));
 
     componentModel.elements!.forEach((ElementModel element) {
@@ -95,12 +98,13 @@ class TaskViewController extends ChangeNotifier {
   }
 
   void renderTemplateBodyTask(TaskModel taskModel) {
+    taskModel.body!.components.sort((a, b) => a.position!.compareTo(b.position!));
     taskModel.body!.components.forEach((component) => component.elements!.first.mainElement = true);
     TemplateTypes templateType = TemplateTypes.values[taskModel.template_id! - 1];
 
     Widget subTitulo = taskModel.header!.components.last.elements!.last.type_id == MultimediaTypes.text.type_id
         ? TextMultimedia(elementModel: taskModel.header!.components.last.elements!.last, getMultimediaUseCase: getMultimediaUseCase)
-        : Container();
+        : TextModalInvisible();
 
     late Widget activityBody;
 
@@ -208,7 +212,7 @@ class TaskViewController extends ChangeNotifier {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             subTitulo,
-            Divider(),
+            Divider(height: 0,thickness: 1,color: Colors.grey.withOpacity(0.2),),
           ],
         ),
         activityBody,
