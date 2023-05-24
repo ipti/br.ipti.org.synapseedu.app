@@ -16,26 +16,22 @@ class DdropTarget extends StatefulWidget {
   final ElementModel element;
   final GetMultimediaUseCase getMultimediaUseCase;
   final TaskViewController taskController;
+  final int position;
 
-
-  DdropTarget({Key? key, required this.element, required this.getMultimediaUseCase, required this.taskController}) : super(key: key);
+  DdropTarget({Key? key, required this.element, required this.getMultimediaUseCase, required this.taskController, required this.position}) : super(key: key);
 
   @override
   _DdropTargetState createState() => _DdropTargetState();
 }
 
 class _DdropTargetState extends State<DdropTarget> {
-  DdropOptionEntity? ddropOptionEntity;
+  late Future<Dartz.Either<Failure, List<int>>> loadTargetImage = widget.getMultimediaUseCase.getBytesByMultimediaId(widget.element.multimedia_id!);
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return DragTarget(
-      onWillAccept: (data) => true,
-      onAccept: (DdropOptionEntity data) {
-        widget.taskController.addDdropOptions(data);
-        setState(() => ddropOptionEntity = data);
-      },
+      onAccept: (DdropOptionEntity data) => widget.taskController.addDdropOptions(widget.position, data),
       builder: (context, List<dynamic> candidateData, rejectedData) {
         return Container(
           width: size.width / 2.6 + 20,
@@ -44,13 +40,22 @@ class _DdropTargetState extends State<DdropTarget> {
             alignment: Alignment.centerRight,
             children: [
               FutureBuilder(
-                future: widget.getMultimediaUseCase.getBytesByMultimediaId(widget.element.multimedia_id!),
+                future: loadTargetImage,
                 builder: (context, AsyncSnapshot<Dartz.Either<Failure, List<int>>> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) return CircularProgressIndicator();
                   return snapshot.data!.fold((l) => CircularProgressIndicator(), (r) => DdropModalImage(bytesImage: Uint8List.fromList(r)));
                 },
               ),
-              Positioned(top: 0, right: 20, child: ddropOptionEntity != null ? DdropModalImage(bytesImage: ddropOptionEntity!.imageBytes!) : Container()),
+              ValueListenableBuilder<List<DdropOptionEntity>>(
+                valueListenable: widget.taskController.ddropOptions,
+                builder: (context, ddropOptions, child) {
+                  return Positioned(
+                    top: 0,
+                    right: 20,
+                    child: ddropOptions[widget.position] != DdropOptionEntity() ? DdropModalImage(bytesImage: ddropOptions[widget.position].imageBytes!) : Container(),
+                  );
+                },
+              ),
             ],
           ),
         );

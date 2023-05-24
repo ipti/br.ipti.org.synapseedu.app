@@ -28,23 +28,17 @@ class TaskViewController extends ChangeNotifier {
 
   ScreenEntity screenEntity = ScreenEntity(bodyWidget: Container(), headerWidgets: []);
 
-  ValueNotifier<List<DdropOptionEntity>> ddropOptions = ValueNotifier([]);
+  ValueNotifier<List<DdropOptionEntity>> ddropOptions = ValueNotifier([DdropOptionEntity(), DdropOptionEntity(), DdropOptionEntity()]);
 
-  void addDdropOptions(DdropOptionEntity options) {
-    print("added");
-    ddropOptions.value.add(options);
+  void addDdropOptions(int position, DdropOptionEntity options) {
+    ddropOptions.value[position] = options;
     ddropOptions.notifyListeners();
   }
 
   void removeDdropOptions(DdropOptionEntity optionEntity) {
-    print("removed");
-    ddropOptions.value.remove(optionEntity);
-    print(ddropOptions.value.map((e) => e.elementModel!.toMap()).toList());
+    int index = ddropOptions.value.indexOf(optionEntity);
+    ddropOptions.value[index] = DdropOptionEntity();
     ddropOptions.notifyListeners();
-  }
-
-  bool searchDdropOptionsByElement(ElementModel element) {
-    return ddropOptions.value.any((DdropOptionEntity option) => option.elementModel == element);
   }
 
   void resetSubmitStatusButton() {
@@ -126,8 +120,45 @@ class TaskViewController extends ChangeNotifier {
         );
         break;
       case TemplateTypes.PRE:
-        activityBody = Center(
+        subTitulo = Center(
           child: TextMultimedia(elementModel: taskModel.body!.components[0].elements!.first, getMultimediaUseCase: getMultimediaUseCase),
+        );
+
+        activityBody = Center(
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Color.fromRGBO(189, 0, 255, 0.2),
+                width: 2,
+              ),
+            ),
+            child: TextFormField(
+              textCapitalization: TextCapitalization.characters,
+              maxLines: 10,
+              minLines: 6,
+              enableSuggestions: false,
+              keyboardType: TextInputType.visiblePassword,
+              // controller: _textController,
+              autofocus: false,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Color(0xFF0000FF), fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Mulish'),
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                hintText: 'Digite a resposta aqui',
+                contentPadding: const EdgeInsets.all(8.0),
+                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(25.7)),
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(25.7)),
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Não se esqueça de digitar a resposta!';
+                }
+                return null;
+              },
+            ),
+          ),
         );
         break;
       case TemplateTypes.AEL:
@@ -148,9 +179,9 @@ class TaskViewController extends ChangeNotifier {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    DdropTarget(element: taskModel.body!.components[3].elements!.first, getMultimediaUseCase: getMultimediaUseCase, taskController: this),
-                    DdropTarget(element: taskModel.body!.components[4].elements!.first, getMultimediaUseCase: getMultimediaUseCase, taskController: this),
-                    DdropTarget(element: taskModel.body!.components[5].elements!.first, getMultimediaUseCase: getMultimediaUseCase, taskController: this),
+                    DdropTarget(element: taskModel.body!.components[3].elements!.first, getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 0),
+                    DdropTarget(element: taskModel.body!.components[4].elements!.first, getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 1),
+                    DdropTarget(element: taskModel.body!.components[5].elements!.first, getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 2),
                   ],
                 ),
               ],
