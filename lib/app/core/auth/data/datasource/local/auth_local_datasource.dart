@@ -14,7 +14,7 @@ abstract class AuthLocalDataSource {
 
   Future<String> getToken();
 
-  Future<bool> cleanToken();
+  Future<bool> cleanTokens();
 }
 
 class AuthLocalDatasourceImpl implements AuthLocalDataSource {
@@ -76,11 +76,12 @@ class AuthLocalDatasourceImpl implements AuthLocalDataSource {
   }
 
   @override
-  Future<bool> cleanToken() async {
+  Future<bool> cleanTokens() async {
     final sharedPreferences = await SharedPreferences.getInstance();
 
-    final result = sharedPreferences.remove(KEY_SESSION_TOKEN);
+    final result = await sharedPreferences.remove(KEY_SESSION_TOKEN);
+    final result_user = await sharedPreferences.remove(keySessionUser);
 
-    return result;
+    return result == (result_user == true);
   }
 }

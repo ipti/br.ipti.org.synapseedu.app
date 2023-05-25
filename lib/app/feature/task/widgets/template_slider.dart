@@ -292,7 +292,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
           margin: showSecondScreen == true ? EdgeInsets.only(bottom: 0) : EdgeInsets.only(top: size.height),
           decoration: BoxDecoration(color: Colors.white),
           width: size.width,
-          height: size.height - 87,
+          height: size.height - 90,
           child: widget.taskViewController.screenEntity.bodyWidget,
         ),
       ),

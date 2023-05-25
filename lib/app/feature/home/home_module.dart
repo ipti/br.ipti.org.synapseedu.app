@@ -65,9 +65,11 @@ class _HomeModuleState extends State<HomeModule> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _taskSelectController,
-      builder: (context, child) => HomePage(taskSelectController: _taskSelectController, taskViewController: _taskViewController, userProvider: _userProvider),
+    return SafeArea(
+      child: AnimatedBuilder(
+        animation: _taskSelectController,
+        builder: (context, child) => HomePage(taskSelectController: _taskSelectController, taskViewController: _taskViewController, userProvider: _userProvider),
+      ),
     );
   }
 }

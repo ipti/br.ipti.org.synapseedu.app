@@ -8,13 +8,11 @@ import '../entity/login_response_entity.dart';
 
 class AuthUseCase {
   final AuthRepositoryInterface authRepository;
+
   AuthUseCase({required this.authRepository});
 
-  Future<Either<Failure, LoginResponseEntity>> verifyAuth() async {
+  Future<Either<Failure, LoginResponseEntity>> getLoginIfExist() async {
     final result = await authRepository.getStoredUserData();
-    if (result.isLeft()) {
-      authRepository.logout();
-    }
     return result;
   }
 
@@ -35,13 +33,14 @@ class AuthUseCase {
 
     loginResponseEntity.fold(
       id,
-      (authToken) => _cacheSessionValues(authToken),
+      (resLoginResponseEntity) => _cacheSessionValues(resLoginResponseEntity, authLoginEntity),
     );
 
     return loginResponseEntity;
   }
 
-  Future _cacheSessionValues(LoginResponseEntity response) async {
+  Future _cacheSessionValues(LoginResponseEntity response, LoginEntity loginEntity) async {
+    response.loginEntity = loginEntity;
     await Future.wait([authRepository.storeUserData(response)]);
   }
 

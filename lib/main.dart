@@ -20,11 +20,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'activity_selection/activity_selection_view.dart';
+import 'app/util/routes.dart';
 import 'webview/headless_webview.dart';
 import 'template_questoes/text_question.dart';
 import 'template_questoes/multiple_choice.dart';
 import 'template_questoes/ddrop/ddrop.dart';
 import 'template_questoes/pre_base.dart';
+
 
 void main() async {
   //usando pra iniciar em outra tela
@@ -38,7 +40,8 @@ void main() async {
           ChangeNotifierProvider(create: (context) => UserProvider()),
         ],
         child: MaterialApp(
-          title: 'Elesson',
+          navigatorKey: navigatorKey,
+          title: 'Synapse Aluno',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             fontFamily: 'Mulish',
@@ -52,9 +55,8 @@ void main() async {
               minWidth: 0,
             ),
           ),
-          // initialRoute: '/',
+          initialRoute: AuthModule.routeName,
           routes: {
-            '/': (context) => VerifyLogin(),
             AuthModule.routeName: (context) => AuthModule(),
             HomeModule.routeName: (context) => HomeModule(),
             DegreeSelectionView.routeName: (context) => DegreeSelectionView(),
@@ -86,40 +88,4 @@ void main() async {
     final license = await rootBundle.loadString('fonts/OFL.txt');
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   });
-}
-
-class VerifyLogin extends StatefulWidget {
-  const VerifyLogin({Key? key}) : super(key: key);
-
-  @override
-  State<VerifyLogin> createState() => _VerifyLoginState();
-}
-
-class _VerifyLoginState extends State<VerifyLogin> {
-  bool initialized = false;
-
-  Future<UserModel?> verifyLogin() async {
-    initialized = true;
-    return await Provider.of<UserProvider>(context).recoverUser();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: FutureBuilder(
-        future: initialized ? null : verifyLogin(),
-        builder: (context, snapshot) {
-          print((snapshot.data as UserModel?)?.user_type_id);
-          if (snapshot.connectionState != ConnectionState.waiting) {
-            // return AuthModule();
-            return snapshot.data != null ? HomeModule() : AuthModule();
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
-    );
-  }
 }

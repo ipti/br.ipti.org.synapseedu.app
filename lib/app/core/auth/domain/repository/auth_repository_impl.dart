@@ -22,14 +22,12 @@ class AuthRepositoryImpl extends AuthRepositoryInterface {
   Future<Either<Failure, LoginResponseEntity>> getStoredUserData() async {
     try {
       final result = await authLocalDataSource.getCurrentUser();
-
       return Right(result);
     } on Exception catch (e) {
       log(e.toString());
       return Left(Failure("Erro desconhecido"));
     }
   }
-
 
   @override
   Future<Either<Failure, AuthResponseEntity>> getAccessToken(String username, String password) async {
@@ -47,15 +45,16 @@ class AuthRepositoryImpl extends AuthRepositoryInterface {
       final result = await authRemoteDataSource.login(authLoginEntity);
       return Right(result);
     } on DioError catch (e) {
+      print("[AuthRepositoryImpl] login: ${e.response?.data['message']}");
       return Left(RestFailure(e.response?.data['message'] ?? "Erro ao realizar login"));
     }
   }
 
   @override
-  Future<Either<Failure, void>> logout() async {
+  Future<Either<Failure, bool>> logout() async {
     try {
       final response = await Future.wait([
-        authLocalDataSource.cleanToken(),
+        authLocalDataSource.cleanTokens(),
       ]);
 
       return Right(

@@ -4,13 +4,11 @@ class UserModel extends Equatable{
   int? id;
   String? name;
   String? user_name;
-  String? password;
   int? user_type_id;
 
   UserModel({
     this.id,
     this.name = 'Nome do usuário',
-    this.password,
     this.user_name,
     this.user_type_id = 3,
   });
@@ -33,14 +31,12 @@ class UserModel extends Equatable{
         "id": id,
         "name": name,
         "user_name": user_name,
-        "password": password,
         "user_type_id": user_type_id,
       };
 
   Map<String, dynamic> toJsonAdd() => {
         "name": name,
         "user_name": user_name,
-        "password": password,
         "user_type_id": user_type_id,
       };
 
@@ -49,10 +45,9 @@ class UserModel extends Equatable{
         id: 0,
         name: 'Aluno(a)',
         user_name: 'Nome do usuário',
-        password: '',
         user_type_id: 0,
       );
 
   @override
-  List<Object?> get props => [id, name, user_name, password, user_type_id];
+  List<Object?> get props => [id, name, user_name, user_type_id];
 }

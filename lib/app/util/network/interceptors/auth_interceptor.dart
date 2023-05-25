@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:elesson/app/core/auth/data/datasource/local/auth_local_datasource.dart';
 
@@ -10,6 +12,7 @@ class AuthInterceptor extends InterceptorsWrapper {
     try {
       final sessionService = AuthLocalDatasourceImpl();
       final token = await sessionService.getToken();
+      log("TOKEN: $token");
       options.headers['Authorization'] = 'Bearer $token';
 
       return super.onRequest(options, handler);

@@ -14,5 +14,5 @@ abstract class AuthRepositoryInterface {
   Future<Either<Failure, bool>> storeUserData(LoginResponseEntity loginResponseEntity);
   Future<Either<Failure, LoginResponseEntity>> getStoredUserData();
 
-  Future<Either<Failure, void>> logout();
+  Future<Either<Failure, bool>> logout();
 }

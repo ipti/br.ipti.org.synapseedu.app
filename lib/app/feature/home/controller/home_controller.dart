@@ -28,14 +28,15 @@ class HomeController extends ChangeNotifier {
     final res = await getTaskUseCase.getTaskById(taskId);
     res.fold(
       (l) {
-        _searchButtonStatus = SubmitButtonStatus.Idle;
+        _searchButtonStatus = SubmitButtonStatus.Error;
         notifyListeners();
+        Future.delayed(Duration(seconds: 2));
       },
       (r) {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => TaskModule(taskModel: r)));
       },
     );
+    _searchButtonStatus = SubmitButtonStatus.Idle;
+    notifyListeners();
   }
-
-
 }

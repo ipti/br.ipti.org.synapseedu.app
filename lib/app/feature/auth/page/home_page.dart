@@ -32,7 +32,7 @@ class AuthScreen extends StatelessWidget {
               context: context,
             ),
             SizedBox(height: size.height * 0.05),
-            GestureDetector(
+            authController.showLoading ? CircularProgressIndicator(): GestureDetector(
               onTap: () => authController.getAcessToken(context),
               child: Text("USAR COMO CONVIDADO", style: TextStyle(decoration: TextDecoration.underline, color: Colors.blue, fontWeight: FontWeight.bold)),
             ),

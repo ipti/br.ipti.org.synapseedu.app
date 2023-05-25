@@ -20,6 +20,9 @@ class AuthController extends ChangeNotifier {
   LoginEntity _authLoginEntity = LoginEntity.empty();
 
   LoginEntity get authLoginEntity => _authLoginEntity;
+  set authLoginEntity(LoginEntity value) {
+    _authLoginEntity = value;
+  }
 
   getAcessToken(BuildContext context) async {
     _showLoading = true;
@@ -34,15 +37,7 @@ class AuthController extends ChangeNotifier {
         Either<Failure, LoginResponseEntity> res = await login();
         if (res.isRight()) {
           LoginResponseEntity loginResponseEntity = res.getOrElse(() => LoginResponseEntity.empty());
-          // if (loginResponseEntity == LoginResponseEntity.empty()) return Left(RestFailure("Erro ao logar"));
-
-          UserModel userModel = UserModel(
-            id: loginResponseEntity.id,
-            user_name: loginResponseEntity.user_name,
-            name: loginResponseEntity.name,
-            user_type_id: loginResponseEntity.user_type_id,
-          );
-          context.read<UserProvider>().setUser(userModel);
+          context.read<UserProvider>().setUser(loginResponseEntity);
           Navigator.of(context).pushNamedAndRemoveUntil(HomeModule.routeName, (route) => false);
         }
       });
@@ -52,17 +47,32 @@ class AuthController extends ChangeNotifier {
   Future<Either<Failure, LoginResponseEntity>> login() async {
     Either<Failure, LoginResponseEntity> res = await authUseCase.login(_authLoginEntity);
     return res.fold((l) {
-      _showFeedback = true;
       _feedback = l.message;
+      _showFeedback = true;
       _showLoading = false;
       notifyListeners();
       return Left(RestFailure(l.message));
     }, (r) {
-      _showFeedback = true;
       _feedback = "Bem vindo, ${r.user_name}";
+      _showFeedback = true;
       _showLoading = false;
-      // FeaturePermission().setUserType(r.user_type_id);
       notifyListeners();
+      return Right(r);
+    });
+  }
+
+  //verifyLogin
+  Future<Either<Failure, LoginResponseEntity>> verifyLogin() async {
+    Either<Failure, LoginResponseEntity> res = await authUseCase.getLoginIfExist();
+    return res.fold((l) {
+      _feedback = l.message;
+      _showFeedback = true;
+      _showLoading = false;
+      return Left(RestFailure(_feedback));
+    }, (r) {
+      _feedback = "Bem vindo de volta, ${r.user_name}";
+      _showFeedback = true;
+      _showLoading = false;
       return Right(r);
     });
   }

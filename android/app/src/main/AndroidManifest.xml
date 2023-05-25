@@ -21,7 +21,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="elesson"
+        android:label="Synapse Aluno"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
