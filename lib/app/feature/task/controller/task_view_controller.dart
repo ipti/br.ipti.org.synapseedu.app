@@ -21,15 +21,23 @@ class TaskViewController extends ChangeNotifier {
 
   TaskViewController({required this.getMultimediaUseCase});
 
-  SubmitButtonStatus _submitButtonStatus = SubmitButtonStatus.Idle;
+  /*
+  * STATUS DO BOTÃO DE SUBMISSÃO
+  * */
+  SubmitButtonStatus _submitButtonStatus = SubmitButtonStatus.Disabled;
 
   SubmitButtonStatus get buttonStatus => _submitButtonStatus;
 
-  final TextEditingController taskIdController = TextEditingController();
-
+  /*
+  * ENTIDADE RESPONSAVEL POR ARMAZENAR OS WIDGETS DA TELA
+  * */
   ScreenEntity screenEntity = ScreenEntity(bodyWidget: Container(), headerWidgets: []);
 
+  /*
+  * DDROP
+  * */
   ValueNotifier<List<DdropOptionEntity>> ddropOptions = ValueNotifier([DdropOptionEntity(), DdropOptionEntity(), DdropOptionEntity()]);
+
 
   void addDdropOptions(int position, DdropOptionEntity options) {
     ddropOptions.value[position] = options;
@@ -42,17 +50,60 @@ class TaskViewController extends ChangeNotifier {
     ddropOptions.notifyListeners();
   }
 
-  void resetSubmitStatusButton() {
-    _submitButtonStatus = SubmitButtonStatus.Idle;
-    ddropOptions.notifyListeners();
+  void validationDdrop() {
+    bool haveEmpty = ddropOptions.value.any((element) => element == DdropOptionEntity());
+    if (!haveEmpty) {
+      _submitButtonStatus = SubmitButtonStatus.Idle;
+      notifyListeners();
+    } else if (haveEmpty && _submitButtonStatus == SubmitButtonStatus.Idle) {
+      _submitButtonStatus = SubmitButtonStatus.Disabled;
+      notifyListeners();
+    }
   }
 
+  /*
+  * PRE
+  * */
+  TextEditingController preController = TextEditingController();
+
+  void validationPre() {
+    bool isValid = preController.text.isNotEmpty;
+    if (isValid) {
+      _submitButtonStatus = SubmitButtonStatus.Idle;
+      notifyListeners();
+    } else if (!isValid && _submitButtonStatus == SubmitButtonStatus.Idle) {
+      _submitButtonStatus = SubmitButtonStatus.Disabled;
+      notifyListeners();
+    }
+  }
+
+  /*
+  * MTE
+  * */
+  ValueNotifier<ComponentModel> componentSelected = ValueNotifier(ComponentModel());
+  void changeComponentSelected(ComponentModel componentModel) {
+    if(componentSelected.value == componentModel) {
+      componentSelected.value = ComponentModel();
+      componentSelected.notifyListeners();
+      _submitButtonStatus = SubmitButtonStatus.Disabled;
+      notifyListeners();
+      return;
+    }
+    componentSelected.value = componentModel;
+    _submitButtonStatus = SubmitButtonStatus.Idle;
+    componentSelected.notifyListeners();
+    notifyListeners();
+  }
+
+  /*
+  * RENDEREIZAÇÃO DOS TEMPLATES
+  * */
   void renderTaskJson(TaskModel taskToRender) {
     taskToRender.header!.components.sort((a, b) => a.position!.compareTo(b.position!));
     taskToRender.header!.components.forEach((ComponentModel component) {
       renderHeaderComponent(componentModel: component, widgetsList: screenEntity.headerWidgets);
     });
-    if(screenEntity.headerWidgets.length == 2){
+    if (screenEntity.headerWidgets.length == 2) {
       screenEntity.headerWidgets.insert(2, TextModalInvisible());
     }
     renderTemplateBodyTask(taskToRender);
@@ -62,7 +113,6 @@ class TaskViewController extends ChangeNotifier {
     componentModel.elements!.sort((a, b) => a.position!.compareTo(b.position!));
 
     componentModel.elements!.forEach((ElementModel element) {
-      print(element.toMap());
       widgetsList.addAll([...buildWidgetFromElement(componentModel, element)]);
     });
   }
@@ -76,15 +126,15 @@ class TaskViewController extends ChangeNotifier {
         }
         return [];
       case 2:
-        // element.mainElement = true;
+      // element.mainElement = true;
         if (componentModel.elements!.any((element) => element.type_id == MultimediaTypes.text.type_id)) {
           return [
             TextMultimedia(
                 elementModel: componentModel.elements!.singleWhere((element) => element.type_id == MultimediaTypes.text.type_id), getMultimediaUseCase: getMultimediaUseCase),
-            ImageMultimedia(elementModel: element, getMultimediaUseCase: getMultimediaUseCase),
+            ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase),
           ];
         }
-        return [ImageMultimedia(elementModel: element, getMultimediaUseCase: getMultimediaUseCase)];
+        return [ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase)];
       case 3:
         bool onlyAudioElement = componentModel.elements!.length == 1;
         if (onlyAudioElement) {
@@ -109,27 +159,29 @@ class TaskViewController extends ChangeNotifier {
     late Widget activityBody;
 
     switch (templateType) {
+
       case TemplateTypes.MTE:
         activityBody = Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            // alignment: WrapAlignment.center,
-            children: [
-              ImageMultimedia(elementModel: taskModel.body!.components[0].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
-              ImageMultimedia(elementModel: taskModel.body!.components[1].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
-              ImageMultimedia(elementModel: taskModel.body!.components[2].elements!.first, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true),
-            ],
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ImageMultimedia(componentModel: taskModel.body!.components[0], getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this),
+                ImageMultimedia(componentModel: taskModel.body!.components[1], getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this),
+                ImageMultimedia(componentModel: taskModel.body!.components[2], getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this),
+              ],
+            ),
           ),
         );
         break;
       case TemplateTypes.PRE:
-        subTitulo = Center(
-          child: TextMultimedia(elementModel: taskModel.body!.components[0].elements!.first, getMultimediaUseCase: getMultimediaUseCase),
-        );
-
+        preController.addListener(() => validationPre());
+        subTitulo = TextMultimedia(elementModel: taskModel.body!.components[0].elements!.first, getMultimediaUseCase: getMultimediaUseCase);
         activityBody = Center(
           child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 12, vertical: 50),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
@@ -143,7 +195,7 @@ class TaskViewController extends ChangeNotifier {
               minLines: 6,
               enableSuggestions: false,
               keyboardType: TextInputType.visiblePassword,
-              // controller: _textController,
+              controller: preController,
               autofocus: false,
               textAlign: TextAlign.center,
               style: TextStyle(color: Color(0xFF0000FF), fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Mulish'),
@@ -166,6 +218,7 @@ class TaskViewController extends ChangeNotifier {
         );
         break;
       case TemplateTypes.AEL:
+        ddropOptions.addListener(() => validationDdrop());
         activityBody = Expanded(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 15),
@@ -194,8 +247,22 @@ class TaskViewController extends ChangeNotifier {
         );
         break;
       case TemplateTypes.TEXT:
-        activityBody = Center(
-          child: TextMultimedia(elementModel: taskModel.body!.components[0].elements!.first, getMultimediaUseCase: getMultimediaUseCase),
+        _submitButtonStatus = SubmitButtonStatus.Success;
+        activityBody = Expanded(
+          flex: 1,
+          child: Scrollbar(
+            isAlwaysShown: true,
+            child: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 15),
+                child: TextMultimedia(
+                  elementModel: taskModel.body!.components[0].elements!.first,
+                  getMultimediaUseCase: getMultimediaUseCase,
+                  disableMaxHeight: true,
+                ),
+              ),
+            ),
+          ),
         );
         break;
       default:
@@ -206,14 +273,13 @@ class TaskViewController extends ChangeNotifier {
     }
 
     screenEntity.bodyWidget = Column(
-      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            subTitulo,
-            Divider(height: 0,thickness: 1,color: Colors.grey.withOpacity(0.2),),
-          ],
+        subTitulo,
+        Divider(
+          height: 0,
+          thickness: 1,
+          color: Colors.grey.withOpacity(0.2),
         ),
         activityBody,
       ],

@@ -6,10 +6,10 @@ import 'package:elesson/app/util/failures/failures.dart';
 import 'package:flutter/material.dart';
 
 class TextMultimedia extends StatelessWidget {
-  final ElementModel elementModel;
   final GetMultimediaUseCase getMultimediaUseCase;
-
-  const TextMultimedia({Key? key, required this.elementModel, required this.getMultimediaUseCase}) : super(key: key);
+  final bool? disableMaxHeight;
+  final ElementModel elementModel;
+  const TextMultimedia({Key? key, required this.elementModel, required this.getMultimediaUseCase, this.disableMaxHeight}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class TextMultimedia extends StatelessWidget {
                 style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16, fontFamily: 'Mulish'),
               ),
             ),
-            height: height,
+            height: disableMaxHeight ?? false ? null : height,
             padding: EdgeInsets.symmetric(horizontal: 16),
             // margin: EdgeInsets.only(top: 12),
           ),

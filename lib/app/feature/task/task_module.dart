@@ -8,6 +8,7 @@ import 'package:elesson/app/core/task/domain/repository/task_repository_impl.dar
 import 'package:elesson/app/core/task/domain/repository/multimedia_repository_impl.dart';
 import 'package:elesson/app/core/task/domain/usecase/get_multimedia_usecase.dart';
 import 'package:elesson/app/core/task/domain/usecase/get_task_usecase.dart';
+import 'package:elesson/app/core/task/domain/usecase/render_template_usecase.dart';
 import 'package:elesson/app/feature/home/controller/home_controller.dart';
 import 'package:elesson/app/feature/home/page/home_page.dart';
 import 'package:elesson/app/feature/task/page/task_view_page.dart';
@@ -29,11 +30,8 @@ class TaskModule extends StatefulWidget {
 class _TaskModuleState extends State<TaskModule> {
 
   late IMultimediaRemoteDatasource _multimediaRemoteDataSource;
-
   late IMultimediaRepository _multimediaRepository;
-
   late GetMultimediaUseCase _getMultimediaUseCase;
-
   late TaskViewController _taskViewController;
 
   @override
@@ -42,11 +40,8 @@ class _TaskModuleState extends State<TaskModule> {
     Dio dioAuthed = DioAuthed().dio;
 
     _multimediaRemoteDataSource = MultimediaRemoteDataSourceImpl(dio: dioAuthed);
-
     _multimediaRepository = MultimediaRepositoryImpl(multimediaRemoteDataSource: _multimediaRemoteDataSource);
-
     _getMultimediaUseCase = GetMultimediaUseCase(multimediaRepository: _multimediaRepository);
-
     _taskViewController = TaskViewController(getMultimediaUseCase: _getMultimediaUseCase);
   }
 

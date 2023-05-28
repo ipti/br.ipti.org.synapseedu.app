@@ -28,16 +28,12 @@ class _HomeModuleState extends State<HomeModule> {
   late UserProvider _userProvider;
 
   late ITaskRemoteDataSource _taskRemoteDataSource;
-  late IMultimediaRemoteDatasource _multimediaRemoteDataSource;
 
   late ITaskRepository _taskRepository;
-  late IMultimediaRepository _multimediaRepository;
 
   late GetTaskUseCase _getTaskUseCase;
-  late GetMultimediaUseCase _getMultimediaUseCase;
 
   late HomeController _taskSelectController;
-  late TaskViewController _taskViewController;
 
   @override
   void initState() {
@@ -45,16 +41,12 @@ class _HomeModuleState extends State<HomeModule> {
     Dio dioAuthed = DioAuthed().dio;
 
     _taskRemoteDataSource = TaskRemoteDataSourceImpl(dio: dioAuthed);
-    _multimediaRemoteDataSource = MultimediaRemoteDataSourceImpl(dio: dioAuthed);
 
     _taskRepository = TaskRepositoryImpl(taskRemoteDataSource: _taskRemoteDataSource);
-    _multimediaRepository = MultimediaRepositoryImpl(multimediaRemoteDataSource: _multimediaRemoteDataSource);
 
     _getTaskUseCase = GetTaskUseCase(taskRepository: _taskRepository);
-    _getMultimediaUseCase = GetMultimediaUseCase(multimediaRepository: _multimediaRepository);
 
     _taskSelectController = HomeController(getTaskUseCase: _getTaskUseCase);
-    _taskViewController = TaskViewController(getMultimediaUseCase: _getMultimediaUseCase);
   }
 
   @override
@@ -68,7 +60,7 @@ class _HomeModuleState extends State<HomeModule> {
     return SafeArea(
       child: AnimatedBuilder(
         animation: _taskSelectController,
-        builder: (context, child) => HomePage(taskSelectController: _taskSelectController, taskViewController: _taskViewController, userProvider: _userProvider),
+        builder: (context, child) => HomePage(taskSelectController: _taskSelectController, userProvider: _userProvider),
       ),
     );
   }

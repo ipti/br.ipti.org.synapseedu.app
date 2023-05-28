@@ -16,12 +16,7 @@ class HomeController extends ChangeNotifier {
 
   final TextEditingController taskIdController = TextEditingController();
 
-  void resetSubmitStatusButton() {
-    _searchButtonStatus = SubmitButtonStatus.Idle;
-    notifyListeners();
-  }
-
-  void submitSearchTaskById(BuildContext context, TaskViewController taskViewController) async {
+  void submitSearchTaskById(BuildContext context) async {
     _searchButtonStatus = SubmitButtonStatus.Loading;
     notifyListeners();
     final taskId = int.parse(taskIdController.text);

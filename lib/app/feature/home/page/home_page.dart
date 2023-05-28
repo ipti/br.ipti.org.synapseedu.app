@@ -8,10 +8,9 @@ import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
   final HomeController taskSelectController;
-  final TaskViewController taskViewController;
   final UserProvider userProvider;
 
-  const HomePage({Key? key, required this.taskSelectController, required this.taskViewController, required this.userProvider}) : super(key: key);
+  const HomePage({Key? key, required this.taskSelectController, required this.userProvider}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +46,7 @@ class HomePage extends StatelessWidget {
                                 ? GestureDetector(
                                     behavior: HitTestBehavior.translucent,
                                     onTap: () {
-                                      taskSelectController.submitSearchTaskById(context,taskViewController);
+                                      taskSelectController.submitSearchTaskById(context);
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(

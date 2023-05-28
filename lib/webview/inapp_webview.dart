@@ -31,6 +31,65 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    return InAppWebView(
+      // initialUrl: "https://flutter.dev/",
+      initialUrlRequest: URLRequest(url: Uri.parse("https://flutter.dev/")),
+      // initialFile: "assets/example.html",
+      // initialHeaders: ,
+      // initialOptions: InAppWebViewGroupOptions(
+      //     crossPlatform: InAppWebViewOptions(
+      //   debuggingEnabled: true,
+      // )),
+      onWebViewCreated: (InAppWebViewController controller) {
+        webView = controller;
+        webView!.addJavaScriptHandler(
+            handlerName: 'theHandler',
+            callback: (args) {
+              // return data to JavaScript side!
+              return {'bar': 'bar_value', 'baz': 'baz_value'};
+            });
+
+        webView!.addJavaScriptHandler(
+            handlerName: 'handlerFooWithArgs',
+            callback: (args) {
+              // print("Blergh: ${args[3]['foo']}");
+              print("fooWithArgs: $args");
+              // it will print: [1, true, [bar, 5], {foo: baz}, {bar: bar_value, baz: baz_value}]
+            });
+      },
+      onConsoleMessage: (controller, consoleMessage) {
+        print('Mensagem: $consoleMessage');
+        // it will print: {message: {"bar":"bar_value","baz":"baz_value"}, messageLevel: 1}
+      },
+//                     onLoadStart: (InAppWebViewController controller, String url) {
+//                       setState(() {
+//                         this.url = url;
+//                       });
+//                     },
+//                     onLoadStop: (InAppWebViewController controller, String url) async {
+//                       setState(() {
+//                         this.url = url;
+//                       });
+//                       // valor = await controller
+//                       //     .evaluateJavascript(source: 'assets/app.js')
+//                       //     .timeout(Duration(milliseconds: 1000));
+//                       controller.evaluateJavascript(source: '''function test() {
+//     document.getElementById("mid").innerHTML = "HOY";
+//     console.log(3010);
+//     return 1212;
+// };
+// test();''').then((value) {
+//                         print('RESULTADO: $value and $valor');
+//                       });
+//                       // print('RESULTADO: $number');
+//                     },
+      onProgressChanged: (InAppWebViewController controller, int progress) {
+        setState(() {
+          this.progress = progress / 100;
+        });
+      },
+    );
+
     int valor = 0;
     return MaterialApp(
       home: Scaffold(
@@ -54,7 +113,7 @@ class _MyAppState extends State<MyApp> {
                   decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
                   child: InAppWebView(
                     // initialUrl: "https://flutter.dev/",
-                    initialUrlRequest: URLRequest(url: Uri.parse("https://apielesson.azurewebsites.net")),
+                    initialUrlRequest: URLRequest(url: Uri.parse("https://flutter.dev/")),
                     // initialFile: "assets/example.html",
                     // initialHeaders: ,
                     // initialOptions: InAppWebViewGroupOptions(
