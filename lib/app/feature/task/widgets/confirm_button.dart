@@ -65,7 +65,9 @@ class ConfirmButtonWidget extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                 ),
               );
       },
