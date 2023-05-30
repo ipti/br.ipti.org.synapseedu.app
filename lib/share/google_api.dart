@@ -1,5 +1,5 @@
 import 'package:googleapis/vision/v1.dart';
-// import 'package:googleapis/vision/v1.dart';
+
 import 'package:googleapis_auth/auth_io.dart';
 
 final _credentials = new ServiceAccountCredentials.fromJson(r'''
@@ -10,15 +10,11 @@ final _credentials = new ServiceAccountCredentials.fromJson(r'''
     "client_id": "111096070744001961169",
     "type": "service_account"
   }
-  ''');
+''');
 
-const _SCOPES = const [VisionApi.cloudVisionScope];
-
-String? googleApiToken;
-
-Future<void> getGoogleApiToken() async {
-  await clientViaServiceAccount(_credentials, _SCOPES).then((httpClient) {
-    // print(http_client.credentials.accessToken.data);
-    googleApiToken = "Bearer ${httpClient.credentials.accessToken.data}";
+Future<String> getGoogleApiToken() async {
+  return await clientViaServiceAccount(_credentials, [VisionApi.cloudVisionScope]).then((httpClient) {
+    // print(httpClient.credentials.accessToken.data);
+    return "Bearer ${httpClient.credentials.accessToken.data}";
   });
 }

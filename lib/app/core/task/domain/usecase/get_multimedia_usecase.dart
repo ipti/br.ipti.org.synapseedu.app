@@ -16,4 +16,9 @@ class GetMultimediaUseCase{
     return await multimediaRepository.getBytesByMultimediaId(id);
   }
 
+  //read Text Of Image
+  Future<Either<Failure, String>> readTextOfImage() async {
+    return await multimediaRepository.readTextOfImage();
+  }
+
 }

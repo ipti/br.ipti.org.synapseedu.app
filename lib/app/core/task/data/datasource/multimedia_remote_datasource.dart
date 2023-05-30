@@ -6,6 +6,8 @@ abstract class IMultimediaRemoteDatasource {
   Future<String> getTextById(int id);
 
   Future<List<int>> getBytesByMultimediaReference(String reference);
+
+  Future<String> getTextOfImage(String base64Image, String googleApiToken);
 }
 
 class MultimediaRemoteDataSourceImpl extends IMultimediaRemoteDatasource {
@@ -37,10 +39,41 @@ class MultimediaRemoteDataSourceImpl extends IMultimediaRemoteDatasource {
 
   @override
   Future<List<int>> getBytesByMultimediaReference(String reference) async {
-    try{
+    try {
       Response response = await dio.post<List<int>>("/multimedia/download/image", data: {"name": reference}, options: Options(responseType: ResponseType.bytes));
       return response.data;
-    } on DioError catch(e) {
+    } on DioError catch (e) {
+      print(e.message);
+    }
+    throw "Erro desconhecido";
+  }
+
+  @override
+  Future<String> getTextOfImage(String base64Image, String googleApiToken) async {
+    Dio dioCleaned = Dio();
+    try {
+      Response response = await dioCleaned.post(
+        "https://vision.googleapis.com/v1/images:annotate",
+        options: Options(
+          headers: {'Authorization': googleApiToken},
+          contentType: "application/json",
+        ),
+        data: {
+          "requests": [
+            {
+              "image": {
+                "content": base64Image,
+              },
+              "features": [
+                {"type": "DOCUMENT_TEXT_DETECTION"}
+              ]
+            }
+          ]
+        },
+      );
+      print(response.data);
+      return response.data["responses"][0]['textAnnotations'][0]['description'];
+    } on DioError catch (e) {
       print(e.message);
     }
     throw "Erro desconhecido";

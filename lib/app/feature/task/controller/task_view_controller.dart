@@ -14,7 +14,10 @@ import 'package:elesson/app/feature/task/widgets/text_multimedia.dart';
 import 'package:elesson/app/util/enums/button_status.dart';
 import 'package:elesson/app/util/enums/multimedia_types.dart';
 import 'package:elesson/app/util/enums/task_types.dart';
+import 'package:elesson/app/util/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:wakelock/wakelock.dart';
 
 class TaskViewController extends ChangeNotifier {
   final GetMultimediaUseCase getMultimediaUseCase;
@@ -37,7 +40,6 @@ class TaskViewController extends ChangeNotifier {
   * DDROP
   * */
   ValueNotifier<List<DdropOptionEntity>> ddropOptions = ValueNotifier([DdropOptionEntity(), DdropOptionEntity(), DdropOptionEntity()]);
-
 
   void addDdropOptions(int position, DdropOptionEntity options) {
     ddropOptions.value[position] = options;
@@ -77,12 +79,20 @@ class TaskViewController extends ChangeNotifier {
     }
   }
 
+  Future<void> readTextOfImage() async {
+    final res = await getMultimediaUseCase.readTextOfImage();
+    res.fold((l) => null, (r) => preController.text = r);
+    notifyListeners();
+    validationPre();
+  }
+
   /*
   * MTE
   * */
   ValueNotifier<ComponentModel> componentSelected = ValueNotifier(ComponentModel());
+
   void changeComponentSelected(ComponentModel componentModel) {
-    if(componentSelected.value == componentModel) {
+    if (componentSelected.value == componentModel) {
       componentSelected.value = ComponentModel();
       componentSelected.notifyListeners();
       _submitButtonStatus = SubmitButtonStatus.Disabled;
@@ -126,7 +136,7 @@ class TaskViewController extends ChangeNotifier {
         }
         return [];
       case 2:
-      // element.mainElement = true;
+        // element.mainElement = true;
         if (componentModel.elements!.any((element) => element.type_id == MultimediaTypes.text.type_id)) {
           return [
             TextMultimedia(
@@ -159,7 +169,6 @@ class TaskViewController extends ChangeNotifier {
     late Widget activityBody;
 
     switch (templateType) {
-
       case TemplateTypes.MTE:
         activityBody = Expanded(
           child: Center(
@@ -180,40 +189,100 @@ class TaskViewController extends ChangeNotifier {
         preController.addListener(() => validationPre());
         subTitulo = TextMultimedia(elementModel: taskModel.body!.components[0].elements!.first, getMultimediaUseCase: getMultimediaUseCase);
         activityBody = Center(
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 12, vertical: 50),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: Color.fromRGBO(189, 0, 255, 0.2),
-                width: 2,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 12, vertical: 50),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Color.fromRGBO(189, 0, 255, 0.2),
+                    width: 2,
+                  ),
+                ),
+                child: TextFormField(
+                  textCapitalization: TextCapitalization.characters,
+                  maxLines: 10,
+                  minLines: 6,
+                  enableSuggestions: false,
+                  keyboardType: TextInputType.visiblePassword,
+                  controller: preController,
+                  autofocus: false,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Color(0xFF0000FF), fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Mulish'),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: 'Digite a resposta aqui',
+                    contentPadding: const EdgeInsets.all(8.0),
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(25.7)),
+                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(25.7)),
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Não se esqueça de digitar a resposta!';
+                    }
+                    return null;
+                  },
+                ),
               ),
-            ),
-            child: TextFormField(
-              textCapitalization: TextCapitalization.characters,
-              maxLines: 10,
-              minLines: 6,
-              enableSuggestions: false,
-              keyboardType: TextInputType.visiblePassword,
-              controller: preController,
-              autofocus: false,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Color(0xFF0000FF), fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Mulish'),
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: 'Digite a resposta aqui',
-                contentPadding: const EdgeInsets.all(8.0),
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(25.7)),
-                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(25.7)),
+              SizedBox(height: 20),
+              GestureDetector(
+                onTap: () async {
+                  Wakelock.enable();
+                  showDialog(
+                    context: navigatorKey.currentContext!,
+                    builder: (context) => AnimatedContainer(
+                      duration: const Duration(milliseconds: 800),
+                      curve: Curves.fastLinearToSlowEaseIn,
+                      child: Dialog(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                        elevation: 0,
+                        backgroundColor: Colors.transparent,
+                        child: Stack(
+                          children: [
+                            Center(
+                              child: Container(
+                                width: 200,
+                                height: 200,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10, offset: Offset(0, 10))],
+                                ),
+                                child: Center(
+                                  child: SpinKitCubeGrid(
+                                    color: Colors.indigoAccent,
+                                    size: 50,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                  await readTextOfImage().whenComplete(() => Navigator.of(navigatorKey.currentContext!).pop());
+                  Wakelock.disable();
+                },
+                child: Container(
+                  padding: EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Color.fromRGBO(0, 0, 255, 1)),
+                    color: Color.fromRGBO(0, 0, 255, 1),
+                    borderRadius: BorderRadius.circular(18.0),
+                  ),
+                  child: Icon(
+                    Icons.camera,
+                    size: 40,
+                    color: Colors.white,
+                  ),
+                ),
               ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Não se esqueça de digitar a resposta!';
-                }
-                return null;
-              },
-            ),
+            ],
           ),
         );
         break;

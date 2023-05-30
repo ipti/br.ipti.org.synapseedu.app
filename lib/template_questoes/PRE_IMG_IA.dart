@@ -370,13 +370,13 @@ class _PreImgIaState extends State<PreImgIa> {
 
   // função para extrair texto da imagem enviando o base64 dela
   Future<int> extractText() async {
-    print(googleApiToken);
+    // print(googleApiToken);
     print(base64Image);
     try {
       retorno = await Dio().post(
         "https://vision.googleapis.com/v1/images:annotate",
         options: Options(
-            headers: {'Authorization': googleApiToken},
+            // headers: {'Authorization': googleApiToken},
             contentType: "application/json"),
         data: {
           "requests": [
@@ -399,15 +399,13 @@ class _PreImgIaState extends State<PreImgIa> {
   }
 
   // função para tirar foto
-  Future pickImage() async {
-    final pickedFile = await picker.getImage(
+  Future<String> pickImage() async {
+    final pickedFile = await picker.pickImage(
       source: ImageSource.camera,
       preferredCameraDevice: CameraDevice.front,
     );
-
     imageFile = File(pickedFile!.path);
-
-    base64Image = await converter();
+    return await converter();
   }
 
   late File imageFile;

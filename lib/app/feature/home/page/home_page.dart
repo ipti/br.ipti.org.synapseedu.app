@@ -4,6 +4,7 @@ import 'package:elesson/app/feature/task/controller/task_view_controller.dart';
 import 'package:elesson/app/feature/home/controller/home_controller.dart';
 import 'package:elesson/app/providers/userProvider.dart';
 import 'package:elesson/app/util/enums/button_status.dart';
+import 'package:elesson/share/google_api.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -78,6 +79,7 @@ class HomePage extends StatelessWidget {
                     ],
                   )
                 : Container(),
+            TextButton(child: Text("ss"),onPressed: () => getGoogleApiToken()),
             ElessonCardWidget(
               blockDone: false,
               backgroundImage: "assets/img/mate.png",
