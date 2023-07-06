@@ -38,7 +38,7 @@ class DdropSender extends StatelessWidget {
               valueListenable: taskController.ddropOptions,
               builder: (context, ddropOptions, child) {
                 return ddropOptions.contains(ddropOptionEntity)
-                    ? DdropSenderUndo(callback: ()=> taskController.removeDdropOptions(ddropOptionEntity))
+                    ? DdropSenderUndo(callback: () => taskController.removeDdropOptions(ddropOptionEntity))
                     : Draggable(
                         data: ddropOptionEntity,
                         child: GestureDetector(

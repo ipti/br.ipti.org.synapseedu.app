@@ -16,8 +16,8 @@ class DdropShimmerModal extends StatelessWidget {
       direction: ShimmerDirection.fromLTRB(),
       child: Container(
         decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(18)),
-        width: size.width / 2.6,
-        height: size.width / 2.6,
+        width: size.width > size.height ? (size.width / 2.6) / 3 : size.width / 2.6,
+        height: size.width > size.height ? (size.width / 2.6) / 3 : size.width / 2.6,
       ),
     );
   }

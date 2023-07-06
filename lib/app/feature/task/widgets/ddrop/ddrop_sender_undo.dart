@@ -15,8 +15,8 @@ class DdropSenderUndo extends StatelessWidget {
       child: Container(
         child: FDottedLine(
           child: Container(
-            width: size.width / 2.6,
-            height: size.width / 2.6,
+            width: size.width > size.height ? (size.width / 2.6) / 3 : size.width / 2.6,
+            height: size.width > size.height ? (size.width / 2.6) / 3 : size.width / 2.6,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,

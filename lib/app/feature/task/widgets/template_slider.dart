@@ -83,40 +83,48 @@ class _TemplateSliderState extends State<TemplateSlider> {
       backgroundColor: Colors.white,
       body: Container(
         height: maxScreenHeight,
-        child: Stack(
-          children: [
-            TopScreen(headerWidgets: widget.taskViewController.screenEntity.headerWidgets),
-            SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
-              child: GestureDetector(
-                onPanUpdate: (details) {
-                  if (details.delta.dy > 0) {
-                    setState(() {
-                      boxResponder = Colors.white;
-                      colorResponder = Color(0xFF0000FF);
-                      showSecondScreen = false;
-                    });
-                  }
-                },
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 250),
-                  margin: showSecondScreen == true ? EdgeInsets.only(bottom: 0) : EdgeInsets.only(top: size.height),
-                  decoration: BoxDecoration(color: Colors.white),
-                  width: size.width,
-                  height: size.height - 90,
-                  child: widget.taskViewController.screenEntity.bodyWidget,
-                ),
+        child: size.width > size.height
+            ? Row(
+                children: [
+                  Expanded(child: TopScreen(headerWidgets: widget.taskViewController.screenEntity.headerWidgets)),
+                  VerticalDivider(width: 20, thickness: 1, indent: 20, endIndent: 0, color: Colors.grey),
+                  Expanded(child: widget.taskViewController.screenEntity.bodyWidget),
+                ],
+              )
+            : Stack(
+                children: [
+                  TopScreen(headerWidgets: widget.taskViewController.screenEntity.headerWidgets),
+                  SingleChildScrollView(
+                    physics: NeverScrollableScrollPhysics(),
+                    child: GestureDetector(
+                      onPanUpdate: (details) {
+                        if (details.delta.dy > 0) {
+                          setState(() {
+                            boxResponder = Colors.white;
+                            colorResponder = Color(0xFF0000FF);
+                            showSecondScreen = false;
+                          });
+                        }
+                      },
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 250),
+                        margin: showSecondScreen == true ? EdgeInsets.only(bottom: 0) : EdgeInsets.only(top: size.height),
+                        decoration: BoxDecoration(color: Colors.white),
+                        width: size.width,
+                        height: size.height - 90,
+                        child: widget.taskViewController.screenEntity.bodyWidget,
+                      ),
+                    ),
+                  )
+                ],
               ),
-            ),
-          ],
-        ),
       ),
-      floatingActionButton: bottonTemplateSlider(bottonPadding, buttonHeight, context, buttonWidth),
+      floatingActionButton: bottonTemplateSlider(bottonPadding, buttonHeight, context, buttonWidth, size.width > size.height),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
-  Widget bottonTemplateSlider(double bottonPadding, double buttonHeight, BuildContext context, double buttonWidth) {
+  Widget bottonTemplateSlider(double bottonPadding, double buttonHeight, BuildContext context, double buttonWidth, bool showButtonResponse) {
     return Container(
       color: Colors.white,
       height: bottonPadding,
@@ -143,7 +151,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
             SizedBox(width: 10),
             ConfirmButtonWidget(taskViewController: widget.taskViewController),
             SizedBox(width: 10),
-            showSecondScreen == false
+            showButtonResponse ? Container() : showSecondScreen == false
                 ? ButtonTheme(
                     minWidth: buttonWidth,
                     height: buttonHeight,

@@ -12,7 +12,7 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    authController.authLoginEntity.username.text = "kevenny_adm";
+    authController.authLoginEntity.username.text = "kevenny";
     authController.authLoginEntity.password.text = "senhasupersecreta";
 
     Size size = MediaQuery.of(context).size;
