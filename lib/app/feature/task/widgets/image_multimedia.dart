@@ -12,13 +12,12 @@ import 'package:flutter/material.dart';
 import 'shimmer_load_multimedia.dart';
 
 class ImageMultimedia extends StatefulWidget {
-  final double? width;
   final bool bodyElement;
   final ComponentModel componentModel;
   final GetMultimediaUseCase getMultimediaUseCase;
   final TaskViewController? taskViewController;
 
-  ImageMultimedia({Key? key, required this.componentModel, required this.getMultimediaUseCase, this.bodyElement = false, this.width, this.taskViewController}) : super(key: key);
+  ImageMultimedia({Key? key, required this.componentModel, required this.getMultimediaUseCase, this.bodyElement = false, this.taskViewController}) : super(key: key);
 
   @override
   _ImageMultimediaState createState() => _ImageMultimediaState();
@@ -38,22 +37,24 @@ class _ImageMultimediaState extends State<ImageMultimedia> {
   Widget build(BuildContext context) {
     print("Render IMAGE MULTIMEDIA");
     Size size = MediaQuery.of(context).size;
-    if (widget.width == null) {
-      heightWidth = widget.bodyElement ? (max(size.height, size.width) / 4.3) : min(size.height, size.width) - 30;
-    }
+
+    heightWidth = widget.bodyElement ? (max(size.height, size.width) / 4.3) : min(size.height, size.width) - 30;
+
+    if(size.width > size.height) heightWidth = heightWidth / 2;
+
     return FutureBuilder(
       future: widget.getMultimediaUseCase.getBytesByMultimediaId(findedElementModel.multimedia_id!),
       builder: (context, AsyncSnapshot<Dartz.Either<Failure, List<int>>> snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) return ShimmerLoadMultimedia(width: widget.width ?? heightWidth, height: widget.width ?? heightWidth);
+        if (snapshot.connectionState != ConnectionState.done) return ShimmerLoadMultimedia(width: heightWidth, height: heightWidth);
         return snapshot.data!.fold(
           (l) => Center(child: Text('Erro ao carregar imagem')),
           (r) {
             Uint8List imageData = Uint8List.fromList(r);
 
-            if(widget.taskViewController == null){
+            if (widget.taskViewController == null) {
               return Container(
-                height: widget.width ?? heightWidth,
-                width: widget.width ?? heightWidth,
+                height: heightWidth,
+                width: heightWidth,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(18),
@@ -72,8 +73,8 @@ class _ImageMultimediaState extends State<ImageMultimedia> {
                 return GestureDetector(
                   onTap: () => widget.bodyElement ? widget.taskViewController!.changeComponentSelected(widget.componentModel) : null,
                   child: Container(
-                    height: widget.width ?? heightWidth,
-                    width: widget.width ?? heightWidth,
+                    height: heightWidth,
+                    width: heightWidth,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(18),
@@ -87,7 +88,6 @@ class _ImageMultimediaState extends State<ImageMultimedia> {
                 );
               },
             );
-
           },
         );
       },

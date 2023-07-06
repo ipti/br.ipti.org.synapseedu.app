@@ -79,7 +79,6 @@ class HomePage extends StatelessWidget {
                     ],
                   )
                 : Container(),
-            TextButton(child: Text("ss"),onPressed: () => getGoogleApiToken()),
             ElessonCardWidget(
               blockDone: false,
               backgroundImage: "assets/img/mate.png",

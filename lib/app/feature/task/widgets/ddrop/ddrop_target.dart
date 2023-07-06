@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 
 import '../image_multimedia.dart';
 import 'ddrop_modal_image.dart';
+import 'ddrop_shimmer_modal.dart';
 
 class DdropTarget extends StatefulWidget {
   final ElementModel element;
@@ -33,16 +34,16 @@ class _DdropTargetState extends State<DdropTarget> {
     return DragTarget(
       onAccept: (DdropOptionEntity data) => widget.taskController.addDdropOptions(widget.position, data),
       builder: (context, List<dynamic> candidateData, rejectedData) {
-        return Container(
-          width: size.width / 2.6 + 20,
-          height: size.width / 2.6,
+        return SizedBox(
+          width: size.width > size.height ? (size.width / 2.6) / 3 + 20 : size.width / 2.6 + 20,
+          height: size.width > size.height ? (size.width / 2.6) / 3 : size.width / 2.6,
           child: Stack(
             alignment: Alignment.centerRight,
             children: [
               FutureBuilder(
                 future: loadTargetImage,
                 builder: (context, AsyncSnapshot<Dartz.Either<Failure, List<int>>> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) return CircularProgressIndicator();
+                  if (snapshot.connectionState == ConnectionState.waiting) return DdropShimmerModal();
                   return snapshot.data!.fold((l) => CircularProgressIndicator(), (r) => DdropModalImage(bytesImage: Uint8List.fromList(r)));
                 },
               ),

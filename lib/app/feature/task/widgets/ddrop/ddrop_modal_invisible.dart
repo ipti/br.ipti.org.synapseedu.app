@@ -7,8 +7,8 @@ class DdropModalInvisible extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      width: size.width / 2.6,
-      height: size.width / 2.6,
+      width: size.width > size.height ? (size.width / 2.6) / 3 : size.width / 2.6,
+      height: size.width > size.height ? (size.width / 2.6) / 3 : size.width / 2.6,
     );
   }
 }
