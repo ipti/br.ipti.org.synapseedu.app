@@ -320,7 +320,7 @@ class TaskViewController extends ChangeNotifier {
         activityBody = Expanded(
           flex: 1,
           child: Scrollbar(
-            isAlwaysShown: true,
+            thumbVisibility: true,
             child: SingleChildScrollView(
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 15),

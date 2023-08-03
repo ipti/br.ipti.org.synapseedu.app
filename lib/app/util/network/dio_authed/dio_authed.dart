@@ -11,7 +11,7 @@ class DioAuthed {
     ..interceptors.addAll([
       AuthInterceptor(),
       // PrettyDioLogger(requestHeader: true, requestBody: true, responseBody: true, responseHeader: false, error: true, compact: true, maxWidth: 90),
-      ErrorInterceptor()
+      // ErrorInterceptor()
     ])..options = BaseOptions(
       baseUrl: URLBASE,
     );

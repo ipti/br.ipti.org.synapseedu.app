@@ -117,15 +117,13 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                 ButtonTheme(
                   minWidth: screenHeight < 823 ? 48 : 64,
                   height: screenHeight < 823 ? 48 : 64,
-                  child: OutlineButton(
-                    padding: const EdgeInsets.all(0),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(0, 0, 255, 0.2),
-                    ),
-                    color: Colors.white,
-                    textColor: const Color(0xFF0000FF),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: Color.fromRGBO(0, 0, 255, 0.2)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+                      textStyle: TextStyle(color: Color(0xFF0000FF)),
+                      backgroundColor: Colors.white,
+                      padding: EdgeInsets.all(8),
                     ),
                     child: ImageIcon(
                       AssetImage("assets/icons/chevron_right.png"),
@@ -139,9 +137,9 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                         if (loginQuery.valid != false) {
                           if (loginQuery.student != null) {
                             await sendCode(numeroFinal);
-                            Navigator.pushReplacementNamed(
-                                context, CodeVerifyView.routeName,
-                                arguments: loginQuery.student);
+                            // Navigator.pushReplacementNamed(
+                            //     context, CodeVerifyView.routeName,
+                            //     arguments: loginQuery.student);
                           }
                         } else {
                           setState(() {

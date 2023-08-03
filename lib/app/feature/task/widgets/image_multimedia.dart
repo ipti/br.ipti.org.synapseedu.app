@@ -35,7 +35,6 @@ class _ImageMultimediaState extends State<ImageMultimedia> {
 
   @override
   Widget build(BuildContext context) {
-    print("Render IMAGE MULTIMEDIA");
     Size size = MediaQuery.of(context).size;
 
     heightWidth = widget.bodyElement ? (max(size.height, size.width) / 4.3) : min(size.height, size.width) - 30;

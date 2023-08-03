@@ -1,7 +1,6 @@
 // import 'package:elesson/share/turmas.dart';
 import 'package:elesson/share/qr_code_reader.dart';
 import 'package:elesson/share/question_widgets.dart';
-import 'package:elesson/webview/headless_webview.dart';
 import 'package:flutter/material.dart';
 import 'package:elesson/share/api.dart';
 
@@ -363,18 +362,6 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                 ),
                 SizedBox(
                   height: 10.0,
-                ),
-                Text('Ou acompanhe os alunos'),
-                RaisedButton(
-                  textColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  onPressed: () => {
-                    Navigator.of(context).pushNamed(HeadlessWebView.routeName),
-                  },
-                  // child: Text('Relatórios'),
-                  child: Text('WebView'),
                 ),
                 SizedBox(
                   height: heightScreen / 7,

@@ -16,15 +16,16 @@ class HomeController extends ChangeNotifier {
 
   final TextEditingController taskIdController = TextEditingController();
 
-  void submitSearchTaskById(BuildContext context) async {
+  Future submitSearchTaskById(BuildContext context) async {
+    print("Entrou aqui");
     _searchButtonStatus = SubmitButtonStatus.Loading;
-    notifyListeners();
+    // notifyListeners();
     final taskId = int.parse(taskIdController.text);
     final res = await getTaskUseCase.getTaskById(taskId);
     res.fold(
       (l) {
         _searchButtonStatus = SubmitButtonStatus.Error;
-        notifyListeners();
+        // notifyListeners();
         Future.delayed(Duration(seconds: 2));
       },
       (r) {
@@ -32,6 +33,6 @@ class HomeController extends ChangeNotifier {
       },
     );
     _searchButtonStatus = SubmitButtonStatus.Idle;
-    notifyListeners();
+    // notifyListeners();
   }
 }

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 // import 'package:audioplayers/audio_cache.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/ddrop/ddrop_function.dart';
 import 'package:elesson/share/snackbar_widget.dart';
@@ -71,8 +70,8 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
 
   late Timer nextQuestionTimer;
 
-  final Connectivity _connectivity = Connectivity();
-  StreamSubscription<ConnectivityResult>? _connectivitySubscription;
+  // final Connectivity _connectivity = Connectivity();
+  // StreamSubscription<ConnectivityResult>? _connectivitySubscription;
   String _connectionStatus = 'Unknown';
 
   @override
@@ -84,41 +83,41 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
       // }
     }
     initConnectivity();
-    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    // _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     super.initState();
   }
 
   Future<void> initConnectivity() async {
-    ConnectivityResult result = ConnectivityResult.none;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      result = await _connectivity.checkConnectivity();
-    } on PlatformException catch (e) {
-      print(e.toString());
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) {
-      return Future.value(null);
-    }
-
-    return _updateConnectionStatus(result);
+    // ConnectivityResult result = ConnectivityResult.none;
+    // // Platform messages may fail, so we use a try/catch PlatformException.
+    // try {
+    //   result = await _connectivity.checkConnectivity();
+    // } on PlatformException catch (e) {
+    //   print(e.toString());
+    // }
+    //
+    // // If the widget was removed from the tree while the asynchronous platform
+    // // message was in flight, we want to discard the reply rather than calling
+    // // setState to update our non-existent appearance.
+    // if (!mounted) {
+    //   return Future.value(null);
+    // }
+    //
+    // return _updateConnectionStatus(result);
   }
 
-  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
-    switch (result) {
-      case ConnectivityResult.wifi:
-      case ConnectivityResult.mobile:
-      case ConnectivityResult.none:
-        setState(() => _connectionStatus = result.toString());
-        break;
-      default:
-        setState(() => _connectionStatus = 'Failed to get connectivity.');
-        break;
-    }
-  }
+  // Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+  //   switch (result) {
+  //     case ConnectivityResult.wifi:
+  //     case ConnectivityResult.mobile:
+  //     case ConnectivityResult.none:
+  //       setState(() => _connectionStatus = result.toString());
+  //       break;
+  //     default:
+  //       setState(() => _connectionStatus = 'Failed to get connectivity.');
+  //       break;
+  //   }
+  // }
 
   @override
   void didChangeDependencies() async {

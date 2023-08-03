@@ -50,6 +50,15 @@ class _HomeModuleState extends State<HomeModule> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    // _taskRemoteDataSource.dispose();
+    // _taskRepository.dispose();
+    // _getTaskUseCase.dispose();
+    _taskSelectController.dispose();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _userProvider = Provider.of<UserProvider>(context);

@@ -3,15 +3,14 @@ import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/share/description_format.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/all.dart';
 import 'package:fdottedline_nullsafety/fdottedline__nullsafety.dart';
 import '../share/image_detail_screen.dart';
 import '../model.dart';
 import 'ddrop_function.dart';
 
-final cobjectProvider = Provider<Cobjects>((ref) {
-  return Cobjects();
-});
+// final cobjectProvider = Provider<Cobjects>((ref) {
+//   return Cobjects();
+// });
 
 class DragAndDrop extends StatefulWidget {
   static const routeName = '/DDROP';

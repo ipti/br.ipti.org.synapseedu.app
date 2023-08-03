@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:connectivity/connectivity.dart';
 import 'package:elesson/app/feature/task/controller/task_view_controller.dart';
 import 'package:elesson/app/feature/task/widgets/confirm_button.dart';
 import 'package:elesson/settings/settings_screen.dart';
@@ -25,49 +24,49 @@ class _TemplateSliderState extends State<TemplateSlider> {
   Color boxResponder = Colors.white;
   late List<String> formattedTitle;
 
-  final Connectivity _connectivity = Connectivity();
-  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  // final Connectivity _connectivity = Connectivity();
+  // late StreamSubscription<ConnectivityResult> _connectivitySubscription;
   String _connectionStatus = 'Unknown';
 
   @override
   void initState() {
     initConnectivity();
-    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    // _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     super.initState();
   }
 
   @override
   dispose() {
     super.dispose();
-    _connectivitySubscription.cancel();
+    // _connectivitySubscription.cancel();
   }
 
   Future<void> initConnectivity() async {
-    ConnectivityResult result = ConnectivityResult.none;
-    try {
-      result = await _connectivity.checkConnectivity();
-    } on PlatformException catch (e) {
-      print(e.toString());
-    }
-    if (!mounted) {
-      return Future.value(null);
-    }
-
-    return _updateConnectionStatus(result);
+    // ConnectivityResult result = ConnectivityResult.none;
+    // try {
+    //   result = await _connectivity.checkConnectivity();
+    // } on PlatformException catch (e) {
+    //   print(e.toString());
+    // }
+    // if (!mounted) {
+    //   return Future.value(null);
+    // }
+    //
+    // return _updateConnectionStatus(result);
   }
 
-  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
-    switch (result) {
-      case ConnectivityResult.wifi:
-      case ConnectivityResult.mobile:
-      case ConnectivityResult.none:
-        setState(() => _connectionStatus = result.toString());
-        break;
-      default:
-        setState(() => _connectionStatus = 'Failed to get connectivity.');
-        break;
-    }
-  }
+  // Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+  //   switch (result) {
+  //     case ConnectivityResult.wifi:
+  //     case ConnectivityResult.mobile:
+  //     case ConnectivityResult.none:
+  //       setState(() => _connectionStatus = result.toString());
+  //       break;
+  //     default:
+  //       setState(() => _connectionStatus = 'Failed to get connectivity.');
+  //       break;
+  //   }
+  // }
 
   double maxScreenHeight = 0;
 

@@ -9,7 +9,6 @@ import '../template_questoes/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-
 import 'api.dart';
 
 // Contém alguns métodos e variáveis globais necessárias para as questões.
@@ -135,15 +134,13 @@ getCobject(int cobjectIndex, BuildContext context, List<String?> cobjectIdList, 
 
 Widget? soundButton(BuildContext context, Question question) {
   return question.header["sound"]!.isNotEmpty
-      ? OutlineButton(
-          padding: EdgeInsets.all(6),
-          borderSide: BorderSide(
-            color: Color.fromRGBO(0, 0, 255, 1),
-          ),
-          color: buttonBackground,
-          textColor: Color(0xFF0000FF),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18.0),
+      ? OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            side: BorderSide(color: Color.fromRGBO(0, 0, 255, 1)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+            textStyle: TextStyle(color: Color(0xFF0000FF)),
+            backgroundColor: buttonBackground,
+            padding: EdgeInsets.all(6),
           ),
           child: Icon(
             Icons.volume_up,
