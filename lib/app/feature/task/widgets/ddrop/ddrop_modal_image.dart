@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
-import '../image_multimedia.dart';
 
 class DdropModalImage extends StatelessWidget {
   final Uint8List bytesImage;

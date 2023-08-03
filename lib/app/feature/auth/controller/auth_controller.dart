@@ -1,10 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:elesson/app/core/auth/data/model/user_model.dart';
 import 'package:elesson/app/core/auth/domain/entity/auth_entity.dart';
 import 'package:elesson/app/core/auth/domain/entity/login_response_entity.dart';
 import 'package:elesson/app/core/auth/domain/usecases/auth_usecase.dart';
 import 'package:elesson/app/feature/home/home_module.dart';
-import 'package:elesson/app/feature/task/task_module.dart';
 import 'package:elesson/app/providers/userProvider.dart';
 import 'package:elesson/app/util/failures/failures.dart';
 import 'package:flutter/material.dart';

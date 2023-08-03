@@ -4,8 +4,6 @@ import 'package:elesson/app/feature/task/widgets/confirm_button.dart';
 import 'package:elesson/settings/settings_screen.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:elesson/share/snackbar_widget.dart';
-import 'package:flutter/services.dart';
 
 import 'template_slider/top_screen.dart';
 

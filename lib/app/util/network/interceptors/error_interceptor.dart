@@ -1,13 +1,10 @@
 import 'package:elesson/app/core/auth/data/datasource/local/auth_local_datasource.dart';
-import 'package:elesson/app/core/auth/data/datasource/remote/auth_remote_datasource.dart';
 import 'package:elesson/app/feature/auth/auth_module.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'dart:developer';
 
 import '../../routes.dart';
-import '../constants.dart';
 
 class ErrorInterceptor extends InterceptorsWrapper {
   @override

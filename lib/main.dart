@@ -42,14 +42,12 @@ void main() async {
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             fontFamily: 'Mulish',
-            backgroundColor: Color(0xFFFFFFFF),
-            primarySwatch: Colors.lightGreen,
             visualDensity: VisualDensity.adaptivePlatformDensity,
             buttonTheme: ButtonThemeData(
               textTheme: ButtonTextTheme.accent,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18), side: BorderSide(color: Color(0xFF00004C), width: 1)),
               minWidth: 0,
-            ),
+            ), colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.lightGreen).copyWith(background: Color(0xFFFFFFFF)),
           ),
           initialRoute: AuthModule.routeName,
           routes: {

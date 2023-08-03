@@ -1,13 +1,10 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:elesson/share/google_api.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:elesson/template_questoes/model.dart';
-import 'package:elesson/template_questoes/question_provider.dart';
-import 'package:flutter/services.dart';
 
 // final cobjectProvider = Provider<Cobjects>((ref) {
 //   return Cobjects();

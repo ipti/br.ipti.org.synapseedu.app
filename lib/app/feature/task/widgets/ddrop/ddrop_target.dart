@@ -5,11 +5,9 @@ import 'package:elesson/app/core/task/data/model/element_model.dart';
 import 'package:elesson/app/core/task/domain/entity/ddrop_option_entity.dart';
 import 'package:elesson/app/core/task/domain/usecase/get_multimedia_usecase.dart';
 import 'package:elesson/app/feature/task/controller/task_view_controller.dart';
-import 'package:elesson/app/feature/task/widgets/image_multimedia.dart';
 import 'package:elesson/app/util/failures/failures.dart';
 import 'package:flutter/material.dart';
 
-import '../image_multimedia.dart';
 import 'ddrop_modal_image.dart';
 import 'ddrop_shimmer_modal.dart';
 

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:brasil_fields/brasil_fields.dart';
-import 'package:elesson/register/code_verify_view.dart';
 import 'package:elesson/register/student_model.dart';
 import 'package:elesson/share/my_twillio.dart';
 import 'package:flutter/material.dart';

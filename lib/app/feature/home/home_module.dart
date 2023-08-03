@@ -1,15 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:elesson/app/core/task/data/datasource/multimedia_remote_datasource.dart';
 import 'package:elesson/app/core/task/data/datasource/task_remote_datasource.dart';
-import 'package:elesson/app/core/task/data/repository/multimedia_repository_interface.dart';
 import 'package:elesson/app/core/task/data/repository/task_repository_interface.dart';
 import 'package:elesson/app/core/task/domain/repository/task_repository_impl.dart';
-import 'package:elesson/app/core/task/domain/repository/multimedia_repository_impl.dart';
-import 'package:elesson/app/core/task/domain/usecase/get_multimedia_usecase.dart';
 import 'package:elesson/app/core/task/domain/usecase/get_task_usecase.dart';
 import 'package:elesson/app/feature/home/controller/home_controller.dart';
 import 'package:elesson/app/feature/home/page/home_page.dart';
-import 'package:elesson/app/feature/task/controller/task_view_controller.dart';
 import 'package:elesson/app/providers/userProvider.dart';
 import 'package:elesson/app/util/network/dio_authed/dio_authed.dart';
 import 'package:flutter/material.dart';

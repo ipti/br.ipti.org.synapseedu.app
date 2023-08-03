@@ -1,11 +1,8 @@
-import 'package:elesson/app/core/task/data/model/task_model.dart';
 import 'package:elesson/app/core/task/domain/usecase/get_task_usecase.dart';
-import 'package:elesson/app/feature/task/page/task_view_page.dart';
 import 'package:elesson/app/feature/task/task_module.dart';
 import 'package:elesson/app/util/enums/button_status.dart';
 import 'package:flutter/material.dart';
 
-import '../../task/controller/task_view_controller.dart';
 
 class HomeController extends ChangeNotifier {
   final GetTaskUseCase getTaskUseCase;
