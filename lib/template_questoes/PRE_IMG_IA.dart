@@ -1,18 +1,14 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:elesson/share/google_api.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:elesson/template_questoes/model.dart';
-import 'package:elesson/template_questoes/question_provider.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/all.dart';
 
-final cobjectProvider = Provider<Cobjects>((ref) {
-  return Cobjects();
-});
+// final cobjectProvider = Provider<Cobjects>((ref) {
+//   return Cobjects();
+// });
 
 // ignore: must_be_immutable
 class PreImgIa extends StatefulWidget {
@@ -50,9 +46,9 @@ class _PreImgIaState extends State<PreImgIa> {
     _textController.dispose();
   }
 
-  final buttonStateProvider = StateProvider<bool>((ref) {
-    return false;
-  });
+  // final buttonStateProvider = StateProvider<bool>((ref) {
+  //   return false;
+  // });
 
   @override
   void initState() {
@@ -61,7 +57,7 @@ class _PreImgIaState extends State<PreImgIa> {
   }
 
   void submitButton(BuildContext context) {
-    context.read(buttonStateProvider).state = true;
+    // context.read(buttonStateProvider).state = true;
   }
 
   @override
@@ -82,9 +78,6 @@ class _PreImgIaState extends State<PreImgIa> {
 
     double widthScreen = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height * 0.93;
-
-    SystemChrome.setEnabledSystemUIOverlays([]);
-
 
 
     return Scaffold(
@@ -347,7 +340,7 @@ class _PreImgIaState extends State<PreImgIa> {
   }
 
   extractErrorAlertDialog(BuildContext context) {
-    Widget okButton = FlatButton(
+    Widget okButton = TextButton(
       child: Text("OK"),
       onPressed: () => Navigator.pop(context),
     );

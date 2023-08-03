@@ -1,6 +1,5 @@
 import 'package:elesson/template_questoes/model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 // import 'package:flutter_riverpod/all.dart';
 
 // import 'package:audioplayers/audioplayers.dart';
@@ -88,7 +87,6 @@ class _SingleLineTextQuestionState extends State<SingleLineTextQuestion> {
     double screenHeight = MediaQuery.of(context).size.height * 0.93;
     double minButtonWidth = deviceSize.width < 411 ? 180 : 259;
     double confirmButtonPadding = deviceSize.width < 411 ? deviceSize.width / 2 : 259;
-    SystemChrome.setEnabledSystemUIOverlays([]);
 
     return Scaffold(
       // body: TemplateSlider(

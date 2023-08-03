@@ -6,7 +6,6 @@ import 'package:elesson/app/core/task/domain/entity/screen_entity.dart';
 import 'package:elesson/app/core/task/domain/usecase/get_multimedia_usecase.dart';
 import 'package:elesson/app/feature/task/widgets/audio_multimedia.dart';
 import 'package:elesson/app/feature/task/widgets/ddrop/ddrop_sender.dart';
-import 'package:elesson/app/feature/task/widgets/ddrop/ddrop_sender_undo.dart';
 import 'package:elesson/app/feature/task/widgets/ddrop/ddrop_target.dart';
 import 'package:elesson/app/feature/task/widgets/image_multimedia.dart';
 import 'package:elesson/app/feature/task/widgets/text_modal_invible.dart';
@@ -320,7 +319,7 @@ class TaskViewController extends ChangeNotifier {
         activityBody = Expanded(
           flex: 1,
           child: Scrollbar(
-            isAlwaysShown: true,
+            thumbVisibility: true,
             child: SingleChildScrollView(
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 15),

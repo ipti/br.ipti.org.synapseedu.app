@@ -83,13 +83,13 @@ class BlockConclusionScreen extends StatelessWidget {
                   child: ButtonTheme(
                     height: 48,
                     minWidth: MediaQuery.of(context).size.width - 32,
-                    child: OutlineButton(
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: Color.fromRGBO(0, 0, 255, 1),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: Color.fromRGBO(0, 0, 255, 1), width: 2),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+                        textStyle: TextStyle(color: Color(0xFF0000FF)),
+                        backgroundColor: Colors.white,
+                        padding: EdgeInsets.all(8),
                       ),
                       child: Text(
                         'VOLTAR AO MENU',
@@ -101,7 +101,6 @@ class BlockConclusionScreen extends StatelessWidget {
                       onPressed: () {
                         isAdmin ? Navigator.of(context).pushReplacementNamed("/admin") : Navigator.of(context).pushReplacementNamed("/");
                       },
-                      textTheme: ButtonTextTheme.accent,
                     ),
                   ),
                 ),

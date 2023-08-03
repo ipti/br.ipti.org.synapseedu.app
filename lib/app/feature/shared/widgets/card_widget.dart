@@ -37,33 +37,26 @@ class ElessonCardWidget extends StatelessWidget {
             children: [
               Container(
                 height: 166.0,
-                child: Image.asset(
-                  backgroundImage!,
-                  fit: BoxFit.cover,
-                  width: screenWidth,
-                ),
+                child: Image.asset(backgroundImage!, fit: BoxFit.cover, width: screenWidth),
               ),
               !blockDone!
                   ? Container(
-                height: 166.0,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: FractionalOffset.topCenter,
-                    end: FractionalOffset.bottomCenter,
-                    colors: [
-                      Color(0XFFFFFFFF).withOpacity(0),
-                      Color(0XFF0000FF).withOpacity(0.4),
-                      //Colors.black,
-                    ],
-                  ),
-                ),
-              )
+                      height: 166.0,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: FractionalOffset.topCenter,
+                          end: FractionalOffset.bottomCenter,
+                          colors: [
+                            Color(0XFFFFFFFF).withOpacity(0),
+                            Color(0XFF0000FF).withOpacity(0.4),
+                          ],
+                        ),
+                      ),
+                    )
                   : Container(
-                height: 166.0,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.6),
-                ),
-              ),
+                      height: 166.0,
+                      decoration: BoxDecoration(color: Colors.white.withOpacity(0.6)),
+                    ),
               Container(
                 margin: EdgeInsets.only(left: 18, right: 18, top: 90),
                 child: Row(
@@ -89,10 +82,7 @@ class ElessonCardWidget extends StatelessWidget {
                 margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.7),
                 alignment: Alignment.centerRight,
                 child: Center(
-                  child: Icon(
-                    ElessonIconLib.chevron_right,
-                    color: Colors.white,
-                  ),
+                  child: Icon(ElessonIconLib.chevron_right, color: Colors.white),
                 ),
               )
             ],

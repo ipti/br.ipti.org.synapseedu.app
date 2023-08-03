@@ -1,4 +1,3 @@
-import 'package:elesson/app/core/auth/data/model/user_model.dart';
 import 'package:elesson/app/core/auth/domain/entity/login_response_entity.dart';
 import 'package:flutter/material.dart';
 

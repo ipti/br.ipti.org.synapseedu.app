@@ -80,8 +80,8 @@ class AuthLocalDatasourceImpl implements AuthLocalDataSource {
     final sharedPreferences = await SharedPreferences.getInstance();
 
     final result = await sharedPreferences.remove(KEY_SESSION_TOKEN);
-    final result_user = await sharedPreferences.remove(keySessionUser);
+    final resultUser = await sharedPreferences.remove(keySessionUser);
 
-    return result == (result_user == true);
+    return result == (resultUser == true);
   }
 }

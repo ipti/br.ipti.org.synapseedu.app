@@ -33,7 +33,7 @@ class PocWidget extends StatelessWidget {
             child: Center(
               child: Padding(
                 padding: EdgeInsets.all(20.0),
-                child: Text('Redirected: ${snapshot.data}', style: Theme.of(context).textTheme.headline6),
+                child: Text('Redirected: ${snapshot.data}', style: Theme.of(context).textTheme.titleLarge),
               ),
             ),
           );

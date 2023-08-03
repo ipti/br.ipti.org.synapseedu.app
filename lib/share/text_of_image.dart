@@ -37,13 +37,13 @@ class _TextOfImageState extends State<TextOfImage> {
               borderRadius: BorderRadius.circular(30.0),
               child: imageFile != null
                   ? Image.file(imageFile!)
-                  : FlatButton(
-                child: Icon(
-                  Icons.add_a_photo,
-                  size: 50,
-                ),
-                onPressed: pickImage,
-              ),
+                  : TextButton(
+                      child: Icon(
+                        Icons.add_a_photo,
+                        size: 50,
+                      ),
+                      onPressed: pickImage,
+                    ),
             ),
           ),
           Text(
@@ -115,7 +115,10 @@ class _TextOfImageState extends State<TextOfImage> {
 
   // função para tirar foto
   Future pickImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera, preferredCameraDevice: CameraDevice.front,);
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.camera,
+      preferredCameraDevice: CameraDevice.front,
+    );
 
     setState(() {
       imageFile = File(pickedFile!.path);

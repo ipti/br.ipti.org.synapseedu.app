@@ -11,7 +11,6 @@ import 'package:elesson/app/providers/userProvider.dart';
 import 'package:elesson/app/util/failures/failures.dart';
 import 'package:elesson/app/util/network/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:provider/provider.dart';
 import '../../core/auth/data/datasource/remote/auth_remote_datasource.dart';
 import 'controller/auth_controller.dart';
