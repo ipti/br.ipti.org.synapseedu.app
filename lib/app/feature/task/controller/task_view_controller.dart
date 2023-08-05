@@ -23,12 +23,18 @@ class TaskViewController extends ChangeNotifier {
 
   TaskViewController({required this.getMultimediaUseCase});
 
+  late ComponentModel correctAnswer;
+
   /*
   * STATUS DO BOTÃO DE SUBMISSÃO
   * */
   SubmitButtonStatus _submitButtonStatus = SubmitButtonStatus.Disabled;
 
   SubmitButtonStatus get buttonStatus => _submitButtonStatus;
+  void changeSubmitButton(SubmitButtonStatus newStatus){
+    _submitButtonStatus = newStatus;
+    notifyListeners();
+  }
 
   /*
   * ENTIDADE RESPONSAVEL POR ARMAZENAR OS WIDGETS DA TELA

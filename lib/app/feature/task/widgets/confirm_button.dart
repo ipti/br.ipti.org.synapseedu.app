@@ -65,7 +65,11 @@ class ConfirmButtonWidget extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    taskViewController.changeSubmitButton(taskViewController.correctAnswer.id == taskViewController.componentSelected.value.id ? SubmitButtonStatus.Success : SubmitButtonStatus.Error);
+                    // changeConfirmButton();
+                    // taskViewController.forceNotity();
+                    await Future.delayed(Duration(seconds: 5));
                     Navigator.of(context).pop();
                   },
                 ),
