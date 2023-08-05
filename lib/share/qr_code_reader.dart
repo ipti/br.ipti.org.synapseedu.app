@@ -21,7 +21,7 @@ class _QrCodeReaderState extends State<QrCodeReader> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
   Color colorToTimerOut = Colors.white;
-  String textToTimeout = "APONTE PARA O CÓDIGO \nQR PRESENTE NO SEU KIT";
+  String textToTimeout = "APONTE PARA A CHAVE \n DE ACESSO";
 
   void timerOut() {
     setState(() {
@@ -70,25 +70,6 @@ class _QrCodeReaderState extends State<QrCodeReader> {
                   ),
                 )
               ],
-            ),
-          ),
-          GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: Container(
-              margin: EdgeInsets.only(top: 24, left: 24),
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                border: Border.all(
-                  width: 2,
-                  color: Colors.white.withOpacity(0.4),
-                ),
-              ),
-              child: Icon(
-                ElessonIconLib.chevron_left,
-                color: Colors.white,
-              ),
             ),
           ),
           Container(
