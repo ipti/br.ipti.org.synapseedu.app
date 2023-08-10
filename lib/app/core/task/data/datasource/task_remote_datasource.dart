@@ -20,7 +20,7 @@ class TaskRemoteDataSourceImpl extends ITaskRemoteDataSource {
       Response response = await dio.get(url);
       TaskModel resTask = TaskModel.fromJson(response.data!);
       return resTask;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       log("[GetTaskById]: ${e.response?.data}");
     }
 
