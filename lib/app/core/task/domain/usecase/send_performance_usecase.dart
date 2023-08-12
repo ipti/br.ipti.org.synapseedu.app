@@ -12,21 +12,16 @@ class SendPerformanceUseCase {
 
   SendPerformanceUseCase({required this.performanceRepository});
 
-  UserProvider userProvider = UserProvider();
-
-  Future<Either<Failure, Performance>> call({required TaskModel task, required UserAnswer userAnswer}) async {
+  Future<Either<Failure, Performance>> call({String correctAnswerPre = "",required TaskModel task, required UserAnswer userAnswer}) async {
     var metaData = MetaDataModel.generate(task: task, userAnswer: userAnswer);
-
-    print("TIPO: ${metaData.runtimeType}");
-    print("METADATA: ${metaData.toJson()}");
 
     DateTime tempoAgora = DateTime.now();
     Performance performance = Performance(
       taskId: task.id!,
       createdAt: tempoAgora,
       userId: userAnswer.userId,
-      isCorrect: false,
-      timeResolution: tempoAgora.second - userAnswer.performanceTime.second,
+      isCorrect: true,
+      timeResolution: tempoAgora.millisecondsSinceEpoch- userAnswer.performanceTime.millisecondsSinceEpoch,
       metadata: metaData,
     );
 
@@ -35,21 +30,13 @@ class SendPerformanceUseCase {
         performance.isCorrect = task.body!.components.first.id == userAnswer.AnswerMte.id;
         return await performanceRepository.sendPerformanceMTE(performance);
       case 2:
-        // performance.isCorrect = task.body!.components.first.text == userAnswer.AnswerPre;
+        performance.isCorrect = correctAnswerPre.toUpperCase() == userAnswer.AnswerPre.toUpperCase();
         return await performanceRepository.sendPerformancePRE(performance);
       case 3:
-        List<int> correctAnswers = task.body!.components.sublist(3,6).map((e) => e.id!).toList();
-
-        for(int i = 0; i < correctAnswers.length; i++){
-          if(correctAnswers[i] != userAnswer.answerDdrop[i].component_id){
-            performance.isCorrect = false;
-          }
-        }
-
+        performance.isCorrect = (metaData as MetaDataModelAEL).performanceStatus;
         return await performanceRepository.sendPerformanceAEL(performance);
       default:
         return Left(Failure('Tipo de tarefa não suportado'));
     }
   }
-
 }

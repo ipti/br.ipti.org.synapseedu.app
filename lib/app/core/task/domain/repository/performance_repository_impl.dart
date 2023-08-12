@@ -14,25 +14,33 @@ class PerformanceRepositoryImpl extends IPerformanceRepository{
   PerformanceRepositoryImpl({required this.performanceRemoteDataSource});
 
   @override
-  Future<Either<Failure, Performance>> sendPerformanceAEL(Performance performance) {
-    log(performance.toJson(templateType: TemplateTypes.AEL).toString());
-    // TODO: implement sendPerformanceDDROP
-    throw UnimplementedError();
+  Future<Either<Failure, Performance>> sendPerformanceAEL(Performance performance) async {
+    try{
+      Performance res = await performanceRemoteDataSource.sendPerformanceAEL(performance);
+      return Right(res);
+    } catch(e){
+      return Left(Failure(e.toString()));
+    }
   }
 
   @override
-  Future<Either<Failure, Performance>> sendPerformanceMTE(Performance performance) {
-    log(performance.toJson(templateType: TemplateTypes.MTE).toString());
-    // TODO: implement sendPerformanceMTE
-    throw UnimplementedError();
+  Future<Either<Failure, Performance>> sendPerformanceMTE(Performance performance) async {
+    try{
+      Performance res = await performanceRemoteDataSource.sendPerformanceMTE(performance);
+      return Right(res);
+    } catch(e){
+      return Left(Failure(e.toString()));
+    }
   }
 
   @override
-  Future<Either<Failure, Performance>> sendPerformancePRE(Performance performance) {
-    log(performance.toJson(templateType: TemplateTypes.PRE).toString());
-    // TODO: implement sendPerformancePRE
-    throw UnimplementedError();
+  Future<Either<Failure, Performance>> sendPerformancePRE(Performance performance) async {
+    try{
+      Performance res = await performanceRemoteDataSource.sendPerformancePRE(performance);
+      return Right(res);
+    } catch(e){
+      return Left(Failure(e.toString()));
+    }
   }
-
 
 }

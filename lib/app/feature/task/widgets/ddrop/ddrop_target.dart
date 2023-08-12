@@ -31,7 +31,7 @@ class _DdropTargetState extends State<DdropTarget> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return DragTarget(
-      onAccept: (DdropOptionEntity data) => widget.taskController.addDdropOptions(widget.position, data),
+      onAccept: (DdropOptionEntity data) => widget.taskController.addDdropOptions(widget.position, data, DateTime.now()),
       builder: (context, List<dynamic> candidateData, rejectedData) {
         return SizedBox(
           width: size.width > size.height ? (size.width / 2.6) / 3 + 20 : size.width / 2.6 + 20,

@@ -21,7 +21,7 @@ import 'package:wakelock/wakelock.dart';
 
 import '../../../core/task/data/model/performance_model.dart';
 import '../../../core/task/domain/entity/user_answer.dart';
-import '../../../core/task/domain/usecase/send_performance.dart';
+import '../../../core/task/domain/usecase/send_performance_usecase.dart';
 import '../../../util/failures/failures.dart';
 
 class TaskViewController extends ChangeNotifier {
@@ -45,6 +45,7 @@ class TaskViewController extends ChangeNotifier {
   Future<void> sendPerformance() async {
     Either<Failure, Performance> res = await sendPerformanceUseCase.call(
       task: task,
+      correctAnswerPre: correctAnswerPre,
       userAnswer: UserAnswer(
         AnswerMte: componentSelected.value,
         AnswerPre: preController.text,
@@ -53,7 +54,10 @@ class TaskViewController extends ChangeNotifier {
         userId: userId,
       ),
     );
-    res.fold((l) => _submitButtonStatus = SubmitButtonStatus.Error, (r) => _submitButtonStatus = SubmitButtonStatus.Success);
+    res.fold(
+      (l) => _submitButtonStatus = SubmitButtonStatus.Error,
+      (r) => r.isCorrect ? _submitButtonStatus = SubmitButtonStatus.Success : _submitButtonStatus = SubmitButtonStatus.Error,
+    );
     notifyListeners();
   }
 
@@ -67,8 +71,9 @@ class TaskViewController extends ChangeNotifier {
   * */
   ValueNotifier<List<DdropOptionEntity>> ddropOptions = ValueNotifier([DdropOptionEntity(), DdropOptionEntity(), DdropOptionEntity()]);
 
-  void addDdropOptions(int position, DdropOptionEntity options) {
+  void addDdropOptions(int position, DdropOptionEntity options, DateTime time) {
     ddropOptions.value[position] = options;
+    ddropOptions.value[position].time = DateTime.now().millisecondsSinceEpoch - performanceTime.millisecondsSinceEpoch;
     ddropOptions.notifyListeners();
   }
 
@@ -92,6 +97,7 @@ class TaskViewController extends ChangeNotifier {
   /*
   * PRE
   * */
+  String correctAnswerPre = "";
   TextEditingController preController = TextEditingController();
 
   void validationPre() {
@@ -166,7 +172,8 @@ class TaskViewController extends ChangeNotifier {
         if (componentModel.elements!.any((element) => element.type_id == MultimediaTypes.text.type_id)) {
           return [
             TextMultimedia(
-                elementModel: componentModel.elements!.singleWhere((element) => element.type_id == MultimediaTypes.text.type_id), getMultimediaUseCase: getMultimediaUseCase),
+                elementModel: componentModel.elements!.singleWhere((element) => element.type_id == MultimediaTypes.text.type_id),
+                getMultimediaUseCase: getMultimediaUseCase),
             ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase),
           ];
         }
@@ -181,6 +188,13 @@ class TaskViewController extends ChangeNotifier {
       default:
         return [];
     }
+  }
+
+  void getCorrectAnswerPre(ElementModel elementModel) async {
+    await getMultimediaUseCase.getTextById(elementModel.multimedia_id!).then((value) => value.fold((l) => null, (r) {
+          print("Lida resposta correta: ${r}");
+          return this.correctAnswerPre = r;
+        }));
   }
 
   void renderTemplateBodyTask(TaskModel taskModel) {
@@ -203,9 +217,21 @@ class TaskViewController extends ChangeNotifier {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ImageMultimedia(componentModel: taskModel.body!.components[0], getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this),
-                ImageMultimedia(componentModel: taskModel.body!.components[1], getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this),
-                ImageMultimedia(componentModel: taskModel.body!.components[2], getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this),
+                ImageMultimedia(
+                    componentModel: taskModel.body!.components[0],
+                    getMultimediaUseCase: getMultimediaUseCase,
+                    bodyElement: true,
+                    taskViewController: this),
+                ImageMultimedia(
+                    componentModel: taskModel.body!.components[1],
+                    getMultimediaUseCase: getMultimediaUseCase,
+                    bodyElement: true,
+                    taskViewController: this),
+                ImageMultimedia(
+                    componentModel: taskModel.body!.components[2],
+                    getMultimediaUseCase: getMultimediaUseCase,
+                    bodyElement: true,
+                    taskViewController: this),
               ],
             ),
           ),
@@ -213,7 +239,8 @@ class TaskViewController extends ChangeNotifier {
         break;
       case TemplateTypes.PRE:
         preController.addListener(() => validationPre());
-        subTitulo = TextMultimedia(elementModel: taskModel.body!.components[0].elements!.first, getMultimediaUseCase: getMultimediaUseCase);
+        // subTitulo = TextMultimedia(elementModel: taskModel.body!.components[0].elements!.first, getMultimediaUseCase: getMultimediaUseCase);
+        getCorrectAnswerPre(taskModel.body!.components[0].elements!.first);
         activityBody = Center(
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -331,9 +358,12 @@ class TaskViewController extends ChangeNotifier {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    DdropTarget(component: taskModel.body!.components[3], getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 0),
-                    DdropTarget(component: taskModel.body!.components[4], getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 1),
-                    DdropTarget(component: taskModel.body!.components[5], getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 2),
+                    DdropTarget(
+                        component: taskModel.body!.components[3], getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 0),
+                    DdropTarget(
+                        component: taskModel.body!.components[4], getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 1),
+                    DdropTarget(
+                        component: taskModel.body!.components[5], getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 2),
                   ],
                 ),
               ],

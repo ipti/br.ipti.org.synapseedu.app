@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/task/data/repository/performance_repository_interface.dart';
 import '../../core/task/domain/repository/performance_repository_impl.dart';
-import '../../core/task/domain/usecase/send_performance.dart';
+import '../../core/task/domain/usecase/send_performance_usecase.dart';
 import 'controller/task_view_controller.dart';
 
 class TaskModule extends StatefulWidget {

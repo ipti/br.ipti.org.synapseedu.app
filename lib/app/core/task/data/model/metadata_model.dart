@@ -1,7 +1,9 @@
+import 'package:elesson/app/core/task/data/model/choises_performance_model.dart';
 import 'package:elesson/app/core/task/data/model/component_model.dart';
 import 'package:elesson/app/core/task/data/model/task_model.dart';
 import 'package:elesson/app/util/enums/task_types.dart';
 
+import '../../../../../template_questoes/ddrop/ddrop_function.dart';
 import '../../domain/entity/ddrop_option_entity.dart';
 import '../../domain/entity/user_answer.dart';
 import 'container_model.dart';
@@ -27,9 +29,7 @@ abstract class MetaDataModel {
           text: userAnswer.AnswerPre,
         );
       case 3:
-
-
-        return MetaDataModelDDROP(
+        return MetaDataModelAEL(
           template_type: templateAbbreviations,
           componentModel: task.body!,
           userChoises: userAnswer.answerDdrop,
@@ -41,6 +41,10 @@ abstract class MetaDataModel {
           body_component_id: 0,
         );
     }
+  }
+
+  factory MetaDataModel.empty() {
+    return MetaDataModelMTE(template_type: "", body_component_id: 0);
   }
 
   //toJson()
@@ -68,36 +72,35 @@ class MetaDataModelPRE extends MetaDataModel {
       };
 }
 
-class MetaDataModelDDROP extends MetaDataModel {
+class MetaDataModelAEL extends MetaDataModel {
   final ContainerModel componentModel;
-
   final List<DdropOptionEntity> userChoises;
+  bool performanceStatus = true;
+  late List<int> _correctAnswers;
+  List<ChoisesModel> _choisesList = [];
 
-  MetaDataModelDDROP({required this.componentModel, required this.userChoises, required super.template_type}) : super(body_component_id: 0);
+  MetaDataModelAEL({required this.componentModel, required this.userChoises, required super.template_type}) : super(body_component_id: 0) {
+    _correctAnswers = componentModel.components.sublist(0, 3).map((e) => e.id!).toList();
+    for (int i = 0; i < _correctAnswers.length; i++) {
+      List<ComponentModel> listComponentsFixed = componentModel.components.sublist(3, 6);
+      bool isCorrect = _correctAnswers[i] == this.userChoises[i].component_id;
+      _choisesList.add(
+        ChoisesModel(
+          body_component_id_top: userChoises[i].component_id,
+          body_component_id_down: listComponentsFixed[i].id!,
+          is_correct: isCorrect,
+          time_resolution: userChoises[i].time,
+        ),
+      );
+
+      if (isCorrect == false) performanceStatus = false;
+    }
+  }
 
   Map<String, dynamic> toJson() {
-
-    List<int> correctAnswers = componentModel.components.sublist(0,3).map((e) => e.id!).toList();
-    List<ComponentModel> listComponentsFixed = componentModel.components.sublist(3, 6);
-    List<dynamic> choisesList = [];
-
-    print("Completo: ${componentModel.components.map((e) => e.toMap()).toList()}");
-    print("Lista 1: ${correctAnswers}");
-    print("Lista 2: ${listComponentsFixed.map((e) => e.id).toList()}");
-
-    for(int i = 0; i < correctAnswers.length; i++){
-
-      choisesList.add({
-        "body_component_id_top": userChoises[i].component_id,
-        "body_component_id_down": listComponentsFixed[i].id,
-        "is_correct": correctAnswers[i] == this.userChoises[i].component_id,
-        "time_resolution": 333, //TODO: finalizar lógica para capturar o time do match
-      });
-    }
-
     return {
       "template_type": template_type,
-      "choices": choisesList,
+      "choices": _choisesList.map((e) => e.toJson()).toList(),
     };
   }
 }
