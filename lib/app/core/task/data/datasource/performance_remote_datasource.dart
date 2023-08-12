@@ -20,7 +20,7 @@ class PerformanceRemoteDatasource implements IPerformanceRemoteDatasource {
   Future<void> sendPerformanceMTE(Performance performance) async {
     String url = '/performance/mte';
     try {
-      await dio.post(url, data: performance.toJson(templateType: TemplateTypes.MTE));
+      Response response = await dio.post(url, data: performance.toJson(templateType: TemplateTypes.MTE));
     } on DioException catch (e) {
       print(e.message);
     }
@@ -31,7 +31,7 @@ class PerformanceRemoteDatasource implements IPerformanceRemoteDatasource {
   Future<void> sendPerformancePRE(Performance performance) async {
     String url = '/performance/pre';
     try {
-      await dio.post(url, data: performance.toJson(templateType: TemplateTypes.PRE));
+      Response response = await dio.post(url, data: performance.toJson(templateType: TemplateTypes.PRE));
     } on DioException catch (e) {
       print(e.message);
     }
@@ -42,7 +42,7 @@ class PerformanceRemoteDatasource implements IPerformanceRemoteDatasource {
   Future<void> sendPerformanceDDROP(Performance performance) async {
     String url = '/performance/ddrop';
     try {
-      await dio.post(url, data: performance.toJson(templateType: TemplateTypes.AEL));
+      Response response = await dio.post(url, data: performance.toJson(templateType: TemplateTypes.AEL));
     } on DioException catch (e) {
       print(e.message);
     }

@@ -2,16 +2,16 @@ import '../../../../util/enums/task_types.dart';
 import 'metadata_model.dart';
 
 class Performance {
-  int id;
+  int? id;
   int userId;
   int taskId;
   bool isCorrect;
   int timeResolution;
-  int createdAt;
-  Metadata metadata;
+  DateTime createdAt;
+  MetaDataModel metadata;
 
   Performance({
-    required this.id,
+    this.id,
     required this.userId,
     required this.taskId,
     required this.isCorrect,
@@ -20,17 +20,22 @@ class Performance {
     required this.metadata,
   });
 
-  Map<String, dynamic> toJson({required TemplateTypes templateType}) => {
-        "id": id,
-        "user_id": userId,
-        "task_id": taskId,
-        "is_correct": isCorrect,
-        "time_resolution": timeResolution,
-        "created_at": createdAt,
-        "meta_data": templateType == TemplateTypes.MTE
-            ? (metadata as MetadataMTE).toJson()
-            : templateType == TemplateTypes.PRE
-                ? (metadata as MetadataPRE).toJson()
-                : (metadata as MetadataDDROP).toJson(),
-      };
+  Map<String, dynamic> toJson({required TemplateTypes templateType}) {
+    var jsonGenerated = {
+      "user_id": userId,
+      "task_id": taskId,
+      "is_correct": isCorrect,
+      "time_resolution": timeResolution,
+      "created_at": createdAt,
+      "meta_data": templateType == TemplateTypes.MTE
+          ? (metadata as MetaDataModelMTE).toJson()
+          : templateType == TemplateTypes.PRE
+              ? (metadata as MetaDataModelPRE).toJson()
+              : (metadata as MetaDataModelDDROP).toJson(),
+    };
+    if (id != null) {
+      jsonGenerated['id'] = id!;
+    }
+    return jsonGenerated;
+  }
 }

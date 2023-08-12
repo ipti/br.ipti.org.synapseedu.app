@@ -13,8 +13,8 @@ class ConfirmButtonWidget extends StatelessWidget {
 
   SubmitButtonStatus oldState = SubmitButtonStatus.Disabled;
 
-  void changeConfirmButton(SubmitButtonStatus newState){
-    if(oldState != newState){
+  void changeConfirmButton(SubmitButtonStatus newState) {
+    if (oldState != newState) {
       oldState = newState;
       switch (taskViewController.buttonStatus) {
         case SubmitButtonStatus.Idle:
@@ -66,11 +66,9 @@ class ConfirmButtonWidget extends StatelessWidget {
                     ),
                   ),
                   onPressed: () async {
-                    taskViewController.changeSubmitButton(taskViewController.correctAnswer.id == taskViewController.componentSelected.value.id ? SubmitButtonStatus.Success : SubmitButtonStatus.Error);
-                    // changeConfirmButton();
-                    // taskViewController.forceNotity();
-                    await Future.delayed(Duration(seconds: 5));
-                    Navigator.of(context).pop();
+                    taskViewController.sendPerformance();
+                    // await Future.delayed(Duration(seconds: 5));
+                    // Navigator.of(context).pop();
                   },
                 ),
               );

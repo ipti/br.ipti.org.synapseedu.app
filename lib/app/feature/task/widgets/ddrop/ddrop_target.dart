@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart' as Dartz;
+import 'package:elesson/app/core/task/data/model/component_model.dart';
 import 'package:elesson/app/core/task/data/model/element_model.dart';
 import 'package:elesson/app/core/task/domain/entity/ddrop_option_entity.dart';
 import 'package:elesson/app/core/task/domain/usecase/get_multimedia_usecase.dart';
@@ -12,19 +13,19 @@ import 'ddrop_modal_image.dart';
 import 'ddrop_shimmer_modal.dart';
 
 class DdropTarget extends StatefulWidget {
-  final ElementModel element;
+  final ComponentModel component;
   final GetMultimediaUseCase getMultimediaUseCase;
   final TaskViewController taskController;
   final int position;
 
-  DdropTarget({Key? key, required this.element, required this.getMultimediaUseCase, required this.taskController, required this.position}) : super(key: key);
+  DdropTarget({Key? key, required this.component, required this.getMultimediaUseCase, required this.taskController, required this.position}) : super(key: key);
 
   @override
   _DdropTargetState createState() => _DdropTargetState();
 }
 
 class _DdropTargetState extends State<DdropTarget> {
-  late Future<Dartz.Either<Failure, List<int>>> loadTargetImage = widget.getMultimediaUseCase.getBytesByMultimediaId(widget.element.multimedia_id!);
+  late Future<Dartz.Either<Failure, List<int>>> loadTargetImage = widget.getMultimediaUseCase.getBytesByMultimediaId(widget.component.elements!.first.multimedia_id!);
 
   @override
   Widget build(BuildContext context) {

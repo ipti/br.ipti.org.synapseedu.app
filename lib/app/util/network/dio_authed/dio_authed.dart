@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import '../constants.dart';
 import '../interceptors/auth_interceptor.dart';
+import '../interceptors/error_interceptor.dart';
 
 class DioAuthed {
   static final DioAuthed _singleton = DioAuthed._internal();
@@ -9,7 +10,7 @@ class DioAuthed {
     ..interceptors.addAll([
       AuthInterceptor(),
       // PrettyDioLogger(requestHeader: true, requestBody: true, responseBody: true, responseHeader: false, error: true, compact: true, maxWidth: 90),
-      // ErrorInterceptor()
+      ErrorInterceptor()
     ])..options = BaseOptions(
       baseUrl: URLBASE,
     );

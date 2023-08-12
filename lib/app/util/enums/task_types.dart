@@ -1,4 +1,4 @@
-enum TemplateTypes { MTE, PRE, AEL, TEXT }
+enum TemplateTypes { MTE, PRE, AEL, TEXT}
 
 extension TemplateTypesExtension on TemplateTypes {
   int get templateId {
@@ -16,7 +16,40 @@ extension TemplateTypesExtension on TemplateTypes {
     }
   }
 
-  void a(int s){}
+  TemplateTypes fromTemplateId(int templateId) {
+    switch (templateId) {
+      case 1:
+        return TemplateTypes.MTE;
+      case 2:
+        return TemplateTypes.PRE;
+      case 3:
+        return TemplateTypes.AEL;
+      case 4:
+        return TemplateTypes.TEXT;
+      default:
+        return TemplateTypes.MTE;
+    }
+  }
+
+  // factory TemplateTypes.fromTemplateId(int templateId) {
+  //   switch (templateId) {
+  //     case 1:
+  //       return TemplateTypes.MTE;
+  //     case 2:
+  //       return TemplateTypes.PRE;
+  //     case 3:
+  //       return TemplateTypes.AEL;
+  //     case 4:
+  //       return TemplateTypes.TEXT;
+  //     default:
+  //       return TemplateTypes.MTE;
+  //   }
+  // }
+  //
+
+  void task(){
+    print("a");
+  }
 
   TemplateTypes get number {
     switch (templateId) {
