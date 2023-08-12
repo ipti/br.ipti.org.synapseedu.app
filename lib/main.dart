@@ -49,8 +49,8 @@ void main() async {
               minWidth: 0,
             ), colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.lightGreen).copyWith(background: Color(0xFFFFFFFF)),
           ),
-          // initialRoute: AuthModule.routeName,
-          initialRoute: QrCodeReader.routeName,
+          initialRoute: AuthModule.routeName,
+          // initialRoute: QrCodeReader.routeName,
           routes: {
             QrCodeReader.routeName: (context) => QrCodeReader(),
             AuthModule.routeName: (context) => AuthModule(),

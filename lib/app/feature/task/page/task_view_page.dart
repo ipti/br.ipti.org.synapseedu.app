@@ -14,12 +14,13 @@ class TaskViewPage extends StatefulWidget {
 }
 
 class _TaskViewPageState extends State<TaskViewPage> {
+
   @override
   void initState() {
     super.initState();
-
     widget.taskViewController.correctAnswer = widget.taskModel.body!.components.firstWhere((element) => element.position == 1);
     widget.taskViewController.renderTaskJson(widget.taskModel);
+    widget.taskViewController.performanceTime = DateTime.now();
   }
 
   @override

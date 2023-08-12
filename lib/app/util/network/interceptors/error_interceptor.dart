@@ -17,6 +17,7 @@ class ErrorInterceptor extends InterceptorsWrapper {
       final authLocalDatasource = AuthLocalDatasourceImpl();
       // final authRemoteDatasource = AuthRemoteDatasourceImpl(dio: Dio()..options.baseUrl = URLBASE);
       // //limpando token antigo
+      print("LIMPANDO TOKENS");
       authLocalDatasource.cleanTokens();
       //
       // AuthUseCase _authUseCase = AuthUseCase(authRepository: AuthRepositoryImpl(authRemoteDataSource: authRemoteDatasource, authLocalDataSource: authLocalDatasource));
@@ -34,7 +35,7 @@ class ErrorInterceptor extends InterceptorsWrapper {
       log("ERRO 401, REDIRECIONANDO O USUARIO PARA LOGIN");
       print(navigatorKey.currentState);
       navigatorKey.currentState?.pushNamedAndRemoveUntil(AuthModule.routeName, (route) => false);
-      // navigatorKey.currentState!.setState(() {});
+      navigatorKey.currentState!.setState(() {});
     }
 
     super.onError(err, handler);

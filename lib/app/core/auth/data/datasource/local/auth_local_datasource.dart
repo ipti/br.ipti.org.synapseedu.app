@@ -28,7 +28,7 @@ class AuthLocalDatasourceImpl implements AuthLocalDataSource {
       keySessionUser,
     );
 
-    if (userJsonString == null) throw Exception("Não há escolas dispoíveis");
+    if (userJsonString == null) throw Exception("Não Usuários disponíveis");
 
     final result = LoginResponseEntity.fromMap(jsonDecode(userJsonString));
 
