@@ -10,8 +10,12 @@ import 'package:elesson/app/providers/userProvider.dart';
 import 'package:elesson/app/util/network/dio_authed/dio_authed.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../core/task/data/datasource/block_remote_datasource.dart';
+import '../../core/task/data/repository/block_repository_interface.dart';
 import '../../core/task/data/repository/performance_repository_interface.dart';
+import '../../core/task/domain/repository/block_repository_impl.dart';
 import '../../core/task/domain/repository/performance_repository_impl.dart';
+import '../../core/task/domain/usecase/get_block_usecase.dart';
 import '../../core/task/domain/usecase/send_performance_usecase.dart';
 import 'controller/task_view_controller.dart';
 
@@ -34,6 +38,10 @@ class _TaskModuleState extends State<TaskModule> {
   late SendPerformanceUseCase _sendPerformanceUseCase;
   late TaskViewController _taskViewController;
 
+  late IBlockRemoteDataSource _blockRemoteDataSource;
+  late IBlockRepository _blockRepository;
+  late GetBlockUsecase _getBlockUseCase;
+
   @override
   void initState() {
     super.initState();
@@ -46,6 +54,17 @@ class _TaskModuleState extends State<TaskModule> {
     _performanceRemoteDataSource = PerformanceRemoteDatasource(dio: dioAuthed);
     _performanceRepository = PerformanceRepositoryImpl(performanceRemoteDataSource: _performanceRemoteDataSource);
     _sendPerformanceUseCase = SendPerformanceUseCase(performanceRepository: _performanceRepository);
+
+    _blockRemoteDataSource = BlockRemoteDataSourceImpl(dio: dioAuthed);
+    _blockRepository = BlockRepositoryImpl(blockRemoteDataSource: _blockRemoteDataSource);
+    _getBlockUseCase = GetBlockUsecase(repository: _blockRepository);
+
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _taskViewController.dispose();
   }
 
   @override
@@ -54,8 +73,8 @@ class _TaskModuleState extends State<TaskModule> {
     _taskViewController = TaskViewController(
       getMultimediaUseCase: _getMultimediaUseCase,
       sendPerformanceUseCase: _sendPerformanceUseCase,
+      userId: userId, getBlockUsecase: _getBlockUseCase,
       task: widget.taskModel,
-      userId: userId,
     );
     super.didChangeDependencies();
   }
