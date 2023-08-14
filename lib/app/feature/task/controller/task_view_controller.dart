@@ -18,7 +18,6 @@ import 'package:elesson/app/util/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:wakelock/wakelock.dart';
-
 import '../../../core/task/data/model/performance_model.dart';
 import '../../../core/task/domain/entity/user_answer.dart';
 import '../../../core/task/domain/usecase/send_performance_usecase.dart';
@@ -30,7 +29,7 @@ class TaskViewController extends ChangeNotifier {
   final TaskModel task;
   final int userId;
 
-  TaskViewController({required this.getMultimediaUseCase, required this.sendPerformanceUseCase, required this.task, required this.userId});
+  TaskViewController({required this.getMultimediaUseCase, required this.sendPerformanceUseCase,required this.task, required this.userId});
 
   late DateTime performanceTime;
   late ComponentModel correctAnswer;
@@ -60,6 +59,8 @@ class TaskViewController extends ChangeNotifier {
     );
     notifyListeners();
   }
+
+
 
   /*
   * ENTIDADE RESPONSAVEL POR ARMAZENAR OS WIDGETS DA TELA

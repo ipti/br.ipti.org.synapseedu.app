@@ -11,6 +11,7 @@ import 'package:elesson/app/providers/userProvider.dart';
 import 'package:elesson/app/util/failures/failures.dart';
 import 'package:elesson/app/util/network/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:provider/provider.dart';
 import '../../core/auth/data/datasource/remote/auth_remote_datasource.dart';
 import 'controller/auth_controller.dart';
@@ -35,7 +36,7 @@ class _AuthModuleState extends State<AuthModule> {
     super.initState();
     dio = Dio();
     dio.options.baseUrl = URLBASE;
-    // dio.interceptors.add(PrettyDioLogger(requestHeader: true, requestBody: true, responseBody: true, responseHeader: false, error: true, compact: true, maxWidth: 90));
+    dio.interceptors.add(PrettyDioLogger(requestHeader: true, requestBody: true, responseBody: true, responseHeader: false, error: true, compact: true, maxWidth: 90));
     AuthRemoteDataSource authRemoteDatasourceImpl = AuthRemoteDatasourceImpl(dio: dio);
     authLocalDatasourceImpl = AuthLocalDatasourceImpl();
 

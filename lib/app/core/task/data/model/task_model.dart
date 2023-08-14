@@ -120,6 +120,37 @@ class TaskModel extends Equatable{
         "body": body?.toMap()
       };
 
+  //empty
+  static TaskModel empty() => TaskModel(
+        id: 0,
+        description: '',
+        year_id: 0,
+        year_year: 0,
+        year_name: '',
+        goal_id: 0,
+        goal_name: '',
+        discipline_id: 0,
+        discipline_name: '',
+        template_id: 0,
+        template_name: '',
+        template_alias: '',
+        theme_id: 0,
+        theme_name: '',
+        head_id: 0,
+        body_id: 0,
+        status_id: 0,
+        create_at: DateTime.now(),
+        update_at: null,
+        total_comments: 0,
+        total_resolved_comments: 0,
+        published: 0,
+        published_date: null,
+        user_id: 0,
+        user_name: '',
+        header: ContainerModel.empty(),
+        body: ContainerModel.empty(),
+      );
+
   TaskModel copyWith({
     int? id,
     String? description,

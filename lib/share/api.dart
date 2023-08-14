@@ -59,13 +59,10 @@ class ApiBlock {
     switch (disciplineId) {
       case "1":
         return "Português";
-        break;
       case "2":
         return "Matemática";
-        break;
       case "3":
         return "Ciências";
-        break;
       default:
         return "Elesson";
     }

@@ -10,6 +10,8 @@ import './register/countdown.dart';
 import 'app/feature/auth/auth_module.dart';
 import 'app/feature/home/home_module.dart';
 import 'app/feature/preview/preview_module.dart';
+import 'app/feature/qrcode/qrcode_module.dart';
+import 'app/providers/block_provider.dart';
 import 'app/providers/userProvider.dart';
 import './root/poc.dart';
 import 'package:elesson/register/sms_register.dart';
@@ -35,6 +37,7 @@ void main() async {
       MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => UserProvider()),
+          ChangeNotifierProvider(create: (context) => BlockProvider()),
         ],
         child: MaterialApp(
           navigatorKey: navigatorKey,
@@ -49,10 +52,9 @@ void main() async {
               minWidth: 0,
             ), colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.lightGreen).copyWith(background: Color(0xFFFFFFFF)),
           ),
-          initialRoute: AuthModule.routeName,
+          initialRoute: QrCodePage.routeName,
           // initialRoute: QrCodeReader.routeName,
           routes: {
-            QrCodeReader.routeName: (context) => QrCodeReader(),
             AuthModule.routeName: (context) => AuthModule(),
             HomeModule.routeName: (context) => HomeModule(),
             DegreeSelectionView.routeName: (context) => DegreeSelectionView(),
@@ -72,7 +74,7 @@ void main() async {
             // TextQuestion.routeName: (context) => TextQuestion(),
             ImageDetailScreen.routeName: (context) => ImageDetailScreen(),
             BlockConclusionScreen.routeName: (context) => BlockConclusionScreen(),
-            QrCodeReader.routeName: (context) => QrCodeReader(),
+            QrCodePage.routeName: (context) => QrCodeModule(),
           },
             onGenerateRoute: (settings) {
               if (settings.name == null || settings.name == "/") {

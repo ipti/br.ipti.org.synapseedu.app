@@ -1,14 +1,35 @@
+import 'package:elesson/app/core/task/data/model/task_model.dart';
 import 'package:elesson/app/feature/task/controller/task_view_controller.dart';
+import 'package:elesson/app/feature/task/task_module.dart';
+import 'package:elesson/app/providers/block_provider.dart';
 import 'package:elesson/app/util/enums/button_status.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class ConfirmButtonWidget extends StatelessWidget {
+import '../../home/home_module.dart';
+
+class ConfirmButtonWidget extends StatefulWidget {
   final TaskViewController taskViewController;
 
   ConfirmButtonWidget({Key? key, required this.taskViewController}) : super(key: key);
 
+  @override
+  State<ConfirmButtonWidget> createState() => _ConfirmButtonWidgetState();
+}
+
+class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
+  late BlockProvider blockProvider;
+
+  @override
+  void didChangeDependencies() {
+    print("DID");
+    blockProvider = Provider.of<BlockProvider>(context, listen: false);
+    super.didChangeDependencies();
+  }
   String confirmButtonText = 'CONFIRMAR';
+
   Color confirmButtonBorderColor = Color.fromRGBO(0, 220, 140, 1);
+
   Color confirmButtonTextColor = Color.fromRGBO(0, 220, 140, 1);
 
   SubmitButtonStatus oldState = SubmitButtonStatus.Disabled;
@@ -16,7 +37,7 @@ class ConfirmButtonWidget extends StatelessWidget {
   void changeConfirmButton(SubmitButtonStatus newState) {
     if (oldState != newState) {
       oldState = newState;
-      switch (taskViewController.buttonStatus) {
+      switch (widget.taskViewController.buttonStatus) {
         case SubmitButtonStatus.Idle:
           confirmButtonText = 'CONFIRMAR';
           confirmButtonBorderColor = Color(0xFF0000FF);
@@ -28,7 +49,7 @@ class ConfirmButtonWidget extends StatelessWidget {
           confirmButtonTextColor = Color.fromRGBO(255, 51, 0, 1);
           break;
         case SubmitButtonStatus.Success:
-          confirmButtonText = 'SUCCESS';
+          confirmButtonText = 'CORRETA';
           confirmButtonBorderColor = Color.fromRGBO(0, 220, 140, 1);
           confirmButtonTextColor = Color.fromRGBO(0, 220, 140, 1);
           break;
@@ -38,14 +59,16 @@ class ConfirmButtonWidget extends StatelessWidget {
     }
   }
 
+  bool blockButton = false;
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: taskViewController,
+      animation: widget.taskViewController,
       builder: (context, child) {
-        changeConfirmButton(taskViewController.buttonStatus);
+        changeConfirmButton(widget.taskViewController.buttonStatus);
 
-        return taskViewController.buttonStatus == SubmitButtonStatus.Disabled
+        return widget.taskViewController.buttonStatus == SubmitButtonStatus.Disabled
             ? Container()
             : Expanded(
                 child: MaterialButton(
@@ -65,11 +88,17 @@ class ConfirmButtonWidget extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
-                  onPressed: () async {
-                    taskViewController.sendPerformance();
-                    // await Future.delayed(Duration(seconds: 5));
-                    // Navigator.of(context).pop();
-                  },
+                  onPressed: !blockButton ? () async {
+                    blockButton = true;
+                    widget.taskViewController.sendPerformance();
+                    await Future.delayed(Duration(seconds: 3));
+                    TaskModel nextTaskId = blockProvider.getNextTask();
+                    if (nextTaskId == TaskModel.empty()) {
+                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeModule()), (route) => false);
+                      return;
+                    }
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => TaskModule(taskModel: nextTaskId)));
+                  } : null,
                 ),
               );
       },

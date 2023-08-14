@@ -71,7 +71,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double bottonPadding = 65;
+    double bottonPadding = 60;
     double buttonHeight = 48 > size.height * 0.0656 ? 48 : size.height * 0.0656;
     double buttonWidth = 150 > 0.3649 * size.width ? 150 : 0.3649 * size.width;
     maxScreenHeight = size.height - 24 - bottonPadding;

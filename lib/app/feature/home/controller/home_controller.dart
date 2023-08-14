@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 class HomeController extends ChangeNotifier {
   final GetTaskUseCase getTaskUseCase;
+
   HomeController({required this.getTaskUseCase});
 
   SubmitButtonStatus _searchButtonStatus = SubmitButtonStatus.Idle;
@@ -32,4 +33,6 @@ class HomeController extends ChangeNotifier {
     _searchButtonStatus = SubmitButtonStatus.Idle;
     // notifyListeners();
   }
+
+
 }

@@ -1,4 +1,5 @@
 // import 'package:elesson/share/turmas.dart';
+import 'package:elesson/app/feature/qrcode/qrcode_module.dart';
 import 'package:elesson/share/qr_code_reader.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
@@ -380,7 +381,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                               context,
                               new MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      new QrCodeReader()));
+                                      new QrCodeModule()));
                           print(
                               "---------------------------------------------------$retorno-----------------------------------------------------------");
                         },

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 // import 'package:audioplayers/audioplayers.dart';
+import 'package:elesson/app/feature/qrcode/qrcode_module.dart';
 import 'package:elesson/share/qr_code_reader.dart';
 
 // import 'package:elesson/template_questoes/question_provider.dart';
@@ -321,7 +322,7 @@ Widget submitAnswer(BuildContext context, List<Cobject> cobjectList, String ques
 }
 
 Future<String?> scan(BuildContext context) async {
-  String? returnedValue = await Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => new QrCodeReader()));
+  String? returnedValue = await Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => new QrCodeModule()));
   //todo implementar aqui direcionamento pra aluma pagina se for preciso (OBS: Tem que ser antes do retorno pra não bugar)
   return returnedValue;
 }

@@ -34,7 +34,7 @@ class AuthRepositoryImpl extends AuthRepositoryInterface {
     try {
       final result = await authRemoteDataSource.getAccessToken(username, password);
       return Right(result);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Left(RestFailure(e.message));
     }
   }
@@ -44,7 +44,7 @@ class AuthRepositoryImpl extends AuthRepositoryInterface {
     try {
       final result = await authRemoteDataSource.login(authLoginEntity);
       return Right(result);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       print("[AuthRepositoryImpl] login: ${e.response?.data['message']}");
       return Left(RestFailure(e.response?.data['message'] ?? "Erro ao realizar login"));
     }

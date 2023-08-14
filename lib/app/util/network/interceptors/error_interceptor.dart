@@ -8,7 +8,7 @@ import '../../routes.dart';
 
 class ErrorInterceptor extends InterceptorsWrapper {
   @override
-  Future onError(DioError err, ErrorInterceptorHandler handler) async {
+  Future onError(DioException err, ErrorInterceptorHandler handler) async {
     if (kDebugMode) {
       debugPrint(err.message);
     }
