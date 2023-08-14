@@ -1,10 +1,9 @@
-import 'package:dartz/dartz.dart';
-
-import '../../../../util/failures/failures.dart';
+import '../../../task/data/repository/block_repository_interface.dart';
 import '../../data/datasource/block_remote_datasource.dart';
-import '../../data/model/block_model.dart';
-import '../../data/repository/block_repository_interface.dart';
 import '../entity/block_parameters_entity.dart';
+import '../../../../util/failures/failures.dart';
+import '../../data/model/block_model.dart';
+import 'package:dartz/dartz.dart';
 
 class BlockRepositoryImpl extends IBlockRepository{
   final IBlockRemoteDataSource blockRemoteDataSource;

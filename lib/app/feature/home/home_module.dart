@@ -10,6 +10,9 @@ import 'package:elesson/app/util/network/dio_authed/dio_authed.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+
+import '../../core/task/data/repository/block_repository_interface.dart';
+
 class HomeModule extends StatefulWidget {
   static const routeName = '/home-module';
 
@@ -21,14 +24,11 @@ class HomeModule extends StatefulWidget {
 
 class _HomeModuleState extends State<HomeModule> {
   late UserProvider _userProvider;
-
   late ITaskRemoteDataSource _taskRemoteDataSource;
-
   late ITaskRepository _taskRepository;
-
   late GetTaskUseCase _getTaskUseCase;
+  late HomeController _homeController;
 
-  late HomeController _taskSelectController;
 
   @override
   void initState() {
@@ -36,21 +36,16 @@ class _HomeModuleState extends State<HomeModule> {
     Dio dioAuthed = DioAuthed().dio;
 
     _taskRemoteDataSource = TaskRemoteDataSourceImpl(dio: dioAuthed);
-
     _taskRepository = TaskRepositoryImpl(taskRemoteDataSource: _taskRemoteDataSource);
-
     _getTaskUseCase = GetTaskUseCase(taskRepository: _taskRepository);
 
-    _taskSelectController = HomeController(getTaskUseCase: _getTaskUseCase);
+    _homeController = HomeController(getTaskUseCase: _getTaskUseCase);
   }
 
   @override
   void dispose() {
     super.dispose();
-    // _taskRemoteDataSource.dispose();
-    // _taskRepository.dispose();
-    // _getTaskUseCase.dispose();
-    _taskSelectController.dispose();
+    _homeController.dispose();
   }
 
   @override
@@ -63,8 +58,8 @@ class _HomeModuleState extends State<HomeModule> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: AnimatedBuilder(
-        animation: _taskSelectController,
-        builder: (context, child) => HomePage(taskSelectController: _taskSelectController, userProvider: _userProvider),
+        animation: _homeController,
+        builder: (context, child) => HomePage(taskSelectController: _homeController, userProvider: _userProvider),
       ),
     );
   }

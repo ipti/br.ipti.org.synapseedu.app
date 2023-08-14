@@ -3,7 +3,10 @@ import 'package:elesson/app/feature/shared/widgets/init_title.dart';
 import 'package:elesson/app/feature/home/controller/home_controller.dart';
 import 'package:elesson/app/providers/userProvider.dart';
 import 'package:elesson/app/util/enums/button_status.dart';
+import 'package:elesson/share/qr_code_reader.dart';
 import 'package:flutter/material.dart';
+
+import '../../qrcode/qrcode_module.dart';
 
 class HomePage extends StatelessWidget {
   final HomeController taskSelectController;
@@ -14,13 +17,30 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
+    // initTitle(text: , heightScreen: size.height, bottomMargin: 20),
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: Size(size.width, 100),
+        child: AppBar(
+          leading: Container(),
+          centerTitle: true,
+          title: Text("Oi, ${userProvider.user.name}",style: TextStyle(color: Color(0XFF00004C), fontWeight: FontWeight.bold, fontFamily: "ElessonIconLib", fontSize: size.height * 0.024)),
+          actions: [
+            IconButton(
+              onPressed: () => Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => QrCodeModule()), (route) => false),
+              icon: Icon(
+                Icons.qr_code_scanner,
+                color: Color(0XFF00004C),
+                size: size.height * 0.04,
+              ),
+            ),
+          ],
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            initTitle(text: "Oi, ${userProvider.user.name}", heightScreen: size.height, bottomMargin: 20),
             Text('INICIAR AVALIAÇÕES', style: TextStyle(color: Color(0XFF6E7291), fontWeight: FontWeight.bold, fontFamily: "ElessonIconLib", fontSize: 18)),
             SizedBox(height: 36.0),
             userProvider.user.user_type_id != 3

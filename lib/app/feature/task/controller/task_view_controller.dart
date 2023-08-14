@@ -4,7 +4,6 @@ import 'package:elesson/app/core/task/data/model/element_model.dart';
 import 'package:elesson/app/core/task/data/model/task_model.dart';
 import 'package:elesson/app/core/task/domain/entity/ddrop_option_entity.dart';
 import 'package:elesson/app/core/task/domain/entity/screen_entity.dart';
-import 'package:elesson/app/core/task/domain/usecase/get_block_usecase.dart';
 import 'package:elesson/app/core/task/domain/usecase/get_multimedia_usecase.dart';
 import 'package:elesson/app/feature/task/widgets/audio_multimedia.dart';
 import 'package:elesson/app/feature/task/widgets/ddrop/ddrop_sender.dart';
@@ -19,10 +18,7 @@ import 'package:elesson/app/util/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:wakelock/wakelock.dart';
-
-import '../../../core/task/data/model/block_model.dart';
 import '../../../core/task/data/model/performance_model.dart';
-import '../../../core/task/domain/entity/block_parameters_entity.dart';
 import '../../../core/task/domain/entity/user_answer.dart';
 import '../../../core/task/domain/usecase/send_performance_usecase.dart';
 import '../../../util/failures/failures.dart';
@@ -30,11 +26,10 @@ import '../../../util/failures/failures.dart';
 class TaskViewController extends ChangeNotifier {
   final GetMultimediaUseCase getMultimediaUseCase;
   final SendPerformanceUseCase sendPerformanceUseCase;
-  final GetBlockUsecase getBlockUsecase;
   final TaskModel task;
   final int userId;
 
-  TaskViewController({required this.getMultimediaUseCase, required this.sendPerformanceUseCase,required this.getBlockUsecase, required this.task, required this.userId});
+  TaskViewController({required this.getMultimediaUseCase, required this.sendPerformanceUseCase,required this.task, required this.userId});
 
   late DateTime performanceTime;
   late ComponentModel correctAnswer;
@@ -65,13 +60,7 @@ class TaskViewController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getBlock() async {
-    Either<Failure, BlockModel> res = await getBlockUsecase.call(BlockParameterEntity(disciplineId: 2, teacherId: 5, studentId: 1));
-    res.fold(
-      (l) => print(l),
-      (r) => print(r),
-    );
-  }
+
 
   /*
   * ENTIDADE RESPONSAVEL POR ARMAZENAR OS WIDGETS DA TELA

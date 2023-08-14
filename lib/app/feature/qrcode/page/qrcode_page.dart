@@ -1,14 +1,16 @@
-import 'dart:async';
 import 'dart:convert';
+
+import 'package:elesson/app/core/auth/data/model/user_model.dart';
+import 'package:elesson/app/providers/userProvider.dart';
 import 'package:elesson/share/general_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-// import 'package:twilio_phone_verify/twilio_phone_verify.dart';
-import '../app/core/qrcode/domain/entity/block_parameters_entity.dart';
-import '../app/feature/qrcode/controller/qrcode_controller.dart';
-import 'elesson_icon_lib_icons.dart';
-import 'my_twillio.dart';
+import '../../../core/auth/domain/entity/login_response_entity.dart';
+import '../../../core/qrcode/domain/entity/block_parameters_entity.dart';
+import '../controller/qrcode_controller.dart';
+
 
 class QrCodePage extends StatefulWidget {
   static const routeName = '/qr_code';
@@ -24,7 +26,6 @@ class QrCodePage extends StatefulWidget {
 class _QrCodePageState extends State<QrCodePage> {
   bool showLoading = false;
   var qrText = '';
-  late QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
   Color colorToTimerOut = Colors.white;
@@ -96,13 +97,9 @@ class _QrCodePageState extends State<QrCodePage> {
       controller.pauseCamera();
       Map<String, dynamic> jsonMaped = json.decode(qrText);
       BlockParameterEntity blockParameterEntity = BlockParameterEntity.fromJson(jsonMaped);
+      UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+      userProvider.setUser(LoginResponseEntity(id: blockParameterEntity.studentId,name: "Aluno", user_name: "Aluno", user_type_id: 3));
       widget.qrCodeController.getBlock(context, blockParameterEntity);
     });
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
   }
 }

@@ -1,8 +1,7 @@
-import 'package:dio/dio.dart';
-
 import '../../domain/entity/block_parameters_entity.dart';
 import '../mock/mock_block.dart';
 import '../model/block_model.dart';
+import 'package:dio/dio.dart';
 
 abstract class IBlockRemoteDataSource {
   Future<BlockModel> getBlock(BlockParameterEntity blockParameter);

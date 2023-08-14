@@ -10,7 +10,7 @@ class DioAuthed {
   final Dio dio = Dio()
     ..interceptors.addAll([
       AuthInterceptor(),
-      //PrettyDioLogger(requestHeader: true, requestBody: true, responseBody: true, responseHeader: true, error: true, compact: true, maxWidth: 90),
+      PrettyDioLogger(requestHeader: true, requestBody: true, responseBody: true, responseHeader: true, error: true, compact: true, maxWidth: 90),
       ErrorInterceptor()
     ])..options = BaseOptions(
       baseUrl: URLBASE,

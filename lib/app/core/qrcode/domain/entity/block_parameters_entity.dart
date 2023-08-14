@@ -7,9 +7,9 @@ class BlockParameterEntity{
 
   factory BlockParameterEntity.fromJson(Map<String, dynamic> json) {
     return BlockParameterEntity(
-      teacherId: json['teacherId'],
-      studentId: json['studentId'],
-      disciplineId: json['disciplineId'],
+      teacherId: json['teacher_id'],
+      studentId: json['inep_id'],
+      disciplineId: json['discipline_id'],
     );
   }
 

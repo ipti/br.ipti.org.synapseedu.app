@@ -1,5 +1,5 @@
-import 'block_values.dart';
 import 'break_point_model.dart';
+import 'block_values.dart';
 
 class BlockModel {
   int id;
@@ -19,7 +19,7 @@ class BlockModel {
       student: BlockValues.fromJson(json['student']),
       discipline: BlockValues.fromJson(json['discipline']),
       tasks: json['tasks'].cast<int>(),
-      breakPoint: BreakPointModel.fromJson(json['breakPoint']),
+      breakPoint: BreakPointModel.fromJson(json['break_point']),
     );
   }
 
