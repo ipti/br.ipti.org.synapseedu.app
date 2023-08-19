@@ -36,7 +36,8 @@ class _QrCodeModuleState extends State<QrCodeModule> {
     super.initState();
     Dio dioAuthed = DioAuthed().dio;
 
-    _blockRemoteDataSource = BlockRemoteDataSourceImpl(dio: dioAuthed);
+    _blockRemoteDataSource = BlockRemoteDataSourceMockImpl(dio: dioAuthed);
+    // _blockRemoteDataSource = BlockRemoteDataSourceImpl(dio: dioAuthed);
     _blockRepository = BlockRepositoryImpl(blockRemoteDataSource: _blockRemoteDataSource);
     _getBlockUseCase = GetBlockUsecase(repository: _blockRepository);
 

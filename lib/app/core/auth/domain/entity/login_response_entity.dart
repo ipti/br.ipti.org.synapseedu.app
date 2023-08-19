@@ -1,4 +1,3 @@
-import 'package:elesson/app/core/auth/domain/entity/login_entity.dart';
 import 'package:equatable/equatable.dart';
 
 class LoginResponseEntity extends Equatable{
@@ -6,14 +5,14 @@ class LoginResponseEntity extends Equatable{
   String name;
   String user_name;
   int user_type_id;
-  LoginEntity? loginEntity = LoginEntity.empty();
+  int? teacher_id;
 
   LoginResponseEntity({
     required this.id,
     required this.name,
     required this.user_name,
     required this.user_type_id,
-    this.loginEntity
+    this.teacher_id,
   });
 
   factory LoginResponseEntity.fromMap(Map<String, dynamic> map) {
@@ -22,7 +21,7 @@ class LoginResponseEntity extends Equatable{
       name: map['name'] ?? "Nome não encontrado",
       user_name: map['user_name'] ?? "Nome não encontrado",
       user_type_id: map['user_type_id'] ?? 0,
-      loginEntity: map['login_entity'] ?? LoginEntity.empty(),
+      teacher_id: map['teacher_id'],
     );
   }
 
@@ -32,18 +31,18 @@ class LoginResponseEntity extends Equatable{
       'name': name,
       'user_name': user_name,
       'user_type_id': user_type_id,
+      'teacher_id': teacher_id,
     };
   }
 
-  //empty
   factory LoginResponseEntity.empty() => LoginResponseEntity(
     id: 0,
     name: "",
     user_name: "",
     user_type_id: 0,
+    teacher_id: null,
   );
 
   @override
-  // TODO: implement props
-  List<Object?> get props => [id, name, user_name, user_type_id];
+  List<Object?> get props => [id, name, user_name, user_type_id, teacher_id];
 }

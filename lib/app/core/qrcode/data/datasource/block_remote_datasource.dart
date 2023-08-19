@@ -7,6 +7,17 @@ abstract class IBlockRemoteDataSource {
   Future<BlockModel> getBlock(BlockParameterEntity blockParameter);
 }
 
+class BlockRemoteDataSourceMockImpl extends IBlockRemoteDataSource {
+  final Dio dio;
+
+  BlockRemoteDataSourceMockImpl({required this.dio});
+
+  @override
+  Future<BlockModel> getBlock(BlockParameterEntity blockParameter) async {
+    return BlockModel.fromJson(get_block_mock);
+  }
+}
+
 class BlockRemoteDataSourceImpl extends IBlockRemoteDataSource {
   final Dio dio;
 
@@ -14,6 +25,12 @@ class BlockRemoteDataSourceImpl extends IBlockRemoteDataSource {
 
   @override
   Future<BlockModel> getBlock(BlockParameterEntity blockParameter) async {
-    return BlockModel.fromJson(get_block_mock);
+    try {
+      Response response = await dio.post('/block/${blockParameter.teacherId}/${blockParameter.studentId}/${blockParameter.disciplineId}');
+      return BlockModel.fromJson(response.data);
+    } on DioException catch (e) {
+      print(e.message);
+    }
+    throw "Erro desconhecido";
   }
 }

@@ -33,14 +33,13 @@ class AuthUseCase {
 
     loginResponseEntity.fold(
       id,
-      (resLoginResponseEntity) => _cacheSessionValues(resLoginResponseEntity, authLoginEntity),
+      (resLoginResponseEntity) => _cacheSessionValues(resLoginResponseEntity),
     );
 
     return loginResponseEntity;
   }
 
-  Future _cacheSessionValues(LoginResponseEntity response, LoginEntity loginEntity) async {
-    response.loginEntity = loginEntity;
+  Future _cacheSessionValues(LoginResponseEntity response) async {
     await Future.wait([authRepository.storeUserData(response)]);
   }
 
