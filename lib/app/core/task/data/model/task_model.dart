@@ -27,6 +27,7 @@ class TaskModel extends Equatable{
   String? user_name;
   int? total_comments;
   int? total_resolved_comments;
+  int? block_id;
   ContainerModel? header;
   ContainerModel? body;
 
@@ -56,6 +57,7 @@ class TaskModel extends Equatable{
     this.published_date,
     this.user_id,
     this.user_name,
+    this.block_id,
     this.header,
     this.body,
   });
@@ -86,6 +88,7 @@ class TaskModel extends Equatable{
         published_date: json['published_date'] != null ? DateTime.parse(json['published_date']) : null,
         user_id: json['user_id'],
         user_name: json['user_name'],
+        block_id: json['block_id'],
         header: json['header'] != null ? ContainerModel.fromMap(json['header']) : ContainerModel(components: []),
         body: json['body'] != null ? ContainerModel.fromMap(json['body']) : ContainerModel(components: []),
       );
@@ -116,6 +119,7 @@ class TaskModel extends Equatable{
         "published_date": published_date,
         "user_id": user_id,
         "user_name": user_name,
+        "block_id": block_id,
         "header": header?.toMap(),
         "body": body?.toMap()
       };
@@ -147,6 +151,7 @@ class TaskModel extends Equatable{
         published_date: null,
         user_id: 0,
         user_name: '',
+        block_id: 0,
         header: ContainerModel.empty(),
         body: ContainerModel.empty(),
       );
@@ -175,6 +180,7 @@ class TaskModel extends Equatable{
     DateTime? published_date,
     int? user_id,
     String? user_name,
+    int? block_id,
     ContainerModel? header,
     ContainerModel? body,
   }) =>
@@ -202,6 +208,7 @@ class TaskModel extends Equatable{
         published_date: published_date ?? this.published_date,
         user_id: user_id ?? this.user_id,
         user_name: user_name ?? this.user_name,
+        block_id: block_id ?? this.block_id,
         header: header ?? this.header,
         body: body ?? this.body,
       );

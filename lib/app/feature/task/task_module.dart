@@ -84,7 +84,7 @@ class _TaskModuleState extends State<TaskModule> {
 
   Future<void> preparingTask() async {
     int userId = Provider.of<UserProvider>(context, listen: false).user.id;
-
+    BlockProvider blockProvider = Provider.of<BlockProvider>(context, listen: false);
     if (widget.taskId != null) {
       Dartz.Either<Failure, TaskModel> res = await _getTaskUseCase.getTaskById(widget.taskId!);
       res.fold(

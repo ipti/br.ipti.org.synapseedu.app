@@ -26,7 +26,7 @@ class BlockRemoteDataSourceImpl extends IBlockRemoteDataSource {
   @override
   Future<BlockModel> getBlock(BlockParameterEntity blockParameter) async {
     try {
-      Response response = await dio.post('/block/${blockParameter.teacherId}/${blockParameter.studentId}/${blockParameter.disciplineId}');
+      Response response = await dio.get('/block/${blockParameter.teacherId}/${blockParameter.studentId}/${blockParameter.disciplineId}');
       return BlockModel.fromJson(response.data);
     } on DioException catch (e) {
       print(e.message);

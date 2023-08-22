@@ -22,8 +22,10 @@ class HomePage extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: Size(size.width, 100),
-        child: AppBar(
+        child: AppBar(toolbarHeight: 100,
+          backgroundColor: Colors.white,
           leading: Container(),
+          elevation: 0,
           centerTitle: true,
           title: Text("Oi, ${userProvider.user.name}",style: TextStyle(color: Color(0XFF00004C), fontWeight: FontWeight.bold, fontFamily: "ElessonIconLib", fontSize: size.height * 0.024)),
           actions: [
@@ -35,6 +37,7 @@ class HomePage extends StatelessWidget {
                 size: size.height * 0.04,
               ),
             ),
+            SizedBox(width: 10.0)
           ],
         ),
       ),

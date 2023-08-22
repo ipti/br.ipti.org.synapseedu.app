@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/app/core/task/data/model/component_model.dart';
 import 'package:elesson/app/core/task/data/model/element_model.dart';
 import 'package:elesson/app/core/task/data/model/task_model.dart';
@@ -41,7 +42,8 @@ class TaskViewController extends ChangeNotifier {
 
   SubmitButtonStatus get buttonStatus => _submitButtonStatus;
 
-  Future<void> sendPerformance() async {
+  Future<void> sendPerformance(int blockid) async {
+    task.block_id = blockid;
     Either<Failure, Performance> res = await sendPerformanceUseCase.call(
       task: task,
       correctAnswerPre: correctAnswerPre,

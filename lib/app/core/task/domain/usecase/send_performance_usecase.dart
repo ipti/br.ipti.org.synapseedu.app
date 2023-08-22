@@ -19,8 +19,9 @@ class SendPerformanceUseCase {
     Performance performance = Performance(
       taskId: task.id!,
       createdAt: tempoAgora,
-      userId: userAnswer.userId,
+      student_id: userAnswer.userId,
       isCorrect: true,
+      block_id: task.block_id,
       timeResolution: tempoAgora.millisecondsSinceEpoch- userAnswer.performanceTime.millisecondsSinceEpoch,
       metadata: metaData,
     );

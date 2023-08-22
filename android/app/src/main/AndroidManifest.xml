@@ -20,9 +20,11 @@
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
     <!--        android:label="Synapse Aluno"-->
+<!--    android:name="${applicationName}"-->
     <application
         android:name="${applicationName}"
         android:usesCleartextTraffic="true"
+        android:label="Synapse EDU"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

@@ -6,8 +6,8 @@ class BreakPointModel{
 
   factory BreakPointModel.fromJson(Map<String, dynamic> json) {
     return BreakPointModel(
-      last_resolved_task_id: json['last_resolved_task_id'],
-      created_at: DateTime.parse(json['created_at']),
+      last_resolved_task_id: json['last_resolved_task_id'] ?? 0,
+      created_at: json['created_at'] != null ? DateTime.parse(json['created_at']) : DateTime.now(),
     );
   }
 

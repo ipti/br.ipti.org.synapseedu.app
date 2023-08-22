@@ -39,6 +39,12 @@ class QrCodeController extends ChangeNotifier {
       },
       (r) {
         blockProvider.setNewBlock(r);
+        int? taskId = blockProvider.firstTaskId;
+        if (taskId == null) {
+          _screenMessage = "Você Já Terminou Este Bloco!";
+          notifyListeners();
+          return;
+        }
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => TaskModule(taskId: blockProvider.firstTaskId)));
       },
     );

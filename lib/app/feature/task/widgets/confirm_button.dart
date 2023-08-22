@@ -90,7 +90,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
                   ),
                   onPressed: !blockButton ? () async {
                     blockButton = true;
-                    widget.taskViewController.sendPerformance();
+                    widget.taskViewController.sendPerformance(blockProvider.block.id!);
                     await Future.delayed(Duration(seconds: 3));
                     TaskModel nextTaskId = blockProvider.getNextTask();
                     if (nextTaskId == TaskModel.empty()) {

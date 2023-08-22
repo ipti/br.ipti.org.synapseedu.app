@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 abstract class IMultimediaRemoteDatasource {
   Future<String> getImageMultimediaReference(int multimediaId);
@@ -18,6 +19,7 @@ class MultimediaRemoteDataSourceImpl extends IMultimediaRemoteDatasource {
   @override
   Future<String> getImageMultimediaReference(int id) async {
     try {
+      dio.interceptors.removeWhere((element) => element.runtimeType == PrettyDioLogger);
       Response response = await dio.get('/multimedia/image/$id');
       return response.data['name'];
     } on DioException catch (e) {
