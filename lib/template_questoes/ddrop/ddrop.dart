@@ -1,20 +1,15 @@
-import 'package:elesson/activity_selection/activity_selection_view.dart';
 import 'package:elesson/share/confirm_button_widget.dart';
 import 'package:elesson/share/question_widgets.dart';
-import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:elesson/template_questoes/share/description_format.dart';
-import 'package:elesson/template_questoes/share/template_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/all.dart';
-import 'package:fdottedline/fdottedline.dart';
+import 'package:fdottedline_nullsafety/fdottedline__nullsafety.dart';
 import '../share/image_detail_screen.dart';
 import '../model.dart';
 import 'ddrop_function.dart';
 
-final cobjectProvider = Provider<Cobjects>((ref) {
-  return Cobjects();
-});
+// final cobjectProvider = Provider<Cobjects>((ref) {
+//   return Cobjects();
+// });
 
 class DragAndDrop extends StatefulWidget {
   static const routeName = '/DDROP';
@@ -24,8 +19,8 @@ class DragAndDrop extends StatefulWidget {
 }
 
 class _DragAndDropState extends State<DragAndDrop> {
-  var cobjectList = new List<Cobject>();
-  var cobjectIdList = new List<String>();
+  List<Cobject> cobjectList = [];
+  List<String?>? cobjectIdList = [];
   var cobjectIndex;
 
   @override
@@ -47,72 +42,67 @@ class _DragAndDropState extends State<DragAndDrop> {
   }
 
   String pieceId = "";
-  int cobjectQuestionsLength;
-  int cobjectIdLength;
+  int? cobjectQuestionsLength;
+  int? cobjectIdLength;
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIOverlays([]);
-    final ScreenArguments args = ModalRoute.of(context).settings.arguments;
-    cobjectList = args.cobjectList;
-    cobjectIdList = args.cobjectIdList;
-    questionIndex = args.questionIndex;
-    cobjectIndex = args.cobjectIndex;
-    cobjectQuestionsLength = args.cobjectQuestionsLength;
-    cobjectIdLength = args.cobjectIdLength;
+    // final ScreenArguments args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+    cobjectList = [];
+    cobjectIdList = [];
+    questionIndex = 1;
+    cobjectIndex = 1;
+    cobjectQuestionsLength = 1;
+    cobjectIdLength = 1;
 
-    String questionText =
-        cobjectList[0].questions[questionIndex].header["text"];
+    String questionText = cobjectList[0].questions[questionIndex!].header["text"]!;
 
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height * 0.93;
     Stopwatch chronometer = Stopwatch();
     return Scaffold(
-      // resizeToAvoidBottomPadding: false,
-      body: TemplateSlider(
-        cobjectIdList: cobjectIdList,
-        cobjectIdListLength: cobjectIdLength,
-        questionIndex: questionIndex,
-        cobjectIndex: cobjectIndex,
-        cobjectQuestionsLength: cobjectQuestionsLength,
-        cobjectList: cobjectList,
-        linkImage: cobjectList[0].questions[0].header['image'] != ''
-            ? BASE_URL + '/image/' + cobjectList[0].questions[0].header['image']
-            : "",
-        sound: cobjectList[0].questions[0].header["sound"],
-        title: cobjectList[0].description.toUpperCase(),
-        text: formatDescription(cobjectList[0]
-            .questions[questionIndex]
-            .header["text"]
-            .toUpperCase()),
-        // text: Text(
-        //   cobjectList[0].questions[questionIndex].header["text"].toUpperCase(),
-        //   textAlign: TextAlign.center,
-        //   style: TextStyle(
-        //     fontWeight: FontWeight.bold,
-        //     fontSize: fonteDaLetra,
-        //     fontFamily: 'Mulish',
-        //   ),
+        // resizeToAvoidBottomPadding: false,
+        // body: TemplateSlider(
+        //   headerView: HeaderView(containerModel: ContainerModel.empty()),
+        //   // taskViewController: TaskViewController(),
+        //   // cobjectIdList: cobjectIdList,
+        //   // cobjectIdListLength: cobjectIdLength,
+        //   // questionIndex: questionIndex,
+        //   // cobjectIndex: cobjectIndex,
+        //   // cobjectQuestionsLength: cobjectQuestionsLength,
+        //   // cobjectList: cobjectList,
+        //   // linkImage: cobjectList[0].questions[0].header['image'] != ''
+        //   //     ? BASE_URL + '/image/' + cobjectList[0].questions[0].header['image']!
+        //   //     : null,
+        //   // sound: cobjectList[0].questions[0].header["sound"],
+        //   // title: cobjectList[0].description!.toUpperCase(),
+        //   // text: formatDescription(cobjectList[0]
+        //   //     .questions[questionIndex!]
+        //   //     .header["text"]!
+        //   //     .toUpperCase()),
+        //   // text: Text(
+        //   //   cobjectList[0].questions[questionIndex].header["text"].toUpperCase(),
+        //   //   textAlign: TextAlign.center,
+        //   //   style: TextStyle(
+        //   //     fontWeight: FontWeight.bold,
+        //   //     fontSize: fonteDaLetra,
+        //   //     fontFamily: 'Mulish',
+        //   //   ),
+        //   // ),
+        //   bodyView: activityScreen(heightScreen - 12, widthScreen,
+        //       cobjectList[0].questions[questionIndex!], questionText, chronometer,
+        //       cobjectIdList: cobjectIdList,
+        //       cobjectList: cobjectList,
+        //       questionIndex: questionIndex!,
+        //       cobjectQuestionsLength: cobjectQuestionsLength,
+        //       cobjectIdLength: cobjectIdLength),
         // ),
-        activityScreen: activityScreen(heightScreen - 12, widthScreen,
-            cobjectList[0].questions[questionIndex], questionText, chronometer,
-            cobjectIdList: cobjectIdList,
-            cobjectList: cobjectList,
-            questionIndex: questionIndex,
-            cobjectQuestionsLength: cobjectQuestionsLength,
-            cobjectIdLength: cobjectIdLength),
-      ),
-    );
+        );
   }
 
-  Widget activityScreen(double heightScreen, double widthScreen,
-      Question question, String questionText, Stopwatch chronometer,
-      {List<String> cobjectIdList,
-      List<Cobject> cobjectList,
-      int questionIndex,
-      int cobjectQuestionsLength,
-      int cobjectIdLength}) {
-    String pieceId = cobjectList[0].questions[questionIndex].pieceId;
+  Widget activityScreen(double heightScreen, double widthScreen, Question question, String questionText, Stopwatch chronometer,
+      {List<String?>? cobjectIdList, required List<Cobject> cobjectList, required int questionIndex, int? cobjectQuestionsLength, int? cobjectIdLength}) {
+    String? pieceId = cobjectList[0].questions[questionIndex].pieceId;
 
     return Container(
       margin: EdgeInsets.only(bottom: 12),
@@ -134,9 +124,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                 child: Center(
                   child: GestureDetector(
                     onTap: () {
-                      playSound(cobjectList[0]
-                          .questions[questionIndex]
-                          .header["sound"]);
+                      playSound(cobjectList[0].questions[questionIndex].header["sound"]);
                     },
                     child: Container(
                       child: Center(
@@ -160,9 +148,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                 height: heightScreen * 0.85,
                 padding: EdgeInsets.only(top: 12, bottom: 12),
                 child: Stack(children: [
-                  Center(
-                      child:
-                          Image.asset('assets/img/divisoria.png', scale: .9)),
+                  Center(child: Image.asset('assets/img/divisoria.png', scale: .9)),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -214,9 +200,7 @@ class _DragAndDropState extends State<DragAndDrop> {
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              valueFirstReceiver != 0 &&
-                      valueSecondReceiver != 0 &&
-                      valueThirdReceiver != 0
+              valueFirstReceiver != 0 && valueSecondReceiver != 0 && valueThirdReceiver != 0
                   ? Center(
                       child: Padding(
                         padding: EdgeInsets.only(top: 3),
@@ -248,7 +232,7 @@ class _DragAndDropState extends State<DragAndDrop> {
     switch (wret) {
       case 1:
         return DragTarget(
-          builder: (context, List<int> candidateData, rejectedData) {
+          builder: (context, List<int?> candidateData, rejectedData) {
             return Container(
               margin: EdgeInsets.only(right: 16),
               width: widthScreen / 2.35,
@@ -272,15 +256,9 @@ class _DragAndDropState extends State<DragAndDrop> {
                     definedPosition: posicao,
                     setState: setState,
                     onLongPress: () {
-                      if (question
-                          .pieces["${randomNumber[posicao - 4]}_1"]["image"]
-                          .isNotEmpty)
-                        Navigator.of(context).pushNamed(
-                            ImageDetailScreen.routeName,
-                            arguments: DetailScreenArguments(
-                                grouping: "${randomNumber[posicao - 4]}_1",
-                                question: question,
-                                heroString: 'box1'));
+                      if (question.pieces["${randomNumber[posicao - 4]}_1"]["image"].isNotEmpty)
+                        Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
+                            arguments: DetailScreenArguments(grouping: "${randomNumber[posicao - 4]}_1", question: question, heroString: 'box1'));
                     },
                     child: dragReceiverTemplate(1, widthScreen, question),
                   ),
@@ -288,10 +266,10 @@ class _DragAndDropState extends State<DragAndDrop> {
               ),
             );
           },
-          onWillAccept: (data) {
+          onWillAccept: (dynamic data) {
             return true;
           },
-          onAccept: (data) {
+          onAccept: (dynamic data) {
             colorFirstReceiverAccepted = data == 1
                 ? Color.fromRGBO(189, 0, 255, 0.4)
                 : data == 2
@@ -299,12 +277,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                     : Color.fromRGBO(0, 203, 255, 0.2);
             updateSender(data, setState);
             tradeValue(1, data, setState);
-            updateReceiver(
-                BASE_URL +
-                    '/image/' +
-                    question.pieces[data.toString()]["image"],
-                1,
-                question);
+            updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 1, question);
 
             if (isGuest == false)
               sendMetaData(
@@ -327,7 +300,7 @@ class _DragAndDropState extends State<DragAndDrop> {
         break;
       case 2:
         return DragTarget(
-          builder: (context, List<int> candidateData, rejectedData) {
+          builder: (context, List<int?> candidateData, rejectedData) {
             return Container(
               margin: EdgeInsets.only(right: 16),
               width: widthScreen / 2.35,
@@ -351,15 +324,9 @@ class _DragAndDropState extends State<DragAndDrop> {
                     definedPosition: posicao,
                     setState: setState,
                     onLongPress: () {
-                      if (question
-                          .pieces["${randomNumber[posicao - 4]}_1"]["image"]
-                          .isNotEmpty)
-                        Navigator.of(context).pushNamed(
-                            ImageDetailScreen.routeName,
-                            arguments: DetailScreenArguments(
-                                grouping: "${randomNumber[posicao - 4]}_1",
-                                question: question,
-                                heroString: 'box2'));
+                      if (question.pieces["${randomNumber[posicao - 4]}_1"]["image"].isNotEmpty)
+                        Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
+                            arguments: DetailScreenArguments(grouping: "${randomNumber[posicao - 4]}_1", question: question, heroString: 'box2'));
                     },
                     child: dragReceiverTemplate(2, widthScreen, question),
                   ),
@@ -367,10 +334,10 @@ class _DragAndDropState extends State<DragAndDrop> {
               ),
             );
           },
-          onWillAccept: (data) {
+          onWillAccept: (dynamic data) {
             return true;
           },
-          onAccept: (data) {
+          onAccept: (dynamic data) {
             colorSecondReceiverAccepted = data == 1
                 ? Color.fromRGBO(189, 0, 255, 0.4)
                 : data == 2
@@ -378,12 +345,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                     : Color.fromRGBO(0, 203, 255, 0.2);
             updateSender(data, setState);
             tradeValue(2, data, setState);
-            updateReceiver(
-                BASE_URL +
-                    '/image/' +
-                    question.pieces[data.toString()]["image"],
-                2,
-                question);
+            updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 2, question);
             if (isGuest == false)
               sendMetaData(
                   isCorrect: data == 2 ? true : false,
@@ -404,7 +366,7 @@ class _DragAndDropState extends State<DragAndDrop> {
         break;
       case 3:
         return DragTarget(
-          builder: (context, List<int> candidateData, rejectedData) {
+          builder: (context, List<int?> candidateData, rejectedData) {
             return Container(
               margin: EdgeInsets.only(right: 16),
               width: widthScreen / 2.35,
@@ -428,15 +390,9 @@ class _DragAndDropState extends State<DragAndDrop> {
                     definedPosition: posicao,
                     setState: setState,
                     onLongPress: () {
-                      if (question
-                          .pieces["${randomNumber[posicao - 4]}_1"]["image"]
-                          .isNotEmpty)
-                        Navigator.of(context).pushNamed(
-                            ImageDetailScreen.routeName,
-                            arguments: DetailScreenArguments(
-                                grouping: "${randomNumber[posicao - 4]}_1",
-                                question: question,
-                                heroString: 'box3'));
+                      if (question.pieces["${randomNumber[posicao - 4]}_1"]["image"].isNotEmpty)
+                        Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
+                            arguments: DetailScreenArguments(grouping: "${randomNumber[posicao - 4]}_1", question: question, heroString: 'box3'));
                     },
                     child: dragReceiverTemplate(3, widthScreen, question),
                   ),
@@ -444,10 +400,10 @@ class _DragAndDropState extends State<DragAndDrop> {
               ),
             );
           },
-          onWillAccept: (data) {
+          onWillAccept: (dynamic data) {
             return true;
           },
-          onAccept: (data) {
+          onAccept: (dynamic data) {
             colorThirdReceiverAccepted = data == 1
                 ? Color.fromRGBO(189, 0, 255, 0.4)
                 : data == 2
@@ -455,12 +411,7 @@ class _DragAndDropState extends State<DragAndDrop> {
                     : Color.fromRGBO(0, 203, 255, 0.2);
             updateSender(data, setState);
             tradeValue(3, data, setState);
-            updateReceiver(
-                BASE_URL +
-                    '/image/' +
-                    question.pieces[data.toString()]["image"],
-                3,
-                question);
+            updateReceiver(BASE_URL + '/image/' + question.pieces[data.toString()]["image"], 3, question);
             if (isGuest == false)
               sendMetaData(
                   isCorrect: data == 3 ? true : false,
@@ -479,6 +430,9 @@ class _DragAndDropState extends State<DragAndDrop> {
           },
         );
         break;
+
+      default:
+        return Container();
     }
   }
 
@@ -496,10 +450,10 @@ class _DragAndDropState extends State<DragAndDrop> {
           definedPosition: index,
           setState: setState,
           onLongPress: () {
-            if (question.pieces["${index}"]["image"].isNotEmpty)
+            if (question.pieces["$index"]["image"].isNotEmpty)
               Navigator.of(context).pushNamed(ImageDetailScreen.routeName,
                   arguments: DetailScreenArguments(
-                      grouping: "${index}",
+                      grouping: "$index",
                       question: question,
                       heroString: index == 1
                           ? 'sender1'
@@ -585,7 +539,7 @@ class _DragAndDropState extends State<DragAndDrop> {
     );
   }
 
-  Widget box({int index, double widthScreen, Question question, Color cor}) {
+  Widget box({int? index, required double widthScreen, required Question question, Color? cor}) {
     return Hero(
       tag: index == 1
           ? 'box1'
@@ -597,9 +551,7 @@ class _DragAndDropState extends State<DragAndDrop> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           image: DecorationImage(
-            image: NetworkImage(BASE_URL +
-                '/image/' +
-                question.pieces['$index' + '_1']["image"]),
+            image: NetworkImage(BASE_URL + '/image/' + question.pieces['$index' + '_1']["image"]),
             fit: BoxFit.cover,
           ),
           border: Border.all(
@@ -645,17 +597,13 @@ class _DragAndDropState extends State<DragAndDrop> {
               // callSnackBar(context);
               return Container();
             },
-            loadingBuilder: (BuildContext context, Widget child,
-                ImageChunkEvent loadingProgress) {
+            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
               if (loadingProgress == null) {
                 return child;
               }
               return Center(
                 child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes
-                      : null,
+                  value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
                 ),
               );
             },
@@ -696,8 +644,7 @@ class _DragAndDropState extends State<DragAndDrop> {
     // );
   }
 
-  Widget dragReceiverTemplate(
-      int index, double widthScreen, Question question) {
+  Widget dragReceiverTemplate(int index, double widthScreen, Question question) {
     String urlToThisReceiver = '';
     bool show = false;
     switch (index) {
@@ -765,17 +712,13 @@ class _DragAndDropState extends State<DragAndDrop> {
                 // callSnackBar(context);
                 return Container();
               },
-              loadingBuilder: (BuildContext context, Widget child,
-                  ImageChunkEvent loadingProgress) {
+              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                 if (loadingProgress == null) {
                   return child;
                 }
                 return Center(
                   child: CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes
-                        : null,
+                    value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
                   ),
                 );
               },

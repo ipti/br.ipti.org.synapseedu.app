@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:elesson/share/api.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/share/snackbar_widget.dart';
@@ -5,26 +7,21 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BlockSelectionLogic {
-  Future<Function> redirectToQuestion(
-      {int cobjectIdIndex,
-      String disciplineId,
-      String discipline,
-      String studentUuid,
-      BuildContext context,
-      String classroomFk}) async {
+  Future<void> redirectToQuestion({int? cobjectIdIndex, String? disciplineId, String? discipline, String? studentUuid, required BuildContext context, String? classroomFk}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String studentUuid = prefs.getString('student_uuid');
+    String studentUuid = prefs.getString('student_uuid') ?? '';
 
-    var blockId = studentUuid != null
+    print(disciplineId);
+    var blockId = false //studentUuid != ''
         ? prefs.getString('block_${classroomFk}_$disciplineId')
-        : await ApiBlock.getBlockByDiscipline(disciplineId);
+        : await (ApiBlock.getBlockByDiscipline(disciplineId!));
     print('blockId: $blockId');
     // var responseBlock = await ApiBlock.getBlock(blockId);
     // print('responseblock: $responseBlock');
-    ApiBlock.getBlock(blockId).then((value) {
+    ApiBlock.getBlock("94").then((value) {
       var responseBlock = value;
       if (responseBlock != "-1") {
-        List<String> cobjectIdList = [];
+        List<String?> cobjectIdList = [];
         int cobjectId = prefs.getInt('last_cobject_$discipline') ?? 0;
         int questionIndex = prefs.getInt('last_question_$discipline') ?? 0;
         responseBlock.data[0]["cobject"].forEach((cobject) {
@@ -33,8 +30,7 @@ class BlockSelectionLogic {
         });
         print(cobjectIdList);
 
-        getCobject(cobjectId, context, cobjectIdList,
-            piecesetIndex: questionIndex);
+        getCobject(cobjectId, context, cobjectIdList, piecesetIndex: questionIndex);
       } else
         callSnackBar(context);
     });

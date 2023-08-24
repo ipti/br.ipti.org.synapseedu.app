@@ -10,7 +10,7 @@ class TextOfImage extends StatefulWidget {
 }
 
 class _TextOfImageState extends State<TextOfImage> {
-  String base64Image;
+  String? base64Image;
 
   @override
   void initState() {
@@ -19,8 +19,8 @@ class _TextOfImageState extends State<TextOfImage> {
     super.initState();
   }
 
-  Response retorno;
-  String resultado = 'Texto de retorno';
+  late Response retorno;
+  String? resultado = 'Texto de retorno';
 
   @override
   Widget build(BuildContext context) {
@@ -36,18 +36,18 @@ class _TextOfImageState extends State<TextOfImage> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(30.0),
               child: imageFile != null
-                  ? Image.file(imageFile)
-                  : FlatButton(
-                child: Icon(
-                  Icons.add_a_photo,
-                  size: 50,
-                ),
-                onPressed: pickImage,
-              ),
+                  ? Image.file(imageFile!)
+                  : TextButton(
+                      child: Icon(
+                        Icons.add_a_photo,
+                        size: 50,
+                      ),
+                      onPressed: pickImage,
+                    ),
             ),
           ),
           Text(
-            resultado,
+            resultado!,
             style: TextStyle(fontSize: size.height * 0.05),
           ),
           Container(
@@ -68,7 +68,7 @@ class _TextOfImageState extends State<TextOfImage> {
     );
   }
 
-  String privateKey;
+  String? privateKey;
 
   // função para receber token do google vision
   Future<void> getToken() async {
@@ -115,22 +115,25 @@ class _TextOfImageState extends State<TextOfImage> {
 
   // função para tirar foto
   Future pickImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera, preferredCameraDevice: CameraDevice.front,);
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.camera,
+      preferredCameraDevice: CameraDevice.front,
+    );
 
     setState(() {
-      imageFile = File(pickedFile.path);
+      imageFile = File(pickedFile!.path);
     });
 
     base64Image = await converter();
   }
 
-  File imageFile;
+  File? imageFile;
 
   final picker = ImagePicker();
 
   // função para converter imagem para base64
   Future<String> converter() async {
-    List<int> imageBytes = imageFile.readAsBytesSync();
+    List<int> imageBytes = imageFile!.readAsBytesSync();
     String convertido = base64Encode(imageBytes);
     return convertido;
   }

@@ -1,28 +1,21 @@
 import 'dart:async';
 
 import 'package:brasil_fields/brasil_fields.dart';
-import 'package:elesson/activity_selection/block_selection_view.dart';
-import 'package:elesson/register/code_verify_view.dart';
 import 'package:elesson/register/student_model.dart';
 import 'package:elesson/share/my_twillio.dart';
-import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:twilio_phone_verify/twilio_phone_verify.dart';
 import '../share/header_widget.dart';
 
-/**
- * * Tela de inserção do número de celular para o recebimento do pin de acesso ao aplicativo.
- * ? O envio do SMS é feito usando a API do Twilio.
- */
+/// * Tela de inserção do número de celular para o recebimento do pin de acesso ao aplicativo.
+/// ? O envio do SMS é feito usando a API do Twilio.
 
-TwilioPhoneVerify _twilioPhoneVerify;
+late TwilioPhoneVerify _twilioPhoneVerify;
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-Student student;
-LoginQuery loginQuery;
+Student? student;
+late LoginQuery loginQuery;
 
 Future<void> sendCode(String phoneNumber) async {
   var result = await _twilioPhoneVerify.sendSmsCode('+55' + phoneNumber);
@@ -46,7 +39,7 @@ class SmsRegisterView extends StatefulWidget {
 
 class _SmsRegisterViewState extends State<SmsRegisterView> {
   final _phoneNumberController = TextEditingController();
-  String phoneNumber;
+  String? phoneNumber;
   String errorText = "";
   double opacity = 0;
 
@@ -123,35 +116,33 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
                 ButtonTheme(
                   minWidth: screenHeight < 823 ? 48 : 64,
                   height: screenHeight < 823 ? 48 : 64,
-                  child: OutlineButton(
-                    padding: const EdgeInsets.all(0),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(0, 0, 255, 0.2),
-                    ),
-                    color: Colors.white,
-                    textColor: const Color(0xFF0000FF),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: Color.fromRGBO(0, 0, 255, 0.2)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+                      textStyle: TextStyle(color: Color(0xFF0000FF)),
+                      backgroundColor: Colors.white,
+                      padding: EdgeInsets.all(8),
                     ),
                     child: ImageIcon(
                       AssetImage("assets/icons/chevron_right.png"),
                     ),
                     // removido _phoneNumberController.text.contains(phoneRegExp)
                     onPressed: () async {
-                      String numero_final = "${_phoneNumberController.text[1]}${_phoneNumberController.text[2]}${_phoneNumberController.text[5]}${_phoneNumberController.text[6]}${_phoneNumberController.text[7]}${_phoneNumberController.text[8]}${_phoneNumberController.text[9]}${_phoneNumberController.text[11]}${_phoneNumberController.text[12]}${_phoneNumberController.text[13]}${_phoneNumberController.text[14]}";
+                      String numeroFinal = "${_phoneNumberController.text[1]}${_phoneNumberController.text[2]}${_phoneNumberController.text[5]}${_phoneNumberController.text[6]}${_phoneNumberController.text[7]}${_phoneNumberController.text[8]}${_phoneNumberController.text[9]}${_phoneNumberController.text[11]}${_phoneNumberController.text[12]}${_phoneNumberController.text[13]}${_phoneNumberController.text[14]}";
                       if (_phoneNumberController.text.length == 15) {
                         loginQuery = await LoginQuery().searchStudent(false,
-                            phoneNumber: numero_final);
+                            phoneNumber: numeroFinal);
                         if (loginQuery.valid != false) {
                           if (loginQuery.student != null) {
-                            await sendCode(numero_final);
-                            Navigator.pushReplacementNamed(
-                                context, CodeVerifyView.routeName,
-                                arguments: loginQuery.student);
+                            await sendCode(numeroFinal);
+                            // Navigator.pushReplacementNamed(
+                            //     context, CodeVerifyView.routeName,
+                            //     arguments: loginQuery.student);
                           }
                         } else {
                           setState(() {
-                            errorText = loginQuery.error +
+                            errorText = loginQuery.error! +
                                 ".\nPor favor, tente novamente.";
                             opacity = 1;
                           });
@@ -241,7 +232,7 @@ class _SmsRegisterViewState extends State<SmsRegisterView> {
             fontWeight: FontWeight.w700,
           ),
           validator: (value) =>
-              value.length < 11 ? "Entre um número válido" : null,
+              value!.length < 11 ? "Entre um número válido" : null,
           onChanged: (value) {
             setState(() {
               phoneNumber = value;

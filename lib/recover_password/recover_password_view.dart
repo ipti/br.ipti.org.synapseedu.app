@@ -8,8 +8,8 @@ class RecoverPassword extends StatefulWidget {
 class _RecoverPasswordState extends State<RecoverPassword> {
   final _nameTemplateController = TextEditingController();
   final _emailTemplateController = TextEditingController();
-  String colegioValue;
-  String serieValue;
+  String? colegioValue;
+  String? serieValue;
 
 //Navigator.of(context).pop();
   @override
@@ -123,7 +123,7 @@ class _RecoverPasswordState extends State<RecoverPassword> {
           )),
           elevation: 16,
           style: TextStyle(color: Colors.black, fontSize: 20),
-          onChanged: (String newValue) {
+          onChanged: (String? newValue) {
             setState(() {
               colegioValue = newValue;
             });
@@ -164,7 +164,7 @@ class _RecoverPasswordState extends State<RecoverPassword> {
         )),
         elevation: 16,
         style: TextStyle(color: Colors.black),
-        onChanged: (String newValue) {
+        onChanged: (String? newValue) {
           setState(() {
             serieValue = newValue;
           });

@@ -12,8 +12,8 @@ class _RegisterViewState extends State<RegisterView> {
   final _passwordNameController = TextEditingController();
   //CRIAR TEXTCONTROLLERS PARA CADA ENTRADA
 
-  String colegioValue;
-  String serieValue;
+  String? colegioValue;
+  String? serieValue;
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +100,7 @@ class _RegisterViewState extends State<RegisterView> {
           )),
           elevation: 16,
           style: TextStyle(color: Colors.black, fontSize: 20),
-          onChanged: (String newValue) {
+          onChanged: (String? newValue) {
             setState(() {
               colegioValue = newValue;
             });
@@ -141,7 +141,7 @@ class _RegisterViewState extends State<RegisterView> {
         )),
         elevation: 16,
         style: TextStyle(color: Colors.black),
-        onChanged: (String newValue) {
+        onChanged: (String? newValue) {
           setState(() {
             serieValue = newValue;
           });

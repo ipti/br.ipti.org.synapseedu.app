@@ -14,15 +14,13 @@ Widget bottomNavigationBar(BuildContext context) {
           ButtonTheme(
             minWidth: buttonHeight,
             height: buttonHeight,
-            child: OutlineButton(
-              padding: EdgeInsets.all(8),
-              borderSide: BorderSide(
-                color: Color.fromRGBO(0, 0, 255, 1),
-              ),
-              color: Colors.white,
-              textColor: Color(0xFF0000FF),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
+            child: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: Color.fromRGBO(0, 0, 255, 1)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                textStyle: TextStyle(color: Color(0xFF0000FF)),
+                backgroundColor: Colors.white,
+                padding: EdgeInsets.all(8),
               ),
               child: Icon(
                 Icons.settings,
@@ -38,15 +36,13 @@ Widget bottomNavigationBar(BuildContext context) {
             ButtonTheme(
               minWidth: 259,
               height: buttonHeight,
-              child: OutlineButton(
-                padding: EdgeInsets.all(8),
-                borderSide: BorderSide(
-                  color: Color(0xFF00DC8C),
-                ),
-                color: Colors.white,
-                textColor: Color(0xFF00DC8C),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: Color(0xFF00DC8C)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+                  textStyle: TextStyle(color: Color(0xFF00DC8C)),
+                  backgroundColor: Colors.white,
+                  padding: EdgeInsets.all(8),
                 ),
                 child: Text(
                   'CONFIRMAR',
@@ -63,15 +59,13 @@ Widget bottomNavigationBar(BuildContext context) {
           ButtonTheme(
             minWidth: buttonHeight,
             height: buttonHeight,
-            child: OutlineButton(
-              padding: EdgeInsets.all(0),
-              borderSide: BorderSide(
-                color: Color.fromRGBO(0, 0, 255, 1),
-              ),
-              color: Colors.white,
-              textColor: Color(0xFF0000FF),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
+            child: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: Color.fromRGBO(0, 0, 255, 1)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+                textStyle: TextStyle(color: Color(0xFF0000FF)),
+                backgroundColor: Colors.white,
+                padding: EdgeInsets.all(8),
               ),
               child: true != true
                   ? Row(

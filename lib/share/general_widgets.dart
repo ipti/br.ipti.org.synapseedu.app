@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
+// import 'package:lottie/lottie.dart';
 import 'elesson_icon_lib_icons.dart';
-import 'global_variables.dart';
 
 Widget elessonCard(
-    {String backgroundImage,
-    String text,
-    double screenWidth,
-    Function onTap,
-    BuildContext context,
-    bool blockDone}) {
+    {required String backgroundImage,
+    required String text,
+    double? screenWidth,
+    Function? onTap,
+    BuildContext? context,
+    bool? blockDone}) {
   return GestureDetector(
     onTap: () {
-      Future<String> retorno = onTap(context);
+      Future<String>? retorno = onTap!(context);
     },
     child: Container(
       margin: EdgeInsets.all(2),
@@ -80,65 +79,12 @@ Widget loadingAnimation() {
   return Container(
     height: 100,
     width: 100,
-    child: Lottie.asset(
-      'assets/animations/loading.json',
-      width: 100,
-      height: 100,
-      fit: BoxFit.fill,
-    ),
+    // child: Lottie.asset(
+    //   'assets/animations/loading.json',
+    //   width: 100,
+    //   height: 100,
+    //   fit: BoxFit.fill,
+    // ),
   );
 }
 
-Widget initTitle({String text, double heightScreen, double bottomMargin}) {
-  return Container(
-    height: heightScreen * 0.12,
-    margin: EdgeInsets.only(bottom: bottomMargin == null ? 0 : bottomMargin),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      boxShadow: [
-        BoxShadow(
-          color: Color.fromRGBO(0, 0, 76, 0.1),
-          spreadRadius: 0.5,
-        ),
-      ],
-    ),
-    child: isDemo
-        ? Stack(
-            children: [
-              Positioned(
-                right: 10,
-                top: 10,
-                child: Text(
-                  'MODO DEMONSTRAÇÃO',
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Center(
-                child: Text(
-                  text,
-                  style: TextStyle(
-                    color: Color(0XFF00004C),
-                    fontWeight: FontWeight.bold,
-                    fontFamily: "ElessonIconLib",
-                    fontSize: heightScreen * 0.024,
-                  ),
-                ),
-              ),
-            ],
-          )
-        : Center(
-            child: Text(
-              text,
-              style: TextStyle(
-                color: Color(0XFF00004C),
-                fontWeight: FontWeight.bold,
-                fontFamily: "ElessonIconLib",
-                fontSize: heightScreen * 0.024,
-              ),
-            ),
-          ),
-  );
-}

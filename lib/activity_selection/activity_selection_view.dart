@@ -1,8 +1,7 @@
 // import 'package:elesson/share/turmas.dart';
+import 'package:elesson/app/feature/qrcode/qrcode_module.dart';
 import 'package:elesson/share/qr_code_reader.dart';
 import 'package:elesson/share/question_widgets.dart';
-import 'package:elesson/template_questoes/model.dart';
-import 'package:elesson/webview/headless_webview.dart';
 import 'package:flutter/material.dart';
 import 'package:elesson/share/api.dart';
 
@@ -22,23 +21,23 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   final _formKey = GlobalKey<FormState>();
 
 //<=====================================SELEÇÃO DE TURMAS E ALUNOS===========================================>
-  List classes = new List<dynamic>();
-  List students = new List<dynamic>();
+  List? classes = [];
+  List? students = [];
 
   String selectedNameClass = "Selecione Sua Turma";
   var selectedIdClass;
 
   String selectedNamestudents = "Selecionar aluno(a)";
   var selectedIdstudents;
-  bool valid;
+  bool? valid;
 
   bool checkStudent = true;
   bool checkDiscipline = true;
 
   //<=======================JOGAR AQUI O ID DO COBJET RECEBIDO===========================>
-  int cobjectId;
+  int? cobjectId;
 
-  var cobject = new List<dynamic>();
+  var cobject = [];
   var questionType;
 
   //<===================================JOGAR AQUI O ID DA ESCOLA=============================================>
@@ -150,10 +149,10 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
             width: MediaQuery.of(context).size.width * 0.9,
             height: MediaQuery.of(context).size.height * 0.5,
             child: ListView.builder(
-              itemCount: classes.length,
+              itemCount: classes!.length,
               itemBuilder: (context, index) {
-                String className = classes[index]["name"];
-                String classId = classes[index]["id"];
+                String className = classes![index]["name"];
+                String? classId = classes![index]["id"];
                 return GestureDetector(
                   onTap: () {
                     setState(() {
@@ -191,10 +190,10 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
             width: MediaQuery.of(context).size.width * 0.9,
             height: MediaQuery.of(context).size.height * 0.5,
             child: ListView.builder(
-              itemCount: students.length,
+              itemCount: students!.length,
               itemBuilder: (context, index) {
-                String studentName = students[index]["name"];
-                String studentId = students[index]["id"];
+                String studentName = students![index]["name"];
+                String? studentId = students![index]["id"];
                 return GestureDetector(
                   onTap: () {
                     setState(() {
@@ -277,7 +276,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   }
 
   //<===============================================================================>
-  String retorno = "Esperando Scanner...";
+  String? retorno = "Esperando Scanner...";
   @override
   Widget build(BuildContext context) {
     double heightScreen = MediaQuery.of(context).size.height;
@@ -331,12 +330,12 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    OutlineButton(
-                      highlightElevation: 5.0,
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(width: 24, color: Colors.red),
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
+                    OutlinedButton(
+                    //   highlightElevation: 5.0,
+                    //   shape: RoundedRectangleBorder(
+                    //     side: BorderSide(width: 24, color: Colors.red),
+                    //     borderRadius: BorderRadius.circular(5.0),
+                    //   ),
                       onPressed: () {
                         setState(() {
                           checkDiscipline = true;
@@ -345,13 +344,13 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                       },
                       child: Text('Português'),
                     ),
-                    OutlineButton(
-                      color: Colors.amber,
-                      highlightedBorderColor: Colors.red,
-                      highlightElevation: 5.0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
+                    OutlinedButton(
+                      // color: Colors.amber,
+                      // highlightedBorderColor: Colors.red,
+                      // highlightElevation: 5.0,
+                      // shape: RoundedRectangleBorder(
+                      //   borderRadius: BorderRadius.circular(5.0),
+                      // ),
                       onPressed: () {
                         setState(() {
                           checkDiscipline = true;
@@ -365,24 +364,12 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                 SizedBox(
                   height: 10.0,
                 ),
-                Text('Ou acompanhe os alunos'),
-                RaisedButton(
-                  textColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  onPressed: () => {
-                    Navigator.of(context).pushNamed(HeadlessWebView.routeName),
-                  },
-                  // child: Text('Relatórios'),
-                  child: Text('WebView'),
-                ),
                 SizedBox(
                   height: heightScreen / 7,
                 ),
                 Column(
                   children: [
-                    Text(retorno),
+                    Text(retorno!),
                     Container(
                       color: Colors.white,
                       height: widthScreen / 3,
@@ -394,7 +381,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
                               context,
                               new MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      new QrCodeReader()));
+                                      new QrCodeModule()));
                           print(
                               "---------------------------------------------------$retorno-----------------------------------------------------------");
                         },
@@ -419,7 +406,7 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
   }
 
   // FUNÇÃO PARA RECEBER OS DADOS DO COBJECT QUANDO A TURMA E O ALUNO FOR SELECIONADO
-  void redirectToQuestion(int cobjectIdIndex) {
+  void redirectToQuestion(int? cobjectIdIndex) {
     if (checkStudent == true && checkDiscipline == true) {
       // print(questionListTest == null);
       getCobjectList("1").then((response) {
@@ -427,26 +414,9 @@ class _ActivitySelectionFormState extends State<ActivitySelectionForm> {
         // print(questionListTest);
       });
       // print(cobjectList);
-      getCobject(cobjectIdIndex, context, questionListTest);
+      getCobject(cobjectIdIndex!, context, questionListTest);
     }
   }
 }
 
-class ScreenArguments {
-  List<Cobject> cobjectList;
-  List<String> cobjectIdList;
-  final int cobjectIdLength;
-  final int cobjectQuestionsLength;
-  final int questionIndex;
-  final String questionType;
-  final int cobjectIndex;
 
-  ScreenArguments(
-      this.cobjectList,
-      this.cobjectIdList,
-      this.cobjectIdLength,
-      this.cobjectQuestionsLength,
-      this.questionIndex,
-      this.questionType,
-      this.cobjectIndex);
-}
