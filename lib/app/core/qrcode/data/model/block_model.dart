@@ -18,7 +18,7 @@ class BlockModel {
       teacher: BlockValues.fromJson(json['teacher']),
       student: BlockValues.fromJson(json['student']),
       discipline: BlockValues.fromJson(json['discipline']),
-      tasks: json['tasks'].cast<int>(),
+      tasks: json['tasks'] != null ? (json['tasks'] as List<dynamic>).map((e) => int.parse(e.toString())).toList() : [],
       breakPoint: BreakPointModel.fromJson(json['break_point']),
     );
   }
