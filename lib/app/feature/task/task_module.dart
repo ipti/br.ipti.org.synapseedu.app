@@ -5,7 +5,7 @@ import 'package:elesson/app/core/task/data/datasource/performance_remote_datasou
 import 'package:elesson/app/core/task/data/model/task_model.dart';
 import 'package:elesson/app/core/task/data/repository/multimedia_repository_interface.dart';
 import 'package:elesson/app/core/task/domain/repository/multimedia_repository_impl.dart';
-import 'package:elesson/app/core/task/domain/usecase/get_multimedia_usecase.dart';
+import 'package:elesson/app/core/task/domain/usecase/Multimedia_usecase.dart';
 import 'package:elesson/app/feature/task/page/task_view_page.dart';
 import 'package:elesson/app/providers/block_provider.dart';
 import 'package:elesson/app/providers/userProvider.dart';
@@ -40,7 +40,7 @@ class _TaskModuleState extends State<TaskModule> {
   late IMultimediaRepository _multimediaRepository;
 
   late IPerformanceRepository _performanceRepository;
-  late GetMultimediaUseCase _getMultimediaUseCase;
+  late MultimediaUseCase _getMultimediaUseCase;
   late SendPerformanceUseCase _sendPerformanceUseCase;
 
   late ITaskRemoteDataSource _taskRemoteDataSource;
@@ -65,7 +65,7 @@ class _TaskModuleState extends State<TaskModule> {
 
     _multimediaRemoteDataSource = MultimediaRemoteDataSourceImpl(dio: dioAuthed);
     _multimediaRepository = MultimediaRepositoryImpl(multimediaRemoteDataSource: _multimediaRemoteDataSource);
-    _getMultimediaUseCase = GetMultimediaUseCase(multimediaRepository: _multimediaRepository);
+    _getMultimediaUseCase = MultimediaUseCase(multimediaRepository: _multimediaRepository);
 
     _performanceRemoteDataSource = PerformanceRemoteDatasource(dio: dioAuthed);
     _performanceRepository = PerformanceRepositoryImpl(performanceRemoteDataSource: _performanceRemoteDataSource);

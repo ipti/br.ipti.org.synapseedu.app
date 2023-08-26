@@ -1,10 +1,10 @@
 import 'package:elesson/app/core/task/data/model/element_model.dart';
-import 'package:elesson/app/core/task/domain/usecase/get_multimedia_usecase.dart';
+import 'package:elesson/app/core/task/domain/usecase/Multimedia_usecase.dart';
 import 'package:flutter/material.dart';
 
 class AudioMultimedia extends StatefulWidget {
   final ElementModel elementModel;
-  final GetMultimediaUseCase getMultimediaUseCase;
+  final MultimediaUseCase getMultimediaUseCase;
   const AudioMultimedia({Key? key, required this.elementModel, required this.getMultimediaUseCase}) : super(key: key);
 
   @override

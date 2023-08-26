@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
 import 'package:elesson/app/core/task/data/datasource/multimedia_remote_datasource.dart';
@@ -64,5 +65,23 @@ class MultimediaRepositoryImpl extends IMultimediaRepository{
     }
   }
 
+  @override
+  Future<Either<Failure, String>> getSoundByMultimediaId(int id) async {
+    try{
+      final sound = await multimediaRemoteDataSource.getSoundByMultimediaId(id);
+      return Right(sound);
+    } on Exception {
+      return Left(Failure("Erro ao obter o som"));
+    }
+  }
 
+  @override
+  Future<Either<Failure, Stream<Uint8List>>> downloadSound(String nameAudio) async {
+    try{
+      Stream<Uint8List> soundStream = await multimediaRemoteDataSource.downloadSound(nameAudio);
+      return Right(soundStream);
+    } on Exception {
+      return Left(Failure("Erro desconhecido"));
+    }
+  }
 }

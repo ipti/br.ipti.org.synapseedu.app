@@ -5,7 +5,7 @@ import 'package:elesson/app/core/task/data/model/element_model.dart';
 import 'package:elesson/app/core/task/data/model/task_model.dart';
 import 'package:elesson/app/core/task/domain/entity/ddrop_option_entity.dart';
 import 'package:elesson/app/core/task/domain/entity/screen_entity.dart';
-import 'package:elesson/app/core/task/domain/usecase/get_multimedia_usecase.dart';
+import 'package:elesson/app/core/task/domain/usecase/Multimedia_usecase.dart';
 import 'package:elesson/app/feature/task/widgets/audio_multimedia.dart';
 import 'package:elesson/app/feature/task/widgets/ddrop/ddrop_sender.dart';
 import 'package:elesson/app/feature/task/widgets/ddrop/ddrop_target.dart';
@@ -18,6 +18,7 @@ import 'package:elesson/app/util/enums/task_types.dart';
 import 'package:elesson/app/util/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:soundpool/soundpool.dart';
 import 'package:wakelock/wakelock.dart';
 import '../../../core/task/data/model/performance_model.dart';
 import '../../../core/task/domain/entity/user_answer.dart';
@@ -25,15 +26,21 @@ import '../../../core/task/domain/usecase/send_performance_usecase.dart';
 import '../../../util/failures/failures.dart';
 
 class TaskViewController extends ChangeNotifier {
-  final GetMultimediaUseCase getMultimediaUseCase;
+  final MultimediaUseCase getMultimediaUseCase;
   final SendPerformanceUseCase sendPerformanceUseCase;
   final TaskModel task;
   final int userId;
 
-  TaskViewController({required this.getMultimediaUseCase, required this.sendPerformanceUseCase,required this.task, required this.userId});
+  TaskViewController({required this.getMultimediaUseCase, required this.sendPerformanceUseCase, required this.task, required this.userId}) {
+    soundIdByMultimediaId = {};
+    soundpool = Soundpool.fromOptions(options: SoundpoolOptions(maxStreams: 3));
+  }
 
   late DateTime performanceTime;
   late ComponentModel correctAnswer;
+
+  static late Map<int, int> soundIdByMultimediaId;
+  static late Soundpool soundpool;
 
   /*
   * STATUS DO BOTÃO DE SUBMISSÃO
@@ -61,8 +68,6 @@ class TaskViewController extends ChangeNotifier {
     );
     notifyListeners();
   }
-
-
 
   /*
   * ENTIDADE RESPONSAVEL POR ARMAZENAR OS WIDGETS DA TELA
@@ -163,11 +168,20 @@ class TaskViewController extends ChangeNotifier {
   }
 
   List<Widget> buildWidgetFromElement(ComponentModel componentModel, ElementModel element) {
+    ElementModel audioElement = componentModel.elements!.singleWhere((element) => element.type_id == MultimediaTypes.audio.type_id,orElse: () => ElementModel());
+    int? audioMultimediaId = audioElement!=ElementModel() ? audioElement.multimedia_id : null;
+
     switch (element.type_id) {
       case 1:
         if (componentModel.elements!.length == 1) {
           element.mainElement = true;
-          return [TextMultimedia(elementModel: element, getMultimediaUseCase: getMultimediaUseCase)];
+          return [
+            TextMultimedia(
+              elementModel: element,
+              getMultimediaUseCase: getMultimediaUseCase,
+              audioCallback: () => getAndPlaySoundByMultimediaId(audioMultimediaId),
+            )
+          ];
         }
         return [];
       case 2:
@@ -175,8 +189,11 @@ class TaskViewController extends ChangeNotifier {
         if (componentModel.elements!.any((element) => element.type_id == MultimediaTypes.text.type_id)) {
           return [
             TextMultimedia(
-                elementModel: componentModel.elements!.singleWhere((element) => element.type_id == MultimediaTypes.text.type_id),
-                getMultimediaUseCase: getMultimediaUseCase),
+              elementModel: componentModel.elements!.singleWhere((element) => element.type_id == MultimediaTypes.text.type_id),
+              getMultimediaUseCase: getMultimediaUseCase,
+              audioCallback: () => getAndPlaySoundByMultimediaId(audioMultimediaId),
+              hasAudio: audioMultimediaId != null,
+            ),
             ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase),
           ];
         }
@@ -220,21 +237,9 @@ class TaskViewController extends ChangeNotifier {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ImageMultimedia(
-                    componentModel: taskModel.body!.components[0],
-                    getMultimediaUseCase: getMultimediaUseCase,
-                    bodyElement: true,
-                    taskViewController: this),
-                ImageMultimedia(
-                    componentModel: taskModel.body!.components[1],
-                    getMultimediaUseCase: getMultimediaUseCase,
-                    bodyElement: true,
-                    taskViewController: this),
-                ImageMultimedia(
-                    componentModel: taskModel.body!.components[2],
-                    getMultimediaUseCase: getMultimediaUseCase,
-                    bodyElement: true,
-                    taskViewController: this),
+                ImageMultimedia(componentModel: taskModel.body!.components[0], getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this),
+                ImageMultimedia(componentModel: taskModel.body!.components[1], getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this),
+                ImageMultimedia(componentModel: taskModel.body!.components[2], getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this),
               ],
             ),
           ),
@@ -361,12 +366,9 @@ class TaskViewController extends ChangeNotifier {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    DdropTarget(
-                        component: taskModel.body!.components[3], getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 0),
-                    DdropTarget(
-                        component: taskModel.body!.components[4], getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 1),
-                    DdropTarget(
-                        component: taskModel.body!.components[5], getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 2),
+                    DdropTarget(component: taskModel.body!.components[3], getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 0),
+                    DdropTarget(component: taskModel.body!.components[4], getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 1),
+                    DdropTarget(component: taskModel.body!.components[5], getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 2),
                   ],
                 ),
               ],
@@ -412,5 +414,11 @@ class TaskViewController extends ChangeNotifier {
         activityBody,
       ],
     );
+  }
+
+  Future getAndPlaySoundByMultimediaId(int? multimediaId) async {
+    print("getAndPlaySoundByMultimediaId");
+    if(multimediaId == null) return;
+    await getMultimediaUseCase.getAndPlaySoundByMultimediaId(multimediaId, soundIdByMultimediaId, soundpool);
   }
 }

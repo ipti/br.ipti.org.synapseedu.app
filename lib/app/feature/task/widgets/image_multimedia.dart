@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:dartz/dartz.dart' as Dartz;
 import 'package:elesson/app/core/task/data/model/component_model.dart';
 import 'package:elesson/app/core/task/data/model/element_model.dart';
-import 'package:elesson/app/core/task/domain/usecase/get_multimedia_usecase.dart';
+import 'package:elesson/app/core/task/domain/usecase/Multimedia_usecase.dart';
 import 'package:elesson/app/feature/task/controller/task_view_controller.dart';
 import 'package:elesson/app/util/enums/multimedia_types.dart';
 import 'package:elesson/app/util/failures/failures.dart';
@@ -14,7 +14,7 @@ import 'shimmer_load_multimedia.dart';
 class ImageMultimedia extends StatefulWidget {
   final bool bodyElement;
   final ComponentModel componentModel;
-  final GetMultimediaUseCase getMultimediaUseCase;
+  final MultimediaUseCase getMultimediaUseCase;
   final TaskViewController? taskViewController;
 
   ImageMultimedia({Key? key, required this.componentModel, required this.getMultimediaUseCase, this.bodyElement = false, this.taskViewController}) : super(key: key);

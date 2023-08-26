@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart' as Dartz;
 import 'package:elesson/app/core/task/data/model/component_model.dart';
 import 'package:elesson/app/core/task/data/model/element_model.dart';
 import 'package:elesson/app/core/task/domain/entity/ddrop_option_entity.dart';
-import 'package:elesson/app/core/task/domain/usecase/get_multimedia_usecase.dart';
+import 'package:elesson/app/core/task/domain/usecase/Multimedia_usecase.dart';
 import 'package:elesson/app/feature/task/controller/task_view_controller.dart';
 import 'package:elesson/app/util/failures/failures.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ import 'ddrop_shimmer_modal.dart';
 
 class DdropTarget extends StatefulWidget {
   final ComponentModel component;
-  final GetMultimediaUseCase getMultimediaUseCase;
+  final MultimediaUseCase getMultimediaUseCase;
   final TaskViewController taskController;
   final int position;
 
