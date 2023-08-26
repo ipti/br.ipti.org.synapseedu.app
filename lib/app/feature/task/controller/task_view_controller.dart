@@ -32,14 +32,14 @@ class TaskViewController extends ChangeNotifier {
   final int userId;
 
   TaskViewController({required this.getMultimediaUseCase, required this.sendPerformanceUseCase, required this.task, required this.userId}) {
-    soundIdByMultimediaId = {};
-    soundpool = Soundpool.fromOptions(options: SoundpoolOptions(maxStreams: 3));
+    soundIdByMultimediaId = Map<int, List<int>>();
+    soundpool = Soundpool.fromOptions(options: SoundpoolOptions(maxStreams: 1,androidOptions: SoundpoolOptionsAndroid(),streamType: StreamType.music));
   }
 
   late DateTime performanceTime;
   late ComponentModel correctAnswer;
 
-  static late Map<int, int> soundIdByMultimediaId;
+  static late Map<int, List<int>> soundIdByMultimediaId;
   static late Soundpool soundpool;
 
   /*
