@@ -14,7 +14,6 @@ class TaskViewPage extends StatefulWidget {
 }
 
 class _TaskViewPageState extends State<TaskViewPage> {
-
   @override
   void initState() {
     super.initState();
@@ -27,9 +26,7 @@ class _TaskViewPageState extends State<TaskViewPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: TemplateSlider(
-          taskViewController: widget.taskViewController,
-        ),
+        body: TemplateSlider(taskViewController: widget.taskViewController),
       ),
     );
   }

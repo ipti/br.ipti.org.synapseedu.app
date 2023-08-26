@@ -91,25 +91,27 @@ class _TemplateSliderState extends State<TemplateSlider> {
             : Stack(
                 children: [
                   TopScreen(headerWidgets: widget.taskViewController.screenEntity.headerWidgets),
-                  SingleChildScrollView(
-                    physics: NeverScrollableScrollPhysics(),
-                    child: GestureDetector(
-                      onPanUpdate: (details) {
-                        if (details.delta.dy > 0) {
-                          setState(() {
-                            boxResponder = Colors.white;
-                            colorResponder = Color(0xFF0000FF);
-                            showSecondScreen = false;
-                          });
-                        }
-                      },
-                      child: AnimatedContainer(
-                        duration: Duration(milliseconds: 250),
-                        margin: showSecondScreen == true ? EdgeInsets.only(bottom: 0) : EdgeInsets.only(top: size.height),
-                        decoration: BoxDecoration(color: Colors.white),
-                        width: size.width,
-                        height: size.height - 90,
-                        child: widget.taskViewController.screenEntity.bodyWidget,
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 250),
+                    decoration: BoxDecoration(color: Colors.white),
+                    margin: showSecondScreen == true ? EdgeInsets.only(bottom: 0) : EdgeInsets.only(top: size.height),
+                    child: SingleChildScrollView(
+                      physics: NeverScrollableScrollPhysics(),
+                      child: GestureDetector(
+                        onPanUpdate: (details) {
+                          if (details.delta.dy > 0) {
+                            setState(() {
+                              boxResponder = Colors.white;
+                              colorResponder = Color(0xFF0000FF);
+                              showSecondScreen = false;
+                            });
+                          }
+                        },
+                        child: Container(
+                          width: size.width,
+                          height: size.height - 90,
+                          child: widget.taskViewController.screenEntity.bodyWidget,
+                        ),
                       ),
                     ),
                   )
@@ -148,38 +150,40 @@ class _TemplateSliderState extends State<TemplateSlider> {
             SizedBox(width: 10),
             ConfirmButtonWidget(taskViewController: widget.taskViewController),
             SizedBox(width: 10),
-            showButtonResponse ? Container() : showSecondScreen == false
-                ? ButtonTheme(
-                    minWidth: buttonWidth,
-                    height: buttonHeight,
-                    child: MaterialButton(
-                      padding: EdgeInsets.zero,
-                      color: boxResponder,
-                      textColor: Color(0xFF0000FF),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                        side: BorderSide(color: Color.fromRGBO(0, 0, 255, 0.2)),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            "RESPONDER",
-                            // widget.isTextTemplate ? 'VER MAIS   ' : 'RESPONDER',
-                            style: TextStyle(color: colorResponder, fontSize: fonteDaLetra, fontWeight: FontWeight.w900),
+            showButtonResponse
+                ? Container()
+                : showSecondScreen == false
+                    ? ButtonTheme(
+                        minWidth: buttonWidth,
+                        height: buttonHeight,
+                        child: MaterialButton(
+                          padding: EdgeInsets.zero,
+                          color: boxResponder,
+                          textColor: Color(0xFF0000FF),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: Color.fromRGBO(0, 0, 255, 0.2)),
                           ),
-                          Icon(Icons.keyboard_arrow_down, size: 40, color: colorResponder),
-                        ],
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          boxResponder = Color(0xFF0000FF);
-                          colorResponder = Colors.white;
-                          showSecondScreen = !showSecondScreen;
-                        });
-                      },
-                    ),
-                  )
-                : backButton(buttonHeight),
+                          child: Row(
+                            children: [
+                              Text(
+                                "RESPONDER",
+                                // widget.isTextTemplate ? 'VER MAIS   ' : 'RESPONDER',
+                                style: TextStyle(color: colorResponder, fontSize: fonteDaLetra, fontWeight: FontWeight.w900),
+                              ),
+                              Icon(Icons.keyboard_arrow_down, size: 40, color: colorResponder),
+                            ],
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              boxResponder = Color(0xFF0000FF);
+                              colorResponder = Colors.white;
+                              showSecondScreen = !showSecondScreen;
+                            });
+                          },
+                        ),
+                      )
+                    : backButton(buttonHeight),
           ],
         ),
       ),

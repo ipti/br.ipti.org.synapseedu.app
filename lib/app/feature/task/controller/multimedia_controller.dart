@@ -3,7 +3,9 @@ import 'package:dio/dio.dart';
 class MultimediaController {
   Dio dio;
 
-  MultimediaController({required this.dio});
+  MultimediaController({required this.dio}){
+
+  }
 
   Future<List<int>> getBytesImage(String name) async {
     Response response = await dio.post<List<int>>("/multimedia/download/image", data: {"name": name}, options: Options(responseType: ResponseType.bytes));
@@ -19,4 +21,6 @@ class MultimediaController {
     Response response = await dio.get('/multimedia/text/$multimediaID');
     return response.data['text']['description'];
   }
+
+
 }
