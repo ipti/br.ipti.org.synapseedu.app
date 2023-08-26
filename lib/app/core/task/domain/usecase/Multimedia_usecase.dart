@@ -20,49 +20,49 @@ class MultimediaUseCase {
     return await multimediaRepository.getBytesByMultimediaId(id);
   }
 
-  Future<Either<Failure, void>> getAndPlaySoundByMultimediaId(int multimediaId, Map<int, List<int>> soundIdByMultimediaId, Soundpool soundpool) async {
+  int cont = 0;
+  bool audioBlocked = false;
+
+  Future<Either<Failure, void>> getAndPlaySoundByMultimediaId(int multimediaId, Map<int, int> soundIdByMultimediaId, Soundpool soundpool) async {
+    if(audioBlocked) return Left(Failure("Audio bloqueado"));
+    audioBlocked = true;
+    cont++;
 
     if (soundIdByMultimediaId[multimediaId] == null) {
-      soundIdByMultimediaId[multimediaId] = List.empty(growable: true);
       Either<Failure, String> audioString = await multimediaRepository.getSoundByMultimediaId(multimediaId);
 
       audioString.fold((l) => l, (r) async {
         Either<Failure, Stream<Uint8List>> resStreamAudio = await multimediaRepository.downloadSound(r);
         resStreamAudio.fold((l) => l, (stream) async {
-          await for (final element in stream) {
-            int soundId = await soundpool.loadUint8List(element);
-            if (soundId > -1) {
-              soundIdByMultimediaId[multimediaId]!.add(soundId);
-            }
-          }
-          playSound(multimediaId, soundIdByMultimediaId, soundpool);
-          print("Play Without Cache");
+          Uint8List bytes = Uint8List.fromList([]);
+          await for (final element in stream) bytes = Uint8List.fromList([...bytes, ...element]);
+          int soundId = await soundpool.loadUint8List(bytes);
+          if (soundId > -1) soundIdByMultimediaId[multimediaId] = soundId;
+          await playSound(multimediaId, soundIdByMultimediaId, soundpool);
+          audioBlocked = false;
         });
       });
     } else {
-      playSound(multimediaId, soundIdByMultimediaId, soundpool);
-      print("PLAY WITH CACHE");
+      await playSound(multimediaId, soundIdByMultimediaId, soundpool);
+      audioBlocked = false;
+
     }
+
 
     return Left(Failure("Erro desconhecido"));
   }
 
-  Future<void> playSound(int multimediaId, Map<int, List<int>> soundIdByMultimediaId, Soundpool soundpool) async {
-    print(soundIdByMultimediaId);
-    if(soundIdByMultimediaId[multimediaId] == null) return;
-
-    // await soundIdByMultimediaId[multimediaId].forEach((element) { });
-    for(int i = 0 ; i < soundIdByMultimediaId[multimediaId]!.length ; i++){
-      print("play");
-      await soundpool.play(soundIdByMultimediaId[multimediaId]![i]);
-    }
-
-    // soundIdByMultimediaId[multimediaId]!.forEach((soundId) async {
-    //   soundpool.play(soundId);
-    //   print("play");
-    //   Future.delayed(Duration(seconds: 2));
-    // });
-    //
+  Future<void> playSound(int multimediaId, Map<int, int> soundIdByMultimediaId, Soundpool soundpool) async {
+    if (soundIdByMultimediaId[multimediaId] == null) return;
+    int streamId = await soundpool.play(soundIdByMultimediaId[multimediaId]!));
+    soundpool.onPlayerStateChanged.listen((event) {
+      if (event == null) return;
+      if (event == SoundpoolPlayerState.STOPPED) {
+        soundpool.stop(streamId);
+        soundpool.dispose();
+        soundIdByMultimediaId.remove(multimediaId);
+      }
+    });
     return;
   }
 
