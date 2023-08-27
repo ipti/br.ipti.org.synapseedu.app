@@ -20,45 +20,18 @@ class MultimediaUseCase {
     return await multimediaRepository.getBytesByMultimediaId(id);
   }
 
-  int cont = 0;
-  bool audioBlocked = false;
-
-  Future<Either<Failure, void>> getAndPlaySoundByMultimediaId(int multimediaId, Map<int, int> soundIdByMultimediaId, Soundpool soundpool) async {
-    if(audioBlocked) return Left(Failure("Audio bloqueado"));
-    audioBlocked = true;
-    cont++;
-
-    if (soundIdByMultimediaId[multimediaId] == null) {
-      Either<Failure, String> audioString = await multimediaRepository.getSoundByMultimediaId(multimediaId);
-
-      audioString.fold((l) => l, (r) async {
-        Either<Failure, Stream<Uint8List>> resStreamAudio = await multimediaRepository.downloadSound(r);
-        resStreamAudio.fold((l) => l, (stream) async {
-          Uint8List bytes = Uint8List.fromList([]);
-          await for (final element in stream) bytes = Uint8List.fromList([...bytes, ...element]);
-          int soundId = await soundpool.loadUint8List(bytes);
-          if (soundId > -1) soundIdByMultimediaId[multimediaId] = soundId;
-          await playSound(multimediaId, soundIdByMultimediaId, soundpool);
-          audioBlocked = false;
-        });
+  Future<Either<Failure, Uint8List>> getSoundByMultimediaId(int multimediaId) async {
+    Either<Failure, String> audioString = await multimediaRepository.getSoundByMultimediaId(multimediaId);
+    return await audioString.fold((l) => Left(l), (r) async {
+      Either<Failure, Stream<Uint8List>> resStreamAudio = await multimediaRepository.downloadSound(r);
+      return await resStreamAudio.fold((l) => Left(l), (stream) async {
+        Uint8List bytes = Uint8List.fromList([]);
+        await for (final element in stream) bytes = Uint8List.fromList([...bytes, ...element]);
+        return Right(bytes);
       });
-    } else {
-      await playSound(multimediaId, soundIdByMultimediaId, soundpool);
-      audioBlocked = false;
-
-    }
-
-
-    return Left(Failure("Erro desconhecido"));
+    });
   }
 
-  Future<void> playSound(int multimediaId, Map<int, int> soundIdByMultimediaId, Soundpool soundpool) async {
-    if (soundIdByMultimediaId[multimediaId] == null) return;
-    int streamId = await soundpool.play(soundIdByMultimediaId[multimediaId]!);
-    return;
-  }
-
-  //read Text Of Image
   Future<Either<Failure, String>> readTextOfImage() async {
     return await multimediaRepository.readTextOfImage();
   }

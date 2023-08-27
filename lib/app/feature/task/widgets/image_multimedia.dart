@@ -60,7 +60,7 @@ class _ImageMultimediaState extends State<ImageMultimedia> {
                   border: Border.all(width: 2, color: Color.fromRGBO(110, 114, 145, 0.2)),
                   image: DecorationImage(
                     image: MemoryImage(imageData),
-                    fit: BoxFit.fitWidth,
+                    fit: BoxFit.scaleDown,
                   ),
                 ),
               );
@@ -80,7 +80,8 @@ class _ImageMultimediaState extends State<ImageMultimedia> {
                       border: Border.all(width: 2, color: widget.componentModel == value ? Color(0xFF0000FF) : Color.fromRGBO(110, 114, 145, 0.2)),
                       image: DecorationImage(
                         image: MemoryImage(imageData),
-                        fit: BoxFit.fitWidth,
+                        fit: BoxFit.scaleDown,
+                        scale: 2,
                       ),
                     ),
                   ),

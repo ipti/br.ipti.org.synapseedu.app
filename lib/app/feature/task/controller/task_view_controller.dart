@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dartz/dartz.dart';
 import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/app/core/task/data/model/component_model.dart';
@@ -168,22 +170,19 @@ class TaskViewController extends ChangeNotifier {
   }
 
   List<Widget> buildWidgetFromElement(ComponentModel componentModel, ElementModel element) {
-    ElementModel audioElement = componentModel.elements!.singleWhere((element) => element.type_id == MultimediaTypes.audio.type_id,orElse: () => ElementModel());
-    int? audioMultimediaId = audioElement!=ElementModel() ? audioElement.multimedia_id : null;
+    ElementModel audioElement = componentModel.elements!.singleWhere((element) => element.type_id == MultimediaTypes.audio.type_id, orElse: () => ElementModel());
+    int? audioMultimediaId = audioElement != ElementModel() ? audioElement.multimedia_id : null;
 
     switch (element.type_id) {
       case 1:
-        if (componentModel.elements!.length == 1) {
-          element.mainElement = true;
-          return [
-            TextMultimedia(
-              elementModel: element,
-              getMultimediaUseCase: getMultimediaUseCase,
-              audioCallback: () => getAndPlaySoundByMultimediaId(audioMultimediaId),
-            )
-          ];
-        }
-        return [];
+        element.mainElement = true;
+        return [
+          TextMultimedia(
+            elementModel: element,
+            getMultimediaUseCase: getMultimediaUseCase,
+            audioCallback: () => playSoundByMultimediaId(audioMultimediaId),
+          )
+        ];
       case 2:
         // element.mainElement = true;
         if (componentModel.elements!.any((element) => element.type_id == MultimediaTypes.text.type_id)) {
@@ -191,7 +190,7 @@ class TaskViewController extends ChangeNotifier {
             TextMultimedia(
               elementModel: componentModel.elements!.singleWhere((element) => element.type_id == MultimediaTypes.text.type_id),
               getMultimediaUseCase: getMultimediaUseCase,
-              audioCallback: () => getAndPlaySoundByMultimediaId(audioMultimediaId),
+              audioCallback: () => playSoundByMultimediaId(audioMultimediaId),
               hasAudio: audioMultimediaId != null,
             ),
             ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase),
@@ -222,9 +221,9 @@ class TaskViewController extends ChangeNotifier {
     taskModel.body!.components.forEach((component) => component.elements!.first.mainElement = true);
     TemplateTypes templateType = TemplateTypes.values[taskModel.template_id! - 1];
 
-    Widget subTitulo = taskModel.header!.components.last.elements!.last.type_id == MultimediaTypes.text.type_id
-        ? TextMultimedia(elementModel: taskModel.header!.components.last.elements!.last, getMultimediaUseCase: getMultimediaUseCase)
-        : TextModalInvisible();
+    List<Widget> subTitulo = taskModel.header!.components.last.elements!.last.type_id == MultimediaTypes.text.type_id
+        ? [TextMultimedia(elementModel: taskModel.header!.components.last.elements!.last, getMultimediaUseCase: getMultimediaUseCase), Divider(height: 0, thickness: 1, color: Colors.grey.withOpacity(0.2))]
+        : [];
 
     late Widget activityBody;
 
@@ -405,20 +404,33 @@ class TaskViewController extends ChangeNotifier {
     screenEntity.bodyWidget = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        subTitulo,
-        Divider(
-          height: 0,
-          thickness: 1,
-          color: Colors.grey.withOpacity(0.2),
-        ),
+        ...subTitulo,
         activityBody,
       ],
     );
   }
 
-  Future getAndPlaySoundByMultimediaId(int? multimediaId) async {
-    print("getAndPlaySoundByMultimediaId");
-    if(multimediaId == null) return;
-    await getMultimediaUseCase.getAndPlaySoundByMultimediaId(multimediaId, soundIdByMultimediaId, soundpool);
+  // ==================================================================================================== SOUND
+  AudioStreamControl? streamControl;
+
+  Future playSoundByMultimediaId(int? multimediaId) async {
+    if (multimediaId == null) return;
+    if (streamControl != null && streamControl!.playing) await soundpool.stop(streamControl!.stream);
+    if (soundIdByMultimediaId[multimediaId] == null) {
+      Either<Failure, Uint8List> res = await getMultimediaUseCase.getSoundByMultimediaId(multimediaId);
+      res.fold((l) => null, (r) async {
+        int soundId = await soundpool.loadUint8List(r);
+        if (soundId > -1) soundIdByMultimediaId[multimediaId] = soundId;
+        await playSound(multimediaId);
+      });
+    } else {
+      await playSound(multimediaId);
+    }
+  }
+
+  Future<void> playSound(int multimediaId) async {
+    if (soundIdByMultimediaId[multimediaId] == null) return;
+    streamControl = await soundpool.playWithControls(soundIdByMultimediaId[multimediaId]!);
+    return;
   }
 }
