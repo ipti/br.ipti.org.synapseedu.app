@@ -54,15 +54,7 @@ class MultimediaUseCase {
 
   Future<void> playSound(int multimediaId, Map<int, int> soundIdByMultimediaId, Soundpool soundpool) async {
     if (soundIdByMultimediaId[multimediaId] == null) return;
-    int streamId = await soundpool.play(soundIdByMultimediaId[multimediaId]!));
-    soundpool.onPlayerStateChanged.listen((event) {
-      if (event == null) return;
-      if (event == SoundpoolPlayerState.STOPPED) {
-        soundpool.stop(streamId);
-        soundpool.dispose();
-        soundIdByMultimediaId.remove(multimediaId);
-      }
-    });
+    int streamId = await soundpool.play(soundIdByMultimediaId[multimediaId]!);
     return;
   }
 
