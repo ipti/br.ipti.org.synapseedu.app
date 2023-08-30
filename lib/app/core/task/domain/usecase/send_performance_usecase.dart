@@ -12,7 +12,7 @@ class SendPerformanceUseCase {
 
   SendPerformanceUseCase({required this.performanceRepository});
 
-  Future<Either<Failure, Performance>> call({String correctAnswerPre = "",required TaskModel task, required UserAnswer userAnswer}) async {
+  Future<Either<Failure, bool>> call({String correctAnswerPre = "",required TaskModel task, required UserAnswer userAnswer}) async {
     var metaData = MetaDataModel.generate(task: task, userAnswer: userAnswer);
 
     DateTime tempoAgora = DateTime.now();
@@ -29,13 +29,16 @@ class SendPerformanceUseCase {
     switch (task.template_id) {
       case 1:
         performance.isCorrect = task.body!.components.first.id == userAnswer.AnswerMte.id;
-        return await performanceRepository.sendPerformanceMTE(performance);
+        await performanceRepository.sendPerformanceMTE(performance);
+        return performance.isCorrect ? Right(true) : Left(Failure('Resposta incorreta'));
       case 2:
         performance.isCorrect = correctAnswerPre.toUpperCase() == userAnswer.AnswerPre.toUpperCase();
-        return await performanceRepository.sendPerformancePRE(performance);
+        await performanceRepository.sendPerformancePRE(performance);
+        return performance.isCorrect ? Right(true) : Left(Failure('Resposta incorreta'));
       case 3:
         performance.isCorrect = (metaData as MetaDataModelAEL).performanceStatus;
-        return await performanceRepository.sendPerformanceAEL(performance);
+        await performanceRepository.sendPerformanceAEL(performance);
+        return performance.isCorrect ? Right(true) : Left(Failure('Resposta incorreta'));
       default:
         return Left(Failure('Tipo de tarefa não suportado'));
     }

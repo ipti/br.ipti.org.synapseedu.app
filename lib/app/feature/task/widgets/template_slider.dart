@@ -148,7 +148,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
               ),
             ),
             SizedBox(width: 10),
-            ConfirmButtonWidget(taskViewController: widget.taskViewController),
+            ConfirmButtonWidget(taskViewController: widget.taskViewController, soundpool: widget.taskViewController.soundpool),
             SizedBox(width: 10),
             showButtonResponse
                 ? Container()

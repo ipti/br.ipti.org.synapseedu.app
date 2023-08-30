@@ -12,6 +12,7 @@ import 'package:elesson/app/providers/userProvider.dart';
 import 'package:elesson/app/util/network/dio_authed/dio_authed.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:soundpool/soundpool.dart';
 import '../../core/task/data/datasource/task_remote_datasource.dart';
 import '../../core/task/data/repository/performance_repository_interface.dart';
 import '../../core/task/data/repository/task_repository_interface.dart';
@@ -50,6 +51,8 @@ class _TaskModuleState extends State<TaskModule> {
   late TaskViewController _taskViewController;
   late TaskModel task;
 
+  late Soundpool soundpool;
+
   @override
   void initState() {
     super.initState();
@@ -70,6 +73,8 @@ class _TaskModuleState extends State<TaskModule> {
     _performanceRemoteDataSource = PerformanceRemoteDatasource(dio: dioAuthed);
     _performanceRepository = PerformanceRepositoryImpl(performanceRemoteDataSource: _performanceRemoteDataSource);
     _sendPerformanceUseCase = SendPerformanceUseCase(performanceRepository: _performanceRepository);
+
+    soundpool = Soundpool.fromOptions(options: SoundpoolOptions(streamType: StreamType.music));
   }
 
   void loadNextTask() async {
@@ -84,7 +89,6 @@ class _TaskModuleState extends State<TaskModule> {
 
   Future<void> preparingTask() async {
     int userId = Provider.of<UserProvider>(context, listen: false).user.id;
-    BlockProvider blockProvider = Provider.of<BlockProvider>(context, listen: false);
     if (widget.taskId != null) {
       Dartz.Either<Failure, TaskModel> res = await _getTaskUseCase.getTaskById(widget.taskId!);
       res.fold(
@@ -93,8 +97,9 @@ class _TaskModuleState extends State<TaskModule> {
       );
     }
     _taskViewController = TaskViewController(
-      getMultimediaUseCase: _getMultimediaUseCase,
       sendPerformanceUseCase: _sendPerformanceUseCase,
+      getMultimediaUseCase: _getMultimediaUseCase,
+      soundpool: soundpool,
       userId: userId,
       task: task,
     );

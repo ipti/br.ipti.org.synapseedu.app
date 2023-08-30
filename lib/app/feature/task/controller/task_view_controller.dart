@@ -32,17 +32,18 @@ class TaskViewController extends ChangeNotifier {
   final SendPerformanceUseCase sendPerformanceUseCase;
   final TaskModel task;
   final int userId;
+  final Soundpool soundpool;
 
-  TaskViewController({required this.getMultimediaUseCase, required this.sendPerformanceUseCase, required this.task, required this.userId}) {
+
+  TaskViewController({required this.getMultimediaUseCase, required this.sendPerformanceUseCase, required this.task, required this.userId, required this.soundpool}) {
     soundIdByMultimediaId = Map<int, int>();
-    soundpool = Soundpool.fromOptions(options: SoundpoolOptions(streamType: StreamType.music));
+
   }
 
   late DateTime performanceTime;
   late ComponentModel correctAnswer;
 
   static late Map<int, int> soundIdByMultimediaId;
-  static late Soundpool soundpool;
 
   /*
   * STATUS DO BOTÃO DE SUBMISSÃO
@@ -53,7 +54,7 @@ class TaskViewController extends ChangeNotifier {
 
   Future<void> sendPerformance(int blockid) async {
     task.block_id = blockid;
-    Either<Failure, Performance> res = await sendPerformanceUseCase.call(
+    Either<Failure, bool> res = await sendPerformanceUseCase.call(
       task: task,
       correctAnswerPre: correctAnswerPre,
       userAnswer: UserAnswer(
@@ -66,7 +67,7 @@ class TaskViewController extends ChangeNotifier {
     );
     res.fold(
       (l) => _submitButtonStatus = SubmitButtonStatus.Error,
-      (r) => r.isCorrect ? _submitButtonStatus = SubmitButtonStatus.Success : _submitButtonStatus = SubmitButtonStatus.Error,
+      (r) => r ? _submitButtonStatus = SubmitButtonStatus.Success : _submitButtonStatus = SubmitButtonStatus.Error,
     );
     notifyListeners();
   }
@@ -222,24 +223,27 @@ class TaskViewController extends ChangeNotifier {
     TemplateTypes templateType = TemplateTypes.values[taskModel.template_id! - 1];
 
     List<Widget> subTitulo = taskModel.header!.components.last.elements!.last.type_id == MultimediaTypes.text.type_id
-        ? [TextMultimedia(elementModel: taskModel.header!.components.last.elements!.last, getMultimediaUseCase: getMultimediaUseCase), Divider(height: 0, thickness: 1, color: Colors.grey.withOpacity(0.2))]
+        ? [
+            TextMultimedia(elementModel: taskModel.header!.components.last.elements!.last, getMultimediaUseCase: getMultimediaUseCase),
+            Divider(height: 0, thickness: 1, color: Colors.grey.withOpacity(0.2))
+          ]
         : [];
 
     late Widget activityBody;
 
     switch (templateType) {
       case TemplateTypes.MTE:
+        List<Widget> childrenRandomed = taskModel.body!.components
+            .map((componentModel) => ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this))
+            .toList();
+        childrenRandomed.shuffle();
         activityBody = Expanded(
           child: Center(
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ImageMultimedia(componentModel: taskModel.body!.components[0], getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this),
-                ImageMultimedia(componentModel: taskModel.body!.components[1], getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this),
-                ImageMultimedia(componentModel: taskModel.body!.components[2], getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this),
-              ],
+              children: childrenRandomed,
             ),
           ),
         );
@@ -312,12 +316,7 @@ class TaskViewController extends ChangeNotifier {
                                   borderRadius: BorderRadius.circular(20),
                                   boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10, offset: Offset(0, 10))],
                                 ),
-                                child: Center(
-                                  child: SpinKitCubeGrid(
-                                    color: Colors.indigoAccent,
-                                    size: 50,
-                                  ),
-                                ),
+                                child: Center(child: SpinKitCubeGrid(color: Colors.indigoAccent, size: 50)),
                               ),
                             )
                           ],
@@ -335,11 +334,7 @@ class TaskViewController extends ChangeNotifier {
                     color: Color.fromRGBO(0, 0, 255, 1),
                     borderRadius: BorderRadius.circular(18.0),
                   ),
-                  child: Icon(
-                    Icons.camera,
-                    size: 40,
-                    color: Colors.white,
-                  ),
+                  child: Icon(Icons.camera, size: 40, color: Colors.white),
                 ),
               ),
             ],
@@ -347,6 +342,13 @@ class TaskViewController extends ChangeNotifier {
         );
         break;
       case TemplateTypes.AEL:
+        int position = 0;
+        List<Widget> childrenRandomed = taskModel.body!.components.sublist(3, 6).map((component) {
+          position++;
+          return DdropTarget(component: component, getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: position - 1);
+        }).toList();
+        childrenRandomed.shuffle();
+
         ddropOptions.addListener(() => validationDdrop());
         activityBody = Expanded(
           child: Container(
@@ -356,20 +358,12 @@ class TaskViewController extends ChangeNotifier {
               children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    DdropSender(component: taskModel.body!.components[0], getMultimediaUseCase: getMultimediaUseCase, taskController: this),
-                    DdropSender(component: taskModel.body!.components[1], getMultimediaUseCase: getMultimediaUseCase, taskController: this),
-                    DdropSender(component: taskModel.body!.components[2], getMultimediaUseCase: getMultimediaUseCase, taskController: this),
-                  ],
+                  children: taskModel.body!.components
+                      .sublist(0, 3)
+                      .map((component) => DdropSender(component: component, getMultimediaUseCase: getMultimediaUseCase, taskController: this))
+                      .toList(),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    DdropTarget(component: taskModel.body!.components[3], getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 0),
-                    DdropTarget(component: taskModel.body!.components[4], getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 1),
-                    DdropTarget(component: taskModel.body!.components[5], getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 2),
-                  ],
-                ),
+                Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: childrenRandomed),
               ],
             ),
           ),

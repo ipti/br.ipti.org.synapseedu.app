@@ -18,7 +18,7 @@ class DdropModalImage extends StatelessWidget {
         border: Border.all(color: Color.fromRGBO(189, 0, 255, 0.2), width: 2),
         image: DecorationImage(
           image: MemoryImage(bytesImage),
-          fit: BoxFit.cover,
+          fit: BoxFit.cover, scale: 2
         ),
       ),
     );
