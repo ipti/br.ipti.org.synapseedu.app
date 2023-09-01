@@ -27,7 +27,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
   int positiveSoundId = 0;
   int negativeSoundId = 0;
 
-  void loadSound()async{
+  void loadSound() async {
     positiveSoundId = await rootBundle.load('assets/audio/positiva.wav').then((ByteData soundData) => widget.soundpool.load(soundData));
     negativeSoundId = await rootBundle.load('assets/audio/negativa.wav').then((ByteData soundData) => widget.soundpool.load(soundData));
   }
@@ -90,39 +90,56 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
 
         return widget.taskViewController.buttonStatus == SubmitButtonStatus.Disabled
             ? Container()
-            : Expanded(
-                child: MaterialButton(
-                  elevation: 2,
-                  padding: EdgeInsets.symmetric(horizontal: 12),
-                  height: double.maxFinite,
-                  textColor: Color.fromRGBO(0, 220, 140, 1),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                    side: BorderSide(color: confirmButtonBorderColor),
-                  ),
-                  child: Text(
-                    confirmButtonText,
-                    style: TextStyle(
-                      color: confirmButtonTextColor,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 16,
+            : widget.taskViewController.buttonStatus == SubmitButtonStatus.Loading
+                ? Expanded(
+                  child: MaterialButton(
+                      elevation: 2,
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      height: double.maxFinite,
+                      textColor: Color.fromRGBO(0, 220, 140, 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        side: BorderSide(color: confirmButtonBorderColor),
+                      ),
+                      onPressed: () => null,
+                      child: CircularProgressIndicator(color: Colors.blue),
                     ),
-                  ),
-                  onPressed: !blockButton
-                      ? () async {
-                          blockButton = true;
-                          widget.taskViewController.sendPerformance(blockProvider.block.id);
-                          await Future.delayed(Duration(seconds: 2));
-                          TaskModel nextTaskId = blockProvider.getNextTask();
-                          if (nextTaskId == TaskModel.empty()) {
-                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => TaskCompletedPage()), (route) => false);
-                            return;
-                          }
-                          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => TaskModule(taskModel: nextTaskId)));
-                        }
-                      : null,
-                ),
-              );
+                )
+                : Expanded(
+                    child: MaterialButton(
+                      elevation: 2,
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      height: double.maxFinite,
+                      textColor: Color.fromRGBO(0, 220, 140, 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        side: BorderSide(color: confirmButtonBorderColor),
+                      ),
+                      child: Text(
+                        confirmButtonText,
+                        style: TextStyle(
+                          color: confirmButtonTextColor,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 16,
+                        ),
+                      ),
+                      onPressed: !blockButton
+                          ? () async {
+                              blockButton = true;
+                              widget.taskViewController.buttonStatus = SubmitButtonStatus.Loading;
+                              widget.taskViewController.forceNotifyListener();
+                              widget.taskViewController.sendPerformance(blockProvider.block.id);
+                              await Future.delayed(Duration(seconds: 2));
+                              TaskModel nextTaskId = blockProvider.getNextTask();
+                              if (nextTaskId == TaskModel.empty()) {
+                                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => TaskCompletedPage()), (route) => false);
+                                return;
+                              }
+                              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => TaskModule(taskModel: nextTaskId)));
+                            }
+                          : null,
+                    ),
+                  );
       },
     );
   }

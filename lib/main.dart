@@ -50,8 +50,8 @@ void main() async {
               minWidth: 0,
             ), colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.lightGreen).copyWith(background: Color(0xFFFFFFFF)),
           ),
-          // initialRoute: QrCodePage.routeName,
-          initialRoute: AuthModule.routeName,
+          initialRoute: QrCodePage.routeName,
+          // initialRoute: AuthModule.routeName,
           routes: {
             AuthModule.routeName: (context) => AuthModule(),
             HomeModule.routeName: (context) => HomeModule(),

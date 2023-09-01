@@ -16,6 +16,7 @@ import 'package:elesson/app/feature/task/widgets/text_modal_invible.dart';
 import 'package:elesson/app/feature/task/widgets/text_multimedia.dart';
 import 'package:elesson/app/util/enums/button_status.dart';
 import 'package:elesson/app/util/enums/multimedia_types.dart';
+import 'package:elesson/app/util/enums/sound_status.dart';
 import 'package:elesson/app/util/enums/task_types.dart';
 import 'package:elesson/app/util/routes.dart';
 import 'package:flutter/material.dart';
@@ -32,14 +33,13 @@ class TaskViewController extends ChangeNotifier {
   final SendPerformanceUseCase sendPerformanceUseCase;
   final TaskModel task;
   final int userId;
-  final Soundpool soundpool;
-
+  Soundpool soundpool;
 
   TaskViewController({required this.getMultimediaUseCase, required this.sendPerformanceUseCase, required this.task, required this.userId, required this.soundpool}) {
     soundIdByMultimediaId = Map<int, int>();
-
   }
 
+  SoundStatusEnum soundStatus = SoundStatusEnum.Idle;
   late DateTime performanceTime;
   late ComponentModel correctAnswer;
 
@@ -51,6 +51,11 @@ class TaskViewController extends ChangeNotifier {
   SubmitButtonStatus _submitButtonStatus = SubmitButtonStatus.Disabled;
 
   SubmitButtonStatus get buttonStatus => _submitButtonStatus;
+  //set
+  set buttonStatus(SubmitButtonStatus value) {
+    _submitButtonStatus = value;
+    notifyListeners();
+  }
 
   Future<void> sendPerformance(int blockid) async {
     task.block_id = blockid;
@@ -179,9 +184,11 @@ class TaskViewController extends ChangeNotifier {
         element.mainElement = true;
         return [
           TextMultimedia(
+            taskViewController: this,
             elementModel: element,
             getMultimediaUseCase: getMultimediaUseCase,
             audioCallback: () => playSoundByMultimediaId(audioMultimediaId),
+            hasAudio: audioMultimediaId != null,
           )
         ];
       case 2:
@@ -189,6 +196,7 @@ class TaskViewController extends ChangeNotifier {
         if (componentModel.elements!.any((element) => element.type_id == MultimediaTypes.text.type_id)) {
           return [
             TextMultimedia(
+              taskViewController: this,
               elementModel: componentModel.elements!.singleWhere((element) => element.type_id == MultimediaTypes.text.type_id),
               getMultimediaUseCase: getMultimediaUseCase,
               audioCallback: () => playSoundByMultimediaId(audioMultimediaId),
@@ -224,7 +232,7 @@ class TaskViewController extends ChangeNotifier {
 
     List<Widget> subTitulo = taskModel.header!.components.last.elements!.last.type_id == MultimediaTypes.text.type_id
         ? [
-            TextMultimedia(elementModel: taskModel.header!.components.last.elements!.last, getMultimediaUseCase: getMultimediaUseCase),
+            TextMultimedia(elementModel: taskModel.header!.components.last.elements!.last, getMultimediaUseCase: getMultimediaUseCase, taskViewController: this),
             Divider(height: 0, thickness: 1, color: Colors.grey.withOpacity(0.2))
           ]
         : [];
@@ -379,6 +387,7 @@ class TaskViewController extends ChangeNotifier {
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 15),
                 child: TextMultimedia(
+                  taskViewController: this,
                   elementModel: taskModel.body!.components[0].elements!.first,
                   getMultimediaUseCase: getMultimediaUseCase,
                   disableMaxHeight: true,
@@ -409,7 +418,16 @@ class TaskViewController extends ChangeNotifier {
 
   Future playSoundByMultimediaId(int? multimediaId) async {
     if (multimediaId == null) return;
-    if (streamControl != null && streamControl!.playing) await soundpool.stop(streamControl!.stream);
+    // print("STREAM CONTROL: ${streamControl?.stream} - ${streamControl?.playing} - ${streamControl?.stopped}");
+    // if (streamControl != null && streamControl!.playing) {
+    //   print("=====================================================================");
+    //   await soundpool.stop(streamControl!.stream);
+    //   streamControl!.stop();
+    //   await soundpool.release();
+    //   return;
+    // }
+    soundStatus = SoundStatusEnum.Loading;
+    notifyListeners();
     if (soundIdByMultimediaId[multimediaId] == null) {
       Either<Failure, Uint8List> res = await getMultimediaUseCase.getSoundByMultimediaId(multimediaId);
       res.fold((l) => null, (r) async {
@@ -424,7 +442,13 @@ class TaskViewController extends ChangeNotifier {
 
   Future<void> playSound(int multimediaId) async {
     if (soundIdByMultimediaId[multimediaId] == null) return;
+    soundStatus = SoundStatusEnum.Playing;
+    notifyListeners();
     streamControl = await soundpool.playWithControls(soundIdByMultimediaId[multimediaId]!);
     return;
+  }
+
+  void forceNotifyListener() {
+    notifyListeners();
   }
 }
