@@ -56,7 +56,7 @@ class TextMultimedia extends StatelessWidget {
                         },),
                       SizedBox(
                         width: size.width - (hasAudio ? 46 : 10),
-                        child: Text(r, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16, fontFamily: 'Mulish')),
+                        child: Text(r, textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16, fontFamily: 'Mulish')),
                       ),
                     ],
                   ),

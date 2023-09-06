@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
@@ -161,7 +162,9 @@ class TaskViewController extends ChangeNotifier {
     taskToRender.header!.components.forEach((ComponentModel component) {
       renderHeaderComponent(componentModel: component, widgetsList: screenEntity.headerWidgets);
     });
-    if (screenEntity.headerWidgets.length == 2) {
+    if (screenEntity.headerWidgets.length == 2 && screenEntity.headerWidgets.first.runtimeType == ImageMultimedia) {
+      screenEntity.headerWidgets.insert(0, TextModalInvisible());
+    }else if (screenEntity.headerWidgets.length == 2 && screenEntity.headerWidgets.last.runtimeType == ImageMultimedia) {
       screenEntity.headerWidgets.insert(2, TextModalInvisible());
     }
     renderTemplateBodyTask(taskToRender);
@@ -193,18 +196,18 @@ class TaskViewController extends ChangeNotifier {
         ];
       case 2:
         // element.mainElement = true;
-        if (componentModel.elements!.any((element) => element.type_id == MultimediaTypes.text.type_id)) {
-          return [
-            TextMultimedia(
-              taskViewController: this,
-              elementModel: componentModel.elements!.singleWhere((element) => element.type_id == MultimediaTypes.text.type_id),
-              getMultimediaUseCase: getMultimediaUseCase,
-              audioCallback: () => playSoundByMultimediaId(audioMultimediaId),
-              hasAudio: audioMultimediaId != null,
-            ),
-            ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase),
-          ];
-        }
+        // if (componentModel.elements!.any((element) => element.type_id == MultimediaTypes.text.type_id)) {
+        //   return [
+        //     TextMultimedia(
+        //       taskViewController: this,
+        //       elementModel: componentModel.elements!.singleWhere((element) => element.type_id == MultimediaTypes.text.type_id),
+        //       getMultimediaUseCase: getMultimediaUseCase,
+        //       audioCallback: () => playSoundByMultimediaId(audioMultimediaId),
+        //       hasAudio: audioMultimediaId != null,
+        //     ),
+        //     ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase),
+        //   ];
+        // }
         return [ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase)];
       case 3:
         bool onlyAudioElement = componentModel.elements!.length == 1;
