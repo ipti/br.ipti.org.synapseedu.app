@@ -52,6 +52,7 @@ class TaskViewController extends ChangeNotifier {
   SubmitButtonStatus _submitButtonStatus = SubmitButtonStatus.Disabled;
 
   SubmitButtonStatus get buttonStatus => _submitButtonStatus;
+
   //set
   set buttonStatus(SubmitButtonStatus value) {
     _submitButtonStatus = value;
@@ -164,7 +165,7 @@ class TaskViewController extends ChangeNotifier {
     });
     if (screenEntity.headerWidgets.length == 2 && screenEntity.headerWidgets.first.runtimeType == ImageMultimedia) {
       screenEntity.headerWidgets.insert(0, TextModalInvisible());
-    }else if (screenEntity.headerWidgets.length == 2 && screenEntity.headerWidgets.last.runtimeType == ImageMultimedia) {
+    } else if (screenEntity.headerWidgets.length == 2 && screenEntity.headerWidgets.last.runtimeType == ImageMultimedia) {
       screenEntity.headerWidgets.insert(2, TextModalInvisible());
     }
     renderTemplateBodyTask(taskToRender);
@@ -188,7 +189,7 @@ class TaskViewController extends ChangeNotifier {
         return [
           TextMultimedia(
             taskViewController: this,
-            elementModel: element,
+            componentModel: componentModel,
             getMultimediaUseCase: getMultimediaUseCase,
             audioCallback: () => playSoundByMultimediaId(audioMultimediaId),
             hasAudio: audioMultimediaId != null,
@@ -235,7 +236,7 @@ class TaskViewController extends ChangeNotifier {
 
     List<Widget> subTitulo = taskModel.header!.components.last.elements!.last.type_id == MultimediaTypes.text.type_id
         ? [
-            TextMultimedia(elementModel: taskModel.header!.components.last.elements!.last, getMultimediaUseCase: getMultimediaUseCase, taskViewController: this),
+            // TextMultimedia(componentModel: taskModel.header!.components.last, getMultimediaUseCase: getMultimediaUseCase, taskViewController: this),
             Divider(height: 0, thickness: 1, color: Colors.grey.withOpacity(0.2))
           ]
         : [];
@@ -245,7 +246,9 @@ class TaskViewController extends ChangeNotifier {
     switch (templateType) {
       case TemplateTypes.MTE:
         List<Widget> childrenRandomed = taskModel.body!.components
-            .map((componentModel) => ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this))
+            .map((componentModel) => componentModel.elements!.first.type_id == MultimediaTypes.text.type_id
+                ? TextMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, taskViewController: this,isMte: true)
+                : ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this))
             .toList();
         childrenRandomed.shuffle();
         activityBody = Expanded(
@@ -391,7 +394,7 @@ class TaskViewController extends ChangeNotifier {
                 padding: EdgeInsets.symmetric(vertical: 15),
                 child: TextMultimedia(
                   taskViewController: this,
-                  elementModel: taskModel.body!.components[0].elements!.first,
+                  componentModel: taskModel.body!.components[0],
                   getMultimediaUseCase: getMultimediaUseCase,
                   disableMaxHeight: true,
                 ),
