@@ -34,6 +34,16 @@ abstract class MetaDataModel {
           componentModel: task.body!,
           userChoises: userAnswer.answerDdrop,
         );
+      case 5:
+        return MetaDataModelMTE(
+          template_type: templateAbbreviations,
+          body_component_id: userAnswer.AnswerMte.id!,
+        );
+      case 6:
+        return MetaDataModelMTE(
+          template_type: templateAbbreviations,
+          body_component_id: userAnswer.AnswerMte.id!,
+        );
       default:
         print("Não localizado");
         return MetaDataModelMTE(

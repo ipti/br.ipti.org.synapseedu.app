@@ -247,7 +247,7 @@ class TaskViewController extends ChangeNotifier {
       case TemplateTypes.MTE:
         List<Widget> childrenRandomed = taskModel.body!.components
             .map((componentModel) => componentModel.elements!.first.type_id == MultimediaTypes.text.type_id
-                ? TextMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, taskViewController: this,isMte: true)
+                ? TextMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, taskViewController: this, isMte: true)
                 : ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this))
             .toList();
         childrenRandomed.shuffle();
@@ -261,6 +261,64 @@ class TaskViewController extends ChangeNotifier {
             ),
           ),
         );
+        break;
+      case TemplateTypes.MTE2:
+        List<Widget> childrenRandomed = taskModel.body!.components
+            .map((componentModel) => componentModel.elements!.first.type_id == MultimediaTypes.text.type_id
+                ? TextMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, taskViewController: this, isMte: true)
+                : ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this))
+            .toList();
+        childrenRandomed.shuffle();
+        activityBody = Expanded(
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: childrenRandomed,
+            ),
+          ),
+        );
+        break;
+      case TemplateTypes.MTE4:
+        List<Widget> childrenRandomed = taskModel.body!.components
+            .map((componentModel) => componentModel.elements!.first.type_id == MultimediaTypes.text.type_id
+                ? TextMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, taskViewController: this, isMte: true)
+                : ImageMultimedia(
+                    componentModel: componentModel,
+                    getMultimediaUseCase: getMultimediaUseCase,
+                    bodyElement: true,
+                    taskViewController: this,
+                    ismte4: true,
+                  ))
+            .toList();
+        childrenRandomed.shuffle();
+        activityBody = Expanded(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: childrenRandomed.sublist(0, 2),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: childrenRandomed.sublist(2, 4),
+                ),
+              ],
+            ),
+          ),
+        );
+
+        // activityBody = Expanded(
+        //   child: Center(
+        //     child: Wrap(crossAxisAlignment: WrapCrossAlignment.center,
+        //       children: childrenRandomed,
+        //     ),
+        //   ),
+        // );
         break;
       case TemplateTypes.PRE:
         preController.addListener(() => validationPre());
