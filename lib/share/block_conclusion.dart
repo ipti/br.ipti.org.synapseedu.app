@@ -60,7 +60,7 @@ class BlockConclusionScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                   text: TextSpan(
                     style: TextStyle(
-                      fontFamily: 'Mulish',
+                      fontFamily: 'Comic',
                       fontSize: 18,
                       color: Colors.black,
                     ),

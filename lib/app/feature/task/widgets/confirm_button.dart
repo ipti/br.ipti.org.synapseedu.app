@@ -9,13 +9,14 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:soundpool/soundpool.dart';
 
-import '../../home/home_module.dart';
 
 class ConfirmButtonWidget extends StatefulWidget {
   final TaskViewController taskViewController;
   final Soundpool soundpool;
 
-  ConfirmButtonWidget({Key? key, required this.taskViewController, required this.soundpool}) : super(key: key);
+  ConfirmButtonWidget(
+      {Key? key, required this.taskViewController, required this.soundpool})
+      : super(key: key);
 
   @override
   State<ConfirmButtonWidget> createState() => _ConfirmButtonWidgetState();
@@ -28,8 +29,12 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
   int negativeSoundId = 0;
 
   void loadSound() async {
-    positiveSoundId = await rootBundle.load('assets/audio/positiva.wav').then((ByteData soundData) => widget.soundpool.load(soundData));
-    negativeSoundId = await rootBundle.load('assets/audio/negativa.wav').then((ByteData soundData) => widget.soundpool.load(soundData));
+    positiveSoundId = await rootBundle
+        .load('assets/audio/positiva.wav')
+        .then((ByteData soundData) => widget.soundpool.load(soundData));
+    negativeSoundId = await rootBundle
+        .load('assets/audio/negativa.wav')
+        .then((ByteData soundData) => widget.soundpool.load(soundData));
   }
 
   @override
@@ -44,7 +49,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
     super.didChangeDependencies();
   }
 
-  String confirmButtonText = 'CONFIRMAR';
+  String confirmButtonText = 'ENVIAR RESPOSTA';
 
   Color confirmButtonBorderColor = Color(0xFF0000FF);
 
@@ -57,7 +62,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
       oldState = newState;
       switch (widget.taskViewController.buttonStatus) {
         case SubmitButtonStatus.Idle:
-          confirmButtonText = 'CONFIRMAR';
+          confirmButtonText = 'ENVIAR RESPOSTA';
           confirmButtonBorderColor = Color(0xFF0000FF);
           confirmButtonTextColor = Color(0xFF0000FF);
           break;
@@ -88,11 +93,13 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
       builder: (context, child) {
         changeConfirmButton(widget.taskViewController.buttonStatus);
 
-        return widget.taskViewController.buttonStatus == SubmitButtonStatus.Disabled
+        return widget.taskViewController.buttonStatus ==
+                SubmitButtonStatus.Disabled
             ? Container()
-            : widget.taskViewController.buttonStatus == SubmitButtonStatus.Loading
+            : widget.taskViewController.buttonStatus ==
+                    SubmitButtonStatus.Loading
                 ? Expanded(
-                  child: MaterialButton(
+                    child: MaterialButton(
                       elevation: 2,
                       padding: EdgeInsets.symmetric(horizontal: 12),
                       height: double.maxFinite,
@@ -104,7 +111,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
                       onPressed: () => null,
                       child: CircularProgressIndicator(color: Colors.blue),
                     ),
-                )
+                  )
                 : Expanded(
                     child: MaterialButton(
                       elevation: 2,
@@ -115,27 +122,47 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
                         borderRadius: BorderRadius.circular(15.0),
                         side: BorderSide(color: confirmButtonBorderColor),
                       ),
-                      child: Text(
-                        confirmButtonText,
-                        style: TextStyle(
-                          color: confirmButtonTextColor,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 16,
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            confirmButtonText,
+                            style: TextStyle(
+                              color: confirmButtonTextColor,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 14,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Icon(
+                            Icons.send,
+                            color: confirmButtonTextColor,
+                          )
+                        ],
                       ),
                       onPressed: !blockButton
                           ? () async {
                               blockButton = true;
-                              widget.taskViewController.buttonStatus = SubmitButtonStatus.Loading;
+                              widget.taskViewController.buttonStatus =
+                                  SubmitButtonStatus.Loading;
                               widget.taskViewController.forceNotifyListener();
-                              widget.taskViewController.sendPerformance(blockProvider.block.id);
+                              widget.taskViewController
+                                  .sendPerformance(blockProvider.block.id);
                               await Future.delayed(Duration(seconds: 2));
-                              TaskModel nextTaskId = blockProvider.getNextTask();
+                              TaskModel nextTaskId =
+                                  blockProvider.getNextTask();
                               if (nextTaskId == TaskModel.empty()) {
-                                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => TaskCompletedPage()), (route) => false);
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            TaskCompletedPage()),
+                                    (route) => false);
                                 return;
                               }
-                              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => TaskModule(taskModel: nextTaskId)));
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          TaskModule(taskModel: nextTaskId)));
                             }
                           : null,
                     ),

@@ -1,6 +1,5 @@
 import 'package:elesson/app/feature/auth/controller/auth_controller.dart';
 import 'package:elesson/app/feature/shared/widgets/init_title.dart';
-import 'package:elesson/register/sms_register.dart';
 import 'package:elesson/share/general_widgets.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +25,7 @@ class AuthScreen extends StatelessWidget {
             elessonCard(backgroundImage: "assets/img/cover.png", text: "ACESSO COM QR CODE", screenWidth: size.width, onTap: scan, context: context),
             SizedBox(height: size.height * 0.05),
             authController.showLoading ? CircularProgressIndicator(): GestureDetector(
-              onTap: () => authController.getAcessToken(context),
+              // onTap: () => authController.getAcessToken(context),
               child: Text("USAR COMO CONVIDADO", style: TextStyle(decoration: TextDecoration.underline, color: Colors.blue, fontWeight: FontWeight.bold)),
             ),
           ],

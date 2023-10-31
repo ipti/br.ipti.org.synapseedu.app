@@ -1,9 +1,7 @@
 import 'package:elesson/app/feature/shared/widgets/card_widget.dart';
-import 'package:elesson/app/feature/shared/widgets/init_title.dart';
 import 'package:elesson/app/feature/home/controller/home_controller.dart';
 import 'package:elesson/app/providers/userProvider.dart';
 import 'package:elesson/app/util/enums/button_status.dart';
-import 'package:elesson/share/qr_code_reader.dart';
 import 'package:flutter/material.dart';
 
 import '../../qrcode/qrcode_module.dart';

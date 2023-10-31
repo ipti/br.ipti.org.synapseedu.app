@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-import '../../../../util/network/constants.dart';
 
 abstract class IMultimediaRemoteDatasource {
   Future<String> getImageMultimediaReference(int multimediaId);
@@ -33,6 +32,7 @@ class MultimediaRemoteDataSourceImpl extends IMultimediaRemoteDatasource {
       return response.data['name'];
     } on DioException catch (e) {
       print(e.message);
+      throw "${e.message}";
     }
     throw "Erro desconhecido";
   }
@@ -44,6 +44,7 @@ class MultimediaRemoteDataSourceImpl extends IMultimediaRemoteDatasource {
       return response.data['text']['description'];
     } on DioException catch (e) {
       print(e.message);
+      throw "${e.message}";
     }
     throw "Erro desconhecido";
   }
@@ -55,6 +56,7 @@ class MultimediaRemoteDataSourceImpl extends IMultimediaRemoteDatasource {
       return response.data;
     } on DioException catch (e) {
       print(e.message);
+      throw "${e.message}";
     }
     throw "Erro desconhecido";
   }
@@ -86,6 +88,7 @@ class MultimediaRemoteDataSourceImpl extends IMultimediaRemoteDatasource {
       return response.data["responses"][0]['textAnnotations'][0]['description'];
     } on DioException catch (e) {
       print(e.message);
+      throw "${e.message}";
     }
     throw "Erro desconhecido";
   }
@@ -97,6 +100,7 @@ class MultimediaRemoteDataSourceImpl extends IMultimediaRemoteDatasource {
       return response.data['name'];
     } on DioException catch (e) {
       print(e.message);
+      throw "${e.message}";
     }
     throw "Erro desconhecido";
   }
@@ -108,6 +112,7 @@ class MultimediaRemoteDataSourceImpl extends IMultimediaRemoteDatasource {
       return response.data!.stream;
     } on DioException catch (e) {
       print(e.message);
+      throw "${e.message}";
     }
     throw ArgumentError.value("Download Audio", "Erro ao baixar o audio");
   }

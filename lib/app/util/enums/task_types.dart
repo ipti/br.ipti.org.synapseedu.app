@@ -1,4 +1,4 @@
-enum TemplateTypes { MTE, PRE, AEL, TEXT}
+enum TemplateTypes { MTE, PRE, AEL, TEXT, MTE2, MTE4 }
 
 extension TemplateTypesExtension on TemplateTypes {
   int get templateId {
@@ -11,6 +11,10 @@ extension TemplateTypesExtension on TemplateTypes {
         return 3;
       case TemplateTypes.TEXT:
         return 4;
+      case TemplateTypes.MTE2:
+        return 5;
+      case TemplateTypes.MTE4:
+        return 6;
       default:
         return 1;
     }
@@ -26,6 +30,10 @@ extension TemplateTypesExtension on TemplateTypes {
         return TemplateTypes.AEL;
       case 4:
         return TemplateTypes.TEXT;
+      case 5:
+        return TemplateTypes.MTE2;
+      case 6:
+        return TemplateTypes.MTE4;
       default:
         return TemplateTypes.MTE;
     }
@@ -47,7 +55,7 @@ extension TemplateTypesExtension on TemplateTypes {
   // }
   //
 
-  void task(){
+  void task() {
     print("a");
   }
 
@@ -61,9 +69,12 @@ extension TemplateTypesExtension on TemplateTypes {
         return TemplateTypes.AEL;
       case 4:
         return TemplateTypes.TEXT;
+      case 5:
+        return TemplateTypes.MTE2;
+      case 6:
+        return TemplateTypes.MTE4;
       default:
         return TemplateTypes.MTE;
     }
   }
-
 }

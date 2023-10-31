@@ -1,7 +1,6 @@
 import 'package:elesson/app/core/task/data/model/performance_model.dart';
 import 'package:elesson/app/core/task/domain/entity/user_answer.dart';
 import '../../data/repository/performance_repository_interface.dart';
-import 'package:elesson/app/providers/userProvider.dart';
 import '../../../../util/failures/failures.dart';
 import '../../data/model/metadata_model.dart';
 import '../../data/model/task_model.dart';

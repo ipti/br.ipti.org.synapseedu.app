@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'package:elesson/share/general_widgets.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +6,6 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 // import 'package:twilio_phone_verify/twilio_phone_verify.dart';
 import '../app/core/qrcode/domain/entity/block_parameters_entity.dart';
 import '../app/feature/qrcode/controller/qrcode_controller.dart';
-import 'elesson_icon_lib_icons.dart';
-import 'my_twillio.dart';
 
 class QrCodePage extends StatefulWidget {
   static const routeName = '/qr_code';

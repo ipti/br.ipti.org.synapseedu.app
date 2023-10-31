@@ -1,4 +1,3 @@
-import 'package:elesson/app/feature/shared/contants/ddrop_colors.dart';
 import 'package:flutter/material.dart';
 
 class TaskCompletedPage extends StatelessWidget {

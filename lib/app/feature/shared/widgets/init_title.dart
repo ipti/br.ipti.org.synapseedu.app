@@ -1,4 +1,3 @@
-import 'package:elesson/share/global_variables.dart';
 import 'package:flutter/material.dart';
 
 Widget initTitle({String? text, required double heightScreen, double? bottomMargin}) {

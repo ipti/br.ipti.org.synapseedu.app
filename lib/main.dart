@@ -5,6 +5,7 @@ import 'package:elesson/share/qr_code_reader.dart';
 import 'package:elesson/splashscreen/degree_selection_view.dart';
 import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
 import 'package:elesson/template_questoes/PRE_SOM_IA.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:provider/provider.dart';
 import './register/countdown.dart';
 import 'app/feature/auth/auth_module.dart';
@@ -25,8 +26,24 @@ import 'app/util/routes.dart';
 import 'template_questoes/multiple_choice.dart';
 import 'template_questoes/ddrop/ddrop.dart';
 import 'template_questoes/pre_base.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  // ;;FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
   //usando pra iniciar em outra tela
   //Força o modo retrato na inicialização do aplicativo
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,10 +56,10 @@ void main() async {
         ],
         child: MaterialApp(
           navigatorKey: navigatorKey,
-          title: 'Synapse Aluno',
+          title: 'RPSEdu',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            fontFamily: 'Mulish',
+            fontFamily: 'Comic',
             visualDensity: VisualDensity.adaptivePlatformDensity,
             buttonTheme: ButtonThemeData(
               textTheme: ButtonTextTheme.accent,

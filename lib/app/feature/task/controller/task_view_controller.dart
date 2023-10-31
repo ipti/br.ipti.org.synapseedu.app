@@ -1,8 +1,6 @@
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
-import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/app/core/task/data/model/component_model.dart';
 import 'package:elesson/app/core/task/data/model/element_model.dart';
 import 'package:elesson/app/core/task/data/model/task_model.dart';
@@ -24,7 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:wakelock/wakelock.dart';
-import '../../../core/task/data/model/performance_model.dart';
 import '../../../core/task/domain/entity/user_answer.dart';
 import '../../../core/task/domain/usecase/send_performance_usecase.dart';
 import '../../../util/failures/failures.dart';
@@ -247,7 +244,7 @@ class TaskViewController extends ChangeNotifier {
       case TemplateTypes.MTE:
         List<Widget> childrenRandomed = taskModel.body!.components
             .map((componentModel) => componentModel.elements!.first.type_id == MultimediaTypes.text.type_id
-                ? TextMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, taskViewController: this,isMte: true)
+                ? TextMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, taskViewController: this, isMte: true)
                 : ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this))
             .toList();
         childrenRandomed.shuffle();
@@ -258,6 +255,56 @@ class TaskViewController extends ChangeNotifier {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: childrenRandomed,
+            ),
+          ),
+        );
+        break;
+      case TemplateTypes.MTE2:
+        List<Widget> childrenRandomed = taskModel.body!.components
+            .map((componentModel) => componentModel.elements!.first.type_id == MultimediaTypes.text.type_id
+                ? TextMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, taskViewController: this, isMte: true)
+                : ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this))
+            .toList();
+        childrenRandomed.shuffle();
+        activityBody = Expanded(
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: childrenRandomed,
+            ),
+          ),
+        );
+        break;
+      case TemplateTypes.MTE4:
+        List<Widget> childrenRandomed = taskModel.body!.components
+            .map((componentModel) => componentModel.elements!.first.type_id == MultimediaTypes.text.type_id
+                ? TextMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, taskViewController: this, isMte: true)
+                : ImageMultimedia(
+                    componentModel: componentModel,
+                    getMultimediaUseCase: getMultimediaUseCase,
+                    bodyElement: true,
+                    taskViewController: this,
+                    ismte4: true,
+                  ))
+            .toList();
+        childrenRandomed.shuffle();
+        activityBody = Expanded(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: childrenRandomed.sublist(0, 2),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: childrenRandomed.sublist(2, 4),
+                ),
+              ],
             ),
           ),
         );
@@ -289,7 +336,7 @@ class TaskViewController extends ChangeNotifier {
                   controller: preController,
                   autofocus: false,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Color(0xFF0000FF), fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Mulish'),
+                  style: TextStyle(color: Color(0xFF0000FF), fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Comic'),
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
