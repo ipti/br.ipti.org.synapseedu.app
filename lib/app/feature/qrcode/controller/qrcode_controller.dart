@@ -1,11 +1,9 @@
 import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:elesson/app/core/qrcode/domain/usecase/get_block_usecase.dart';
-import 'package:elesson/app/feature/home/home_module.dart';
 import 'package:elesson/app/feature/task/task_module.dart';
 import 'package:elesson/app/providers/block_provider.dart';
 import 'package:flutter/material.dart';
-import '../../../core/auth/domain/entity/auth_entity.dart';
 import '../../../core/auth/domain/usecases/auth_usecase.dart';
 import '../../../core/qrcode/data/model/block_model.dart';
 import '../../../core/qrcode/domain/entity/block_parameters_entity.dart';

@@ -21,7 +21,6 @@ import '../../core/task/domain/repository/task_repository_impl.dart';
 import '../../core/task/domain/usecase/get_task_usecase.dart';
 import '../../core/task/domain/usecase/send_performance_usecase.dart';
 import '../../util/failures/failures.dart';
-import '../qrcode/controller/qrcode_controller.dart';
 import 'controller/task_view_controller.dart';
 
 class TaskModule extends StatefulWidget {

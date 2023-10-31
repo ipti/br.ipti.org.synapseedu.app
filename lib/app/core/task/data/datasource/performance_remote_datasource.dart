@@ -23,6 +23,7 @@ class PerformanceRemoteDatasource implements IPerformanceRemoteDatasource {
       return Performance.fromJson(response.data);
     } on DioException catch (e) {
       print(e.message);
+      throw "${e.message}";
     }
     throw "Erro ao enviar performance";
   }
@@ -34,6 +35,7 @@ class PerformanceRemoteDatasource implements IPerformanceRemoteDatasource {
       return Performance.fromJson(response.data);
     } on DioException catch (e) {
       print(e.message);
+      throw "${e.message}";
     }
     throw "Erro ao enviar performance";
   }
@@ -45,6 +47,7 @@ class PerformanceRemoteDatasource implements IPerformanceRemoteDatasource {
       return Performance.fromJson(response.data);
     } on DioException catch (e) {
       print(e.message);
+      throw "${e.message}";
     }
     throw "Erro ao enviar performance";
   }

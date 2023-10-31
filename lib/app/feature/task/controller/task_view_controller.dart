@@ -1,8 +1,6 @@
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
-import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/app/core/task/data/model/component_model.dart';
 import 'package:elesson/app/core/task/data/model/element_model.dart';
 import 'package:elesson/app/core/task/data/model/task_model.dart';
@@ -24,7 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:wakelock/wakelock.dart';
-import '../../../core/task/data/model/performance_model.dart';
 import '../../../core/task/domain/entity/user_answer.dart';
 import '../../../core/task/domain/usecase/send_performance_usecase.dart';
 import '../../../util/failures/failures.dart';
@@ -311,14 +308,6 @@ class TaskViewController extends ChangeNotifier {
             ),
           ),
         );
-
-        // activityBody = Expanded(
-        //   child: Center(
-        //     child: Wrap(crossAxisAlignment: WrapCrossAlignment.center,
-        //       children: childrenRandomed,
-        //     ),
-        //   ),
-        // );
         break;
       case TemplateTypes.PRE:
         preController.addListener(() => validationPre());
@@ -347,7 +336,7 @@ class TaskViewController extends ChangeNotifier {
                   controller: preController,
                   autofocus: false,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Color(0xFF0000FF), fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Mulish'),
+                  style: TextStyle(color: Color(0xFF0000FF), fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Comic'),
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,

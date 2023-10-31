@@ -10,7 +10,7 @@ Widget formatDescription(String text) {
         color: Colors.black,
         fontWeight: FontWeight.bold,
         fontSize: fonteDaLetra,
-        fontFamily: 'Mulish',
+        fontFamily: 'Comic',
       ),
       // recognizer: TapGestureRecognizer()
       //   ..onTap = () {
@@ -35,7 +35,7 @@ Widget formatDescription(String text) {
           color: Colors.black,
           fontWeight: FontWeight.bold,
           fontSize: fonteDaLetra,
-          fontFamily: 'Mulish',
+          fontFamily: 'Comic',
         ),
         children: [
           TextSpan(

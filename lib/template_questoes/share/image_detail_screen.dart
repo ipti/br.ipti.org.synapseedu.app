@@ -88,7 +88,7 @@ class _ImageDetailScreenState extends State<ImageDetailScreen> {
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: fonteDaLetra,
-                              fontFamily: 'Mulish',
+                              fontFamily: 'Comic',
                             ),
                           ),
                         ),

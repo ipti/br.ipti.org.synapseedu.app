@@ -3,7 +3,6 @@ import 'package:elesson/app/core/task/data/model/component_model.dart';
 import 'package:elesson/app/core/task/data/model/task_model.dart';
 import 'package:elesson/app/util/enums/task_types.dart';
 
-import '../../../../../template_questoes/ddrop/ddrop_function.dart';
 import '../../domain/entity/ddrop_option_entity.dart';
 import '../../domain/entity/user_answer.dart';
 import 'container_model.dart';

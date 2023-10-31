@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:elesson/app/core/auth/data/model/user_model.dart';
 import 'package:elesson/app/providers/userProvider.dart';
 import 'package:elesson/share/general_widgets.dart';
 import 'package:flutter/material.dart';
