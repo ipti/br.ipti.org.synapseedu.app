@@ -22,7 +22,7 @@ class HeaderView extends StatelessWidget {
             child: Center(
               child: Text(
                 containerModel.description ?? "",
-                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: fonteDaLetra, fontFamily: 'Mulish'),
+                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: fonteDaLetra, fontFamily: 'Comic'),
               ),
             ),
             height: ((size.height - 24) * 0.145) - 12,

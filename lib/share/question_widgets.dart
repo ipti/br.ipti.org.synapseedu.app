@@ -2,7 +2,6 @@ import 'dart:io';
 
 // import 'package:audioplayers/audioplayers.dart';
 import 'package:elesson/app/feature/qrcode/qrcode_module.dart';
-import 'package:elesson/share/qr_code_reader.dart';
 
 // import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';

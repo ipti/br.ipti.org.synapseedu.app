@@ -8,6 +8,7 @@ import 'package:elesson/app/core/task/domain/repository/task_repository_impl.dar
 import 'package:elesson/app/core/task/domain/usecase/get_task_usecase.dart';
 import 'package:elesson/app/core/auth/domain/usecases/auth_usecase.dart';
 import 'package:elesson/app/util/network/dio_authed/dio_authed.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:elesson/app/util/network/constants.dart';
 import 'controller/preview_controller.dart';
@@ -33,7 +34,7 @@ class _PreviewModuleState extends State<PreviewModule> {
     super.initState();
     Dio dio = Dio();
     dio.options.baseUrl = URLBASE;
-    // dio.interceptors.add(PrettyDioLogger(requestHeader: true, requestBody: true, responseBody: true, responseHeader: false, error: true, compact: true, maxWidth: 90));
+    if(kDebugMode) dio.interceptors.add(PrettyDioLogger(requestHeader: true, requestBody: true, responseBody: true, responseHeader: false, error: true, compact: true, maxWidth: 90));
 
     Dio dioAuthed = DioAuthed().dio;
 

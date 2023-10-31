@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:dartz/dartz.dart' as Dartz;
 import 'package:elesson/app/core/task/data/model/component_model.dart';
 import 'package:elesson/app/core/task/data/model/element_model.dart';
-import 'package:elesson/app/core/task/domain/usecase/get_multimedia_usecase.dart';
+import 'package:elesson/app/core/task/domain/usecase/Multimedia_usecase.dart';
 import 'package:elesson/app/feature/task/controller/task_view_controller.dart';
 import 'package:elesson/app/util/enums/multimedia_types.dart';
 import 'package:elesson/app/util/failures/failures.dart';
@@ -14,10 +14,11 @@ import 'shimmer_load_multimedia.dart';
 class ImageMultimedia extends StatefulWidget {
   final bool bodyElement;
   final ComponentModel componentModel;
-  final GetMultimediaUseCase getMultimediaUseCase;
+  final MultimediaUseCase getMultimediaUseCase;
   final TaskViewController? taskViewController;
+  final bool? ismte4;
 
-  ImageMultimedia({Key? key, required this.componentModel, required this.getMultimediaUseCase, this.bodyElement = false, this.taskViewController}) : super(key: key);
+  ImageMultimedia({Key? key, this.ismte4, required this.componentModel, required this.getMultimediaUseCase, this.bodyElement = false, this.taskViewController}) : super(key: key);
 
   @override
   _ImageMultimediaState createState() => _ImageMultimediaState();
@@ -37,9 +38,13 @@ class _ImageMultimediaState extends State<ImageMultimedia> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    heightWidth = widget.bodyElement ? (max(size.height, size.width) / 4.3) : min(size.height, size.width) - 30;
+    if (widget.ismte4 != null) {
+      heightWidth = size.width > size.height ? (size.width / 2.6) / 3 : size.width / 2.6;
+    } else {
+      heightWidth = widget.bodyElement ? (max(size.height, size.width) / 4.3) : min(size.height, size.width) - 30;
+    }
 
-    if(size.width > size.height) heightWidth = heightWidth / 2;
+    if (size.width > size.height) heightWidth = heightWidth / 2;
 
     return FutureBuilder(
       future: widget.getMultimediaUseCase.getBytesByMultimediaId(findedElementModel.multimedia_id!),
@@ -57,10 +62,10 @@ class _ImageMultimediaState extends State<ImageMultimedia> {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(18),
-                  border: Border.all(width: 2, color: Color.fromRGBO(110, 114, 145, 0.2)),
+                  // border: Border.all(width: 2, color: Color.fromRGBO(110, 114, 145, 0.2)),
                   image: DecorationImage(
                     image: MemoryImage(imageData),
-                    fit: BoxFit.fitWidth,
+                    fit: BoxFit.scaleDown,
                   ),
                 ),
               );
@@ -80,7 +85,8 @@ class _ImageMultimediaState extends State<ImageMultimedia> {
                       border: Border.all(width: 2, color: widget.componentModel == value ? Color(0xFF0000FF) : Color.fromRGBO(110, 114, 145, 0.2)),
                       image: DecorationImage(
                         image: MemoryImage(imageData),
-                        fit: BoxFit.fitWidth,
+                        fit: BoxFit.contain,
+                        scale: 2,
                       ),
                     ),
                   ),

@@ -5,12 +5,14 @@ import 'package:elesson/share/qr_code_reader.dart';
 import 'package:elesson/splashscreen/degree_selection_view.dart';
 import 'package:elesson/template_questoes/PRE_IMG_IA.dart';
 import 'package:elesson/template_questoes/PRE_SOM_IA.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:provider/provider.dart';
 import './register/countdown.dart';
 import 'app/feature/auth/auth_module.dart';
 import 'app/feature/home/home_module.dart';
 import 'app/feature/preview/preview_module.dart';
 import 'app/feature/qrcode/qrcode_module.dart';
+import 'app/feature/task/page/task_completed_page.dart';
 import 'app/providers/block_provider.dart';
 import 'app/providers/userProvider.dart';
 import './root/poc.dart';
@@ -24,13 +26,26 @@ import 'app/util/routes.dart';
 import 'template_questoes/multiple_choice.dart';
 import 'template_questoes/ddrop/ddrop.dart';
 import 'template_questoes/pre_base.dart';
-import 'package:url_strategy/url_strategy.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  // ;;FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
   //usando pra iniciar em outra tela
   //Força o modo retrato na inicialização do aplicativo
-
-  setPathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) async {
     runApp(
@@ -41,10 +56,10 @@ void main() async {
         ],
         child: MaterialApp(
           navigatorKey: navigatorKey,
-          title: 'Synapse Aluno',
+          title: 'RPSEdu',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            fontFamily: 'Mulish',
+            fontFamily: 'Comic',
             visualDensity: VisualDensity.adaptivePlatformDensity,
             buttonTheme: ButtonThemeData(
               textTheme: ButtonTextTheme.accent,
@@ -53,7 +68,7 @@ void main() async {
             ), colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.lightGreen).copyWith(background: Color(0xFFFFFFFF)),
           ),
           initialRoute: QrCodePage.routeName,
-          // initialRoute: QrCodeReader.routeName,
+          // initialRoute: AuthModule.routeName,
           routes: {
             AuthModule.routeName: (context) => AuthModule(),
             HomeModule.routeName: (context) => HomeModule(),
@@ -77,11 +92,10 @@ void main() async {
             QrCodePage.routeName: (context) => QrCodeModule(),
           },
             onGenerateRoute: (settings) {
-              if (settings.name == null || settings.name == "/") {
-                return MaterialPageRoute(builder: (context) => HomeModule());
-              }
-
               var uri = Uri.parse(settings.name!);
+              if (settings.name == null || settings.name == "/") {
+                return MaterialPageRoute(builder: (context) => TaskCompletedPage());
+              }
               if (uri.pathSegments.length == 2 && uri.pathSegments.first == 'preview') {
                 var id = uri.pathSegments[1];
                 return MaterialPageRoute(

@@ -84,8 +84,7 @@ class _LoginViewState extends State<LoginView> {
     }
 
     return AnimatedContainer(
-      margin: EdgeInsets.only(
-          left: widthScreen * 0.05, right: widthScreen * 0.05, bottom: bottomAboutBox, top: topAboutBox),
+      margin: EdgeInsets.only(left: widthScreen * 0.05, right: widthScreen * 0.05, bottom: bottomAboutBox, top: topAboutBox),
       duration: Duration(milliseconds: 500),
       width: widthScreen * 0.9,
       height: heightScreen * 0.6,
@@ -139,11 +138,7 @@ class _LoginViewState extends State<LoginView> {
       },
       child: Text(
         'Recuperar senha',
-        style: TextStyle(
-            color: Colors.red,
-            fontSize: heightScreen * 0.025,
-            fontWeight: FontWeight.bold,
-            decoration: TextDecoration.underline),
+        style: TextStyle(color: Colors.red, fontSize: heightScreen * 0.025, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
       ),
     );
   }

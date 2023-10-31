@@ -5,13 +5,14 @@ import 'package:elesson/app/core/task/data/datasource/performance_remote_datasou
 import 'package:elesson/app/core/task/data/model/task_model.dart';
 import 'package:elesson/app/core/task/data/repository/multimedia_repository_interface.dart';
 import 'package:elesson/app/core/task/domain/repository/multimedia_repository_impl.dart';
-import 'package:elesson/app/core/task/domain/usecase/get_multimedia_usecase.dart';
+import 'package:elesson/app/core/task/domain/usecase/Multimedia_usecase.dart';
 import 'package:elesson/app/feature/task/page/task_view_page.dart';
 import 'package:elesson/app/providers/block_provider.dart';
 import 'package:elesson/app/providers/userProvider.dart';
 import 'package:elesson/app/util/network/dio_authed/dio_authed.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:soundpool/soundpool.dart';
 import '../../core/task/data/datasource/task_remote_datasource.dart';
 import '../../core/task/data/repository/performance_repository_interface.dart';
 import '../../core/task/data/repository/task_repository_interface.dart';
@@ -20,7 +21,6 @@ import '../../core/task/domain/repository/task_repository_impl.dart';
 import '../../core/task/domain/usecase/get_task_usecase.dart';
 import '../../core/task/domain/usecase/send_performance_usecase.dart';
 import '../../util/failures/failures.dart';
-import '../qrcode/controller/qrcode_controller.dart';
 import 'controller/task_view_controller.dart';
 
 class TaskModule extends StatefulWidget {
@@ -40,7 +40,7 @@ class _TaskModuleState extends State<TaskModule> {
   late IMultimediaRepository _multimediaRepository;
 
   late IPerformanceRepository _performanceRepository;
-  late GetMultimediaUseCase _getMultimediaUseCase;
+  late MultimediaUseCase _getMultimediaUseCase;
   late SendPerformanceUseCase _sendPerformanceUseCase;
 
   late ITaskRemoteDataSource _taskRemoteDataSource;
@@ -49,6 +49,8 @@ class _TaskModuleState extends State<TaskModule> {
 
   late TaskViewController _taskViewController;
   late TaskModel task;
+
+  late Soundpool soundpool;
 
   @override
   void initState() {
@@ -65,11 +67,13 @@ class _TaskModuleState extends State<TaskModule> {
 
     _multimediaRemoteDataSource = MultimediaRemoteDataSourceImpl(dio: dioAuthed);
     _multimediaRepository = MultimediaRepositoryImpl(multimediaRemoteDataSource: _multimediaRemoteDataSource);
-    _getMultimediaUseCase = GetMultimediaUseCase(multimediaRepository: _multimediaRepository);
+    _getMultimediaUseCase = MultimediaUseCase(multimediaRepository: _multimediaRepository);
 
     _performanceRemoteDataSource = PerformanceRemoteDatasource(dio: dioAuthed);
     _performanceRepository = PerformanceRepositoryImpl(performanceRemoteDataSource: _performanceRemoteDataSource);
     _sendPerformanceUseCase = SendPerformanceUseCase(performanceRepository: _performanceRepository);
+
+    soundpool = Soundpool.fromOptions(options: SoundpoolOptions(streamType: StreamType.music));
   }
 
   void loadNextTask() async {
@@ -84,7 +88,6 @@ class _TaskModuleState extends State<TaskModule> {
 
   Future<void> preparingTask() async {
     int userId = Provider.of<UserProvider>(context, listen: false).user.id;
-    BlockProvider blockProvider = Provider.of<BlockProvider>(context, listen: false);
     if (widget.taskId != null) {
       Dartz.Either<Failure, TaskModel> res = await _getTaskUseCase.getTaskById(widget.taskId!);
       res.fold(
@@ -93,8 +96,9 @@ class _TaskModuleState extends State<TaskModule> {
       );
     }
     _taskViewController = TaskViewController(
-      getMultimediaUseCase: _getMultimediaUseCase,
       sendPerformanceUseCase: _sendPerformanceUseCase,
+      getMultimediaUseCase: _getMultimediaUseCase,
+      soundpool: soundpool,
       userId: userId,
       task: task,
     );

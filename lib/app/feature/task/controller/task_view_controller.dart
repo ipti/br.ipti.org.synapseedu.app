@@ -1,11 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:dartz/dartz.dart';
-import 'package:elesson/activity_selection/block_selection_view.dart';
 import 'package:elesson/app/core/task/data/model/component_model.dart';
 import 'package:elesson/app/core/task/data/model/element_model.dart';
 import 'package:elesson/app/core/task/data/model/task_model.dart';
 import 'package:elesson/app/core/task/domain/entity/ddrop_option_entity.dart';
 import 'package:elesson/app/core/task/domain/entity/screen_entity.dart';
-import 'package:elesson/app/core/task/domain/usecase/get_multimedia_usecase.dart';
+import 'package:elesson/app/core/task/domain/usecase/Multimedia_usecase.dart';
 import 'package:elesson/app/feature/task/widgets/audio_multimedia.dart';
 import 'package:elesson/app/feature/task/widgets/ddrop/ddrop_sender.dart';
 import 'package:elesson/app/feature/task/widgets/ddrop/ddrop_target.dart';
@@ -14,26 +15,33 @@ import 'package:elesson/app/feature/task/widgets/text_modal_invible.dart';
 import 'package:elesson/app/feature/task/widgets/text_multimedia.dart';
 import 'package:elesson/app/util/enums/button_status.dart';
 import 'package:elesson/app/util/enums/multimedia_types.dart';
+import 'package:elesson/app/util/enums/sound_status.dart';
 import 'package:elesson/app/util/enums/task_types.dart';
 import 'package:elesson/app/util/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:soundpool/soundpool.dart';
 import 'package:wakelock/wakelock.dart';
-import '../../../core/task/data/model/performance_model.dart';
 import '../../../core/task/domain/entity/user_answer.dart';
 import '../../../core/task/domain/usecase/send_performance_usecase.dart';
 import '../../../util/failures/failures.dart';
 
 class TaskViewController extends ChangeNotifier {
-  final GetMultimediaUseCase getMultimediaUseCase;
+  final MultimediaUseCase getMultimediaUseCase;
   final SendPerformanceUseCase sendPerformanceUseCase;
   final TaskModel task;
   final int userId;
+  Soundpool soundpool;
 
-  TaskViewController({required this.getMultimediaUseCase, required this.sendPerformanceUseCase,required this.task, required this.userId});
+  TaskViewController({required this.getMultimediaUseCase, required this.sendPerformanceUseCase, required this.task, required this.userId, required this.soundpool}) {
+    soundIdByMultimediaId = Map<int, int>();
+  }
 
+  SoundStatusEnum soundStatus = SoundStatusEnum.Idle;
   late DateTime performanceTime;
   late ComponentModel correctAnswer;
+
+  static late Map<int, int> soundIdByMultimediaId;
 
   /*
   * STATUS DO BOTÃO DE SUBMISSÃO
@@ -42,9 +50,15 @@ class TaskViewController extends ChangeNotifier {
 
   SubmitButtonStatus get buttonStatus => _submitButtonStatus;
 
+  //set
+  set buttonStatus(SubmitButtonStatus value) {
+    _submitButtonStatus = value;
+    notifyListeners();
+  }
+
   Future<void> sendPerformance(int blockid) async {
     task.block_id = blockid;
-    Either<Failure, Performance> res = await sendPerformanceUseCase.call(
+    Either<Failure, bool> res = await sendPerformanceUseCase.call(
       task: task,
       correctAnswerPre: correctAnswerPre,
       userAnswer: UserAnswer(
@@ -57,12 +71,10 @@ class TaskViewController extends ChangeNotifier {
     );
     res.fold(
       (l) => _submitButtonStatus = SubmitButtonStatus.Error,
-      (r) => r.isCorrect ? _submitButtonStatus = SubmitButtonStatus.Success : _submitButtonStatus = SubmitButtonStatus.Error,
+      (r) => r ? _submitButtonStatus = SubmitButtonStatus.Success : _submitButtonStatus = SubmitButtonStatus.Error,
     );
     notifyListeners();
   }
-
-
 
   /*
   * ENTIDADE RESPONSAVEL POR ARMAZENAR OS WIDGETS DA TELA
@@ -148,7 +160,9 @@ class TaskViewController extends ChangeNotifier {
     taskToRender.header!.components.forEach((ComponentModel component) {
       renderHeaderComponent(componentModel: component, widgetsList: screenEntity.headerWidgets);
     });
-    if (screenEntity.headerWidgets.length == 2) {
+    if (screenEntity.headerWidgets.length == 2 && screenEntity.headerWidgets.first.runtimeType == ImageMultimedia) {
+      screenEntity.headerWidgets.insert(0, TextModalInvisible());
+    } else if (screenEntity.headerWidgets.length == 2 && screenEntity.headerWidgets.last.runtimeType == ImageMultimedia) {
       screenEntity.headerWidgets.insert(2, TextModalInvisible());
     }
     renderTemplateBodyTask(taskToRender);
@@ -163,23 +177,35 @@ class TaskViewController extends ChangeNotifier {
   }
 
   List<Widget> buildWidgetFromElement(ComponentModel componentModel, ElementModel element) {
+    ElementModel audioElement = componentModel.elements!.singleWhere((element) => element.type_id == MultimediaTypes.audio.type_id, orElse: () => ElementModel());
+    int? audioMultimediaId = audioElement != ElementModel() ? audioElement.multimedia_id : null;
+
     switch (element.type_id) {
       case 1:
-        if (componentModel.elements!.length == 1) {
-          element.mainElement = true;
-          return [TextMultimedia(elementModel: element, getMultimediaUseCase: getMultimediaUseCase)];
-        }
-        return [];
+        element.mainElement = true;
+        return [
+          TextMultimedia(
+            taskViewController: this,
+            componentModel: componentModel,
+            getMultimediaUseCase: getMultimediaUseCase,
+            audioCallback: () => playSoundByMultimediaId(audioMultimediaId),
+            hasAudio: audioMultimediaId != null,
+          )
+        ];
       case 2:
         // element.mainElement = true;
-        if (componentModel.elements!.any((element) => element.type_id == MultimediaTypes.text.type_id)) {
-          return [
-            TextMultimedia(
-                elementModel: componentModel.elements!.singleWhere((element) => element.type_id == MultimediaTypes.text.type_id),
-                getMultimediaUseCase: getMultimediaUseCase),
-            ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase),
-          ];
-        }
+        // if (componentModel.elements!.any((element) => element.type_id == MultimediaTypes.text.type_id)) {
+        //   return [
+        //     TextMultimedia(
+        //       taskViewController: this,
+        //       elementModel: componentModel.elements!.singleWhere((element) => element.type_id == MultimediaTypes.text.type_id),
+        //       getMultimediaUseCase: getMultimediaUseCase,
+        //       audioCallback: () => playSoundByMultimediaId(audioMultimediaId),
+        //       hasAudio: audioMultimediaId != null,
+        //     ),
+        //     ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase),
+        //   ];
+        // }
         return [ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase)];
       case 3:
         bool onlyAudioElement = componentModel.elements!.length == 1;
@@ -205,36 +231,79 @@ class TaskViewController extends ChangeNotifier {
     taskModel.body!.components.forEach((component) => component.elements!.first.mainElement = true);
     TemplateTypes templateType = TemplateTypes.values[taskModel.template_id! - 1];
 
-    Widget subTitulo = taskModel.header!.components.last.elements!.last.type_id == MultimediaTypes.text.type_id
-        ? TextMultimedia(elementModel: taskModel.header!.components.last.elements!.last, getMultimediaUseCase: getMultimediaUseCase)
-        : TextModalInvisible();
+    List<Widget> subTitulo = taskModel.header!.components.last.elements!.last.type_id == MultimediaTypes.text.type_id
+        ? [
+            // TextMultimedia(componentModel: taskModel.header!.components.last, getMultimediaUseCase: getMultimediaUseCase, taskViewController: this),
+            Divider(height: 0, thickness: 1, color: Colors.grey.withOpacity(0.2))
+          ]
+        : [];
 
     late Widget activityBody;
 
     switch (templateType) {
       case TemplateTypes.MTE:
+        List<Widget> childrenRandomed = taskModel.body!.components
+            .map((componentModel) => componentModel.elements!.first.type_id == MultimediaTypes.text.type_id
+                ? TextMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, taskViewController: this, isMte: true)
+                : ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this))
+            .toList();
+        childrenRandomed.shuffle();
         activityBody = Expanded(
           child: Center(
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
+              children: childrenRandomed,
+            ),
+          ),
+        );
+        break;
+      case TemplateTypes.MTE2:
+        List<Widget> childrenRandomed = taskModel.body!.components
+            .map((componentModel) => componentModel.elements!.first.type_id == MultimediaTypes.text.type_id
+                ? TextMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, taskViewController: this, isMte: true)
+                : ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this))
+            .toList();
+        childrenRandomed.shuffle();
+        activityBody = Expanded(
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: childrenRandomed,
+            ),
+          ),
+        );
+        break;
+      case TemplateTypes.MTE4:
+        List<Widget> childrenRandomed = taskModel.body!.components
+            .map((componentModel) => componentModel.elements!.first.type_id == MultimediaTypes.text.type_id
+                ? TextMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, taskViewController: this, isMte: true)
+                : ImageMultimedia(
+                    componentModel: componentModel,
+                    getMultimediaUseCase: getMultimediaUseCase,
+                    bodyElement: true,
+                    taskViewController: this,
+                    ismte4: true,
+                  ))
+            .toList();
+        childrenRandomed.shuffle();
+        activityBody = Expanded(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ImageMultimedia(
-                    componentModel: taskModel.body!.components[0],
-                    getMultimediaUseCase: getMultimediaUseCase,
-                    bodyElement: true,
-                    taskViewController: this),
-                ImageMultimedia(
-                    componentModel: taskModel.body!.components[1],
-                    getMultimediaUseCase: getMultimediaUseCase,
-                    bodyElement: true,
-                    taskViewController: this),
-                ImageMultimedia(
-                    componentModel: taskModel.body!.components[2],
-                    getMultimediaUseCase: getMultimediaUseCase,
-                    bodyElement: true,
-                    taskViewController: this),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: childrenRandomed.sublist(0, 2),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: childrenRandomed.sublist(2, 4),
+                ),
               ],
             ),
           ),
@@ -267,7 +336,7 @@ class TaskViewController extends ChangeNotifier {
                   controller: preController,
                   autofocus: false,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Color(0xFF0000FF), fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Mulish'),
+                  style: TextStyle(color: Color(0xFF0000FF), fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Comic'),
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
@@ -308,12 +377,7 @@ class TaskViewController extends ChangeNotifier {
                                   borderRadius: BorderRadius.circular(20),
                                   boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10, offset: Offset(0, 10))],
                                 ),
-                                child: Center(
-                                  child: SpinKitCubeGrid(
-                                    color: Colors.indigoAccent,
-                                    size: 50,
-                                  ),
-                                ),
+                                child: Center(child: SpinKitCubeGrid(color: Colors.indigoAccent, size: 50)),
                               ),
                             )
                           ],
@@ -331,11 +395,7 @@ class TaskViewController extends ChangeNotifier {
                     color: Color.fromRGBO(0, 0, 255, 1),
                     borderRadius: BorderRadius.circular(18.0),
                   ),
-                  child: Icon(
-                    Icons.camera,
-                    size: 40,
-                    color: Colors.white,
-                  ),
+                  child: Icon(Icons.camera, size: 40, color: Colors.white),
                 ),
               ),
             ],
@@ -343,6 +403,13 @@ class TaskViewController extends ChangeNotifier {
         );
         break;
       case TemplateTypes.AEL:
+        int position = 0;
+        List<Widget> childrenRandomed = taskModel.body!.components.sublist(3, 6).map((component) {
+          position++;
+          return DdropTarget(component: component, getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: position - 1);
+        }).toList();
+        childrenRandomed.shuffle();
+
         ddropOptions.addListener(() => validationDdrop());
         activityBody = Expanded(
           child: Container(
@@ -352,23 +419,12 @@ class TaskViewController extends ChangeNotifier {
               children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    DdropSender(component: taskModel.body!.components[0], getMultimediaUseCase: getMultimediaUseCase, taskController: this),
-                    DdropSender(component: taskModel.body!.components[1], getMultimediaUseCase: getMultimediaUseCase, taskController: this),
-                    DdropSender(component: taskModel.body!.components[2], getMultimediaUseCase: getMultimediaUseCase, taskController: this),
-                  ],
+                  children: taskModel.body!.components
+                      .sublist(0, 3)
+                      .map((component) => DdropSender(component: component, getMultimediaUseCase: getMultimediaUseCase, taskController: this))
+                      .toList(),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    DdropTarget(
-                        component: taskModel.body!.components[3], getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 0),
-                    DdropTarget(
-                        component: taskModel.body!.components[4], getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 1),
-                    DdropTarget(
-                        component: taskModel.body!.components[5], getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: 2),
-                  ],
-                ),
+                Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: childrenRandomed),
               ],
             ),
           ),
@@ -384,7 +440,8 @@ class TaskViewController extends ChangeNotifier {
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 15),
                 child: TextMultimedia(
-                  elementModel: taskModel.body!.components[0].elements!.first,
+                  taskViewController: this,
+                  componentModel: taskModel.body!.components[0],
                   getMultimediaUseCase: getMultimediaUseCase,
                   disableMaxHeight: true,
                 ),
@@ -403,14 +460,48 @@ class TaskViewController extends ChangeNotifier {
     screenEntity.bodyWidget = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        subTitulo,
-        Divider(
-          height: 0,
-          thickness: 1,
-          color: Colors.grey.withOpacity(0.2),
-        ),
+        ...subTitulo,
         activityBody,
       ],
     );
+  }
+
+  // ==================================================================================================== SOUND
+  AudioStreamControl? streamControl;
+
+  Future playSoundByMultimediaId(int? multimediaId) async {
+    if (multimediaId == null) return;
+    // print("STREAM CONTROL: ${streamControl?.stream} - ${streamControl?.playing} - ${streamControl?.stopped}");
+    // if (streamControl != null && streamControl!.playing) {
+    //   print("=====================================================================");
+    //   await soundpool.stop(streamControl!.stream);
+    //   streamControl!.stop();
+    //   await soundpool.release();
+    //   return;
+    // }
+    soundStatus = SoundStatusEnum.Loading;
+    notifyListeners();
+    if (soundIdByMultimediaId[multimediaId] == null) {
+      Either<Failure, Uint8List> res = await getMultimediaUseCase.getSoundByMultimediaId(multimediaId);
+      res.fold((l) => null, (r) async {
+        int soundId = await soundpool.loadUint8List(r);
+        if (soundId > -1) soundIdByMultimediaId[multimediaId] = soundId;
+        await playSound(multimediaId);
+      });
+    } else {
+      await playSound(multimediaId);
+    }
+  }
+
+  Future<void> playSound(int multimediaId) async {
+    if (soundIdByMultimediaId[multimediaId] == null) return;
+    soundStatus = SoundStatusEnum.Playing;
+    notifyListeners();
+    streamControl = await soundpool.playWithControls(soundIdByMultimediaId[multimediaId]!);
+    return;
+  }
+
+  void forceNotifyListener() {
+    notifyListeners();
   }
 }

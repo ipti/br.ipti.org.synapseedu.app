@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
+
 abstract class IMultimediaRemoteDatasource {
   Future<String> getImageMultimediaReference(int multimediaId);
 
@@ -10,6 +11,10 @@ abstract class IMultimediaRemoteDatasource {
   Future<List<int>> getBytesByMultimediaReference(String reference);
 
   Future<String> getTextOfImage(String base64Image, String googleApiToken);
+
+  Future<String> getSoundByMultimediaId(int id);
+
+  Future<Stream<Uint8List>> downloadSound(String nameAudio);
 }
 
 class MultimediaRemoteDataSourceImpl extends IMultimediaRemoteDatasource {
@@ -27,6 +32,7 @@ class MultimediaRemoteDataSourceImpl extends IMultimediaRemoteDatasource {
       return response.data['name'];
     } on DioException catch (e) {
       print(e.message);
+      throw "${e.message}";
     }
     throw "Erro desconhecido";
   }
@@ -38,6 +44,7 @@ class MultimediaRemoteDataSourceImpl extends IMultimediaRemoteDatasource {
       return response.data['text']['description'];
     } on DioException catch (e) {
       print(e.message);
+      throw "${e.message}";
     }
     throw "Erro desconhecido";
   }
@@ -49,6 +56,7 @@ class MultimediaRemoteDataSourceImpl extends IMultimediaRemoteDatasource {
       return response.data;
     } on DioException catch (e) {
       print(e.message);
+      throw "${e.message}";
     }
     throw "Erro desconhecido";
   }
@@ -80,7 +88,32 @@ class MultimediaRemoteDataSourceImpl extends IMultimediaRemoteDatasource {
       return response.data["responses"][0]['textAnnotations'][0]['description'];
     } on DioException catch (e) {
       print(e.message);
+      throw "${e.message}";
     }
     throw "Erro desconhecido";
+  }
+
+  @override
+  Future<String> getSoundByMultimediaId(int id) async {
+    try {
+      Response response = await dio.get('/multimedia/sound/$id');
+      return response.data['name'];
+    } on DioException catch (e) {
+      print(e.message);
+      throw "${e.message}";
+    }
+    throw "Erro desconhecido";
+  }
+
+  @override
+  Future<Stream<Uint8List>> downloadSound(String nameAudio) async {
+    try {
+      Response<ResponseBody> response = await dio.post('/multimedia/download/sound', data: {"name": nameAudio}, options: Options(responseType: ResponseType.stream));
+      return response.data!.stream;
+    } on DioException catch (e) {
+      print(e.message);
+      throw "${e.message}";
+    }
+    throw ArgumentError.value("Download Audio", "Erro ao baixar o audio");
   }
 }

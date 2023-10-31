@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 
-import '../../core/task/data/repository/block_repository_interface.dart';
 
 class HomeModule extends StatefulWidget {
   static const routeName = '/home-module';
