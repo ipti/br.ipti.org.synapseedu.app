@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
+import '../../../../settings/settings_screen.dart';
 import '../../../core/auth/domain/entity/login_response_entity.dart';
 import '../../../core/qrcode/domain/entity/block_parameters_entity.dart';
 import '../controller/qrcode_controller.dart';
@@ -60,25 +61,40 @@ class _QrCodePageState extends State<QrCodePage> {
                     ),
                   ),
                 ),
-                Container(
-                  color: Colors.black,
-                  height: MediaQuery.of(context).size.height * 0.23,
-                  width: MediaQuery.of(context).size.width,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 24),
-                    child: Text(
-                      widget.qrCodeController.screenMessage,
-                      style: TextStyle(
-                        color: colorToTimerOut,
-                        fontWeight: FontWeight.bold,
+                Stack(
+                  children: [
+
+                    Container(
+                      color: Colors.black,
+                      height: MediaQuery.of(context).size.height * 0.23,
+                      width: MediaQuery.of(context).size.width,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 24),
+                        child: Text(
+                          widget.qrCodeController.screenMessage,
+                          style: TextStyle(
+                            color: colorToTimerOut,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                      textAlign: TextAlign.center,
                     ),
-                  ),
-                )
+                    Container(
+                      width: 30,
+                      height: 30,
+                      child: IconButton(
+                        alignment: Alignment.topLeft,
+                        onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsScreen(),)),
+                        icon: Icon(Icons.settings,color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
+
           Container(
             height: 100,
             width: 100,

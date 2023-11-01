@@ -34,9 +34,6 @@ Widget backButton(double buttonSize, BuildContext context) {
         size: 40,
       ),
       onPressed: () {
-        // O template de texto não possui a tela inferior, diferente dos outros. O condicional verifica
-        // o booleano e fornece o direcionamento adequado. O template de texto permite ao usuário voltar para
-        // a tela anterior dentro do mesmo texto, enquanto os outros templates não possuem tal opção.
         Navigator.of(context).pop();
       },
     ),
@@ -44,16 +41,7 @@ Widget backButton(double buttonSize, BuildContext context) {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  // bool status = true;
   bool acceptTerms = true;
-
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   getTermState();
-  //   // getTermsSwitchValues();
-  // }
 
   Future<bool> getTermState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -65,37 +53,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     prefs.setBool('termos', value);
   }
 
-  //
-  // getTermsSwitchValues() async {
-  //   // print('AQUI: $acceptTerms');
-  //   print('VEIO CÁ $acceptTerms');
-  //   acceptTerms = await getTermsSwitchState();
-  //   setState(() {});
-  // }
-  //
-  // Future<bool> getTermsSwitchState() async {
-  //   prefs = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     acceptTerms = prefs.getBool('termos') ?? false;
-  //   });
-  //   return acceptTerms;
-  //   // return a
-  // }
-  //
-  // void saveSwitchState(bool value) async {
-  //   prefs = await SharedPreferences.getInstance();
-  //   prefs.setBool("termos", value);
-  //   print('Switch Value saved $value');
-  //   // return prefs.setBool("switchState", value);
-  // }
-
   @override
   void didChangeDependencies() async {
-    //   // TODO: implement didChangeDependencies
-    //   prefs = await SharedPreferences.getInstance();
-    //   acceptTerms = await prefs.getBool('termos') ?? false;
-    //   // print(acceptTerms);
-    //   setState(() {});
     acceptTerms = await getTermState();
     setState(() {});
     super.didChangeDependencies();
@@ -105,7 +64,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double buttonSize = 48 > size.height * 0.0656 ? 48 : size.height * 0.0656;
-    print('ESSE: $acceptTerms');
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
@@ -150,7 +108,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               text: TextSpan(
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    launch("https://www.apielesson.azurewebsites.net/privacidade/");
+                    launch("https://syanpseedu.azurewebsites.net/privacidade.html");
                   },
                 text: 'Políticas de privacidade',
                 style: TextStyle(
