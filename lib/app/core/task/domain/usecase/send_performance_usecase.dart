@@ -11,7 +11,8 @@ class SendPerformanceUseCase {
 
   SendPerformanceUseCase({required this.performanceRepository});
 
-  Future<Either<Failure, bool>> call({String correctAnswerPre = "",required TaskModel task, required UserAnswer userAnswer}) async {
+  Future<Either<Failure, bool>> call(
+      {String correctAnswerPre = "", required TaskModel task, required UserAnswer userAnswer}) async {
     var metaData = MetaDataModel.generate(task: task, userAnswer: userAnswer);
 
     DateTime tempoAgora = DateTime.now();
@@ -21,12 +22,14 @@ class SendPerformanceUseCase {
       student_id: userAnswer.userId,
       isCorrect: true,
       block_id: task.block_id,
-      timeResolution: tempoAgora.millisecondsSinceEpoch- userAnswer.performanceTime.millisecondsSinceEpoch,
+      timeResolution: tempoAgora.millisecondsSinceEpoch - userAnswer.performanceTime.millisecondsSinceEpoch,
       metadata: metaData,
     );
 
     switch (task.template_id) {
       case 1:
+      case 5:
+      case 6:
         performance.isCorrect = task.body!.components.first.id == userAnswer.AnswerMte.id;
         await performanceRepository.sendPerformanceMTE(performance);
         return performance.isCorrect ? Right(true) : Left(Failure('Resposta incorreta'));
