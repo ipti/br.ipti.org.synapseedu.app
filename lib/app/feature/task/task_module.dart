@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:dartz/dartz.dart' as Dartz;
 import 'package:dio/dio.dart';
 import 'package:elesson/app/core/task/data/datasource/multimedia_remote_datasource.dart';
@@ -51,6 +52,7 @@ class _TaskModuleState extends State<TaskModule> {
   late TaskModel task;
 
   late Soundpool soundpool;
+  late AudioPlayer audioPlayer;
 
   @override
   void initState() {
@@ -73,6 +75,7 @@ class _TaskModuleState extends State<TaskModule> {
     _performanceRepository = PerformanceRepositoryImpl(performanceRemoteDataSource: _performanceRemoteDataSource);
     _sendPerformanceUseCase = SendPerformanceUseCase(performanceRepository: _performanceRepository);
 
+    audioPlayer = AudioPlayer();
     soundpool = Soundpool.fromOptions(options: SoundpoolOptions(streamType: StreamType.music));
   }
 
@@ -98,6 +101,7 @@ class _TaskModuleState extends State<TaskModule> {
     _taskViewController = TaskViewController(
       sendPerformanceUseCase: _sendPerformanceUseCase,
       getMultimediaUseCase: _getMultimediaUseCase,
+      audioPlayer: audioPlayer,
       soundpool: soundpool,
       userId: userId,
       task: task,

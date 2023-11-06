@@ -2,6 +2,8 @@ import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/block_conclusion_arguments_model.dart';
 import 'package:flutter/material.dart';
 
+import '../app/feature/qrcode/page/qrcode_page.dart';
+
 class BlockConclusionScreen extends StatelessWidget {
   static const routeName = '/block_conclusion';
 
@@ -99,7 +101,8 @@ class BlockConclusionScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        isAdmin ? Navigator.of(context).pushReplacementNamed("/admin") : Navigator.of(context).pushReplacementNamed("/");
+                        isAdmin ? Navigator.of(context).pushReplacementNamed(QrCodePage.routeName) : Navigator.of(context).pushReplacementNamed(QrCodePage.routeName);
+                        // isAdmin ? Navigator.of(context).pushReplacementNamed("/admin") : Navigator.of(context).pushReplacementNamed("/");
                       },
                     ),
                   ),

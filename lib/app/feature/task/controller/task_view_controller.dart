@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:dartz/dartz.dart';
 import 'package:elesson/app/core/task/data/model/component_model.dart';
 import 'package:elesson/app/core/task/data/model/element_model.dart';
@@ -31,22 +32,18 @@ class TaskViewController extends ChangeNotifier {
   final SendPerformanceUseCase sendPerformanceUseCase;
   final TaskModel task;
   final int userId;
+  AudioPlayer audioPlayer;
   Soundpool soundpool;
 
-  TaskViewController(
-      {required this.getMultimediaUseCase,
-      required this.sendPerformanceUseCase,
-      required this.task,
-      required this.userId,
-      required this.soundpool}) {
-    soundIdByMultimediaId = Map<int, int>();
+  TaskViewController({required this.getMultimediaUseCase, required this.sendPerformanceUseCase, required this.task, required this.userId, required this.audioPlayer, required this.soundpool}) {
+    soundIdByMultimediaId = [];
   }
 
   SoundStatusEnum soundStatus = SoundStatusEnum.Idle;
   late DateTime performanceTime;
   late ComponentModel correctAnswer;
 
-  static late Map<int, int> soundIdByMultimediaId;
+  static late List<Map<int, Source>> soundIdByMultimediaId;
 
   /*
   * STATUS DO BOTÃO DE SUBMISSÃO
@@ -89,8 +86,7 @@ class TaskViewController extends ChangeNotifier {
   /*
   * DDROP
   * */
-  ValueNotifier<List<DdropOptionEntity>> ddropOptions =
-      ValueNotifier([DdropOptionEntity(), DdropOptionEntity(), DdropOptionEntity()]);
+  ValueNotifier<List<DdropOptionEntity>> ddropOptions = ValueNotifier([DdropOptionEntity(), DdropOptionEntity(), DdropOptionEntity()]);
 
   void addDdropOptions(int position, DdropOptionEntity options, DateTime time) {
     ddropOptions.value[position] = options;
@@ -168,8 +164,7 @@ class TaskViewController extends ChangeNotifier {
     });
     if (screenEntity.headerWidgets.length == 2 && screenEntity.headerWidgets.first.runtimeType == ImageMultimedia) {
       screenEntity.headerWidgets.insert(0, TextModalInvisible());
-    } else if (screenEntity.headerWidgets.length == 2 &&
-        screenEntity.headerWidgets.last.runtimeType == ImageMultimedia) {
+    } else if (screenEntity.headerWidgets.length == 2 && screenEntity.headerWidgets.last.runtimeType == ImageMultimedia) {
       screenEntity.headerWidgets.insert(2, TextModalInvisible());
     }
     renderTemplateBodyTask(taskToRender);
@@ -184,8 +179,7 @@ class TaskViewController extends ChangeNotifier {
   }
 
   List<Widget> buildWidgetFromElement(ComponentModel componentModel, ElementModel element) {
-    ElementModel audioElement = componentModel.elements!
-        .singleWhere((element) => element.type_id == MultimediaTypes.audio.type_id, orElse: () => ElementModel());
+    ElementModel audioElement = componentModel.elements!.singleWhere((element) => element.type_id == MultimediaTypes.audio.type_id, orElse: () => ElementModel());
     int? audioMultimediaId = audioElement != ElementModel() ? audioElement.multimedia_id : null;
 
     switch (element.type_id) {
@@ -252,16 +246,8 @@ class TaskViewController extends ChangeNotifier {
       case TemplateTypes.MTE:
         List<Widget> childrenRandomed = taskModel.body!.components
             .map((componentModel) => componentModel.elements!.first.type_id == MultimediaTypes.text.type_id
-                ? TextMultimedia(
-                    componentModel: componentModel,
-                    getMultimediaUseCase: getMultimediaUseCase,
-                    taskViewController: this,
-                    isMte: true)
-                : ImageMultimedia(
-                    componentModel: componentModel,
-                    getMultimediaUseCase: getMultimediaUseCase,
-                    bodyElement: true,
-                    taskViewController: this))
+                ? TextMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, taskViewController: this, isMte: true)
+                : ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this))
             .toList();
         childrenRandomed.shuffle();
         activityBody = Expanded(
@@ -278,16 +264,8 @@ class TaskViewController extends ChangeNotifier {
       case TemplateTypes.MTE2:
         List<Widget> childrenRandomed = taskModel.body!.components
             .map((componentModel) => componentModel.elements!.first.type_id == MultimediaTypes.text.type_id
-                ? TextMultimedia(
-                    componentModel: componentModel,
-                    getMultimediaUseCase: getMultimediaUseCase,
-                    taskViewController: this,
-                    isMte: true)
-                : ImageMultimedia(
-                    componentModel: componentModel,
-                    getMultimediaUseCase: getMultimediaUseCase,
-                    bodyElement: true,
-                    taskViewController: this))
+                ? TextMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, taskViewController: this, isMte: true)
+                : ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, bodyElement: true, taskViewController: this))
             .toList();
         childrenRandomed.shuffle();
         activityBody = Expanded(
@@ -302,16 +280,11 @@ class TaskViewController extends ChangeNotifier {
         );
         break;
       case TemplateTypes.MTE4:
-        bool isTextType = taskModel.body!.components
-            .any((componentModel) => componentModel.elements!.first.type_id == MultimediaTypes.text.type_id);
+        bool isTextType = taskModel.body!.components.any((componentModel) => componentModel.elements!.first.type_id == MultimediaTypes.text.type_id);
         List<Widget> childrenRandomed = taskModel.body!.components
             .map(
               (componentModel) => isTextType
-                  ? TextMultimedia(
-                      componentModel: componentModel,
-                      getMultimediaUseCase: getMultimediaUseCase,
-                      taskViewController: this,
-                      isMte: true)
+                  ? TextMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase, taskViewController: this, isMte: true)
                   : ImageMultimedia(
                       componentModel: componentModel,
                       getMultimediaUseCase: getMultimediaUseCase,
@@ -381,17 +354,14 @@ class TaskViewController extends ChangeNotifier {
                   controller: preController,
                   autofocus: false,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Color(0xFF0000FF), fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Comic'),
+                  style: TextStyle(color: Color(0xFF0000FF), fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Comic'),
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
                     hintText: 'Digite a resposta aqui',
                     contentPadding: const EdgeInsets.all(8.0),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(25.7)),
-                    enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(25.7)),
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(25.7)),
+                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white), borderRadius: BorderRadius.circular(25.7)),
                   ),
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -423,9 +393,7 @@ class TaskViewController extends ChangeNotifier {
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(20),
-                                  boxShadow: const [
-                                    BoxShadow(color: Colors.black26, blurRadius: 10, offset: Offset(0, 10))
-                                  ],
+                                  boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10, offset: Offset(0, 10))],
                                 ),
                                 child: Center(child: SpinKitCubeGrid(color: Colors.indigoAccent, size: 50)),
                               ),
@@ -456,11 +424,7 @@ class TaskViewController extends ChangeNotifier {
         int position = 0;
         List<Widget> childrenRandomed = taskModel.body!.components.sublist(3, 6).map((component) {
           position++;
-          return DdropTarget(
-              component: component,
-              getMultimediaUseCase: getMultimediaUseCase,
-              taskController: this,
-              position: position - 1);
+          return DdropTarget(component: component, getMultimediaUseCase: getMultimediaUseCase, taskController: this, position: position - 1);
         }).toList();
         childrenRandomed.shuffle();
 
@@ -475,8 +439,7 @@ class TaskViewController extends ChangeNotifier {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: taskModel.body!.components
                       .sublist(0, 3)
-                      .map((component) => DdropSender(
-                          component: component, getMultimediaUseCase: getMultimediaUseCase, taskController: this))
+                      .map((component) => DdropSender(component: component, getMultimediaUseCase: getMultimediaUseCase, taskController: this))
                       .toList(),
                 ),
                 Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: childrenRandomed),
@@ -526,33 +489,27 @@ class TaskViewController extends ChangeNotifier {
 
   Future playSoundByMultimediaId(int? multimediaId) async {
     if (multimediaId == null) return;
-    // print("STREAM CONTROL: ${streamControl?.stream} - ${streamControl?.playing} - ${streamControl?.stopped}");
-    // if (streamControl != null && streamControl!.playing) {
-    //   print("=====================================================================");
-    //   await soundpool.stop(streamControl!.stream);
-    //   streamControl!.stop();
-    //   await soundpool.release();
-    //   return;
-    // }
-    soundStatus = SoundStatusEnum.Loading;
-    notifyListeners();
-    if (soundIdByMultimediaId[multimediaId] == null) {
+    if(audioPlayer.state == PlayerState.playing) {
+      audioPlayer.stop();
+      return;
+    }
+
+    ///O status PAUSED está sendo usado durante o loading do audio
+    audioPlayer.state = PlayerState.paused;
+
+    if (soundIdByMultimediaId.any((element) => element.containsKey(multimediaId))) {
+      await playSound(multimediaId);
+    } else {
       Either<Failure, Uint8List> res = await getMultimediaUseCase.getSoundByMultimediaId(multimediaId);
       res.fold((l) => null, (r) async {
-        int soundId = await soundpool.loadUint8List(r);
-        if (soundId > -1) soundIdByMultimediaId[multimediaId] = soundId;
+        soundIdByMultimediaId.add({multimediaId: BytesSource(r)});
         await playSound(multimediaId);
       });
-    } else {
-      await playSound(multimediaId);
     }
   }
 
   Future<void> playSound(int multimediaId) async {
-    if (soundIdByMultimediaId[multimediaId] == null) return;
-    soundStatus = SoundStatusEnum.Playing;
-    notifyListeners();
-    streamControl = await soundpool.playWithControls(soundIdByMultimediaId[multimediaId]!);
+    audioPlayer.play(soundIdByMultimediaId.firstWhere((element) => element.containsKey(multimediaId)).values.last);
     return;
   }
 
