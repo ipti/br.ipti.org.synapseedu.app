@@ -11,9 +11,11 @@ class TopScreen extends StatelessWidget {
       decoration: BoxDecoration(color: Colors.white),
       width: size.width,
       height: size.height,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: headerWidgets,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: headerWidgets,
+        ),
       ),
     );
   }

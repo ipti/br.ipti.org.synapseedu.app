@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:elesson/share/question_widgets.dart';
 import 'package:fdottedline_nullsafety/fdottedline__nullsafety.dart';
 import 'package:flutter/material.dart';
@@ -9,14 +11,23 @@ class DdropSenderUndo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    bool isHorizontal = size.width > size.height;
+    double heightWidth = 200;
+    double horizontalWidth = size.width / 2;
+    if (isHorizontal) {
+      heightWidth = horizontalWidth / 2.5;
+    } else {
+      heightWidth = size.width / 3;
+    }
+    heightWidth = min(size.height/3.5 , heightWidth);
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: ()=> callback(),
       child: Container(
         child: FDottedLine(
           child: Container(
-            width: size.width > size.height ? (size.width / 2.6) / 3 : size.width / 2.6,
-            height: size.width > size.height ? (size.width / 2.6) / 3 : size.width / 2.6,
+            width:heightWidth,
+            height: heightWidth,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,

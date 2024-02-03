@@ -16,9 +16,10 @@ class ImageMultimedia extends StatefulWidget {
   final ComponentModel componentModel;
   final MultimediaUseCase getMultimediaUseCase;
   final TaskViewController? taskViewController;
-  final bool? ismte4;
+  final bool ismte4;
 
-  ImageMultimedia({Key? key, this.ismte4, required this.componentModel, required this.getMultimediaUseCase, this.bodyElement = false, this.taskViewController}) : super(key: key);
+  ImageMultimedia({Key? key, this.ismte4 = false, required this.componentModel, required this.getMultimediaUseCase, this.bodyElement = false, this.taskViewController})
+      : super(key: key);
 
   @override
   _ImageMultimediaState createState() => _ImageMultimediaState();
@@ -37,14 +38,33 @@ class _ImageMultimediaState extends State<ImageMultimedia> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
-    if (widget.ismte4 != null) {
-      heightWidth = size.width > size.height ? (size.width / 2.6) / 3 : size.width / 2.6;
+    bool isHorizontal = size.width > size.height;
+    double horizontalWidth = size.width / 2;
+    heightWidth = 200;
+    //header
+    if (!widget.bodyElement) {
+      if (isHorizontal) {
+        heightWidth = horizontalWidth / 1.5;
+      } else {
+        heightWidth = size.width;
+      }
     } else {
-      heightWidth = widget.bodyElement ? (max(size.height, size.width) / 4.3) : min(size.height, size.width) - 30;
+      if (widget.ismte4) {
+        if (isHorizontal) {
+          heightWidth = horizontalWidth / 3;
+        } else {
+          heightWidth = size.width / 3;
+        }
+      }
+      else{
+        if (isHorizontal) {
+          heightWidth = horizontalWidth / 2;
+        } else {
+          heightWidth = size.width / 2;
+        }
+        heightWidth = min(size.height/3.5 , heightWidth);
+      }
     }
-
-    if (size.width > size.height) heightWidth = heightWidth / 2;
 
     return FutureBuilder(
       future: widget.getMultimediaUseCase.getBytesByMultimediaId(findedElementModel.multimedia_id!),
@@ -58,14 +78,17 @@ class _ImageMultimediaState extends State<ImageMultimedia> {
             if (widget.taskViewController == null) {
               return Container(
                 height: heightWidth,
-                width: heightWidth,
+                // width: heightWidth,
+                margin: EdgeInsets.symmetric(horizontal: 5),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(18),
                   // border: Border.all(width: 2, color: Color.fromRGBO(110, 114, 145, 0.2)),
                   image: DecorationImage(
-                    image: MemoryImage(imageData),
-                    fit: BoxFit.scaleDown,
+                    image: MemoryImage(
+                      imageData,
+                    ),
+                    fit: BoxFit.contain,
                   ),
                 ),
               );

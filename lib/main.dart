@@ -47,7 +47,8 @@ void main() async {
   //usando pra iniciar em outra tela
   //Força o modo retrato na inicialização do aplicativo
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) async {
+  //[DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]
+  SystemChrome.setPreferredOrientations([]).then((_) async {
     runApp(
       MultiProvider(
         providers: [
@@ -67,8 +68,8 @@ void main() async {
               minWidth: 0,
             ), colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.lightGreen).copyWith(background: Color(0xFFFFFFFF)),
           ),
-          initialRoute: QrCodePage.routeName,
-          // initialRoute: AuthModule.routeName,
+          // initialRoute: QrCodePage.routeName,
+          initialRoute: AuthModule.routeName,
           routes: {
             AuthModule.routeName: (context) => AuthModule(),
             HomeModule.routeName: (context) => HomeModule(),

@@ -195,20 +195,7 @@ class TaskViewController extends ChangeNotifier {
           )
         ];
       case 2:
-        // element.mainElement = true;
-        // if (componentModel.elements!.any((element) => element.type_id == MultimediaTypes.text.type_id)) {
-        //   return [
-        //     TextMultimedia(
-        //       taskViewController: this,
-        //       elementModel: componentModel.elements!.singleWhere((element) => element.type_id == MultimediaTypes.text.type_id),
-        //       getMultimediaUseCase: getMultimediaUseCase,
-        //       audioCallback: () => playSoundByMultimediaId(audioMultimediaId),
-        //       hasAudio: audioMultimediaId != null,
-        //     ),
-        //     ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase),
-        //   ];
-        // }
-        return [ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase)];
+        return [ImageMultimedia(componentModel: componentModel, getMultimediaUseCase: getMultimediaUseCase,bodyElement: false)];
       case 3:
         bool onlyAudioElement = componentModel.elements!.length == 1;
         if (onlyAudioElement) {
@@ -509,6 +496,7 @@ class TaskViewController extends ChangeNotifier {
   }
 
   Future<void> playSound(int multimediaId) async {
+    print((soundIdByMultimediaId.firstWhere((element) => element.containsKey(multimediaId)).values.last as BytesSource).bytes);
     audioPlayer.play(soundIdByMultimediaId.firstWhere((element) => element.containsKey(multimediaId)).values.last);
     return;
   }

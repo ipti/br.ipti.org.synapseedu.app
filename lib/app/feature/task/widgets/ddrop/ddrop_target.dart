@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart' as Dartz;
@@ -29,12 +30,23 @@ class _DdropTargetState extends State<DdropTarget> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    bool isHorizontal = size.width > size.height;
+    double heightWidth = 200;
+    double horizontalWidth = size.width / 2;
+    if (isHorizontal) {
+      heightWidth = horizontalWidth / 2.5;
+    } else {
+      heightWidth = size.width / 3;
+    }
+    heightWidth = min(size.height/3.5 , heightWidth);
+
     return DragTarget(
       onAccept: (DdropOptionEntity data) => widget.taskController.addDdropOptions(widget.position, data, DateTime.now()),
       builder: (context, List<dynamic> candidateData, rejectedData) {
         return SizedBox(
-          width: size.width > size.height ? (size.width / 2.6) / 3 + 20 : size.width / 2.6 + 20,
-          height: size.width > size.height ? (size.width / 2.6) / 3 : size.width / 2.6,
+          width: heightWidth+20,
+          height: heightWidth,
           child: Stack(
             alignment: Alignment.centerRight,
             children: [

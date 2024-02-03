@@ -49,6 +49,7 @@ class TextMultimedia extends StatelessWidget {
       future: getMultimediaUseCase.getTextById(findedElementModel.multimedia_id!),
       builder: (context, AsyncSnapshot<Either<Failure, String>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) return ShimmerLoadMultimedia(width: size.width - 32, height: height);
+        print("SNAPSHOT: ${snapshot.data}");
         return snapshot.data!.fold(
           (l) => Container(),
           (r) => ValueListenableBuilder(
@@ -68,7 +69,7 @@ class TextMultimedia extends StatelessWidget {
                   height: disableMaxHeight ?? false ? heightWidth : height,
                   decoration: isMte
                       ? BoxDecoration(
-                          color: Colors.red,
+                          // color: Colors.red,
                           borderRadius: BorderRadius.circular(18),
                           border: Border.all(width: 2, color: componentModel == value ? Color(0xFF0000FF) : Color.fromRGBO(110, 114, 145, 0.2)),
                         )
