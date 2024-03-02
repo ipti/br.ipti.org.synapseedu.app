@@ -1,4 +1,3 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:dartz/dartz.dart' as Dartz;
 import 'package:dio/dio.dart';
 import 'package:elesson/app/core/task/data/datasource/multimedia_remote_datasource.dart';
@@ -11,7 +10,9 @@ import 'package:elesson/app/feature/task/page/task_view_page.dart';
 import 'package:elesson/app/providers/block_provider.dart';
 import 'package:elesson/app/providers/userProvider.dart';
 import 'package:elesson/app/util/network/dio_authed/dio_authed.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:soundpool/soundpool.dart';
 import '../../core/task/data/datasource/task_remote_datasource.dart';
@@ -75,7 +76,7 @@ class _TaskModuleState extends State<TaskModule> {
     _performanceRepository = PerformanceRepositoryImpl(performanceRemoteDataSource: _performanceRemoteDataSource);
     _sendPerformanceUseCase = SendPerformanceUseCase(performanceRepository: _performanceRepository);
 
-    audioPlayer = AudioPlayer();
+
     soundpool = Soundpool.fromOptions(options: SoundpoolOptions(streamType: StreamType.music));
   }
 
@@ -98,6 +99,9 @@ class _TaskModuleState extends State<TaskModule> {
         (r) => task = r,
       );
     }
+
+    audioPlayer = AudioPlayer();
+
     _taskViewController = TaskViewController(
       sendPerformanceUseCase: _sendPerformanceUseCase,
       getMultimediaUseCase: _getMultimediaUseCase,

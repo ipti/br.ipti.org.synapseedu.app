@@ -132,23 +132,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // ButtonTheme(
-            //   minWidth: buttonHeight,
-            //   height: buttonHeight,
-            //   child: MaterialButton(
-            //     padding: EdgeInsets.all(8),
-            //     color: Colors.white,
-            //     textColor: Color(0xFF0000FF),
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(18.0),
-            //       side: BorderSide(color: Color.fromRGBO(0, 0, 255, 0.2)),
-            //     ),
-            //     child: Icon(Icons.settings, size: 32, color: Color(0xFF0000FF)),
-            //     onPressed: () => Navigator.of(context).pushNamed(SettingsScreen.routeName),
-            //   ),
-            // ),
-            // SizedBox(width: 10),
-            ConfirmButtonWidget(taskViewController: widget.taskViewController, soundpool: widget.taskViewController.soundpool),
+            if(widget.taskViewController.componentSelected.value.body_id != null) ConfirmButtonWidget(taskViewController: widget.taskViewController, soundpool: widget.taskViewController.soundpool),
             SizedBox(width: 10),
             showButtonResponse
                 ? Container()

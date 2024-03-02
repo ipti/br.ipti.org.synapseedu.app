@@ -1,6 +1,3 @@
-import 'dart:typed_data';
-
-import 'package:audioplayers/audioplayers.dart';
 import 'package:dartz/dartz.dart';
 import 'package:elesson/app/core/task/data/model/component_model.dart';
 import 'package:elesson/app/core/task/data/model/element_model.dart';
@@ -19,10 +16,13 @@ import 'package:elesson/app/util/enums/multimedia_types.dart';
 import 'package:elesson/app/util/enums/sound_status.dart';
 import 'package:elesson/app/util/enums/task_types.dart';
 import 'package:elesson/app/util/routes.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:wakelock/wakelock.dart';
+import '../../../core/task/data/model/my_bytes_source.dart';
 import '../../../core/task/domain/entity/user_answer.dart';
 import '../../../core/task/domain/usecase/send_performance_usecase.dart';
 import '../../../util/failures/failures.dart';
@@ -35,6 +35,8 @@ class TaskViewController extends ChangeNotifier {
   AudioPlayer audioPlayer;
   Soundpool soundpool;
 
+  bool isDownloadingAudio = false;
+
   TaskViewController({required this.getMultimediaUseCase, required this.sendPerformanceUseCase, required this.task, required this.userId, required this.audioPlayer, required this.soundpool}) {
     soundIdByMultimediaId = [];
   }
@@ -43,7 +45,7 @@ class TaskViewController extends ChangeNotifier {
   late DateTime performanceTime;
   late ComponentModel correctAnswer;
 
-  static late List<Map<int, Source>> soundIdByMultimediaId;
+  List<Map<int, MyBytesSource>> soundIdByMultimediaId = [];
 
   /*
   * STATUS DO BOTÃO DE SUBMISSÃO
@@ -51,6 +53,8 @@ class TaskViewController extends ChangeNotifier {
   SubmitButtonStatus _submitButtonStatus = SubmitButtonStatus.Disabled;
 
   SubmitButtonStatus get buttonStatus => _submitButtonStatus;
+
+  int multimediaIdPlayingAudio = 0;
 
   //set
   set buttonStatus(SubmitButtonStatus value) {
@@ -191,7 +195,7 @@ class TaskViewController extends ChangeNotifier {
             componentModel: componentModel,
             getMultimediaUseCase: getMultimediaUseCase,
             audioCallback: () => playSoundByMultimediaId(audioMultimediaId),
-            hasAudio: audioMultimediaId != null,
+            audioMultimediaId: audioMultimediaId,
           )
         ];
       case 2:
@@ -475,29 +479,33 @@ class TaskViewController extends ChangeNotifier {
   AudioStreamControl? streamControl;
 
   Future playSoundByMultimediaId(int? multimediaId) async {
+
     if (multimediaId == null) return;
-    if(audioPlayer.state == PlayerState.playing) {
+    if(audioPlayer.playing == true) {
+      multimediaIdPlayingAudio = 0;
       audioPlayer.stop();
       return;
     }
 
-    ///O status PAUSED está sendo usado durante o loading do audio
-    audioPlayer.state = PlayerState.paused;
-
     if (soundIdByMultimediaId.any((element) => element.containsKey(multimediaId))) {
       await playSound(multimediaId);
     } else {
+      isDownloadingAudio = true;
+      notifyListeners();
       Either<Failure, Uint8List> res = await getMultimediaUseCase.getSoundByMultimediaId(multimediaId);
-      res.fold((l) => null, (r) async {
-        soundIdByMultimediaId.add({multimediaId: BytesSource(r)});
+      return res.fold((l) => null, (r) async {
+        soundIdByMultimediaId.add({multimediaId: MyBytesSource(r)});
         await playSound(multimediaId);
       });
     }
   }
 
   Future<void> playSound(int multimediaId) async {
-    print((soundIdByMultimediaId.firstWhere((element) => element.containsKey(multimediaId)).values.last as BytesSource).bytes);
-    audioPlayer.play(soundIdByMultimediaId.firstWhere((element) => element.containsKey(multimediaId)).values.last);
+    multimediaIdPlayingAudio = multimediaId;
+    await audioPlayer.setAudioSource(soundIdByMultimediaId.firstWhere((element) => element.containsKey(multimediaId)).values.last);
+    await audioPlayer.play();
+    multimediaIdPlayingAudio = 0;
+    audioPlayer.stop();
     return;
   }
 

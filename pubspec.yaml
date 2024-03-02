@@ -58,7 +58,7 @@ dependencies:
   firebase_core: ^2.20.0
   firebase_crashlytics: ^3.4.2
   flutter_native_splash: ^2.3.5
-  audioplayers: ^5.2.1
+  just_audio: ^0.9.21
 
 dev_dependencies:
   change_app_package_name: ^1.1.0
