@@ -68,7 +68,7 @@ class TaskViewController extends ChangeNotifier {
       task: task,
       correctAnswerPre: correctAnswerPre,
       userAnswer: UserAnswer(
-        AnswerMte: componentSelected.value,
+        AnswerMte: componentSelected,
         AnswerPre: preController.text,
         answerDdrop: ddropOptions.value,
         performanceTime: performanceTime,
@@ -142,19 +142,20 @@ class TaskViewController extends ChangeNotifier {
   /*
   * MTE
   * */
-  ValueNotifier<ComponentModel> componentSelected = ValueNotifier(ComponentModel());
+  ComponentModel componentSelected = ComponentModel();
 
   void changeComponentSelected(ComponentModel componentModel) {
-    if (componentSelected.value == componentModel) {
-      componentSelected.value = ComponentModel();
-      componentSelected.notifyListeners();
+    print("Componente selecionado: ${componentModel}");
+    if (componentSelected == componentModel) {
+      componentSelected = ComponentModel();
+      notifyListeners();
       _submitButtonStatus = SubmitButtonStatus.Disabled;
       notifyListeners();
       return;
     }
-    componentSelected.value = componentModel;
+    componentSelected = componentModel;
     _submitButtonStatus = SubmitButtonStatus.Idle;
-    componentSelected.notifyListeners();
+    notifyListeners();
     notifyListeners();
   }
 

@@ -132,7 +132,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if(widget.taskViewController.componentSelected.value.body_id != null) ConfirmButtonWidget(taskViewController: widget.taskViewController, soundpool: widget.taskViewController.soundpool),
+            if(widget.taskViewController.componentSelected.body_id != null) ConfirmButtonWidget(taskViewController: widget.taskViewController, soundpool: widget.taskViewController.soundpool),
             SizedBox(width: 10),
             showButtonResponse
                 ? Container()

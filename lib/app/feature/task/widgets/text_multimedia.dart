@@ -57,7 +57,7 @@ class TextMultimedia extends StatelessWidget {
               return GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
-                  // taskViewController.changeComponentSelected(componentModel);
+                  if(isMte && componentModel.body_id!=null) taskViewController.changeComponentSelected(componentModel);
                   if (audioCallback != null) {
                     audioCallback!();
                     return;
@@ -70,7 +70,7 @@ class TextMultimedia extends StatelessWidget {
                       ? BoxDecoration(
                           borderRadius: BorderRadius.circular(18),
                           border:
-                              Border.all(width: 2, color: componentModel == taskViewController.componentSelected.value ? Color(0xFF0000FF) : Color.fromRGBO(110, 114, 145, 0.2)),
+                              Border.all(width: 2, color: componentModel == taskViewController.componentSelected ? Color(0xFF0000FF) : Color.fromRGBO(110, 114, 145, 0.2)),
                         )
                       : null,
                   padding: EdgeInsets.symmetric(horizontal: 5),

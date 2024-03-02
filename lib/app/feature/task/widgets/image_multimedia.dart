@@ -55,14 +55,13 @@ class _ImageMultimediaState extends State<ImageMultimedia> {
         } else {
           heightWidth = size.width / 3;
         }
-      }
-      else{
+      } else {
         if (isHorizontal) {
           heightWidth = horizontalWidth / 2;
         } else {
           heightWidth = size.width / 2;
         }
-        heightWidth = min(size.height/3.5 , heightWidth);
+        heightWidth = min(size.height / 3.5, heightWidth);
       }
     }
 
@@ -94,9 +93,9 @@ class _ImageMultimediaState extends State<ImageMultimedia> {
               );
             }
 
-            return ValueListenableBuilder(
-              valueListenable: widget.taskViewController!.componentSelected,
-              builder: (context, value, child) {
+            return AnimatedBuilder(
+              animation: widget.taskViewController!,
+              builder: (context, child) {
                 return GestureDetector(
                   onTap: () => widget.bodyElement ? widget.taskViewController!.changeComponentSelected(widget.componentModel) : null,
                   child: Container(
@@ -105,7 +104,7 @@ class _ImageMultimediaState extends State<ImageMultimedia> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(width: 2, color: widget.componentModel == value ? Color(0xFF0000FF) : Color.fromRGBO(110, 114, 145, 0.2)),
+                      border: Border.all(width: 2, color: widget.componentModel == widget.taskViewController!.componentSelected ? Color(0xFF0000FF) : Color.fromRGBO(110, 114, 145, 0.2)),
                       image: DecorationImage(
                         image: MemoryImage(imageData),
                         fit: BoxFit.contain,
