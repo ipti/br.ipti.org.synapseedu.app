@@ -145,7 +145,6 @@ class TaskViewController extends ChangeNotifier {
   ComponentModel componentSelected = ComponentModel();
 
   void changeComponentSelected(ComponentModel componentModel) {
-    print("Componente selecionado: ${componentModel}");
     if (componentSelected == componentModel) {
       componentSelected = ComponentModel();
       notifyListeners();

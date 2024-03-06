@@ -5,6 +5,7 @@ import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../../../util/config.dart';
+import '../../qrcode/qrcode_module.dart';
 
 class AuthScreen extends StatelessWidget {
   final AuthController authController;
@@ -34,6 +35,9 @@ class AuthScreen extends StatelessWidget {
         ),
       );
     }
+
+    return QrCodeModule();
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(

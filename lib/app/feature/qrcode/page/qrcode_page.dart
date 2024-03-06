@@ -112,6 +112,7 @@ class _QrCodePageState extends State<QrCodePage> {
       controller.pauseCamera();
       Map<String, dynamic> jsonMaped = json.decode(qrText);
       BlockParameterEntity blockParameterEntity = BlockParameterEntity.fromJson(jsonMaped);
+      print("FROMM QR CODE: ${blockParameterEntity.toJson()}");
       UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
       userProvider.setUser(LoginResponseEntity(id: blockParameterEntity.studentId,name: "Aluno", user_name: "Aluno", user_type_id: 3));
       widget.qrCodeController.getBlock(context, blockParameterEntity);

@@ -24,7 +24,6 @@ class Performance {
 
   //fromjson
   factory Performance.fromJson(Map<String, dynamic> json) {
-    print(json);
     return Performance(
         id: json['id'],
         student_id: json['student_id'],

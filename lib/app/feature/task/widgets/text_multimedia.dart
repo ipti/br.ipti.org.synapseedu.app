@@ -87,7 +87,6 @@ class TextMultimedia extends StatelessWidget {
                                 builder: (context, AsyncSnapshot<PlaybackEvent> snapshot) {
                                   ProcessingState? state = snapshot.data?.processingState;
                                   if (state == ProcessingState.ready) {
-                                    print("READY");
                                     taskViewController.isDownloadingAudio = false;
                                   }
                                   if (taskViewController.isDownloadingAudio) return Icon(Icons.downloading, color: Colors.blue);

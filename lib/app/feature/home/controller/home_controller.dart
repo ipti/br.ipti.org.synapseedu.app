@@ -15,7 +15,6 @@ class HomeController extends ChangeNotifier {
   final TextEditingController taskIdController = TextEditingController();
 
   Future submitSearchTaskById(BuildContext context) async {
-    print("Entrou aqui");
     _searchButtonStatus = SubmitButtonStatus.Loading;
     // notifyListeners();
     final taskId = int.parse(taskIdController.text);
