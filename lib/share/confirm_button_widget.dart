@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'dart:io';
-
-// import 'package:audioplayers/audio_cache.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:elesson/template_questoes/ddrop/ddrop_function.dart';
 import 'package:elesson/share/snackbar_widget.dart';
 import 'package:elesson/template_questoes/model.dart';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:elesson/app/util/config.dart';
 
 class ConfirmButtonWidget extends StatefulWidget {
   const ConfirmButtonWidget({
@@ -155,42 +153,27 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
 
       onPressed: () {
         timeEnd = DateTime.now().millisecondsSinceEpoch;
-        // prefs.setInt('last_question_${widget.cobjectList[0].discipline}',
-        //     widget.questionIndex);
-        // prefs.setInt('last_cobject_${widget.cobjectList[0].discipline}',
-        //     widget.cobjectIndex);
-
-        // if (!(widget.questionIndex < widget.cobjectQuestionsLength)) {
-        //   if (widget.cobjectIndex + 1 < widget.cobjectIdListLength) {
-        //     prefs.setInt(
-        //         'last_question_${widget.cobjectList[0].discipline}', 0);
-        //     prefs.setInt('last_cobject_${widget.cobjectList[0].discipline}',
-        //         widget.cobjectIndex + 1);
-        //   } else {
-        //     prefs.setInt('last_cobject_${widget.cobjectList[0].discipline}', 0);
-        //     prefs.setInt(
-        //         'last_question_${widget.cobjectList[0].discipline}', 0);
-        //     prefs.setBool(widget.cobjectList[0].discipline, true);
-        //   }
-        // }
 
         if (isSecondClick == false) {
-          setState(() {
-            if (widget.isCorrect) {
-              confirmButtonColor = true;
-              confirmButtonBorder = true;
-              confirmButtonTextColor = true;
-              confirmButtonText = 'VOCÊ ACERTOU!';
-              // audioCache.play('audio/positiva.wav');
-            } else {
-              confirmButtonColor = false;
-              confirmButtonBorder = false;
-              confirmButtonTextColor = false;
-              confirmButtonText = 'NÃO ERA ESSA :(';
-              // audioCache.play('audio/negativa.wav');
-            }
-            confirmButtonBackgroundOpacity = 0.2;
-          });
+          if(answerFeedback) {
+            setState(() {
+              if (widget.isCorrect) {
+                confirmButtonColor = true;
+                confirmButtonBorder = true;
+                confirmButtonTextColor = true;
+                confirmButtonText = 'VOCÊ ACERTOU!';
+                // audioCache.play('audio/positiva.wav');
+              } else {
+                confirmButtonColor = false;
+                confirmButtonBorder = false;
+                confirmButtonTextColor = false;
+                confirmButtonText = 'NÃO ERA ESSA :(';
+                // audioCache.play('audio/negativa.wav');
+              }
+              confirmButtonBackgroundOpacity = 0.2;
+            });
+          }
+
           // isCorrect = !isCorrect;
           nextQuestionTimer = Timer(Duration(seconds: 2), () {
             setState(() {

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 // import 'package:twilio_phone_verify/twilio_phone_verify.dart';
-import '../app/core/qrcode/domain/entity/block_parameters_entity.dart';
+import '../app/core/block/domain/entity/block_parameters_entity.dart';
 import '../app/feature/qrcode/controller/qrcode_controller.dart';
 
 class QrCodePage extends StatefulWidget {

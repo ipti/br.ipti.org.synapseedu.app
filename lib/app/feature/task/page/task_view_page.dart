@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 class TaskViewPage extends StatefulWidget {
   final TaskModel taskModel;
   final TaskViewController taskViewController;
+  final bool offline;
 
-  const TaskViewPage({Key? key, required this.taskModel, required this.taskViewController}) : super(key: key);
+  const TaskViewPage({Key? key, required this.taskModel, required this.taskViewController, required this.offline}) : super(key: key);
 
   @override
   _TaskViewPageState createState() => _TaskViewPageState();
@@ -26,7 +27,7 @@ class _TaskViewPageState extends State<TaskViewPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: TemplateSlider(taskViewController: widget.taskViewController),
+        body: TemplateSlider(taskViewController: widget.taskViewController, offline: widget.offline),
       ),
     );
   }

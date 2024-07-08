@@ -36,7 +36,7 @@ class AuthScreen extends StatelessWidget {
       );
     }
 
-    return QrCodeModule();
+    // return QrCodeModule();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -48,11 +48,13 @@ class AuthScreen extends StatelessWidget {
             initTitle(text: "Acesse seu espaço (A)", heightScreen: size.height, bottomMargin: 36),
             SizedBox(height: 36.0),
             elessonCard(backgroundImage: "assets/img/cover.png", text: "ACESSO COM QR CODE", screenWidth: size.width, onTap: scan, context: context),
-            SizedBox(height: size.height * 0.05),
-            authController.showLoading ? CircularProgressIndicator(): GestureDetector(
-              onTap: () => authController.getAcessToken(context),
-              child: Text("USAR COMO CONVIDADO", style: TextStyle(decoration: TextDecoration.underline, color: Colors.blue, fontWeight: FontWeight.bold)),
-            ),
+            SizedBox(height: 36.0),
+            elessonCard(backgroundImage: "assets/img/mate.png", text: "USO OFFLINE", screenWidth: size.width, onTap: navigateToOfflineHome, context: context),
+            // SizedBox(height: size.height * 0.05),
+            // authController.showLoading ? CircularProgressIndicator(): GestureDetector(
+            //   onTap: () => authController.getAcessToken(context),
+            //   child: Text("USAR COMO CONVIDADO", style: TextStyle(decoration: TextDecoration.underline, color: Colors.blue, fontWeight: FontWeight.bold)),
+            // ),
           ],
         ),
       ),

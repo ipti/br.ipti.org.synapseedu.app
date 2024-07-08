@@ -1,12 +1,12 @@
 import 'dart:developer';
 import 'package:dartz/dartz.dart';
-import 'package:elesson/app/core/qrcode/domain/usecase/get_block_usecase.dart';
+import 'package:elesson/app/core/block/domain/usecase/get_block_usecase.dart';
 import 'package:elesson/app/feature/task/task_module.dart';
 import 'package:elesson/app/providers/block_provider.dart';
 import 'package:flutter/material.dart';
 import '../../../core/auth/domain/usecases/auth_usecase.dart';
-import '../../../core/qrcode/data/model/block_model.dart';
-import '../../../core/qrcode/domain/entity/block_parameters_entity.dart';
+import '../../../core/block/data/model/block_model.dart';
+import '../../../core/block/domain/entity/block_parameters_entity.dart';
 import '../../../util/failures/failures.dart';
 
 ///Essa controladora deve ser instanciada com o
@@ -23,6 +23,10 @@ class QrCodeController extends ChangeNotifier {
 
   String get screenMessage => _screenMessage;
 
+  Future<void> setBlockOffline(BuildContext context, BlockModel blockModel) async {
+    blockProvider.setNewBlock(blockModel);
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => TaskModule(taskId: blockProvider.firstTaskId, offline: true)));
+  }
 
   //BlockParameterEntity(disciplineId: 2, teacherId: 5, studentId: 1)
   Future<void> getBlock(BuildContext context, BlockParameterEntity blockParameterEntity) async {

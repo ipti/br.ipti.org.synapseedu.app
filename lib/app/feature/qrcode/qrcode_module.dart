@@ -9,16 +9,18 @@ import '../../core/auth/data/repository/auth_repository_interface.dart';
 import '../../core/auth/domain/entity/auth_entity.dart';
 import '../../core/auth/domain/repository/auth_repository_impl.dart';
 import '../../core/auth/domain/usecases/auth_usecase.dart';
-import '../../core/qrcode/data/datasource/block_remote_datasource.dart';
-import '../../core/qrcode/domain/repository/block_repository_impl.dart';
-import '../../core/qrcode/domain/usecase/get_block_usecase.dart';
+import '../../core/block/data/datasource/block_remote_datasource.dart';
+import '../../core/block/data/model/block_model.dart';
+import '../../core/block/domain/repository/block_repository_impl.dart';
+import '../../core/block/domain/usecase/get_block_usecase.dart';
 import '../../core/task/data/repository/block_repository_interface.dart';
 import '../../util/network/dio_authed/dio_authed.dart';
 import 'controller/qrcode_controller.dart';
 import 'page/qrcode_page.dart';
 
 class QrCodeModule extends StatefulWidget {
-  const QrCodeModule({super.key});
+  final BlockModel? blockModelOffline;
+  const QrCodeModule({super.key, this.blockModelOffline});
 
   @override
   State<QrCodeModule> createState() => _QrCodeModuleState();
@@ -31,12 +33,12 @@ class _QrCodeModuleState extends State<QrCodeModule> {
 
   late QrCodeController _qrCodeController;
   late BlockProvider _blockProvider;
+
   @override
   void initState() {
     super.initState();
     Dio dioAuthed = DioAuthed().dio;
 
-    // _blockRemoteDataSource = BlockRemoteDataSourceMockImpl(dio: dioAuthed);
     _blockRemoteDataSource = BlockRemoteDataSourceImpl(dio: dioAuthed);
     _blockRepository = BlockRepositoryImpl(blockRemoteDataSource: _blockRemoteDataSource);
     _getBlockUseCase = GetBlockUsecase(repository: _blockRepository);
@@ -58,7 +60,7 @@ class _QrCodeModuleState extends State<QrCodeModule> {
     return SafeArea(
       child: AnimatedBuilder(
           animation: _qrCodeController,
-          builder: (context, child) => QrCodePage(qrCodeController: _qrCodeController),
+          builder: (context, child) => QrCodePage(qrCodeController: _qrCodeController, blockModelOffline: widget.blockModelOffline)
           ),
     );
   }

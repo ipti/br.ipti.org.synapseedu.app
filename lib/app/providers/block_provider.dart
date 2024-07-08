@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../core/qrcode/data/model/block_model.dart';
+import '../core/block/data/model/block_model.dart';
 import '../core/task/data/model/task_model.dart';
 
 class BlockProvider extends ChangeNotifier {
@@ -27,13 +27,23 @@ class BlockProvider extends ChangeNotifier {
   }
 
   get firstTaskId {
-    if(currentBlock.tasks.length == 0 || currentBlock.tasks.length <= currentTaskIndex) return null;
-    return currentBlock.tasks[currentTaskIndex];
+    if(currentBlock.lessons.values.first.tasksId.length == 0 || currentBlock.lessons.values.first.tasksId.length <= currentTaskIndex) return null;
+    return currentBlock.lessons.values.first.tasksId[currentTaskIndex];
   }
 
   int? get nextTaskId {
-    if (currentTaskIndex >= currentBlock.tasks.length - 1) return null;
+    if (currentTaskIndex >= currentBlock.lessons.values.first.tasksId.length - 1) return null;
     currentTaskIndex++;
-    return currentBlock.tasks[currentTaskIndex];
+    return currentBlock.lessons.values.first.tasksId[currentTaskIndex];
+  }
+
+  Future<bool> saveBlockInCache() async {
+    // await _cacheRepository.saveBlock(currentBlock);
+    return true;
+  }
+
+  Future<bool> loadBlockFromCache() async {
+    // currentBlock = await _cacheRepository.getBlock();
+    return true;
   }
 }

@@ -48,7 +48,6 @@ class TextMultimedia extends StatelessWidget {
       future: getMultimediaUseCase.getTextById(findedElementModel.multimedia_id!),
       builder: (context, AsyncSnapshot<Either<Failure, String>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) return ShimmerLoadMultimedia(width: size.width - 32, height: height);
-        print("SNAPSHOT: ${snapshot.data}");
         return snapshot.data!.fold(
           (l) => Container(),
           (r) => AnimatedBuilder(

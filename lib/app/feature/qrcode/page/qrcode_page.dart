@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:elesson/app/core/block/data/model/block_model.dart';
 import 'package:elesson/app/providers/userProvider.dart';
+import 'package:elesson/app/util/config.dart';
 import 'package:elesson/share/general_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,16 +10,16 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../../../settings/settings_screen.dart';
 import '../../../core/auth/domain/entity/login_response_entity.dart';
-import '../../../core/qrcode/domain/entity/block_parameters_entity.dart';
+import '../../../core/block/domain/entity/block_parameters_entity.dart';
 import '../controller/qrcode_controller.dart';
-
 
 class QrCodePage extends StatefulWidget {
   static const routeName = '/qr_code';
 
   final QrCodeController qrCodeController;
+  final BlockModel? blockModelOffline;
 
-  QrCodePage({required this.qrCodeController});
+  QrCodePage({required this.qrCodeController, this.blockModelOffline});
 
   @override
   State<StatefulWidget> createState() => _QrCodePageState();
@@ -63,7 +65,6 @@ class _QrCodePageState extends State<QrCodePage> {
                 ),
                 Stack(
                   children: [
-
                     Container(
                       color: Colors.black,
                       height: MediaQuery.of(context).size.height * 0.23,
@@ -85,8 +86,16 @@ class _QrCodePageState extends State<QrCodePage> {
                       height: 30,
                       child: IconButton(
                         alignment: Alignment.topLeft,
-                        onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsScreen(),)),
-                        icon: Icon(Icons.settings,color: Colors.white),
+                        onPressed: () {
+                          BlockParameterEntity blockParameterEntity = BlockParameterEntity(teacherId: 1, studentId: 1, disciplineId: 1);
+                          answerFeedback = blockParameterEntity.enableFeedback;
+                          UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+                          userProvider.setUser(LoginResponseEntity(id: blockParameterEntity.studentId, name: "Aluno", user_name: "Aluno", user_type_id: 3));
+
+                          widget.qrCodeController.setBlockOffline(context, widget.blockModelOffline!);
+                          // Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsScreen()));
+                        },
+                        icon: Icon(Icons.settings, color: Colors.white),
                       ),
                     ),
                   ],
@@ -94,7 +103,6 @@ class _QrCodePageState extends State<QrCodePage> {
               ],
             ),
           ),
-
           Container(
             height: 100,
             width: 100,
@@ -108,14 +116,20 @@ class _QrCodePageState extends State<QrCodePage> {
 
   void _onQRViewCreated(QRViewController controller) {
     controller.scannedDataStream.listen((scanData) async {
+      print("KEVENNY");
       qrText = scanData.code ?? '';
       controller.pauseCamera();
       Map<String, dynamic> jsonMaped = json.decode(qrText);
       BlockParameterEntity blockParameterEntity = BlockParameterEntity.fromJson(jsonMaped);
-      print("FROMM QR CODE: ${blockParameterEntity.toJson()}");
+      answerFeedback = blockParameterEntity.enableFeedback;
       UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-      userProvider.setUser(LoginResponseEntity(id: blockParameterEntity.studentId,name: "Aluno", user_name: "Aluno", user_type_id: 3));
-      widget.qrCodeController.getBlock(context, blockParameterEntity);
+      userProvider.setUser(LoginResponseEntity(id: blockParameterEntity.studentId, name: "Aluno", user_name: "Aluno", user_type_id: 3));
+
+      if (widget.blockModelOffline != null) {
+        widget.qrCodeController.setBlockOffline(context, widget.blockModelOffline!);
+      } else {
+        widget.qrCodeController.getBlock(context, blockParameterEntity);
+      }
     });
   }
 }

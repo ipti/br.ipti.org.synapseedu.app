@@ -56,4 +56,16 @@ class Performance {
     }
     return jsonGenerated;
   }
+
+  //empty
+  static Performance empty() {
+    return Performance(
+      student_id: 0,
+      taskId: 0,
+      isCorrect: false,
+      timeResolution: 0,
+      createdAt: DateTime.now(),
+      metadata: MetaDataModel.empty(),
+    );
+  }
 }

@@ -15,6 +15,9 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:soundpool/soundpool.dart';
+import '../../core/task/data/datasource/cached/multimedia_cached_datasource.dart';
+import '../../core/task/data/datasource/cached/performance_cached_datasource.dart';
+import '../../core/task/data/datasource/cached/task_cached_datasource.dart';
 import '../../core/task/data/datasource/task_remote_datasource.dart';
 import '../../core/task/data/repository/performance_repository_interface.dart';
 import '../../core/task/data/repository/task_repository_interface.dart';
@@ -29,8 +32,8 @@ class TaskModule extends StatefulWidget {
   static const routeName = '/task-module';
   final TaskModel? taskModel;
   final int? taskId;
-
-  const TaskModule({Key? key, this.taskModel, this.taskId}) : super(key: key);
+  final bool offline;
+  const TaskModule({Key? key, this.taskModel, this.taskId, this.offline = false}) : super(key: key);
 
   @override
   State<TaskModule> createState() => _TaskModuleState();
@@ -55,6 +58,8 @@ class _TaskModuleState extends State<TaskModule> {
   late Soundpool soundpool;
   late AudioPlayer audioPlayer;
 
+  late TaskCachedDataSourceImpl taskCachedDataSourceImpl;
+
   @override
   void initState() {
     super.initState();
@@ -62,20 +67,25 @@ class _TaskModuleState extends State<TaskModule> {
       task = widget.taskModel!;
     }
 
+    print("OFFLINE: ${widget.offline}");
+
+
     Dio dioAuthed = DioAuthed().dio;
-    _taskRemoteDataSource = TaskRemoteDataSourceImpl(dio: dioAuthed);
+
+    taskCachedDataSourceImpl = TaskCachedDataSourceImpl();
+
+    _taskRemoteDataSource = widget.offline ? taskCachedDataSourceImpl : TaskRemoteDataSourceImpl(dio: dioAuthed);
     _taskRepository = TaskRepositoryImpl(taskRemoteDataSource: _taskRemoteDataSource);
     _getTaskUseCase = GetTaskUseCase(taskRepository: _taskRepository);
     loadNextTask();
 
-    _multimediaRemoteDataSource = MultimediaRemoteDataSourceImpl(dio: dioAuthed);
+    _multimediaRemoteDataSource = widget.offline ? MultimediaCachedDataSourceImpl() : MultimediaRemoteDataSourceImpl(dio: dioAuthed);
     _multimediaRepository = MultimediaRepositoryImpl(multimediaRemoteDataSource: _multimediaRemoteDataSource);
     _getMultimediaUseCase = MultimediaUseCase(multimediaRepository: _multimediaRepository);
 
-    _performanceRemoteDataSource = PerformanceRemoteDatasource(dio: dioAuthed);
+    _performanceRemoteDataSource = widget.offline ? PerformanceCachedDataSourceImpl() : PerformanceRemoteDatasource(dio: dioAuthed);
     _performanceRepository = PerformanceRepositoryImpl(performanceRemoteDataSource: _performanceRemoteDataSource);
     _sendPerformanceUseCase = SendPerformanceUseCase(performanceRepository: _performanceRepository);
-
 
     soundpool = Soundpool.fromOptions(options: SoundpoolOptions(streamType: StreamType.music));
   }
@@ -86,17 +96,25 @@ class _TaskModuleState extends State<TaskModule> {
     int? nextTaskId = blockProvider.nextTaskId;
     if (nextTaskId != null) {
       Dartz.Either<Failure, TaskModel> res = await _getTaskUseCase.getTaskById(nextTaskId);
-      res.fold((l) => null, (r) => blockProvider.tasksLoaded.add(r));
+      res.fold((l) => print("ERRO AO CARREGAR TASK: $l"), (r) {
+        print("TASK CARREGADA: ${r.toJson()}");
+        blockProvider.tasksLoaded.add(r);
+      });
     }
   }
 
   Future<void> preparingTask() async {
+    print("TASK MODULE LOADED");
     int userId = Provider.of<UserProvider>(context, listen: false).user.id;
+    print("USER: $userId");
     if (widget.taskId != null) {
       Dartz.Either<Failure, TaskModel> res = await _getTaskUseCase.getTaskById(widget.taskId!);
       res.fold(
-        (l) => null,
-        (r) => task = r,
+        (l) => print("ERRO AO CARREGAR TASK: $l"),
+        (r) {
+          print("TASK CARREGADA: ${r.toJson()}");
+          return task = r;
+        },
       );
     }
 
@@ -120,10 +138,13 @@ class _TaskModuleState extends State<TaskModule> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Material(color: Colors.white, child: Center(child: CircularProgressIndicator()));
           }
+          // print("TASK MODULE LOADED TASK VIEW CONTROLLER ${_taskViewController}");
           return AnimatedBuilder(
             animation: _taskViewController,
-            builder: (context, child) => TaskViewPage(taskViewController: _taskViewController, taskModel: task),
+            builder: (context, child) => TaskViewPage(taskViewController: _taskViewController, taskModel: task, offline: widget.offline),
           );
+
+          // return  Text("TASK MODULE LOADED TASK VIEW CONTROLLER ${task.toJson()}");
         });
   }
 }

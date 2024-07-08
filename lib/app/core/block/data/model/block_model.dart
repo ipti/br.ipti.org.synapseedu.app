@@ -17,10 +17,10 @@ class BlockModel {
     return BlockModel(
         id: json['id'],
         teacher: BlockValues.fromJson(json['teacher']),
-        student: BlockValues.fromJson(json['student']),
+        student: json['student'] != null ? BlockValues.fromJson(json['student']) : BlockValues.empty(),
         discipline: BlockValues.fromJson(json['discipline']),
         tasks: json['tasks'] != null ? (json['tasks'] as List<dynamic>).map((e) => int.parse(e.toString())).toList() : [],
-        breakPoint: BreakPointModel.fromJson(json['break_point']),
+        breakPoint: json['break_point'] != null ? BreakPointModel.fromJson(json['break_point']) : BreakPointModel(last_resolved_task_id: 0, created_at: DateTime.now()),
         lessons: Map.from(json["lessons"]).map((k, v) => MapEntry<String, Lesson>(k, Lesson.fromJson(v))),
     );
   }

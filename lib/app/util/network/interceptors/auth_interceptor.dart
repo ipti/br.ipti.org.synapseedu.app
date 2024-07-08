@@ -12,7 +12,7 @@ class AuthInterceptor extends InterceptorsWrapper {
     try {
       final sessionService = AuthLocalDatasourceImpl();
       final token = await sessionService.getToken();
-      log("[Request] Requicição com token");
+      // log("[Request] Requicição com token");
       options.headers['Authorization'] = 'Bearer $token';
 
       return super.onRequest(options, handler);

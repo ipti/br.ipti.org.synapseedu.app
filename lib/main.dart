@@ -69,7 +69,9 @@ void main() async {
             ), colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.lightGreen).copyWith(background: Color(0xFFFFFFFF)),
           ),
           // initialRoute: QrCodePage.routeName,
+          // initialRoute: ActivitySelectionForm.routeName,
           initialRoute: AuthModule.routeName,
+          // initialRoute: BlockConclusionScreen.routeName,
           routes: {
             AuthModule.routeName: (context) => AuthModule(),
             HomeModule.routeName: (context) => HomeModule(),

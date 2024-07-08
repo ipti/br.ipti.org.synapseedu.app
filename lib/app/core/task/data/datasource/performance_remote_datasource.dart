@@ -12,7 +12,7 @@ abstract class IPerformanceRemoteDatasource {
 
 class PerformanceRemoteDatasource implements IPerformanceRemoteDatasource {
   final Dio dio;
-  String url = '/performance';
+  String url = '/random';
 
   PerformanceRemoteDatasource({required this.dio});
 

@@ -9,11 +9,14 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:soundpool/soundpool.dart';
 
+import '../../../util/config.dart';
+
 class ConfirmButtonWidget extends StatefulWidget {
   final TaskViewController taskViewController;
   final Soundpool soundpool;
+  final bool offline;
 
-  ConfirmButtonWidget({Key? key, required this.taskViewController, required this.soundpool}) : super(key: key);
+  ConfirmButtonWidget({Key? key, required this.taskViewController, required this.soundpool, required this.offline}) : super(key: key);
 
   @override
   State<ConfirmButtonWidget> createState() => _ConfirmButtonWidgetState();
@@ -53,6 +56,11 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
   void changeConfirmButton(SubmitButtonStatus newState) async {
     if (oldState != newState) {
       oldState = newState;
+      if(!answerFeedback && widget.taskViewController.buttonStatus != SubmitButtonStatus.Idle) {
+        confirmButtonText = 'ENVIADA!';
+        await widget.soundpool.play(positiveSoundId);
+        return;
+      };
       switch (widget.taskViewController.buttonStatus) {
         case SubmitButtonStatus.Idle:
           confirmButtonText = 'ENVIAR RESPOSTA';
@@ -143,7 +151,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
                                 Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => TaskCompletedPage()), (route) => false);
                                 return;
                               }
-                              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => TaskModule(taskModel: nextTaskId)));
+                              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => TaskModule(taskModel: nextTaskId,offline: widget.offline)));
                             }
                           : null,
                     ),

@@ -5,7 +5,7 @@ import '../../../../util/failures/failures.dart';
 import '../../data/model/block_model.dart';
 import 'package:dartz/dartz.dart';
 
-class BlockRepositoryImpl extends IBlockRepository{
+class BlockRepositoryImpl extends IBlockRepository {
   final IBlockRemoteDataSource blockRemoteDataSource;
 
   BlockRepositoryImpl({required this.blockRemoteDataSource});
@@ -15,6 +15,17 @@ class BlockRepositoryImpl extends IBlockRepository{
     try {
       final block = await blockRemoteDataSource.getBlock(blockParameter);
       return Right(block);
+    } on Failure catch (e) {
+      return Left(e);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<BlockModel>>> getBlockByTeacherId(int teacherId) async {
+    print("======================================");
+    try {
+      final listBlock = await blockRemoteDataSource.getBlockByTeacherId(teacherId);
+      return Right(listBlock);
     } on Failure catch (e) {
       return Left(e);
     }

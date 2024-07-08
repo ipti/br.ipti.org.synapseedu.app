@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:provider/provider.dart';
 import '../../core/auth/data/datasource/remote/auth_remote_datasource.dart';
+import '../../util/network/cachedStorage.dart';
 import 'controller/auth_controller.dart';
 
 class AuthModule extends StatefulWidget {
@@ -47,6 +48,9 @@ class _AuthModuleState extends State<AuthModule> {
 
     AuthUseCase _authUseCase = AuthUseCase(authRepository: authRepository);
     _authController = AuthController(authUseCase: _authUseCase);
+
+    CachedStorage();
+
   }
   Future<LoginResponseEntity> verifyLogin() async {
     initialized = true;
@@ -61,15 +65,13 @@ class _AuthModuleState extends State<AuthModule> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: FutureBuilder(
-        future: initialized ? null : verifyLogin(),
+        future: null, // initialized ? null : verifyLogin(),
         builder: (context, AsyncSnapshot<LoginResponseEntity> snapshot) {
           if (snapshot.connectionState != ConnectionState.waiting) {
-            return snapshot.data != LoginResponseEntity.empty()
-                ? HomeModule()
-                : AnimatedBuilder(
-                    animation: _authController,
-                    builder: (context, child) => AuthScreen(authController: _authController),
-                  );
+            return AnimatedBuilder(
+              animation: _authController,
+              builder: (context, child) => AuthScreen(authController: _authController),
+            );
           } else {
             return Center(child: CircularProgressIndicator());
           }

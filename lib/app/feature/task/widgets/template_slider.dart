@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:elesson/app/feature/task/controller/task_view_controller.dart';
 import 'package:elesson/app/feature/task/widgets/confirm_button.dart';
+import 'package:elesson/app/util/enums/task_types.dart';
 import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -8,8 +9,9 @@ import 'template_slider/top_screen.dart';
 
 class TemplateSlider extends StatefulWidget {
   final TaskViewController taskViewController;
+  final bool offline;
 
-  TemplateSlider({Key? key, required this.taskViewController}) : super(key: key);
+  TemplateSlider({Key? key, required this.taskViewController, required this.offline}) : super(key: key);
 
   @override
   _TemplateSliderState createState() => _TemplateSliderState();
@@ -118,12 +120,12 @@ class _TemplateSliderState extends State<TemplateSlider> {
                 ],
               ),
       ),
-      floatingActionButton: bottonTemplateSlider(bottonPadding, buttonHeight, context, buttonWidth, size.width > size.height),
+      floatingActionButton: bottonTemplateSlider(bottonPadding, buttonHeight, context, buttonWidth, size.width > size.height, widget.offline),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
-  Widget bottonTemplateSlider(double bottonPadding, double buttonHeight, BuildContext context, double buttonWidth, bool showButtonResponse) {
+  Widget bottonTemplateSlider(double bottonPadding, double buttonHeight, BuildContext context, double buttonWidth, bool showButtonResponse, bool offline) {
     return Container(
       color: Colors.white,
       height: bottonPadding,
@@ -132,7 +134,7 @@ class _TemplateSliderState extends State<TemplateSlider> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if(widget.taskViewController.componentSelected.body_id != null) ConfirmButtonWidget(taskViewController: widget.taskViewController, soundpool: widget.taskViewController.soundpool),
+            if(widget.taskViewController.componentSelected.body_id != null || widget.taskViewController.task.template_id == TemplateTypes.TEXT.templateId ||!widget.taskViewController.ddropOptions.value.any((element) => element.component_id == 0)) ConfirmButtonWidget(taskViewController: widget.taskViewController, soundpool: widget.taskViewController.soundpool, offline: offline),
             SizedBox(width: 10),
             showButtonResponse
                 ? Container()

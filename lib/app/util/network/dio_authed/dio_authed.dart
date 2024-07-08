@@ -11,7 +11,7 @@ class DioAuthed {
   final Dio dio = Dio()
     ..interceptors.addAll([
       AuthInterceptor(),
-      // if (kDebugMode) PrettyDioLogger(requestHeader: true, requestBody: true, responseBody: true, responseHeader: true, error: true, compact: true, maxWidth: 90),
+      // PrettyDioLogger(requestHeader: true, requestBody: true, responseBody: true, responseHeader: true, error: true, compact: true, maxWidth: 90),
       ErrorInterceptor()
     ])
     ..options = BaseOptions(

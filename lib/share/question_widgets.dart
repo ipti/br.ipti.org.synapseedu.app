@@ -5,6 +5,7 @@ import 'package:elesson/app/feature/qrcode/qrcode_module.dart';
 
 // import 'package:elesson/template_questoes/question_provider.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import '../app/feature/home_offline/home_offline_module.dart';
 import '../template_questoes/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -322,8 +323,11 @@ Widget submitAnswer(BuildContext context, List<Cobject> cobjectList, String ques
 
 Future<String?> scan(BuildContext context) async {
   String? returnedValue = await Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => new QrCodeModule()));
-  //todo implementar aqui direcionamento pra aluma pagina se for preciso (OBS: Tem que ser antes do retorno pra não bugar)
   return returnedValue;
+}
+
+void navigateToOfflineHome(BuildContext context) async {
+  Navigator.pushReplacement(context, new MaterialPageRoute(builder: (BuildContext context) => new HomePageOfflineModule()));
 }
 
 Future<void> sendMetaData({String? pieceId, String? groupId, int? finalTime, int? intervalResolution, String? value, bool? isCorrect}) async {
