@@ -10,13 +10,19 @@ class CachedStorage {
   late Database db;
   var store = StoreRef.main();
 
-  initDB() async {
-    print("Iniciando DB");
-    var dir = await getApplicationDocumentsDirectory();
-    await dir.create(recursive: true);
-    var dbPath = join(dir.path, 'local_tasks.db');
-    db = await databaseFactoryIo.openDatabase(dbPath);
-    print("DB Pronto");
+  Future<bool> initDB() async {
+    try{
+      print("Iniciando DB");
+      var dir = await getApplicationDocumentsDirectory();
+      await dir.create(recursive: true);
+      var dbPath = join(dir.path, 'local_tasks.db');
+      db = await databaseFactoryIo.openDatabase(dbPath);
+      print("DB Pronto");
+      return true;
+    } catch(e){
+      print("Erro ao iniciar DB");
+      return false;
+    }
   }
 
   refreshDB() async {
@@ -26,6 +32,6 @@ class CachedStorage {
   factory CachedStorage() => _singleton;
 
   CachedStorage._internal(){
-    initDB();
+    // initDB();
   }
 }

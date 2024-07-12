@@ -2,17 +2,18 @@ import 'package:dio/dio.dart';
 import '../../../../util/enums/task_types.dart';
 import '../model/performance_model.dart';
 
-abstract class IPerformanceRemoteDatasource {
+abstract class IPerformanceDatasource {
   Future<Performance> sendPerformanceMTE(Performance performance);
 
   Future<Performance> sendPerformancePRE(Performance performance);
 
   Future<Performance> sendPerformanceAEL(Performance performance);
+
 }
 
-class PerformanceRemoteDatasource implements IPerformanceRemoteDatasource {
+class PerformanceRemoteDatasource implements IPerformanceDatasource {
   final Dio dio;
-  String url = '/random';
+  String url = '/performance';
 
   PerformanceRemoteDatasource({required this.dio});
 
@@ -51,4 +52,5 @@ class PerformanceRemoteDatasource implements IPerformanceRemoteDatasource {
     }
     throw "Erro ao enviar performance";
   }
+
 }

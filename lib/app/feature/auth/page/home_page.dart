@@ -5,6 +5,7 @@ import 'package:elesson/share/question_widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../../../util/config.dart';
+import '../../../util/network/cachedStorage.dart';
 import '../../qrcode/qrcode_module.dart';
 
 class AuthScreen extends StatelessWidget {
@@ -19,7 +20,7 @@ class AuthScreen extends StatelessWidget {
 
     Size size = MediaQuery.of(context).size;
 
-    if(webRender){
+    if (webRender) {
       return Scaffold(
         backgroundColor: Colors.white,
         body: SizedBox(
@@ -49,7 +50,28 @@ class AuthScreen extends StatelessWidget {
             SizedBox(height: 36.0),
             elessonCard(backgroundImage: "assets/img/cover.png", text: "ACESSO COM QR CODE", screenWidth: size.width, onTap: scan, context: context),
             SizedBox(height: 36.0),
-            elessonCard(backgroundImage: "assets/img/mate.png", text: "USO OFFLINE", screenWidth: size.width, onTap: navigateToOfflineHome, context: context),
+            FutureBuilder(
+                future: CachedStorage().initDB(),
+                builder: (context, snapshot) {
+                  bool status = snapshot.data != null && snapshot.data != false;
+                  print("SNAP: ${status}");
+                  snapshot.connectionState == ConnectionState.waiting ? CircularProgressIndicator() : Text("aaaaaaaaaaaaaaa");
+                  return Stack(
+                    children: [
+                      elessonCard(
+                          backgroundImage: "assets/img/mate.png", text: "USO OFFLINE", screenWidth: size.width, onTap: status ? navigateToOfflineHome : null, context: context),
+                      if (!status)
+                        Center(
+                          child: Container(
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(36.0), color: Colors.grey.withOpacity(0.7)),
+                            height: 145,
+                            width: size.width * 0.87,
+                            child: loadingAnimation(),
+                          ),
+                        ),
+                    ],
+                  );
+                }),
             // SizedBox(height: size.height * 0.05),
             // authController.showLoading ? CircularProgressIndicator(): GestureDetector(
             //   onTap: () => authController.getAcessToken(context),

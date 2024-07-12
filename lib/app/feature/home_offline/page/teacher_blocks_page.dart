@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:elesson/app/core/shared/domain/repository/cacheRepository.dart';
 import 'package:elesson/app/feature/home_offline/controller/offline_controller.dart';
 import 'package:flutter/material.dart';
 import '../../../core/block/data/model/block_model.dart';
@@ -7,10 +6,9 @@ import '../widgets/leason_card.dart';
 
 class TeacherBlocksPage extends StatefulWidget {
   final List<BlockModel> list_block;
-  final CacheRepository cacheRepository;
   final OfflineController offlineController;
 
-  const TeacherBlocksPage({super.key, required this.cacheRepository, required this.list_block, required this.offlineController});
+  const TeacherBlocksPage({super.key, required this.list_block, required this.offlineController});
 
   @override
   State<TeacherBlocksPage> createState() => _TeacherBlocksPageState();

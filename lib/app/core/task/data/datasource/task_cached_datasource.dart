@@ -1,9 +1,9 @@
 import 'package:elesson/app/util/network/cachedStorage.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
-import '../../../../shared/domain/repository/cacheRepository.dart';
+import '../../../shared/domain/repository/cacheRepository.dart';
 import 'package:elesson/app/core/task/data/model/task_model.dart';
-import '../task_remote_datasource.dart';
+import 'task_remote_datasource.dart';
 
 class TaskCachedDataSourceImpl extends ITaskRemoteDataSource {
   DatabaseFactory dbFactory = databaseFactoryIo;

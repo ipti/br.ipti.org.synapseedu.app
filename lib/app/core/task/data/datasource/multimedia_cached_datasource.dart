@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 import 'package:sembast/sembast.dart';
-import '../../../../../util/network/cachedStorage.dart';
-import '../../../../shared/domain/repository/cacheRepository.dart';
-import '../multimedia_remote_datasource.dart';
+import '../../../../util/network/cachedStorage.dart';
+import '../../../shared/domain/repository/cacheRepository.dart';
+import 'multimedia_remote_datasource.dart';
 
 class MultimediaCachedDataSourceImpl extends IMultimediaRemoteDatasource {
   late Database db;

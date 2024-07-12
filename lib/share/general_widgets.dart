@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// import 'package:lottie/lottie.dart';
+import 'package:lottie/lottie.dart';
 import 'elesson_icon_lib_icons.dart';
 
 Widget elessonCard({required String backgroundImage, required String text, double? screenWidth, Function? onTap, BuildContext? context, bool? blockDone}) {
@@ -60,11 +60,11 @@ Widget loadingAnimation() {
   return Container(
     height: 100,
     width: 100,
-    // child: Lottie.asset(
-    //   'assets/animations/loading.json',
-    //   width: 100,
-    //   height: 100,
-    //   fit: BoxFit.fill,
-    // ),
+    child: Lottie.asset(
+      'assets/animations/loading.json',
+      width: 100,
+      height: 100,
+      fit: BoxFit.scaleDown,
+    ),
   );
 }

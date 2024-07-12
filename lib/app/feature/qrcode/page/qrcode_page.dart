@@ -116,7 +116,6 @@ class _QrCodePageState extends State<QrCodePage> {
 
   void _onQRViewCreated(QRViewController controller) {
     controller.scannedDataStream.listen((scanData) async {
-      print("KEVENNY");
       qrText = scanData.code ?? '';
       controller.pauseCamera();
       Map<String, dynamic> jsonMaped = json.decode(qrText);

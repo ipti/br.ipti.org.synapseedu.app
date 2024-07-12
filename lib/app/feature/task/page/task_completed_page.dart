@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../auth/auth_module.dart';
 import '../../home_offline/home_offline_module.dart';
 
 class TaskCompletedPage extends StatelessWidget {
@@ -23,7 +24,7 @@ class TaskCompletedPage extends StatelessWidget {
             //botão de continuar bloco
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushNamedAndRemoveUntil("/auth-module", (route) => false);
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => AuthModule()), (route) => false);
               },
               child: Text('Continuar'),
             ),

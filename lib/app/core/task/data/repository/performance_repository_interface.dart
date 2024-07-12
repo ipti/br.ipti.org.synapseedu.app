@@ -9,4 +9,5 @@ abstract class IPerformanceRepository {
   Future<Either<Failure, Performance>> sendPerformancePRE(Performance performance);
 
   Future<Either<Failure, Performance>> sendPerformanceAEL(Performance performance);
+
 }

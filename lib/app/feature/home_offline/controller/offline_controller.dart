@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/block/data/model/block_model.dart';
 import '../../../core/task/data/datasource/task_remote_datasource.dart';
+import '../../../core/task/data/model/performance_model.dart';
 import '../../../core/task/data/model/task_model.dart';
 import '../../../core/task/data/repository/task_repository_interface.dart';
 import '../../../core/task/domain/repository/multimedia_repository_impl.dart';
@@ -28,8 +29,6 @@ class OfflineController extends ChangeNotifier {
   static OfflineController get instance {
     return _instance;
   }
-
-  //============================================================================
 
   CacheRepository cacheRepository = CacheRepository();
   Dio dioAuthed = DioAuthed().dio;
@@ -51,21 +50,21 @@ class OfflineController extends ChangeNotifier {
     }
   }
 
+  Future<bool> moveToSyncedPerformanceInCache(Performance performance) async {
+    return await cacheRepository.moveToSyncedPerformanceInCache(performance);
+  }
+
   Future<bool> downloadTaskToCache(int id) async {
     List<int> imagesIds = [];
     List<int> textIds = [];
     List<int> audioIds = [];
 
-
-    //TODO: Recebendo a task
-    if(await verifyTaskInCache(id)) return true;
+    if (await verifyTaskInCache(id)) return true;
     Either<Failure, TaskModel> taskEithered = await _getTaskUseCase.getTaskById(id);
     TaskModel task = taskEithered.getOrElse(() => TaskModel.empty());
 
-    //TODO: salvando Task
     await cacheRepository.saveTasks(task);
 
-    //TODO: Separando ID dos elementos de Imagem, Audio e Texto
     task.header?.components.forEach((componentModel) => componentModel.elements?.forEach((element) {
           if (element.type_id == MultimediaTypes.image.type_id) imagesIds.add(element.multimedia_id!);
           if (element.type_id == MultimediaTypes.text.type_id) textIds.add(element.multimedia_id!);
@@ -78,13 +77,7 @@ class OfflineController extends ChangeNotifier {
           if (element.type_id == MultimediaTypes.audio.type_id) audioIds.add(element.multimedia_id!);
         }));
 
-    print(imagesIds);
-    print(textIds);
-    print(audioIds);
-    //=================================================================================================
-
-    //TODO: Baixando Imagens e salvando em cache
-    await Future.forEach(imagesIds ,(id) async {
+    await Future.forEach(imagesIds, (id) async {
       Either<Failure, List<int>> resImage = await _getMultimediaUseCase.getBytesByMultimediaId(id);
       resImage.fold((l) => print(l), (r) async {
         bool resSave = await cacheRepository.saveMultimediaBytes(r, id);
@@ -93,9 +86,6 @@ class OfflineController extends ChangeNotifier {
       });
     });
 
-    print("IMAGENS SALVAS");
-
-    //TODO: Baixando Audios e salvando em cache
     await Future.forEach(audioIds, (id) async {
       Either<Failure, Uint8List> resAudio = await _getMultimediaUseCase.getSoundByMultimediaId(id);
       resAudio.fold((l) => print(l), (r) async {
@@ -105,9 +95,6 @@ class OfflineController extends ChangeNotifier {
       });
     });
 
-    print("AUDIOS SALVOS");
-
-    //TODO: Baixando Textos e salvando em cache
     await Future.forEach(textIds, (id) async {
       Either<Failure, String> resText = await _getMultimediaUseCase.getTextById(id);
       resText.fold((l) => print(l), (r) async {
@@ -117,12 +104,22 @@ class OfflineController extends ChangeNotifier {
       });
     });
 
-    print("TEXTOS SALVOS");
-
     return true;
   }
 
   Future<bool> verifyTaskInCache(int id) async {
     return await cacheRepository.verifyTaskInCache(id);
+  }
+
+  Future<List<Performance>> getAllPerformancesPending() async {
+    return await cacheRepository.getAllPerformancesPending();
+  }
+
+  Future<List<Performance>> getAllPerformancesSynced() async {
+    return await cacheRepository.getAllPerformancesSynced();
+  }
+
+  Future<void> clearSyncedTasks() async {
+    await cacheRepository.clearSyncedTasks();
   }
 }

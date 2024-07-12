@@ -15,9 +15,9 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:soundpool/soundpool.dart';
-import '../../core/task/data/datasource/cached/multimedia_cached_datasource.dart';
-import '../../core/task/data/datasource/cached/performance_cached_datasource.dart';
-import '../../core/task/data/datasource/cached/task_cached_datasource.dart';
+import '../../core/task/data/datasource/multimedia_cached_datasource.dart';
+import '../../core/task/data/datasource/performance_cached_datasource.dart';
+import '../../core/task/data/datasource/task_cached_datasource.dart';
 import '../../core/task/data/datasource/task_remote_datasource.dart';
 import '../../core/task/data/repository/performance_repository_interface.dart';
 import '../../core/task/data/repository/task_repository_interface.dart';
@@ -41,7 +41,7 @@ class TaskModule extends StatefulWidget {
 
 class _TaskModuleState extends State<TaskModule> {
   late IMultimediaRemoteDatasource _multimediaRemoteDataSource;
-  late IPerformanceRemoteDatasource _performanceRemoteDataSource;
+  late IPerformanceDatasource _performanceRemoteDataSource;
   late IMultimediaRepository _multimediaRepository;
 
   late IPerformanceRepository _performanceRepository;
@@ -67,9 +67,6 @@ class _TaskModuleState extends State<TaskModule> {
       task = widget.taskModel!;
     }
 
-    print("OFFLINE: ${widget.offline}");
-
-
     Dio dioAuthed = DioAuthed().dio;
 
     taskCachedDataSourceImpl = TaskCachedDataSourceImpl();
@@ -84,7 +81,7 @@ class _TaskModuleState extends State<TaskModule> {
     _getMultimediaUseCase = MultimediaUseCase(multimediaRepository: _multimediaRepository);
 
     _performanceRemoteDataSource = widget.offline ? PerformanceCachedDataSourceImpl() : PerformanceRemoteDatasource(dio: dioAuthed);
-    _performanceRepository = PerformanceRepositoryImpl(performanceRemoteDataSource: _performanceRemoteDataSource);
+    _performanceRepository = PerformanceRepositoryImpl(performanceDataSource: _performanceRemoteDataSource);
     _sendPerformanceUseCase = SendPerformanceUseCase(performanceRepository: _performanceRepository);
 
     soundpool = Soundpool.fromOptions(options: SoundpoolOptions(streamType: StreamType.music));
@@ -97,22 +94,18 @@ class _TaskModuleState extends State<TaskModule> {
     if (nextTaskId != null) {
       Dartz.Either<Failure, TaskModel> res = await _getTaskUseCase.getTaskById(nextTaskId);
       res.fold((l) => print("ERRO AO CARREGAR TASK: $l"), (r) {
-        print("TASK CARREGADA: ${r.toJson()}");
         blockProvider.tasksLoaded.add(r);
       });
     }
   }
 
   Future<void> preparingTask() async {
-    print("TASK MODULE LOADED");
     int userId = Provider.of<UserProvider>(context, listen: false).user.id;
-    print("USER: $userId");
     if (widget.taskId != null) {
       Dartz.Either<Failure, TaskModel> res = await _getTaskUseCase.getTaskById(widget.taskId!);
       res.fold(
         (l) => print("ERRO AO CARREGAR TASK: $l"),
         (r) {
-          print("TASK CARREGADA: ${r.toJson()}");
           return task = r;
         },
       );
@@ -138,13 +131,10 @@ class _TaskModuleState extends State<TaskModule> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Material(color: Colors.white, child: Center(child: CircularProgressIndicator()));
           }
-          // print("TASK MODULE LOADED TASK VIEW CONTROLLER ${_taskViewController}");
           return AnimatedBuilder(
             animation: _taskViewController,
             builder: (context, child) => TaskViewPage(taskViewController: _taskViewController, taskModel: task, offline: widget.offline),
           );
-
-          // return  Text("TASK MODULE LOADED TASK VIEW CONTROLLER ${task.toJson()}");
         });
   }
 }

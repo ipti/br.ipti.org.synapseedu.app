@@ -4,13 +4,16 @@ import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import '../../../../util/enums/task_types.dart';
 import '../../../block/data/model/block_model.dart';
+import '../../../task/data/model/performance_model.dart';
 
 final BLOCK_CACHE_KEY = "BLOCK_CACHED_";
 final TASKS_CACHE_KEY = "TASKS_CACHED_";
 final MULTIMEDIA_BYTES_CACHE_KEY = "MULTIMEDIA_BYTES_CACHED_";
 final TEXT_CACHE_KEY = "TEXT_CACHED_";
-final PERFORMANCE_CACHE_KEY = "PERFORMANCE_CACHED_";
+final PERFORMANCE_PENDING_CACHE_KEY = "PERFORMANCE_PENDING_CACHED_";
+final PERFORMANCE_SYNCED_CACHE_KEY = "PERFORMANCE_SYNCED_CACHED_";
 
 /// DEFAULT CACHE KEY
 /// KEY+ID
@@ -25,14 +28,6 @@ class CacheRepository {
     db = CachedStorage().db;
     store = CachedStorage().store;
   }
-
-  // syncDB() async {
-  //   var dir = await getApplicationDocumentsDirectory();
-  //   await dir.create(recursive: true);
-  //   var dbPath = join(dir.path, 'local_tasks.db');
-  //   db = await databaseFactoryIo.openDatabase(dbPath);
-  //   print("DB: $db");
-  // }
 
   Future refreshDB()async{
     await db.checkForChanges();
@@ -100,5 +95,34 @@ class CacheRepository {
   Future<bool> verifyTaskInCache(int id) async {
     var record = await store.record("${TASKS_CACHE_KEY}${id}").get(db);
     return record != null;
+  }
+
+  Future<List<Performance>> getAllPerformancesPending() async {
+    var performanceValuesList = await store.find(db, finder: Finder(filter: Filter.custom((record) => record.key.toString().startsWith(PERFORMANCE_PENDING_CACHE_KEY))));
+    return performanceValuesList.map((e) => Performance.fromJson(e.value as Map<String, dynamic>)).toList();
+  }
+
+  Future<List<Performance>> getAllPerformancesSynced() async {
+    var performanceValuesList = await store.find(db, finder: Finder(filter: Filter.custom((record) => record.key.toString().startsWith(PERFORMANCE_SYNCED_CACHE_KEY))));
+    return performanceValuesList.map((e) => Performance.fromJson(e.value as Map<String, dynamic>)).toList();
+  }
+
+  Future<bool> moveToSyncedPerformanceInCache(Performance performance) async {
+    try{
+      var resAdd = await store.record("${PERFORMANCE_SYNCED_CACHE_KEY}${performance.taskId}_${performance.student_id}").put(db, performance.toJson(templateType: templateTypesfromTemplateId(performance.taskId)));
+      print("RESADD: $resAdd");
+      if(resAdd == null) return false;
+      var resDelete = await store.record("${PERFORMANCE_PENDING_CACHE_KEY}${performance.taskId}_${performance.student_id}").delete(db);
+      print("RESDELETE: $resDelete");
+      return resDelete != null;
+    } catch(e){
+      print("ERRO AO MOVER PERFORMANCE PARA SYNCED: $e");
+      return false;
+    }
+  }
+
+  Future<bool> clearSyncedTasks() async {
+    var res = await store.delete(db, finder: Finder(filter: Filter.custom((record) => record.key.toString().startsWith(PERFORMANCE_SYNCED_CACHE_KEY))));
+    return res != null;
   }
 }

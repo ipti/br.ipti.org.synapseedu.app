@@ -1,9 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dio/dio.dart';
 import 'package:elesson/app/core/block/data/datasource/block_remote_datasource.dart';
+import 'package:elesson/app/core/task/data/datasource/performance_remote_datasource.dart';
 import 'package:elesson/app/core/task/data/repository/block_repository_interface.dart';
+import 'package:elesson/app/core/task/domain/usecase/send_performance_usecase.dart';
 import 'package:elesson/app/feature/home_offline/controller/offline_controller.dart';
 import 'package:elesson/app/feature/home_offline/page/leason_dowload_page.dart';
+import 'package:elesson/app/feature/home_offline/page/syncronize_offline_page.dart';
 import 'package:elesson/app/feature/home_offline/page/teacher_blocks_page.dart';
 import 'package:elesson/app/util/network/cachedStorage.dart';
 import 'package:elesson/app/util/network/dio_authed/dio_authed.dart';
@@ -18,6 +21,8 @@ import '../../core/auth/domain/usecases/auth_usecase.dart';
 import '../../core/block/data/model/block_model.dart';
 import '../../core/block/domain/repository/block_repository_impl.dart';
 import '../../core/shared/domain/repository/cacheRepository.dart';
+import '../../core/task/data/repository/performance_repository_interface.dart';
+import '../../core/task/domain/repository/performance_repository_impl.dart';
 import '../../util/network/constants.dart';
 
 class HomePageOfflineModule extends StatefulWidget {
@@ -34,6 +39,9 @@ class _HomePageOfflineModuleState extends State<HomePageOfflineModule> {
   late IBlockRemoteDataSource blockRemoteDataSource;
   late IBlockRepository blockRepository;
   late OfflineController offlineController;
+  late IPerformanceDatasource _performanceDatasource;
+  late IPerformanceRepository _performanceRepository;
+  late SendPerformanceUseCase sendPerformanceUseCase;
 
   @override
   void initState() {
@@ -52,6 +60,10 @@ class _HomePageOfflineModuleState extends State<HomePageOfflineModule> {
     cacheRepository = CacheRepository();
     offlineController = OfflineController.instance;
 
+    _performanceDatasource = PerformanceRemoteDatasource(dio: dioAuthed.dio);
+    _performanceRepository = PerformanceRepositoryImpl(performanceDataSource: _performanceDatasource);
+    sendPerformanceUseCase = SendPerformanceUseCase(performanceRepository: _performanceRepository);
+
     super.initState();
   }
 
@@ -68,19 +80,11 @@ class _HomePageOfflineModuleState extends State<HomePageOfflineModule> {
         actions: [
           IconButton(
               onPressed: () async {
-                await cacheRepository.refreshDB();
-                await cacheRepository.clearCache();
-                setState(() {});
+                await Navigator.of(context).push(MaterialPageRoute(builder: (context) => syncronizeOfflinePage(offlineController: offlineController, sendPerformanceUseCase: sendPerformanceUseCase))).then((value) => setState(() {
+                      inited = false;
+                    }));
               },
-              icon: Icon(Icons.delete)),
-          IconButton(
-              onPressed: () async {
-                // cachedBlocks = [await cacheRepository.getBlock(20)];
-                await cacheRepository.refreshDB();
-                cachedBlocksIds = await cacheRepository.getListCachedBlocs();
-                setState(() {});
-              },
-              icon: Icon(Icons.refresh))
+              icon: Icon(Icons.sync)),
         ],
       ),
       body: FutureBuilder(
@@ -119,8 +123,9 @@ class _HomePageOfflineModuleState extends State<HomePageOfflineModule> {
                               onPressed: () async {
                                 List<BlockModel> res =
                                     await blockRepository.getBlockByTeacherId(int.parse(_teacherCodeController.text)).then((value) => value.fold((l) => [], (r) => r));
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => TeacherBlocksPage(list_block: res, cacheRepository: cacheRepository, offlineController: offlineController)));
+                                await Navigator.of(context).push(MaterialPageRoute(builder: (context) => TeacherBlocksPage(list_block: res, offlineController: offlineController))).then((value) => setState(() {
+                                      inited = false;
+                                    }));
                               },
                               icon: Icon(Icons.send)),
                         ],
@@ -134,7 +139,20 @@ class _HomePageOfflineModuleState extends State<HomePageOfflineModule> {
                       ? Expanded(child: Center(child: Text("Nenhuma aula disponível Offline", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))))
                       : Column(
                           children: [
-                            Text("Aulas disponíveis", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("Aulas disponíveis", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                                IconButton(
+                                  onPressed: () async {
+                                    await cacheRepository.refreshDB();
+                                    cachedBlocksIds = await cacheRepository.getListCachedBlocs();
+                                    setState(() {});
+                                  },
+                                  icon: Icon(Icons.refresh),
+                                ),
+                              ],
+                            ),
                             SizedBox(height: 20),
                             SizedBox(
                               height: 200,
@@ -152,7 +170,7 @@ class _HomePageOfflineModuleState extends State<HomePageOfflineModule> {
                                       child: InkWell(
                                         onTap: () async {
                                           BlockModel block = await cacheRepository.getBlock(cachedBlocksIds[index]);
-                                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => LeasonDownloadPage(block: block)));
+                                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => LeasonDownloadPage(block: block,offlineController: offlineController,)));
                                         },
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.start,

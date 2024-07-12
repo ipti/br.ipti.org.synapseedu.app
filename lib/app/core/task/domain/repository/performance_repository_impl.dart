@@ -8,13 +8,13 @@ import '../../data/datasource/performance_remote_datasource.dart';
 import '../../data/model/performance_model.dart';
 
 class PerformanceRepositoryImpl extends IPerformanceRepository{
-  final IPerformanceRemoteDatasource performanceRemoteDataSource;
-  PerformanceRepositoryImpl({required this.performanceRemoteDataSource});
+  final IPerformanceDatasource performanceDataSource;
+  PerformanceRepositoryImpl({required this.performanceDataSource});
 
   @override
   Future<Either<Failure, Performance>> sendPerformanceAEL(Performance performance) async {
     try{
-      Performance res = await performanceRemoteDataSource.sendPerformanceAEL(performance);
+      Performance res = await performanceDataSource.sendPerformanceAEL(performance);
       return Right(res);
     } catch(e){
       return Left(Failure(e.toString()));
@@ -24,7 +24,7 @@ class PerformanceRepositoryImpl extends IPerformanceRepository{
   @override
   Future<Either<Failure, Performance>> sendPerformanceMTE(Performance performance) async {
     try{
-      Performance res = await performanceRemoteDataSource.sendPerformanceMTE(performance);
+      Performance res = await performanceDataSource.sendPerformanceMTE(performance);
       return Right(res);
     } catch(e){
       return Left(Failure(e.toString()));
@@ -34,7 +34,7 @@ class PerformanceRepositoryImpl extends IPerformanceRepository{
   @override
   Future<Either<Failure, Performance>> sendPerformancePRE(Performance performance) async {
     try{
-      Performance res = await performanceRemoteDataSource.sendPerformancePRE(performance);
+      Performance res = await performanceDataSource.sendPerformancePRE(performance);
       return Right(res);
     } catch(e){
       return Left(Failure(e.toString()));
