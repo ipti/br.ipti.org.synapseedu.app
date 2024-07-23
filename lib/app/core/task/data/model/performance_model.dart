@@ -24,6 +24,8 @@ class Performance {
 
   //fromjson
   factory Performance.fromJson(Map<String, dynamic> json) {
+    print(json['meta_data']['template_id']);
+
     return Performance(
         id: json['id'],
         student_id: json['student_id'],
@@ -32,7 +34,7 @@ class Performance {
         block_id: json['block_id'],
         timeResolution: json['time_resolution'],
         createdAt: DateTime.parse(json['created_at']),
-        metadata: MetaDataModel.empty()
+        metadata: MetaDataModel.fromJson(json['meta_data']),
         // metadata: json['meta_data'] != null ? MetaDataModel.fromJson(json['meta_data']) : MetaDataModelMTE(),
         );
   }

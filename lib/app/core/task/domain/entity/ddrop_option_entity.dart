@@ -11,6 +11,17 @@ class DdropOptionEntity extends Equatable {
 
   DdropOptionEntity({this.elementModel, this.imageBytes, this.component_id = 0, this.time = 0});
 
+  //fromjson
+  factory DdropOptionEntity.fromJson(Map<String, dynamic> json) {
+    return DdropOptionEntity(
+      elementModel: ElementModel.fromMap(json['elementModel']),
+      imageBytes: json['imageBytes'],
+      component_id: json['component_id'],
+      time: json['time'],
+    );
+  }
+
   @override
   List<Object?> get props => [elementModel];
+
 }

@@ -327,7 +327,7 @@ Future<String?> scan(BuildContext context) async {
 }
 
 void navigateToOfflineHome(BuildContext context) async {
-  Navigator.pushReplacement(context, new MaterialPageRoute(builder: (BuildContext context) => new HomePageOfflineModule()));
+  Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => new HomePageOfflineModule()));
 }
 
 Future<void> sendMetaData({String? pieceId, String? groupId, int? finalTime, int? intervalResolution, String? value, bool? isCorrect}) async {

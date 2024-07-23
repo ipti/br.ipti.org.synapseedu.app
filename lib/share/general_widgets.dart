@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'elesson_icon_lib_icons.dart';
 
-Widget elessonCard({required String backgroundImage, required String text, double? screenWidth, Function? onTap, BuildContext? context, bool? blockDone}) {
+Widget elessonCard({required String backgroundImage, required String text, double? screenWidth, Function? onTap, BuildContext? context, bool? blockDone, bool showLoading = false}) {
   return GestureDetector(
     onTap: () {
       Future<void> retorno = onTap!(context);
@@ -26,10 +26,7 @@ Widget elessonCard({required String backgroundImage, required String text, doubl
                 gradient: LinearGradient(
                   begin: FractionalOffset.topCenter,
                   end: FractionalOffset.bottomCenter,
-                  colors: [
-                    Color(0XFFFFFFFF).withOpacity(0),
-                    Color(0XFF0000FF).withOpacity(0.4),
-                  ],
+                  colors: [Color(0XFFFFFFFF).withOpacity(0), Color(0XFF0000FF).withOpacity(0.4)],
                 ),
               ),
             ),
@@ -38,17 +35,19 @@ Widget elessonCard({required String backgroundImage, required String text, doubl
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    text,
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: "ElessonIconLib"),
-                  ),
-                  Icon(
-                    ElessonIconLib.chevron_right,
-                    color: Colors.white,
-                  ),
+                  Text(text, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: "ElessonIconLib")),
+                  Icon(ElessonIconLib.chevron_right, color: Colors.white),
                 ],
               ),
-            )
+            ),
+            if(showLoading) Center(
+              child: Container(
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(36.0), color: Colors.grey.withOpacity(0.5)),
+                height: 145,
+                width: screenWidth,
+                child: loadingAnimation(),
+              ),
+            ),
           ],
         ),
       ),

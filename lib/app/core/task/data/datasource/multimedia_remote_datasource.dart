@@ -24,9 +24,6 @@ class MultimediaRemoteDataSourceImpl extends IMultimediaRemoteDatasource {
   @override
   Future<String> getImageMultimediaReference(int id) async {
     try {
-      // if (kDebugMode) {
-      //   dio.interceptors.removeWhere((element) => element.runtimeType == PrettyDioLogger);
-      // }
       Response response = await dio.get('/multimedia/image/$id');
       return response.data['name'];
     } on DioException catch (e) {

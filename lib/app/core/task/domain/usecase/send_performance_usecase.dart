@@ -33,7 +33,7 @@ class SendPerformanceUseCase {
       case 6:
         performance.isCorrect = task.body!.components.first.id == userAnswer.AnswerMte.id;
         print("PERFORMANCE MTE: ${performance.toJson(templateType: TemplateTypes.MTE)}");
-        await performanceRepository. sendPerformanceMTE(performance);
+        await performanceRepository.sendPerformanceMTE(performance);
         return performance.isCorrect ? Right(true) : Left(Failure('Resposta incorreta'));
       case 2:
         performance.isCorrect = correctAnswerPre.toUpperCase() == userAnswer.AnswerPre.toUpperCase();
@@ -46,28 +46,27 @@ class SendPerformanceUseCase {
         await performanceRepository.sendPerformanceAEL(performance);
         return performance.isCorrect ? Right(true) : Left(Failure('Resposta incorreta'));
       default:
+        return Right(true);
         return Left(Failure('Tipo de tarefa não suportado'));
     }
   }
 
   Future<Either<Failure, bool>> offlineToOnline({required Performance performance}) async {
-    // await Future.delayed(Duration(seconds: 4),() => print("SYNC: ${performance.taskId}"),);
-    // return Right(true);
-
+    print("OFFLINE TO ONLINE: ${performance.metadata.runtimeType}");
     switch (performance.metadata.runtimeType) {
       case MetaDataModelMTE:
+        print("MTE");
+        print(performance.toJson(templateType: TemplateTypes.MTE));
         Either<Failure, Performance> res = await performanceRepository.sendPerformanceMTE(performance);
-        if(res.isLeft()) return Left(Failure('Resposta incorreta'));
-        return Right(true);
+        return res.fold((l) => Left(l), (r) => Right(true));
       case MetaDataModelPRE:
         Either<Failure, Performance> res = await performanceRepository.sendPerformancePRE(performance);
-        if(res.isLeft()) return Left(Failure('Resposta incorreta'));
-        return Right(true);
+        return res.fold((l) => Left(l), (r) => Right(true));
       case MetaDataModelAEL:
         Either<Failure, Performance> res = await performanceRepository.sendPerformanceAEL(performance);
-        if(res.isLeft()) return Left(Failure('Resposta incorreta'));
-        return Right(true);
+        return res.fold((l) => Left(l), (r) => Right(true));
       default:
+        // return Right(true);
         return Left(Failure('Tipo de tarefa não suportado'));
     }
   }

@@ -34,6 +34,8 @@ class HomePageOfflineModule extends StatefulWidget {
 
 class _HomePageOfflineModuleState extends State<HomePageOfflineModule> {
   TextEditingController _teacherCodeController = TextEditingController();
+
+
   late CacheRepository cacheRepository;
   late DioAuthed dioAuthed;
   late IBlockRemoteDataSource blockRemoteDataSource;
@@ -69,6 +71,7 @@ class _HomePageOfflineModuleState extends State<HomePageOfflineModule> {
 
   List<int> cachedBlocksIds = [];
   bool inited = false;
+  bool searchByCode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -80,16 +83,15 @@ class _HomePageOfflineModuleState extends State<HomePageOfflineModule> {
         actions: [
           IconButton(
               onPressed: () async {
-                await Navigator.of(context).push(MaterialPageRoute(builder: (context) => syncronizeOfflinePage(offlineController: offlineController, sendPerformanceUseCase: sendPerformanceUseCase))).then((value) => setState(() {
-                      inited = false;
-                    }));
+                await Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => syncronizeOfflinePage(offlineController: offlineController, sendPerformanceUseCase: sendPerformanceUseCase)))
+                    .then((value) => setState(() => inited = false));
               },
               icon: Icon(Icons.sync)),
         ],
       ),
       body: FutureBuilder(
           future: inited ? null : cacheRepository.getListCachedBlocs(),
-          // future: inited ? null : cacheRepository.getBlock(20),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               inited = true;
@@ -108,6 +110,15 @@ class _HomePageOfflineModuleState extends State<HomePageOfflineModule> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text("Código do professor", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+
+                      // Container(
+                      //   width: size.width * 0.7,
+                      //   height: 40,
+                      //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(width: 3, color: Color.fromRGBO(110, 114, 145, 0.2))),
+                      //   padding: EdgeInsets.symmetric(horizontal: 5),
+                      //   child: TextFormField(controller: _teacherCodeController, keyboardType: TextInputType.number, decoration: InputDecoration(border: InputBorder.none)),
+                      // ),
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -123,9 +134,11 @@ class _HomePageOfflineModuleState extends State<HomePageOfflineModule> {
                               onPressed: () async {
                                 List<BlockModel> res =
                                     await blockRepository.getBlockByTeacherId(int.parse(_teacherCodeController.text)).then((value) => value.fold((l) => [], (r) => r));
-                                await Navigator.of(context).push(MaterialPageRoute(builder: (context) => TeacherBlocksPage(list_block: res, offlineController: offlineController))).then((value) => setState(() {
-                                      inited = false;
-                                    }));
+                                await Navigator.of(context)
+                                    .push(MaterialPageRoute(builder: (context) => TeacherBlocksPage(list_block: res, offlineController: offlineController)))
+                                    .then((value) => setState(() {
+                                          inited = false;
+                                        }));
                               },
                               icon: Icon(Icons.send)),
                         ],
@@ -170,7 +183,9 @@ class _HomePageOfflineModuleState extends State<HomePageOfflineModule> {
                                       child: InkWell(
                                         onTap: () async {
                                           BlockModel block = await cacheRepository.getBlock(cachedBlocksIds[index]);
-                                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => LeasonDownloadPage(block: block,offlineController: offlineController,)));
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(builder: (context) => LeasonDownloadPage(block: block, offlineController: offlineController)),
+                                          );
                                         },
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.start,

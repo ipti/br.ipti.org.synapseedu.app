@@ -54,21 +54,10 @@ class AuthScreen extends StatelessWidget {
                 future: CachedStorage().initDB(),
                 builder: (context, snapshot) {
                   bool status = snapshot.data != null && snapshot.data != false;
-                  print("SNAP: ${status}");
-                  snapshot.connectionState == ConnectionState.waiting ? CircularProgressIndicator() : Text("aaaaaaaaaaaaaaa");
                   return Stack(
                     children: [
                       elessonCard(
-                          backgroundImage: "assets/img/mate.png", text: "USO OFFLINE", screenWidth: size.width, onTap: status ? navigateToOfflineHome : null, context: context),
-                      if (!status)
-                        Center(
-                          child: Container(
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(36.0), color: Colors.grey.withOpacity(0.7)),
-                            height: 145,
-                            width: size.width * 0.87,
-                            child: loadingAnimation(),
-                          ),
-                        ),
+                          backgroundImage: "assets/img/mate.png", text: "USO OFFLINE", screenWidth: size.width, onTap: status ? navigateToOfflineHome : null, context: context, showLoading: !status),
                     ],
                   );
                 }),

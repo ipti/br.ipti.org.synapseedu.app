@@ -9,7 +9,6 @@ class GetTaskUseCase {
   GetTaskUseCase({required this.taskRepository});
 
   Future<Either<Failure, TaskModel>> getTaskById(int id) async {
-    print("GETTASKBYID: ${id}");
     return await taskRepository.getTaskById(id);
   }
 }

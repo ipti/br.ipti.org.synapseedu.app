@@ -81,8 +81,7 @@ class OfflineController extends ChangeNotifier {
       Either<Failure, List<int>> resImage = await _getMultimediaUseCase.getBytesByMultimediaId(id);
       resImage.fold((l) => print(l), (r) async {
         bool resSave = await cacheRepository.saveMultimediaBytes(r, id);
-        print("SALVANDO IMAGENS #$id: $resSave");
-        Future.delayed(Duration(milliseconds: 500));
+        // Future.delayed(Duration(milliseconds: 500));
       });
     });
 
@@ -90,8 +89,7 @@ class OfflineController extends ChangeNotifier {
       Either<Failure, Uint8List> resAudio = await _getMultimediaUseCase.getSoundByMultimediaId(id);
       resAudio.fold((l) => print(l), (r) async {
         bool resSave = await cacheRepository.saveMultimediaBytes(r, id);
-        print("SALVANDO AUDIOS #$id: $resSave");
-        Future.delayed(Duration(milliseconds: 500));
+        // Future.delayed(Duration(milliseconds: 500));
       });
     });
 
@@ -99,8 +97,7 @@ class OfflineController extends ChangeNotifier {
       Either<Failure, String> resText = await _getMultimediaUseCase.getTextById(id);
       resText.fold((l) => print(l), (r) async {
         bool resSave = await cacheRepository.saveText(r, id);
-        print("SALVANDO TEXTOS #$id: $resSave");
-        Future.delayed(Duration(milliseconds: 500));
+        // Future.delayed(Duration(milliseconds: 500));
       });
     });
 
@@ -121,5 +118,9 @@ class OfflineController extends ChangeNotifier {
 
   Future<void> clearSyncedTasks() async {
     await cacheRepository.clearSyncedTasks();
+  }
+
+  Future<List<Performance>> getAllPerformanceFromStudent(int studentId) async {
+    return cacheRepository.getAllPerformanceFromStudent(studentId);
   }
 }

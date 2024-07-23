@@ -39,6 +39,8 @@ class _LeasonCardState extends State<LeasonCard> {
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(width: 2, color: Color.fromRGBO(110, 114, 145, 0.2))),
         child: InkWell(
           onTap: () async {
+            if(status == 2 || status == 3) return;
+
             setState(() {
               status = 2;
             });
@@ -50,7 +52,6 @@ class _LeasonCardState extends State<LeasonCard> {
             if (resSaveBlockCache) {
               await Future.forEach(widget.block.tasks, (idTask) async {
                 bool res = await widget.offlineController.downloadTaskToCache(idTask);
-                print("SALVANDO TASK #$idTask: $res");
                 setState(() {
                   currentTaskDownloading++;
                 });
@@ -74,15 +75,20 @@ class _LeasonCardState extends State<LeasonCard> {
               SizedBox(width: 5),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 5),
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.green, width: 2)),
-                // width: 30,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.blue, width: 2)),
                 height: 30,
                 child: Row(
                   children: [
-                    if (status == 2) Text(currentTaskDownloading.toString() + "/" + widget.block.tasks.length.toString()),
+                    if (status == 2)
+                      Row(
+                        children: [
+                          Text(currentTaskDownloading.toString() + "/" + widget.block.tasks.length.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                          SizedBox(width: 5),
+                        ],
+                      ),
                     status == 2
-                        ? CircularProgressIndicator()
-                        : Icon(status == 1 ? Icons.download_for_offline_outlined : Icons.download_done, color: status == 1 ? Colors.red : Colors.green),
+                        ? SizedBox(width: 25, height: 25, child: Padding(padding: const EdgeInsets.all(3), child: CircularProgressIndicator(color: Colors.blue)))
+                        : Icon(status == 1 ? Icons.download_for_offline_outlined : Icons.download_done, color: status == 1 ? Colors.blue : Colors.green),
                   ],
                 ),
               ),

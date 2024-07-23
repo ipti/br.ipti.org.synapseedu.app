@@ -87,13 +87,13 @@ class _QrCodePageState extends State<QrCodePage> {
                       child: IconButton(
                         alignment: Alignment.topLeft,
                         onPressed: () {
-                          BlockParameterEntity blockParameterEntity = BlockParameterEntity(teacherId: 1, studentId: 1, disciplineId: 1);
-                          answerFeedback = blockParameterEntity.enableFeedback;
-                          UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-                          userProvider.setUser(LoginResponseEntity(id: blockParameterEntity.studentId, name: "Aluno", user_name: "Aluno", user_type_id: 3));
-
-                          widget.qrCodeController.setBlockOffline(context, widget.blockModelOffline!);
-                          // Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsScreen()));
+                          // BlockParameterEntity blockParameterEntity = BlockParameterEntity(teacherId: 1, studentId: 1, disciplineId: 1,enableFeedback: true);
+                          // answerFeedback = blockParameterEntity.enableFeedback;
+                          // UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+                          // userProvider.setUser(LoginResponseEntity(id: blockParameterEntity.studentId, name: "Aluno", user_name: "Aluno", user_type_id: 5));
+                          //
+                          // widget.qrCodeController.setBlockOffline(context, widget.blockModelOffline!);
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsScreen()));
                         },
                         icon: Icon(Icons.settings, color: Colors.white),
                       ),

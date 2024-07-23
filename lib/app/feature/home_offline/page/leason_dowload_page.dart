@@ -3,6 +3,7 @@ import 'package:elesson/app/feature/qrcode/qrcode_module.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/block/data/model/block_model.dart';
+import '../../select_student/select_student_module.dart';
 import '../controller/offline_controller.dart';
 
 class LeasonDownloadPage extends StatefulWidget {
@@ -78,9 +79,8 @@ class _LeasonDownloadPageState extends State<LeasonDownloadPage> {
                     decoration:
                         BoxDecoration(color: getColorButton(), borderRadius: BorderRadius.circular(10), border: Border.all(width: 2, color: Color.fromRGBO(110, 114, 145, 0.2))),
                     child: TextButton(
-                        onPressed: startButtonStatus == 2
-                            ? null
-                            : () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => QrCodeModule(blockModelOffline: widget.block))),
+                        onPressed: startButtonStatus == 1
+                            ? () => Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => SelectStudentModule(blockModelOffline: widget.block, offlineController: widget.offlineController)), (route) => false) : null,
                         child: Center(child: Text(getTitleButton(), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25, fontFamily: 'Comic')))),
                   ),
                 ),

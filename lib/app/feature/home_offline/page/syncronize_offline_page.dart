@@ -4,6 +4,7 @@ import 'package:elesson/app/core/task/domain/usecase/send_performance_usecase.da
 import 'package:elesson/app/feature/home_offline/controller/offline_controller.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/task/data/model/metadata_model.dart';
 import '../../../core/task/data/model/performance_model.dart';
 import '../../../util/enums/task_types.dart';
 import '../../../util/failures/failures.dart';
@@ -24,6 +25,7 @@ class _syncronizeOfflinePageState extends State<syncronizeOfflinePage> {
 
   List<Performance> allPerformances = [];
   int currentSyncTaskId = 0;
+  bool error = false;
 
   Future<void> syncPerformances() async {
     await Future.forEach(performancesToSync, (performance) async {
@@ -31,6 +33,10 @@ class _syncronizeOfflinePageState extends State<syncronizeOfflinePage> {
       dartz.Either<Failure, bool> resUploadPerformance = await widget.sendPerformanceUseCase.offlineToOnline(performance: performance);
       await resUploadPerformance.fold((l) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erro ao sincronizar performance [${l.message}]")));
+        setState(() {
+          currentSyncTaskId = 0;
+          error = true;
+        });
         throw Exception("Erro ao sincronizar performance [${l.message}]");
       }, (r) async {
         bool resRemove = await widget.offlineController.moveToSyncedPerformanceInCache(performance);
@@ -103,10 +109,10 @@ class _syncronizeOfflinePageState extends State<syncronizeOfflinePage> {
                 child: Container(
                   width: size.width * 0.8,
                   height: 50,
-                  decoration: BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.circular(10), border: Border.all(width: 2, color: Color.fromRGBO(110, 114, 145, 0.2))),
+                  decoration: BoxDecoration(color:error ? Colors.red : Colors.blue, borderRadius: BorderRadius.circular(10), border: Border.all(width: 2, color: Color.fromRGBO(110, 114, 145, 0.2))),
                   child: TextButton(
                       onPressed: currentSyncTaskId == 0 ? () async => await syncPerformances() : null,
-                      child: Center(child: Text(currentSyncTaskId  == 0 ? "Iniciar Sincronização" : "Sincronizando...", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25, fontFamily: 'Comic')))),
+                      child: Center(child: Text(error ? "Erro de sincronização" : currentSyncTaskId  == 0 ? "Iniciar Sincronização" : "Sincronizando...", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25, fontFamily: 'Comic')))),
                 ),
               ),
               Divider(),
@@ -131,7 +137,7 @@ class _syncronizeOfflinePageState extends State<syncronizeOfflinePage> {
                           children: [
                             Expanded(
                               child: AutoSizeText(
-                                "[${performance.student_id}] Performance #${performance.taskId}",
+                                "[${performance.student_id}] Performance #${performance.taskId}",// | ${performance.toJson(templateType: performance.metadata.runtimeType == MetaDataModelMTE ? TemplateTypes.MTE : performance.metadata.runtimeType == MetaDataModelPRE ? TemplateTypes.PRE : TemplateTypes.AEL)}",
                                 textAlign: TextAlign.start,
                                 minFontSize: 14,
                                 style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25, fontFamily: 'Comic'),

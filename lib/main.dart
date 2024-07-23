@@ -96,9 +96,12 @@ void main() async {
           },
             onGenerateRoute: (settings) {
               var uri = Uri.parse(settings.name!);
-              if (settings.name == null || settings.name == "/") {
-                return MaterialPageRoute(builder: (context) => TaskCompletedPage());
+              if(kIsWeb){
+                if (settings.name == null || settings.name == "/") {
+                  return MaterialPageRoute(builder: (context) => TaskCompletedPage());
+                }
               }
+
               if (uri.pathSegments.length == 2 && uri.pathSegments.first == 'preview') {
                 var id = uri.pathSegments[1];
                 return MaterialPageRoute(
@@ -107,7 +110,7 @@ void main() async {
                 );
               }
 
-              return MaterialPageRoute(builder: (context) => Scaffold(appBar: AppBar(), body: Center(child: Text('404!'))));
+              if(kIsWeb)return MaterialPageRoute(builder: (context) => Scaffold(appBar: AppBar(), body: Center(child: Text('404!'))));
             }
         ),
       ),

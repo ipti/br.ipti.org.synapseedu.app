@@ -1,9 +1,6 @@
 import 'package:elesson/app/core/task/data/model/task_model.dart';
 import 'package:elesson/app/util/network/cachedStorage.dart';
 import 'package:sembast/sembast.dart';
-import 'package:sembast/sembast_io.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import '../../../../util/enums/task_types.dart';
 import '../../../block/data/model/block_model.dart';
 import '../../../task/data/model/performance_model.dart';
@@ -62,7 +59,6 @@ class CacheRepository {
       await store.record("${MULTIMEDIA_BYTES_CACHE_KEY}${multimediaId}").add(db, multimediaBytes);
       return true;
     } catch (e) {
-      print("ERRO AO SALVAR MULTIMEDIA BYTES: $e");
       return false;
     }
   }
@@ -77,7 +73,6 @@ class CacheRepository {
       await store.record("${TEXT_CACHE_KEY}${multimediaId}").add(db, text);
       return true;
     } catch (e) {
-      print("ERRO AO SALVAR TEXTO: $e");
       return false;
     }
   }
@@ -97,8 +92,16 @@ class CacheRepository {
     return record != null;
   }
 
+  Future<List<Performance>> getAllPerformanceFromStudent(int studentId) async {
+    var performanceValuesList = await store.find(db, finder: Finder(filter: Filter.custom((record) => record.key.toString().endsWith("_${studentId}"))));
+    return performanceValuesList.map((e) => Performance.fromJson(e.value as Map<String, dynamic>)).toList();
+  }
+
   Future<List<Performance>> getAllPerformancesPending() async {
+    var all = await store.findKeys(db);
+    print(all.where((element) => element.toString().contains("PERFORMANCE")).toList());
     var performanceValuesList = await store.find(db, finder: Finder(filter: Filter.custom((record) => record.key.toString().startsWith(PERFORMANCE_PENDING_CACHE_KEY))));
+    // print(performanceValuesList.length);
     return performanceValuesList.map((e) => Performance.fromJson(e.value as Map<String, dynamic>)).toList();
   }
 
@@ -110,13 +113,10 @@ class CacheRepository {
   Future<bool> moveToSyncedPerformanceInCache(Performance performance) async {
     try{
       var resAdd = await store.record("${PERFORMANCE_SYNCED_CACHE_KEY}${performance.taskId}_${performance.student_id}").put(db, performance.toJson(templateType: templateTypesfromTemplateId(performance.taskId)));
-      print("RESADD: $resAdd");
       if(resAdd == null) return false;
       var resDelete = await store.record("${PERFORMANCE_PENDING_CACHE_KEY}${performance.taskId}_${performance.student_id}").delete(db);
-      print("RESDELETE: $resDelete");
       return resDelete != null;
     } catch(e){
-      print("ERRO AO MOVER PERFORMANCE PARA SYNCED: $e");
       return false;
     }
   }

@@ -58,6 +58,36 @@ abstract class MetaDataModel {
 
   //toJson()
   Map<String, dynamic> toJson() => {"erro": "Não implementado"};
+
+  //fromJson()
+  factory MetaDataModel.fromJson(Map<String, dynamic> json) {
+    switch (json['template_type']) {
+      case "MTE4":
+      case "MTE2":
+      case "MTE":
+        return MetaDataModelMTE(
+          template_type: json['template_type'],
+          body_component_id: json['body_component_id'],
+        );
+      case "PRE":
+        return MetaDataModelPRE(
+          template_type: json['template_type'],
+          body_component_id: json['body_component_id'],
+          text: json['text'],
+        );
+      case "AEL":
+        return MetaDataModelAEL(
+          template_type: json['template_type'],
+          componentModel: ContainerModel.fromMap(json['component']),
+          userChoises: (json['choices'] as List).map((e) => DdropOptionEntity.fromJson(e)).toList(),
+        );
+      default:
+        return MetaDataModelMTE(
+          template_type: "",
+          body_component_id: 0,
+        );
+    }
+  }
 }
 
 class MetaDataModelMTE extends MetaDataModel {
