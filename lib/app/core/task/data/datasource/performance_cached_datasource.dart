@@ -25,6 +25,7 @@ class PerformanceCachedDataSourceImpl implements IPerformanceDatasource {
 
   @override
   Future<Performance> sendPerformanceMTE(Performance performance) async {
+    print("SIM");
     print("SEND PERFORMANCE: ${performance.toJson(templateType: TemplateTypes.MTE)}");
     await store.record("${PERFORMANCE_PENDING_CACHE_KEY}${performance.taskId}_${performance.student_id}").add(db, performance.toJson(templateType: TemplateTypes.MTE));
     return Performance.empty();

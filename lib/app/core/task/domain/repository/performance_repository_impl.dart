@@ -24,6 +24,7 @@ class PerformanceRepositoryImpl extends IPerformanceRepository{
   @override
   Future<Either<Failure, Performance>> sendPerformanceMTE(Performance performance) async {
     try{
+      print("SEND PERFORMANCE");
       Performance res = await performanceDataSource.sendPerformanceMTE(performance);
       return Right(res);
     } catch(e){

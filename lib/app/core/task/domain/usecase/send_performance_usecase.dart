@@ -53,10 +53,10 @@ class SendPerformanceUseCase {
 
   Future<Either<Failure, bool>> offlineToOnline({required Performance performance}) async {
     print("OFFLINE TO ONLINE: ${performance.metadata.runtimeType}");
+    performance.metadata = MetaDataModelMTE(template_type: "MTE", body_component_id: 1);
     switch (performance.metadata.runtimeType) {
       case MetaDataModelMTE:
-        print("MTE");
-        print(performance.toJson(templateType: TemplateTypes.MTE));
+        print("MTE ${performance.toJson(templateType: TemplateTypes.MTE)}");
         Either<Failure, Performance> res = await performanceRepository.sendPerformanceMTE(performance);
         return res.fold((l) => Left(l), (r) => Right(true));
       case MetaDataModelPRE:

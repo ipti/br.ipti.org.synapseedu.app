@@ -2,6 +2,7 @@ import 'package:elesson/app/core/task/data/model/choises_performance_model.dart'
 import 'package:elesson/app/core/task/data/model/component_model.dart';
 import 'package:elesson/app/core/task/data/model/task_model.dart';
 import 'package:elesson/app/util/enums/task_types.dart';
+import 'package:googleapis/shared.dart';
 
 import '../../domain/entity/ddrop_option_entity.dart';
 import '../../domain/entity/user_answer.dart';
@@ -77,11 +78,16 @@ abstract class MetaDataModel {
           text: json['text'],
         );
       case "AEL":
-        return MetaDataModelAEL(
-          template_type: json['template_type'],
-          componentModel: ContainerModel.fromMap(json['component']),
-          userChoises: (json['choices'] as List).map((e) => DdropOptionEntity.fromJson(e)).toList(),
+        return MetaDataModelMTE(
+          template_type: "",
+          body_component_id: 0,
         );
+        // return MetaDataModelAEL(
+        //   template_type: json['template_type'],
+        //   componentModel: ContainerModel.empty(),// ContainerModel.fromMap(json['component']),
+        //   userChoises: (json['choices'] as List).map((e) => DdropOptionEntity.fromJson(e)).toList(),
+        // );
+
       default:
         return MetaDataModelMTE(
           template_type: "",
@@ -95,8 +101,8 @@ class MetaDataModelMTE extends MetaDataModel {
   MetaDataModelMTE({required super.template_type, required super.body_component_id});
 
   Map<String, dynamic> toJson() => {
-        "template_type": template_type,
-        "body_component_id": body_component_id,
+        "template_type": template_type ?? "MTE",
+        "body_component_id": body_component_id ?? 1,
       };
 }
 

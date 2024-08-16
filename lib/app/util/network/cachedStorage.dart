@@ -15,6 +15,7 @@ class CachedStorage {
       var dir = await getApplicationDocumentsDirectory();
       await dir.create(recursive: true);
       var dbPath = join(dir.path, 'local_tasks.db');
+      print("DATABASE: ${dbPath}");
       db = await databaseFactoryIo.openDatabase(dbPath);
       return true;
     } catch(e){

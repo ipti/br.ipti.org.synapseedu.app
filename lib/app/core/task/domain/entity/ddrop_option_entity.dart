@@ -13,11 +13,12 @@ class DdropOptionEntity extends Equatable {
 
   //fromjson
   factory DdropOptionEntity.fromJson(Map<String, dynamic> json) {
+    print("DDROP ENTITY: ${json}");
     return DdropOptionEntity(
       elementModel: ElementModel.fromMap(json['elementModel']),
-      imageBytes: json['imageBytes'],
-      component_id: json['component_id'],
-      time: json['time'],
+      imageBytes: json['imageBytes'] != null ? json['imageBytes'] : [],
+      component_id: json['imageBytes'] != null ? json['component_id'] : 1,
+      time: json['imageBytes'] != null ? json['time']: 1,
     );
   }
 

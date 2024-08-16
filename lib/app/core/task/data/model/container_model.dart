@@ -11,8 +11,8 @@ class ContainerModel extends Equatable{
 
   factory ContainerModel.fromMap(Map<String, dynamic> json) {
     return ContainerModel(
-      id: json['id'] ?? 0,
-      description: json['description'] ?? "",
+      id: json['id'] != null? json['id'] : 0,
+      description: json['description'] != null ? json['description'] : "",
       components: json['components'] != null ? (json['components'] as List<dynamic>).map((e) => ComponentModel.fromMap(e as Map<String, dynamic>)).toList() : [],
     );
   }
