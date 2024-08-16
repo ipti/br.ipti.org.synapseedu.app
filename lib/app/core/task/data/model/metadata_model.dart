@@ -61,6 +61,7 @@ abstract class MetaDataModel {
 
   //fromJson()
   factory MetaDataModel.fromJson(Map<String, dynamic> json) {
+    if(json == null) return MetaDataModelMTE(template_type: "", body_component_id: 0);
     switch (json['template_type']) {
       case "MTE4":
       case "MTE2":

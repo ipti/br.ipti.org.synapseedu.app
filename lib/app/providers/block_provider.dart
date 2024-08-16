@@ -22,7 +22,7 @@ class BlockProvider extends ChangeNotifier {
 
   void setNewBlock(BlockModel newBlock) {
     currentBlock = newBlock;
-    currentTaskIndex = block.tasks.indexOf(newBlock.breakPoint.last_resolved_task_id);
+    currentTaskIndex = newBlock.breakPoint.last_resolved_task_id == 0 ? 0 : block.tasks.indexOf(newBlock.breakPoint.last_resolved_task_id)+1;
     if (currentTaskIndex == -1) currentTaskIndex = 0;
   }
 

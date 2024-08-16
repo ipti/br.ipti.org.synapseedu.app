@@ -41,14 +41,21 @@ class _LeasonDownloadPageState extends State<LeasonDownloadPage> {
   Future<bool> verifyIfTasksIsCached() async {
     await Future.delayed(Duration(seconds: 2));
     bool block = false;
-    widget.block.tasks.forEach((taskId) async {
+    await Future.forEach( widget.block.tasks, (taskId) async {
       bool res = await widget.offlineController.verifyTaskInCache(taskId);
       if (res == false) {
         errorTasks.add(taskId);
         block = true;
       }
-      ;
     });
+
+    // widget.block.tasks.forEach((taskId) async {
+    //   bool res = await widget.offlineController.verifyTaskInCache(taskId);
+    //   if (res == false) {
+    //     errorTasks.add(taskId);
+    //     block = true;
+    //   }
+    // });
     return !block;
   }
 
@@ -80,7 +87,10 @@ class _LeasonDownloadPageState extends State<LeasonDownloadPage> {
                         BoxDecoration(color: getColorButton(), borderRadius: BorderRadius.circular(10), border: Border.all(width: 2, color: Color.fromRGBO(110, 114, 145, 0.2))),
                     child: TextButton(
                         onPressed: startButtonStatus == 1
-                            ? () => Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => SelectStudentModule(blockModelOffline: widget.block, offlineController: widget.offlineController)), (route) => false) : null,
+                            ? () => Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(builder: (context) => SelectStudentModule(blockModelOffline: widget.block, offlineController: widget.offlineController)),
+                                (route) => false)
+                            : null,
                         child: Center(child: Text(getTitleButton(), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25, fontFamily: 'Comic')))),
                   ),
                 ),

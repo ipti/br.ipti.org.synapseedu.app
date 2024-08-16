@@ -21,7 +21,7 @@ class LoginResponseEntity extends Equatable{
       name: map['name'] ?? "Nome não encontrado",
       user_name: map['user_name'] ?? "Nome não encontrado",
       user_type_id: map['user_type_id'] ?? 0,
-      teacher_id: map['teacher_id'],
+      teacher_id: map["teacher"]['id'],
     );
   }
 

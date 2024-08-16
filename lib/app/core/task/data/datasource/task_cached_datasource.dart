@@ -21,7 +21,6 @@ class TaskCachedDataSourceImpl extends ITaskRemoteDataSource {
 
     if (record != null) {
       TaskModel taskModel = TaskModel.fromJson(record as Map<String, dynamic>);
-      print(taskModel.toJson());
       return taskModel;
     }
     return TaskModel();

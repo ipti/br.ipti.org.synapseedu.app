@@ -22,7 +22,7 @@ class BlockRepositoryImpl extends IBlockRepository {
 
   @override
   Future<Either<Failure, List<BlockModel>>> getBlockByTeacherId(int teacherId) async {
-    print("======================================");
+    // print("======================================");
     try {
       final listBlock = await blockRemoteDataSource.getBlockByTeacherId(teacherId);
       return Right(listBlock);

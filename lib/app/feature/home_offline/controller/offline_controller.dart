@@ -8,8 +8,10 @@ import 'package:elesson/app/core/task/data/repository/multimedia_repository_inte
 import 'package:elesson/app/feature/task/controller/multimedia_controller.dart';
 import 'package:elesson/app/util/enums/multimedia_types.dart';
 import 'package:flutter/material.dart';
+import 'package:sembast/sembast.dart';
 
 import '../../../core/block/data/model/block_model.dart';
+import '../../../core/home_offline/data/model/TeacherClassroomModel.dart';
 import '../../../core/task/data/datasource/task_remote_datasource.dart';
 import '../../../core/task/data/model/performance_model.dart';
 import '../../../core/task/data/model/task_model.dart';
@@ -122,5 +124,25 @@ class OfflineController extends ChangeNotifier {
 
   Future<List<Performance>> getAllPerformanceFromStudent(int studentId) async {
     return cacheRepository.getAllPerformanceFromStudent(studentId);
+  }
+
+  Future<bool> saveStudentsOfTeacher(int teacherId,List<TeacherClassroomModel> teacherClassrooms) async {
+    try {
+      await cacheRepository.saveStudents(teacherId,teacherClassrooms);
+      return true;
+    } on Exception catch (e) {
+      return false;
+    }
+  }
+
+  Future<List<TeacherClassroomModel>> getStudentsOfTeacher(int teacherId) async {
+    return await cacheRepository.getStudentsOfTeacher(teacherId);
+  }
+
+  Future<List<TeacherClassroomModel>> downloadStudentsOfTeacher(int teacherId) async {
+    //TODO: refatorar depois, feito assim por motivos de urgencia
+    Response res = await dioAuthed.get("/user/teacher-classrooms/$teacherId");
+    List<TeacherClassroomModel> teacherClassroom = (res.data as List<dynamic>).map((e) => TeacherClassroomModel.fromJson(e)).toList();
+    return teacherClassroom;
   }
 }

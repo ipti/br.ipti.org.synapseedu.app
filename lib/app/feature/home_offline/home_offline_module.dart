@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dio/dio.dart';
+import 'package:elesson/app/core/auth/domain/entity/login_entity.dart';
 import 'package:elesson/app/core/block/data/datasource/block_remote_datasource.dart';
 import 'package:elesson/app/core/task/data/datasource/performance_remote_datasource.dart';
 import 'package:elesson/app/core/task/data/repository/block_repository_interface.dart';
@@ -16,6 +17,7 @@ import '../../core/auth/data/datasource/local/auth_local_datasource.dart';
 import '../../core/auth/data/datasource/remote/auth_remote_datasource.dart';
 import '../../core/auth/data/repository/auth_repository_interface.dart';
 import '../../core/auth/domain/entity/auth_entity.dart';
+import '../../core/auth/domain/entity/login_response_entity.dart';
 import '../../core/auth/domain/repository/auth_repository_impl.dart';
 import '../../core/auth/domain/usecases/auth_usecase.dart';
 import '../../core/block/data/model/block_model.dart';
@@ -35,6 +37,7 @@ class HomePageOfflineModule extends StatefulWidget {
 class _HomePageOfflineModuleState extends State<HomePageOfflineModule> {
   TextEditingController _teacherCodeController = TextEditingController();
 
+  LoginEntity _loginEntity = LoginEntity(username: TextEditingController(), password: TextEditingController());
 
   late CacheRepository cacheRepository;
   late DioAuthed dioAuthed;
@@ -45,12 +48,15 @@ class _HomePageOfflineModuleState extends State<HomePageOfflineModule> {
   late IPerformanceRepository _performanceRepository;
   late SendPerformanceUseCase sendPerformanceUseCase;
 
+  late AuthUseCase _authUseCase;
+  LoginResponseEntity userLogged = LoginResponseEntity(id: 1, name: "Mackenzie", user_type_id: 4, teacher_id: 2, user_name:"Mackenzie" '');
+
   @override
   void initState() {
     AuthRemoteDataSource _authRemoteDatasourceImpl = AuthRemoteDatasourceImpl(dio: Dio()..options.baseUrl = URLBASE);
     AuthLocalDataSource _authLocalDatasourceImpl = AuthLocalDatasourceImpl();
     AuthRepositoryInterface authRepository = AuthRepositoryImpl(authLocalDataSource: _authLocalDatasourceImpl, authRemoteDataSource: _authRemoteDatasourceImpl);
-    AuthUseCase _authUseCase = AuthUseCase(authRepository: authRepository);
+    _authUseCase = AuthUseCase(authRepository: authRepository);
 
     _authUseCase.getAccessToken(AuthEntity(username: "editor", password: "iptisynpaseeditor2022"));
 
@@ -69,6 +75,7 @@ class _HomePageOfflineModuleState extends State<HomePageOfflineModule> {
     super.initState();
   }
 
+  bool logging = false;
   List<int> cachedBlocksIds = [];
   bool inited = false;
   bool searchByCode = false;
@@ -97,54 +104,154 @@ class _HomePageOfflineModuleState extends State<HomePageOfflineModule> {
               inited = true;
               return Center(child: CircularProgressIndicator());
             }
-            if (snapshot.data != null) {
-              cachedBlocksIds = snapshot.data as List<int>;
-            }
+            if (snapshot.data != null) cachedBlocksIds = snapshot.data as List<int>;
+
             return SizedBox(
               width: size.width,
               height: size.height,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text("Código do professor", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                  userLogged.id == 0
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Usuário", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                                Container(
+                                  width: size.width * 0.9,
+                                  // height: 40,
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(width: 3, color: Color.fromRGBO(110, 114, 145, 0.2))),
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  child: TextFormField(
+                                    controller: _loginEntity.username,
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(border: InputBorder.none),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Senha", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                                Container(
+                                  width: size.width * 0.9,
+                                  // height: 40,
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(width: 3, color: Color.fromRGBO(110, 114, 145, 0.2))),
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  child:
+                                      TextFormField(controller: _loginEntity.password, keyboardType: TextInputType.number, decoration: InputDecoration(border: InputBorder.none)),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            InkWell(
+                              onTap: () async {
+                                if (logging) return;
+                                logging = true;
 
-                      // Container(
-                      //   width: size.width * 0.7,
-                      //   height: 40,
-                      //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(width: 3, color: Color.fromRGBO(110, 114, 145, 0.2))),
-                      //   padding: EdgeInsets.symmetric(horizontal: 5),
-                      //   child: TextFormField(controller: _teacherCodeController, keyboardType: TextInputType.number, decoration: InputDecoration(border: InputBorder.none)),
-                      // ),
+                                await _authUseCase.login(_loginEntity).then((value) async {
+                                  userLogged = value.getOrElse(() => LoginResponseEntity.empty());
+                                  print(userLogged.toMap());
+                                  if (userLogged.id == 0) {
+                                    print("Erro ao fazer login");
+                                    return;
+                                  } else if (userLogged.user_type_id == 4) {
+                                    List<BlockModel> res =
+                                        await blockRepository.getBlockByTeacherId(userLogged.teacher_id!).then((value) => value.fold((l) => [], (r) => r));
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: size.width * 0.7,
-                            height: 40,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(width: 3, color: Color.fromRGBO(110, 114, 145, 0.2))),
-                            padding: EdgeInsets.symmetric(horizontal: 5),
-                            child: TextFormField(controller: _teacherCodeController, keyboardType: TextInputType.number, decoration: InputDecoration(border: InputBorder.none)),
-                          ),
-                          IconButton(
-                              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
-                              onPressed: () async {
-                                List<BlockModel> res =
-                                    await blockRepository.getBlockByTeacherId(int.parse(_teacherCodeController.text)).then((value) => value.fold((l) => [], (r) => r));
-                                await Navigator.of(context)
-                                    .push(MaterialPageRoute(builder: (context) => TeacherBlocksPage(list_block: res, offlineController: offlineController)))
-                                    .then((value) => setState(() {
-                                          inited = false;
-                                        }));
+                                    await Navigator.of(context)
+                                        .push(MaterialPageRoute(builder: (context) => TeacherBlocksPage(list_block: res, offlineController: offlineController, teacherUser: userLogged)))
+                                        .then((value) => setState(() {
+                                              inited = false;
+                                            }));
+                                  } else {
+                                    print("Usuário não é professor");
+                                    return;
+                                  }
+                                });
+
+                                // setState(() {
+                                  logging = false;
+                                // });
                               },
-                              icon: Icon(Icons.send)),
-                        ],
-                      )
-                    ],
-                  ),
+                              child: Container(
+                                  width: size.width * 0.9,
+                                  height: 40,
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.blue),
+                                  child: Center(child: Text("Entrar", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)))),
+                            ),
+
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     Container(
+                            //       width: size.width * 0.9,
+                            //       height: 40,
+                            //       decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(width: 3, color: Color.fromRGBO(110, 114, 145, 0.2))),
+                            //       padding: EdgeInsets.symmetric(horizontal: 5),
+                            //       child: TextFormField(controller: _teacherCodeController, keyboardType: TextInputType.number, decoration: InputDecoration(border: InputBorder.none)),
+                            //     ),
+                            //     IconButton(
+                            //         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
+                            //         onPressed: () async {
+                            //           List<BlockModel> res =
+                            //               await blockRepository.getBlockByTeacherId(int.parse(_teacherCodeController.text)).then((value) => value.fold((l) => [], (r) => r));
+                            //           await Navigator.of(context)
+                            //               .push(MaterialPageRoute(builder: (context) => TeacherBlocksPage(list_block: res, offlineController: offlineController)))
+                            //               .then((value) => setState(() {
+                            //                     inited = false;
+                            //                   }));
+                            //         },
+                            //         icon: Icon(Icons.send)),
+                            //   ],
+                            // )
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              radius: 30,
+                              backgroundColor: Colors.blue,
+                              child: Icon(Icons.person, color: Colors.white),
+                            ),
+                            SizedBox(width: 10),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("${userLogged.name}", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                                Text("Professor", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                            SizedBox(width: 30),
+                            Container(
+                              decoration: BoxDecoration(border: Border.all(width: 2, color: Colors.black), borderRadius: BorderRadius.circular(10)),
+                              child: IconButton(
+                                onPressed: () async {
+                                  List<BlockModel> res =
+                                      await blockRepository.getBlockByTeacherId(userLogged.teacher_id!).then((value) => value.fold((l) => [], (r) => r));
+
+                                  await Navigator.of(context)
+                                      .push(MaterialPageRoute(builder: (context) => TeacherBlocksPage(list_block: res, offlineController: offlineController, teacherUser: userLogged)))
+                                      .then((value) => setState(() {
+                                    inited = false;
+                                  }));
+                                },
+                                icon: Row(
+                                  children: [
+                                    Text("Ir para aulas", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                                    SizedBox(width: 10),
+                                    Icon(Icons.logout),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                   SizedBox(height: 20),
                   Divider(),
                   SizedBox(height: 20),
